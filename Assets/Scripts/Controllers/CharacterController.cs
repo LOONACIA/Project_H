@@ -9,14 +9,11 @@ public partial class CharacterController : MonoBehaviour
 {
     [SerializeField]
     private CharacterControlData m_data;
-    
+
     private PossessionProcessor m_possession;
 
     [SerializeField]
     [NotifyFieldChanged(nameof(OnCharacterChanged))]
-    // 인스펙터 확인용 필드
-    private Actor m_currentActor;
-    
     private Actor m_character;
 
     private bool m_isOnPossessing;
@@ -26,18 +23,18 @@ public partial class CharacterController : MonoBehaviour
 
     // Look //
     private Vector2 m_lookDelta;
-    
+
     private Transform m_cameraHolder;
 
     private float m_cameraRotationX;
-    
+
     private void Awake()
     {
-        if (m_data == null) 
+        if (m_data == null)
         {
             m_data = ManagerRoot.Resource.Load<CharacterControlData>($"data/{nameof(CharacterControlData)}");
         }
-        
+
         m_possession = GetComponent<PossessionProcessor>();
         m_possession.Possessing += OnPossessing;
         m_possession.Possessed += OnPossessed;
@@ -45,19 +42,19 @@ public partial class CharacterController : MonoBehaviour
 
     private void Start()
     {
-        if (m_currentActor != null)
+        if (m_character != null)
         {
-            OnCharacterChanged();
+            ChangeActor(null, m_character);
         }
-        
+
         InitInput();
     }
 
     private void Update()
-	{
-		Look();
-	}
-    
+    {
+        Look();
+    }
+
     private void FixedUpdate()
     {
         Move();
@@ -78,7 +75,7 @@ public partial class CharacterController : MonoBehaviour
             m_character.TryJump();
         }
     }
-    
+
     private void Attack()
     {
         if (m_character != null)
@@ -109,9 +106,9 @@ public partial class CharacterController : MonoBehaviour
         {
             return;
         }
-        
+
         m_isOnPossessing = true;
-        
+
         m_possession.TryPossess(m_character);
     }
 
@@ -139,7 +136,7 @@ public partial class CharacterController : MonoBehaviour
     {
         DisableInput();
     }
-    
+
     private void OnPossessed(object sender, Actor actor)
     {
         EnableInput();
@@ -148,26 +145,34 @@ public partial class CharacterController : MonoBehaviour
         ChangeActor(actor);
     }
 
-    private void OnCharacterChanged()
+    /// <summary>
+    /// 인스펙터에서 캐릭터를 변경할 때 호출되는 콜백
+    /// </summary>
+    /// <param name="oldActor">이전 값</param>
+    /// <param name="newActor">최신 값</param>
+    private void OnCharacterChanged(Actor oldActor, Actor newActor)
     {
-        ChangeActor(m_currentActor);
-        GameManager.Camera.CurrentCamera = m_currentActor.GetComponentInChildren<CinemachineVirtualCamera>();
+        ChangeActor(oldActor, newActor);
+
+        GameManager.Camera.CurrentCamera = m_character.GetComponentInChildren<CinemachineVirtualCamera>();
     }
 
-    private void ChangeActor(Actor newActor)
+    private void ChangeActor(Actor newActor) => ChangeActor(m_character, newActor);
+
+    private void ChangeActor(Actor oldActor, Actor newActor)
     {
         if (newActor == null)
         {
             return;
         }
-        
+
         m_cameraRotationX = 0f;
-        if (m_character != null)
+        if (oldActor != null)
         {
-            m_character.Unpossessed();
+            oldActor.Unpossessed();
         }
 
-        m_character = m_currentActor = newActor;
+        m_character = newActor;
         m_character.Possessed();
         m_cameraHolder = m_character.FirstPersonCameraPivot.transform;
     }
