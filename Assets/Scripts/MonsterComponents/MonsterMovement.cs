@@ -12,16 +12,20 @@ using UnityEngine.AI;
 public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
 {
     public bool isDashing;
+
+    public bool isMoving;
     
     [SerializeField]
     private MonsterMovementData m_data;
     
+    private Actor m_actor;
+
     private Rigidbody m_rigidbody;
     
     private CapsuleCollider m_collider;
 
     private NavMeshAgent m_agent;
-    
+
     private Vector3 m_currentNormal;
     
     private float m_lastJumpedTime;
@@ -42,6 +46,12 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
 
     private float m_dashMultiplier = 1f;
 
+    // 현재 이동 애니메이션 보간 비율 (정지 0, 걷기 0.5, 달리기 1)
+    private float m_currentMovementRatio;
+
+    // 이동 애니메이션 보간 변화량
+    private float m_moveAnimationChangeRatio = 0.01f;
+
     public MonsterMovementData Data => m_data;
 
     public bool IsOnGround
@@ -54,6 +64,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
     
 	private void Start()
     {
+        m_actor = GetComponent<Monster>();
         m_rigidbody = GetComponent<Rigidbody>();
         m_collider = GetComponent<CapsuleCollider>();
         m_agent = GetComponent<NavMeshAgent>();
@@ -63,6 +74,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
     {
         CalculateCurrentNormal();
         CheckJumping();
+        UpdateAnimator();
     }
 
     private void FixedUpdate()
@@ -80,6 +92,9 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
             // 아무 것도 하지 않음
             return;
         }
+
+        //플레이어가 움직이는지 체크
+        isMoving = directionInput != Vector3.zero;
 
         // 대쉬 사용 시 속도 증가
         m_dashMultiplier = isDashing ? m_data.DashMultiplier : 1;
@@ -279,6 +294,37 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         if (m_data == null)
         {
             Debug.LogWarning($"{nameof(m_data)} is null");
+        }
+    }
+
+    private void UpdateAnimator()
+    {
+        // 현재 움직이고 있는지 확인
+        Vector3 navSpeed = new Vector3(m_agent.velocity.x, 0f, m_agent.velocity.z);
+        bool moving = navSpeed.sqrMagnitude > 0.2f || isMoving;
+
+        // move blend tree 값 설정 (정지 0, 걷기 0.5, 달리기 1)
+        float targetMoveRatio = 0;
+        if (isMoving)
+            targetMoveRatio = (isDashing ? 1 : 0.5f);
+
+        // 현재 이동 애니메이션 보간
+        if (Mathf.Abs(m_currentMovementRatio - targetMoveRatio) > m_moveAnimationChangeRatio)
+        {
+            m_currentMovementRatio += (m_currentMovementRatio < targetMoveRatio ? m_moveAnimationChangeRatio : -m_moveAnimationChangeRatio);
+            m_currentMovementRatio = Mathf.Clamp(m_currentMovementRatio, 0f, 1f);
+        }
+
+        // 애니메이터에 적용
+        if (m_actor.IsPossessed)
+        {
+            m_actor.Animator.SetFloat("MovementRatio", m_currentMovementRatio);
+            m_actor.Animator.SetBool("Jump", m_isJumpApplied);
+        }
+        else
+        {
+            m_actor.Animator.SetFloat("MovementRatio", m_currentMovementRatio);
+            m_actor.Animator.SetBool("Jump", !IsOnGround);
         }
     }
 }
