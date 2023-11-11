@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
 using LOONACIA.Unity;
+using LOONACIA.Unity.Managers;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.VFX;
 
 public class EffectManager
 {
@@ -13,7 +15,7 @@ public class EffectManager
 	
 	public GameObject targetEffect;
 	
-	public GameObject bloodEffect;
+	private GameObject m_bloodEffect;
 	// TODO END //
 	
 	private Volume m_volume;
@@ -28,6 +30,8 @@ public class EffectManager
 	
 	public void Init()
 	{
+        m_bloodEffect = GameManager.Settings.BloodEffect;
+        
 		m_volume = GameObject.Find("Global Volume").GetComponent<Volume>();
 		m_volume.profile.TryGet(out m_colorAdjustments);
 		m_volume.profile.TryGet(out m_vignette);
@@ -60,6 +64,23 @@ public class EffectManager
 		// Open Eye Effect
 		Utility.Lerp(1, 0, 1f, value => m_vignette.intensity.Override(value), ignoreTimeScale: true);
 	}
+    
+    /// <summary>
+    /// 출혈 이펙트 실행하는 함수
+    /// </summary>
+    /// <param name="monster">이펙트 실행 위치</param>
+    /// <param name="rotaion">이펙트 방향</param>
+    /// <param name="duration">이펙트 재생 시간</param>
+    public void PlayBloodEffect(GameObject monster, Quaternion rotaion, float duration = 0)
+    {
+        // 출혈 이펙트 오브젝트 생성
+        GameObject go = ManagerRoot.Resource.Instantiate(m_bloodEffect, monster.transform.position + Vector3.up, rotaion);
+
+        // 이펙트 설정
+        go.transform.SetParent(monster.transform);
+        BloodEffect effect = go.GetOrAddComponent<BloodEffect>();
+        effect.Show(monster.transform.position, duration);
+    }
 	
 	private void ClearColorAdjustments()
 	{

@@ -28,8 +28,9 @@ public class MonsterHealth : MonoBehaviour, IHealth
         get => m_status.Hp;
         set
         {
+            var diff = value - m_status.Hp;
             m_status.Hp = Mathf.Clamp(value, 0, m_data.MaxHp);
-            OnHealthChanged(value);
+            OnHealthChanged(diff);
         }
     }
 
@@ -74,7 +75,11 @@ public class MonsterHealth : MonoBehaviour, IHealth
     private void OnHealthChanged(int amount)
     {
         HealthChanged?.Invoke(this, amount);
-		
+        if (amount < 0)
+        {
+            GameManager.Effect.PlayBloodEffect(gameObject, transform.rotation, 0.5f);
+        }
+
         if (IsDead)
         {
             Dying?.Invoke(this, EventArgs.Empty);
