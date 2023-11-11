@@ -38,6 +38,10 @@ public class MonsterAttack : MonoBehaviour
 	
 	public event EventHandler AttackFinish;
 
+    public event EventHandler SkillStart;
+
+    public event EventHandler SkillFinish;
+
 	private void Awake()
 	{
 		m_actor = GetComponent<Monster>();
@@ -134,6 +138,19 @@ public class MonsterAttack : MonoBehaviour
 		IsAttacking = false;
 		AttackFinish?.Invoke(this, EventArgs.Empty);
 	}
+    
+    private void OnSkillAnimationStart(object sender, EventArgs e)
+    {
+        m_isHitBoxChecked = false;
+        IsAttacking = true;
+        SkillStart?.Invoke(this, EventArgs.Empty);
+    }
+	
+    private void OnSkillAnimationEnd(object sender, EventArgs e)
+    {
+        IsAttacking = false;
+        SkillFinish?.Invoke(this, EventArgs.Empty);
+    }
 
 	private void RegisterWeaponEvents(Weapon weapon)
 	{
@@ -141,8 +158,8 @@ public class MonsterAttack : MonoBehaviour
 		weapon.AttackFinish += OnAttackAnimationEnd;
 		weapon.AttackHit += OnAttackHit;
 		
-		weapon.SkillStart += OnAttackAnimationStart;
-		weapon.SkillFinish += OnAttackAnimationEnd;
+		weapon.SkillStart += OnSkillAnimationStart;
+		weapon.SkillFinish += OnSkillAnimationEnd;
 		weapon.SkillHit += OnSkillHit;
 	}
 
@@ -152,8 +169,8 @@ public class MonsterAttack : MonoBehaviour
 		weapon.AttackFinish -= OnAttackAnimationEnd;
 		weapon.AttackHit -= OnAttackHit;
 		
-		weapon.SkillStart -= OnAttackAnimationStart;
-		weapon.SkillFinish -= OnAttackAnimationEnd;
+		weapon.SkillStart -= OnSkillAnimationStart;
+		weapon.SkillFinish -= OnSkillAnimationEnd;
 		weapon.SkillHit -= OnSkillHit;
 	}
 

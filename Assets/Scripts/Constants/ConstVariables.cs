@@ -10,4 +10,9 @@ public static class ConstVariables
     [Header("Logging")]
     public const string LOG_PATH = "Logs";
     public const string LOG_FILE_FORMAT = "log-{0}.txt";
+    
+    [Header("Camera")]
+    public const string CAMERASHAKE_GOBLINNORMALATTACKSTART_ANIMATION_NAME = "CameraGoblinAttackStart";
+    public const string CAMERASHAKE_GOBLINNORMALATTACKSTOP_ANIMATION_NAME = "CameraGoblinAttackStop";
+    public const string CAMERASHAKE_GOBLINNORMALSKILLSTART_ANIMATION_NAME = "CameraGoblinSkillStart";
 }
