@@ -204,6 +204,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDashing: 0
+  isMoving: 0
   m_data: {fileID: 11400000, guid: 433250fdfdea211409e5d5fb5da175b8, type: 2}
   m_isOnGround: 0
 --- !u!114 &7779555384794141492
@@ -672,9 +673,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 6594267234909460467}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f16babe6d6fb1dd4081a08039e8339c5, type: 3}
+  m_Script: {fileID: 11500000, guid: 6ad36176aa803c44fbdede2bc7050bba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_attackHitBoxes:
+  - m_position: {x: 0, y: 0, z: 0}
+    m_halfExtents: {x: 0, y: 0, z: 0}
+    m_rotation: {x: 0, y: 0, z: 0, w: 0}
+    m_gizmoColor: {r: 0, g: 0, b: 0, a: 0}
+  m_skillHitBoxes:
+  - m_position: {x: 0, y: 0, z: 0}
+    m_halfExtents: {x: 0, y: 0, z: 0}
+    m_rotation: {x: 0, y: 0, z: 0, w: 0}
+    m_gizmoColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1001 &6360418462237604294
 PrefabInstance:
   m_ObjectHideFlags: 0
