@@ -5,15 +5,17 @@ public interface IHealth
 {
     GameObject gameObject { get; }
 
-    int CurrentHp { get; set; }
+    int CurrentHp { get; }
     
     int MaxHp { get; }
     
     void Kill();
     
-    event EventHandler<int> HealthChanged;
+    event EventHandler<Actor> Damaged;
 
     event EventHandler Dying;
     
     event EventHandler Died;
+    
+    void TakeDamage(int damage, Actor attacker);
 }

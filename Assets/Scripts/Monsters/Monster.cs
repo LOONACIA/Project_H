@@ -12,7 +12,7 @@ using UnityEngine.AI;
 public class Monster : Actor
 {
     // TODO: 빙의 게이지 관련 처리
-    private float m_stamina = 0f;
+    //private float m_stamina = 0f;
     
     public MonsterAttack Attack { get; private set; }
     

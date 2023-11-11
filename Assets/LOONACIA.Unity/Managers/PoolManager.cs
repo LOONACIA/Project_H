@@ -49,7 +49,7 @@ namespace LOONACIA.Unity.Managers
 
 		public void Release(Poolable pooledObject)
 		{
-			pooledObject.transform.parent = Root;
+			pooledObject.transform.SetParent(Root);
 			pooledObject.Pool.Release(pooledObject);
 		}
 
