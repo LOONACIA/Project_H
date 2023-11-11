@@ -6,8 +6,6 @@ using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(MonsterAttack))]
-[RequireComponent(typeof(MonsterHealth))]
-[RequireComponent(typeof(MonsterStatus))]
 [RequireComponent(typeof(MonsterMovement))]
 public class Monster : Actor
 {
@@ -16,11 +14,7 @@ public class Monster : Actor
     
     public MonsterAttack Attack { get; private set; }
     
-    public MonsterHealth Health { get; private set; }
-    
     public MonsterMovement Movement { get; private set; }
-
-    public MonsterStatus Status { get; private set; }
 
     public ObservableCollection<Actor> Targets { get; } = new();
     
@@ -29,8 +23,6 @@ public class Monster : Actor
         base.Awake();
 
         Attack = GetComponent<MonsterAttack>();
-        Health = GetComponent<MonsterHealth>();
-        Status = GetComponent<MonsterStatus>();
         Movement = GetComponent<MonsterMovement>();
     }
 

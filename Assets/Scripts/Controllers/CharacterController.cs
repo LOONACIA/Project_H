@@ -9,12 +9,12 @@ public partial class CharacterController : MonoBehaviour
 {
     [SerializeField]
     private CharacterControlData m_data;
-
-    private PossessionProcessor m_possession;
-
+    
     [SerializeField]
     [NotifyFieldChanged(nameof(OnCharacterChanged))]
     private Actor m_character;
+
+    private PossessionProcessor m_possession;
 
     private bool m_isOnPossessing;
 
@@ -27,6 +27,10 @@ public partial class CharacterController : MonoBehaviour
     private Transform m_cameraHolder;
 
     private float m_cameraRotationX;
+    
+    public Actor Character => m_character;
+
+    public event EventHandler<int> HpChanged;
 
     private void Awake()
     {
@@ -38,6 +42,8 @@ public partial class CharacterController : MonoBehaviour
         m_possession = GetComponent<PossessionProcessor>();
         m_possession.Possessing += OnPossessing;
         m_possession.Possessed += OnPossessed;
+        
+        GameManager.UI.ShowHpIndicator(this);
     }
 
     private void Start()
@@ -48,6 +54,14 @@ public partial class CharacterController : MonoBehaviour
         }
 
         InitInput();
+    }
+
+    private void OnEnable()
+    {
+    }
+
+    private void OnDisable()
+    {
     }
 
     private void Update()
@@ -145,6 +159,27 @@ public partial class CharacterController : MonoBehaviour
         ChangeActor(actor);
     }
 
+    private void RegisterActorEvents()
+    {
+        if (m_character != null)
+        {
+            m_character.Health.Damaged += OnDamaged;
+        }
+    }
+    
+    private void UnregisterActorEvents()
+    {
+        if (m_character != null)
+        {
+            m_character.Health.Damaged -= OnDamaged;
+        }
+    }
+
+    private void OnDamaged(object sender, Actor e)
+    {
+        HpChanged?.Invoke(this, Character.Health.CurrentHp);
+    }
+
     /// <summary>
     /// 인스펙터에서 캐릭터를 변경할 때 호출되는 콜백
     /// </summary>
@@ -152,6 +187,17 @@ public partial class CharacterController : MonoBehaviour
     /// <param name="newActor">최신 값</param>
     private void OnCharacterChanged(Actor oldActor, Actor newActor)
     {
+        if (!Application.isPlaying)
+        {
+            if (oldActor != null)
+            {
+                oldActor.GetComponentInChildren<CinemachineVirtualCamera>().Priority = 1;
+            }
+            
+            newActor.GetComponentInChildren<CinemachineVirtualCamera>().Priority = 2;
+            return;
+        }
+        
         ChangeActor(oldActor, newActor);
 
         GameManager.Camera.CurrentCamera = m_character.GetComponentInChildren<CinemachineVirtualCamera>();
@@ -175,5 +221,7 @@ public partial class CharacterController : MonoBehaviour
         m_character = newActor;
         m_character.Possessed();
         m_cameraHolder = m_character.FirstPersonCameraPivot.transform;
+        
+        HpChanged?.Invoke(this, Character.Health.CurrentHp);
     }
 }

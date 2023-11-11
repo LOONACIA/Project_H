@@ -1,3 +1,4 @@
+using LOONACIA.Unity.Managers;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -5,6 +6,8 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(ActorHealth))]
+[RequireComponent(typeof(ActorStatus))]
 public abstract class Actor : MonoBehaviour
 {
     private static readonly int s_hitAnimationKey = Animator.StringToHash("Hit");
@@ -23,6 +26,10 @@ public abstract class Actor : MonoBehaviour
     
     [SerializeField]
     private Animator m_thirdPersonAnimator;
+    
+    public ActorHealth Health { get; private set; }
+    
+    public ActorStatus Status { get; private set; }
 
     public StateMachine<Actor> StateMachine { get; } = new();
     
@@ -37,6 +44,8 @@ public abstract class Actor : MonoBehaviour
         m_agent = GetComponent<NavMeshAgent>();
         m_collider = GetComponent<Collider>();
         m_rigidbody = GetComponent<Rigidbody>();
+        Health = GetComponent<ActorHealth>();
+        Status = GetComponent<ActorStatus>();
         EnableAIComponents();
     }
     
@@ -178,6 +187,6 @@ public abstract class Actor : MonoBehaviour
     private IEnumerator CoDie(float seconds)
     {
         yield return new WaitForSeconds(seconds);
-        Destroy(gameObject);
+        ManagerRoot.Resource.Release(gameObject);
     }
 }

@@ -12,6 +12,12 @@ public class GameUIManager
     {
     }
     
+    public void ShowHpIndicator(CharacterController player)
+    {
+        var ui = ManagerRoot.UI.ShowSceneUI<UIHpIndicator>();
+        ui.SetPlayer(player);
+    }
+    
     public void ShowCrosshair()
     {
         // If crosshair is already shown
