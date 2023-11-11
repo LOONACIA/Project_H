@@ -28,12 +28,16 @@ public class GameManager : MonoBehaviour
     private CameraManager m_camera = new();
     
     private EffectManager m_effect = new();
+
+    private GameUIManager m_ui = new();
     
     public static CameraManager Camera => Instance.m_camera;
     
     public static EffectManager Effect => Instance.m_effect;
 
     public static GameSettings Settings => Instance.m_settings; 
+    
+    public static GameUIManager UI => Instance.m_ui;
 
     public bool IsGameOver { get; private set; }
 
@@ -87,6 +91,7 @@ public class GameManager : MonoBehaviour
             
             // 매니저 클래스 초기화
             s_instance.m_effect.Init();
+            s_instance.m_ui.Init();
             
             // 매니저가 Monobehaviour를 상속받는 경우 여기에서 초기화
             // Example:

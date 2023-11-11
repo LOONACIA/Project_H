@@ -11,10 +11,6 @@ using UnityEngine.VFX;
 public class EffectManager
 {
 	// TODO: Data로 분리
-	private float m_lensDistortionEffectVariable = 0.04f;
-	
-	public GameObject targetEffect;
-	
 	private GameObject m_bloodEffect;
 	// TODO END //
 	
@@ -37,11 +33,34 @@ public class EffectManager
 		m_volume.profile.TryGet(out m_vignette);
 	}
 	
+    /// <summary>
+    /// 빙의 준비 시작 이펙트를 실행합니다.
+    /// </summary>
 	public void ShowPreparePossessionEffect()
-	{
+    {
+        GameManager.UI.ShowCrosshair();
 		m_colorAdjustments.saturation.Override(-100f);
 	}
+    
+    /// <summary>
+    /// 빙의 준비 완료 이펙트를 실행합니다.
+    /// </summary>
+    public void ShowBeginPossessionEffect()
+    {
+        GameManager.UI.HideCrosshair();
+    }
+    
+    /// <summary>
+    /// 빙의 실패 이펙트를 실행합니다.
+    /// </summary>
+    public void ShowPossessionFailEffect()
+    {
+        ClearColorAdjustments();
+    }
 
+    /// <summary>
+    /// 빙의 시작 이펙트를 실행합니다.
+    /// </summary>
 	public void ShowPossessionStartEffect()
 	{
 		GameManager.Camera.CurrentCamera.m_Lens.FieldOfView = 150f;
@@ -50,11 +69,9 @@ public class EffectManager
 		Utility.Lerp(0, 1, 1f, value => m_vignette.intensity.Override(value), ignoreTimeScale: true);
 	}
 	
-	public void ShowPossessionFailEffect()
-	{
-		ClearColorAdjustments();
-	}
-	
+    /// <summary>
+    /// 빙의 성공 이펙트를 실행합니다.
+    /// </summary>
 	public void ShowPossessionSuccessEffect()
 	{
 		ClearColorAdjustments();

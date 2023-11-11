@@ -42,8 +42,7 @@ public class PossessionProcessor : MonoBehaviour
 
     public void OnPossessAnimEnd()
     {
-        // TODO: 레이캐스트로 몬스터를 찾은 후, 없으면 빙의 이펙트 중지 후 종료
-        // 몬스터를 찾으면, 고스트를 생성해 목표로 이동하게 만들면서 추가 이펙트
+        GameManager.Effect.ShowBeginPossessionEffect();
         GameObject target = RayToTarget();
         Debug.Log($"{target != null}");
         if (target == null || !target.TryGetComponent<Actor>(out var actor))
