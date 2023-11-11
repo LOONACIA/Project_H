@@ -44,7 +44,7 @@ public partial class CharacterController : MonoBehaviour
     {
         if (m_character != null)
         {
-            ChangeActor(null, m_character);
+            OnCharacterChanged(null, m_character);
         }
 
         InitInput();
