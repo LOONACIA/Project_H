@@ -1,9 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 [RequireComponent(typeof(MonsterStatus))]
 public class MonsterHealth : MonoBehaviour, IHealth
@@ -17,22 +14,13 @@ public class MonsterHealth : MonoBehaviour, IHealth
 
     private MonsterStatus m_status;
 
-    public event EventHandler<int> HealthChanged;
+    public event EventHandler<Actor> Damaged;
 
     public event EventHandler Dying;
 
     public event EventHandler Died;
 
-    public int CurrentHp
-    {
-        get => m_status.Hp;
-        set
-        {
-            var diff = value - m_status.Hp;
-            m_status.Hp = Mathf.Clamp(value, 0, m_data.MaxHp);
-            OnHealthChanged(diff);
-        }
-    }
+    public int CurrentHp => m_status.Hp;
 
     public int MaxHp => m_data.MaxHp;
 
@@ -46,7 +34,7 @@ public class MonsterHealth : MonoBehaviour, IHealth
 
     protected virtual void Start()
     {
-        CurrentHp = m_data.MaxHp;
+        m_status.Hp = m_data.MaxHp;
     }
 
     private void OnEnable()
@@ -66,15 +54,27 @@ public class MonsterHealth : MonoBehaviour, IHealth
             receiver.DeathAnimationEnd -= OnDied;
         }
     }
+    
+    public void TakeDamage(int damage, Actor attacker)
+    {
+        if (IsDead)
+        {
+            return;
+        }
+
+        m_status.Hp -= damage;
+        OnDamaged(attacker);
+    }
 
     public void Kill()
     {
-        CurrentHp = 0;
+        m_status.Hp = 0;
+        OnDamaged(null);
     }
     
-    private void OnHealthChanged(int amount)
+    private void OnDamaged(Actor attacker)
     {
-        HealthChanged?.Invoke(this, amount);
+        Damaged?.Invoke(this, attacker);
         
         if (IsDead)
         {
