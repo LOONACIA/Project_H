@@ -29,6 +29,7 @@ public class MeleeWeapon : Weapon
 
     protected override void OnSkillAnimationStart()
     {
+        return;
         base.OnSkillAnimationStart();
         m_skillHitBoxIndex = 0;
     }
@@ -48,6 +49,7 @@ public class MeleeWeapon : Weapon
 
     protected virtual void OnSkillAnimationEvent()
     {
+        return;
         var hitBox = m_skillHitBoxes[m_skillHitBoxIndex++ % m_skillHitBoxes.Count];
         if (hitBox == null)
         {
