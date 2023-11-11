@@ -15,6 +15,9 @@ public class PossessionProcessor : MonoBehaviour
 
     private Actor m_sender;
 
+    /// <summary>
+    /// 빙의 타겟 선정에 성공할 경우, 빙의 시작 시 발생하는 이벤트.
+    /// </summary>
     public event EventHandler Possessing; 
 
     /// <summary>
@@ -44,7 +47,6 @@ public class PossessionProcessor : MonoBehaviour
     {
         GameManager.Effect.ShowBeginPossessionEffect();
         GameObject target = RayToTarget();
-        Debug.Log($"{target != null}");
         if (target == null || !target.TryGetComponent<Actor>(out var actor))
         {
             GameManager.Effect.ShowPossessionFailEffect();

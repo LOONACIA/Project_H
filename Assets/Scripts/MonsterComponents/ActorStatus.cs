@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using LOONACIA.Unity;
 using UnityEngine;
 
-public class MonsterStatus : MonoBehaviour
+public class ActorStatus : MonoBehaviour
 {
 	[SerializeField]
 	[ReadOnly]
-	[Tooltip("Hp는 " + nameof(MonsterHealth) + "에서 관리됨")]
+	[Tooltip("Hp는 " + nameof(ActorHealth) + "에서 관리됨")]
 	private int m_hp;
 	
 	[SerializeField]

@@ -2,8 +2,8 @@ using System;
 using System.Linq;
 using UnityEngine;
 
-[RequireComponent(typeof(MonsterStatus))]
-public class MonsterHealth : MonoBehaviour, IHealth
+[RequireComponent(typeof(ActorStatus))]
+public class ActorHealth : MonoBehaviour, IHealth
 {
     private static readonly int s_deadAnimationKey = Animator.StringToHash("Dead");
     
@@ -12,7 +12,7 @@ public class MonsterHealth : MonoBehaviour, IHealth
 
     private Monster m_actor;
 
-    private MonsterStatus m_status;
+    private ActorStatus m_status;
 
     public event EventHandler<Actor> Damaged;
 
@@ -29,7 +29,7 @@ public class MonsterHealth : MonoBehaviour, IHealth
     protected void Awake()
     {
         m_actor = GetComponent<Monster>();
-        m_status = GetComponent<MonsterStatus>();
+        m_status = GetComponent<ActorStatus>();
     }
 
     protected virtual void Start()
@@ -101,7 +101,7 @@ public class MonsterHealth : MonoBehaviour, IHealth
     {
         if (m_data == null)
         {
-            Debug.LogWarning($"{nameof(m_data)} is null");
+            Debug.LogWarning($"{name}: {nameof(m_data)} is null");
         }
     }
 }

@@ -83,7 +83,7 @@ public class EffectManager
 	}
     
     /// <summary>
-    /// 출혈 이펙트 실행하는 함수
+    /// 출혈 이펙트를 실행합니다.
     /// </summary>
     /// <param name="monster">이펙트 실행 위치</param>
     /// <param name="rotaion">이펙트 방향</param>
