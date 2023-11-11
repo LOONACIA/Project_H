@@ -34,6 +34,22 @@ public class Monster : Actor
         Movement = GetComponent<MonsterMovement>();
     }
 
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+
+        Attack.AttackStart += OnAttackStart;
+        Attack.SkillStart += OnSkillStart;
+    }
+
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+
+        Attack.AttackStart -= OnAttackStart;
+        Attack.SkillStart -= OnSkillStart;
+    }
+
     public override void Move(Vector3 direction)
     {
         Movement.Move(direction);
@@ -72,5 +88,21 @@ public class Monster : Actor
         base.Unpossessed();
 
         Status.Damage = Attack.Data.Damage;
+    }
+    
+    private void OnAttackStart(object sender, EventArgs e)
+    {
+        if (IsPossessed)
+        {
+            // TODO: 공격 시작 시 카메라 흔들기
+        }
+    }
+    
+    private void OnSkillStart(object sender, EventArgs e)
+    {
+        if (IsPossessed)
+        {
+            // TODO: 스킬 시작 시 카메라 흔들기
+        }
     }
 }
