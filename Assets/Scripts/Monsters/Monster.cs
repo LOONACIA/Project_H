@@ -16,8 +16,6 @@ public class Monster : Actor
     
     public MonsterMovement Movement { get; private set; }
 
-    public GroundSmashSkill smashSkill;
-
     public ObservableCollection<Actor> Targets { get; } = new();
     
     protected override void Awake()
@@ -61,8 +59,7 @@ public class Monster : Actor
 
     public override void Skill()
     {
-        //Attack.Skill();
-        smashSkill.Cast(this);
+        Attack.Skill();
     }
 
     public override void Dash()

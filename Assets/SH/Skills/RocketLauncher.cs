@@ -29,7 +29,7 @@ public class RocketLauncher : MonoBehaviour
         bool isCheck = false;
 
         //히트박스를 체크
-        var hitObjects = m_attackHitBox.DetectHitBox(transform);
+        var hitObjects = m_attackHitBox.DetectHitBox();
 
         //공격 체크
         foreach (var health in hitObjects)
@@ -62,10 +62,6 @@ public class RocketLauncher : MonoBehaviour
         m_animator = GetComponent<Animator>();
     }
 
-    public void OnDrawGizmos()
-    {
-        m_attackHitBox.DrawHitBoxGizmo(transform);
-    }
     #endregion
 
 }

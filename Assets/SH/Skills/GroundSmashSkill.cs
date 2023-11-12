@@ -3,36 +3,47 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GroundSmashSkill : MonoBehaviour
+public class GroundSmashSkill : Skill
 {
     public MonsterAttackData data;
     public GameObject groundSmashEffect;
 
-    [SerializeField] private HitBox m_attackHitBox;
+    public HitBox attackHitBox;
+
+    public GameObject slashVfx;
 
     private Animator m_animator;
     private Monster m_caster;
-
-    private GameObject m_pooledEffect;
     
-    public void Cast(Monster caster)
+    public override void Cast(Monster caster, Animator animator)
     {
+        //초기화
         m_caster = caster;
-        //1. 애니메이터의 실행
+        m_animator = animator;
+
+        //애니메이션 실행
         m_animator.SetTrigger("Skill");
         //2. 공격 VFX의 출력
         //3. 공격 중인지(isAttacking) 체크
     }
 
-    public void OnSkillAnimationEvent()
+    #region AnimationEvent
+
+    public override void OnSkillVfxEvent()
+    {
+        slashVfx.SetActive(false);
+        slashVfx.SetActive(true);
+    }
+
+    public override void OnSkillAnimationEvent()
     {
         //TODO: 본인이라면 카메라 흔들기
         //TODO: CC기, 데미지 적용
 
         bool isCheck = false;
-        
+
         //히트박스를 체크
-        var hitObjects = m_attackHitBox.DetectHitBox(transform);
+        var hitObjects = attackHitBox.DetectHitBox();
         
         //공격 체크
         foreach (var health in hitObjects)
@@ -51,31 +62,25 @@ public class GroundSmashSkill : MonoBehaviour
         }
 
         //이펙트 생성
-        m_pooledEffect.transform.position = transform.position ;
-        m_pooledEffect.transform.rotation = Quaternion.Euler(transform.eulerAngles + m_attackHitBox.Rotation.eulerAngles);
-        m_pooledEffect.SetActive(false);
-        m_pooledEffect.SetActive(true);
+        groundSmashEffect.SetActive(false);
+        groundSmashEffect.SetActive(true);
         
         //EffectManager.instance.CameraShakeGoblinAttackStop();
     }
     
-    public void OnSkillAnimationEnd()
+    public override void OnSkillAnimationEnd()
     {
         
     }
 
-    #region Event Functions
+    #endregion
+
+    #region UnityFunction
 
     private void Start()
     {
         m_animator = GetComponent<Animator>();
-        m_pooledEffect = Instantiate(groundSmashEffect);
-        m_pooledEffect.SetActive(false);
     }
 
-    public void OnDrawGizmos()
-    {
-        m_attackHitBox.DrawHitBoxGizmo(transform);
-    }
     #endregion
 }

@@ -49,16 +49,15 @@ public class MeleeWeapon : Weapon
 
     protected virtual void OnSkillAnimationEvent()
     {
-        return;
-        var hitBox = m_skillHitBoxes[m_skillHitBoxIndex++ % m_skillHitBoxes.Count];
-        if (hitBox == null)
-        {
-            Debug.LogError($"Skill is interrupted because hit box is null. {name}");
-            return;
-        }
+        //var hitBox = m_skillHitBoxes[m_skillHitBoxIndex++ % m_skillHitBoxes.Count];
+        //if (hitBox == null)
+        //{
+        //    Debug.LogError($"Skill is interrupted because hit box is null. {name}");
+        //    return;
+        //}
 
-        var detectedObjects = DetectHitBox(hitBox);
-        OnSkillHit(detectedObjects);
+        //var detectedObjects = DetectHitBox(hitBox);
+        OnSkillHit(new List<IHealth>());
     }
 
     private IEnumerable<IHealth> DetectHitBox(HitBox hitBox)
