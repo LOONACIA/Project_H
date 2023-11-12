@@ -10,7 +10,7 @@ using UnityEngine.EventSystems;
  * 공격을 시작하고, Weapon으로부터 전달받은 IHealth 객체에 피해를 가하는 함수
  * 판정은 Weapon 클래스에서 이루어짐
  */
-[RequireComponent(typeof(MonsterStatus))]
+[RequireComponent(typeof(ActorStatus))]
 public class MonsterAttack : MonoBehaviour
 {
 	private static readonly int s_attackAnimationKey = Animator.StringToHash("Attack");
@@ -22,7 +22,7 @@ public class MonsterAttack : MonoBehaviour
 
 	private Monster m_actor;
 	
-	private MonsterStatus m_status;
+	private ActorStatus m_status;
 	
 	private Weapon[] m_weapons;
 
@@ -45,7 +45,7 @@ public class MonsterAttack : MonoBehaviour
 	private void Awake()
 	{
 		m_actor = GetComponent<Monster>();
-		m_status = GetComponent<MonsterStatus>();
+		m_status = GetComponent<ActorStatus>();
 		m_weapons = GetComponentsInChildren<Weapon>(true);
 	}
 
@@ -190,7 +190,7 @@ public class MonsterAttack : MonoBehaviour
 	{
 		if (m_data == null)
 		{
-			Debug.LogWarning($"{nameof(m_data)} is null");
+            Debug.LogWarning($"{name}: {nameof(m_data)} is null");
 		}
 	}
 }
