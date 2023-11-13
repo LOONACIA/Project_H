@@ -100,6 +100,5 @@ public class Monster : Actor
 
     public override void Block(bool value)
     {
-        throw new NotImplementedException();
     }
 }
