@@ -89,6 +89,15 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Block"",
+                    ""type"": ""Button"",
+                    ""id"": ""25506341-561b-429e-9ad4-cf2be971b5c3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -289,6 +298,17 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
                     ""action"": ""Skill"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""aed01424-bbcf-474b-a515-6ce70b8e0cfd"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Block"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -332,6 +352,7 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
         m_Character_Possess = m_Character.FindAction("Possess", throwIfNotFound: true);
         m_Character_Look = m_Character.FindAction("Look", throwIfNotFound: true);
         m_Character_Skill = m_Character.FindAction("Skill", throwIfNotFound: true);
+        m_Character_Block = m_Character.FindAction("Block", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -400,6 +421,7 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
     private readonly InputAction m_Character_Possess;
     private readonly InputAction m_Character_Look;
     private readonly InputAction m_Character_Skill;
+    private readonly InputAction m_Character_Block;
     public struct CharacterActions
     {
         private @CharacterInputActions m_Wrapper;
@@ -411,6 +433,7 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
         public InputAction @Possess => m_Wrapper.m_Character_Possess;
         public InputAction @Look => m_Wrapper.m_Character_Look;
         public InputAction @Skill => m_Wrapper.m_Character_Skill;
+        public InputAction @Block => m_Wrapper.m_Character_Block;
         public InputActionMap Get() { return m_Wrapper.m_Character; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -441,6 +464,9 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
             @Skill.started += instance.OnSkill;
             @Skill.performed += instance.OnSkill;
             @Skill.canceled += instance.OnSkill;
+            @Block.started += instance.OnBlock;
+            @Block.performed += instance.OnBlock;
+            @Block.canceled += instance.OnBlock;
         }
 
         private void UnregisterCallbacks(ICharacterActions instance)
@@ -466,6 +492,9 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
             @Skill.started -= instance.OnSkill;
             @Skill.performed -= instance.OnSkill;
             @Skill.canceled -= instance.OnSkill;
+            @Block.started -= instance.OnBlock;
+            @Block.performed -= instance.OnBlock;
+            @Block.canceled -= instance.OnBlock;
         }
 
         public void RemoveCallbacks(ICharacterActions instance)
@@ -510,5 +539,6 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
         void OnPossess(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
         void OnSkill(InputAction.CallbackContext context);
+        void OnBlock(InputAction.CallbackContext context);
     }
 }
