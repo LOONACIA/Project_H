@@ -32,62 +32,24 @@ public class MeleeWeapon : Weapon
             return;
         }
 
-        var detectedObjects = DetectHitBox(hitBox);
-        OnHitEvent(detectedObjects);
+        var detectedObjects = hitBox.DetectHitBox(transform);
+        //Debug.Log($"Col: {m_attackHitBoxIndex}{detectedObjects.Count()}");
+        InvokeAttackHit(detectedObjects);
     }
 
     #endregion
     
 #region HitBox
-    private IEnumerable<IHealth> DetectHitBox(HitBox hitBox)
-    {
-        Quaternion rotation = Quaternion.Euler(transform.eulerAngles + hitBox.Rotation.eulerAngles);
-
-        return Physics.OverlapBox(transform.position + transform.TransformDirection(hitBox.Position),
-                hitBox.HalfExtents, rotation, LayerMask.GetMask("Monster"))
-            .Select(detectedObject => detectedObject.GetComponent<IHealth>())
-            .Where(health => health != null);
-    }
 
     private void OnDrawGizmosSelected()
     {
-        DrawHitBoxGizmos(m_attackHitBoxes);
-    }
-
-    private void DrawHitBoxGizmos(IEnumerable<HitBox> hitBoxes)
-    {
-        foreach (var hitBox in hitBoxes)
+        foreach (var hitbox in m_attackHitBoxes)
         {
-            Gizmos.color = hitBox.GizmoColor;
-            Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, transform.localScale) *
-                            (Matrix4x4.Translate(hitBox.Position) *
-                             Matrix4x4.Rotate(Quaternion.Euler(hitBox.Rotation.eulerAngles)));
-            Gizmos.DrawWireCube(Vector3.zero, hitBox.HalfExtents * 2f);
+            hitbox.DrawGizmo(transform);
         }
     }
 
-    [Serializable]
-    private class HitBox
-    {
-        [SerializeField]
-        private Vector3 m_position;
+    
 
-        [SerializeField]
-        private Vector3 m_halfExtents;
-
-        [SerializeField]
-        private Quaternion m_rotation;
-
-        [SerializeField]
-        private Color m_gizmoColor = Color.red;
-
-        public Vector3 Position => m_position;
-
-        public Vector3 HalfExtents => m_halfExtents;
-
-        public Quaternion Rotation => m_rotation;
-
-        public Color GizmoColor => m_gizmoColor;
-    }
     #endregion
 }

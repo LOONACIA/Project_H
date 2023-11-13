@@ -17,7 +17,7 @@ public abstract class Weapon : MonoBehaviour
 
     #region HitEvent Functions
     
-    protected virtual void OnHitEvent(IEnumerable<IHealth> hitObjects) { AttackHit?.Invoke(this, hitObjects); }
+    protected virtual void InvokeAttackHit(IEnumerable<IHealth> hitObjects) { AttackHit?.Invoke(this, hitObjects); }
 
     #endregion
 

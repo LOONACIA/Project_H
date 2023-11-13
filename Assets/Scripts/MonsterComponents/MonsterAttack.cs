@@ -133,9 +133,9 @@ public class MonsterAttack : MonoBehaviour
 			
 			Debug.Log($"{health.gameObject.name} is hit by {gameObject.name}, damage: {damage}");
             health.TakeDamage(damage, m_actor);
+            m_isHitBoxChecked = true;
 		}
 
-		m_isHitBoxChecked = true;
 	}
 	
 	private void OnAttackAnimationStart(object sender, EventArgs e)
