@@ -10,31 +10,33 @@ using UnityEngine.Serialization;
  */
 public class MeleeWeapon : Weapon
 {
+    private AttackAnimationEventReceiver m_receiver;
+    
     [FormerlySerializedAs("m_hitBoxes")]
     [SerializeField]
     private List<HitBox> m_attackHitBoxes;
 
-    [SerializeField]
-    private List<HitBox> m_skillHitBoxes;
-
     private int m_attackHitBoxIndex = 0;
 
-    private int m_skillHitBoxIndex = 0;
-
-    protected override void OnAttackAnimationStart()
+    private void Start()
     {
-        base.OnAttackAnimationStart();
+        m_receiver = GetComponent<AttackAnimationEventReceiver>();
+        if (m_receiver)
+        {
+            m_receiver.AttackStart += OnAnimationStart;
+            m_receiver.AttackHit += OnAnimationEvent;
+            m_receiver.AttackFinish += OnAnimationEnd;
+        }
+    }
+
+    #region AttackEvent
+
+    private void OnAnimationStart(object sender, EventArgs e)
+    {
         m_attackHitBoxIndex = 0;
     }
-
-    protected override void OnSkillAnimationStart()
-    {
-        return;
-        base.OnSkillAnimationStart();
-        m_skillHitBoxIndex = 0;
-    }
-
-    protected virtual void OnAttackAnimationEvent()
+    
+    protected virtual void OnAnimationEvent(object sender, EventArgs e)
     {
         var hitBox = m_attackHitBoxes[m_attackHitBoxIndex++ % m_attackHitBoxes.Count];
         if (hitBox == null)
@@ -44,22 +46,22 @@ public class MeleeWeapon : Weapon
         }
 
         var detectedObjects = DetectHitBox(hitBox);
-        OnAttackHit(detectedObjects);
+        InvokeAttackHit(detectedObjects);
     }
 
-    protected virtual void OnSkillAnimationEvent()
+    private void OnAnimationEnd(object sender, EventArgs e)
     {
-        //var hitBox = m_skillHitBoxes[m_skillHitBoxIndex++ % m_skillHitBoxes.Count];
-        //if (hitBox == null)
-        //{
-        //    Debug.LogError($"Skill is interrupted because hit box is null. {name}");
-        //    return;
-        //}
-
-        //var detectedObjects = DetectHitBox(hitBox);
-        OnSkillHit(new List<IHealth>());
+        
     }
 
+    #endregion
+    
+
+    // protected virtual void OnSkillAnimationEvent()
+    // {
+    //     OnSkillHit(new List<IHealth>());
+    // }
+#region HitBox
     private IEnumerable<IHealth> DetectHitBox(HitBox hitBox)
     {
         Quaternion rotation = Quaternion.Euler(transform.eulerAngles + hitBox.Rotation.eulerAngles);
@@ -73,7 +75,6 @@ public class MeleeWeapon : Weapon
     private void OnDrawGizmosSelected()
     {
         DrawHitBoxGizmos(m_attackHitBoxes);
-        DrawHitBoxGizmos(m_skillHitBoxes);
     }
 
     private void DrawHitBoxGizmos(IEnumerable<HitBox> hitBoxes)
@@ -111,4 +112,5 @@ public class MeleeWeapon : Weapon
 
         public Color GizmoColor => m_gizmoColor;
     }
+    #endregion
 }

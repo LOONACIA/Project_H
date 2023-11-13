@@ -25,6 +25,7 @@ public class MonsterAttack : MonoBehaviour
 	private ActorStatus m_status;
 	
 	private Weapon[] m_weapons;
+    private AttackAnimationEventReceiver[] m_attackAnimationEventReceivers;
 
 	private bool m_isHitBoxChecked;
 
@@ -49,7 +50,8 @@ public class MonsterAttack : MonoBehaviour
 		m_actor = GetComponent<Monster>();
 		m_status = GetComponent<ActorStatus>();
 		m_weapons = GetComponentsInChildren<Weapon>(true);
-	}
+        m_attackAnimationEventReceivers = GetComponentsInChildren<AttackAnimationEventReceiver>(true);
+    }
 
 	private void Start()
 	{
@@ -58,6 +60,10 @@ public class MonsterAttack : MonoBehaviour
 
 	private void OnEnable()
 	{
+        foreach (var receiver in m_attackAnimationEventReceivers)
+        {
+            RegisterAnimationEvents(receiver);
+        }
 		foreach (var weapon in m_weapons)
 		{
 			RegisterWeaponEvents(weapon);
@@ -70,6 +76,10 @@ public class MonsterAttack : MonoBehaviour
 		{
 			UnregisterWeaponEvents(weapon);
 		}
+        foreach (var receiver in m_attackAnimationEventReceivers)
+        {
+            UnregisterAnimationEvents(receiver);
+        }
 	}
 
 	public void Attack()
@@ -156,26 +166,33 @@ public class MonsterAttack : MonoBehaviour
         skill.OnSkillAnimationEnd();
     }
 
+    private void RegisterAnimationEvents(AttackAnimationEventReceiver receiver)
+    {
+        receiver.AttackStart += OnAttackAnimationStart;
+        receiver.AttackFinish += OnAttackAnimationEnd;
+    }
+    private void UnregisterAnimationEvents(AttackAnimationEventReceiver receiver)
+    {
+        receiver.AttackStart -= OnAttackAnimationStart;
+        receiver.AttackFinish -= OnAttackAnimationEnd;
+    }
+
 	private void RegisterWeaponEvents(Weapon weapon)
 	{
-		weapon.AttackStart += OnAttackAnimationStart;
-		weapon.AttackFinish += OnAttackAnimationEnd;
 		weapon.AttackHit += OnAttackHit;
 		
-		weapon.SkillStart += OnSkillAnimationStart;
-		weapon.SkillFinish += OnSkillAnimationEnd;
-		weapon.SkillHit += OnSkillHit;
+		// weapon.SkillStart += OnSkillAnimationStart;
+		// weapon.SkillFinish += OnSkillAnimationEnd;
+		// weapon.SkillHit += OnSkillHit;
 	}
 
 	private void UnregisterWeaponEvents(Weapon weapon)
 	{
-		weapon.AttackStart -= OnAttackAnimationStart;
-		weapon.AttackFinish -= OnAttackAnimationEnd;
 		weapon.AttackHit -= OnAttackHit;
 		
-		weapon.SkillStart -= OnSkillAnimationStart;
-		weapon.SkillFinish -= OnSkillAnimationEnd;
-		weapon.SkillHit -= OnSkillHit;
+		// weapon.SkillStart -= OnSkillAnimationStart;
+		// weapon.SkillFinish -= OnSkillAnimationEnd;
+		// weapon.SkillHit -= OnSkillHit;
 	}
 
 	private void OnAttackHit(object sender, IEnumerable<IHealth> e)
