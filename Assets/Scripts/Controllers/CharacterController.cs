@@ -126,6 +126,14 @@ public partial class CharacterController : MonoBehaviour
         m_possession.TryPossess(m_character);
     }
 
+    private void Block(bool value)
+    {
+        if (m_character != null)
+        {
+            m_character.Block(value);
+        }
+    }
+
     private void Look()
     {
         float xDelta = m_lookDelta.x * m_data.CameraHorizontalSensitivity * Time.unscaledDeltaTime;

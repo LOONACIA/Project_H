@@ -97,4 +97,9 @@ public class Monster : Actor
             // TODO: 스킬 시작 시 카메라 흔들기
         }
     }
+
+    public override void Block(bool value)
+    {
+        throw new NotImplementedException();
+    }
 }
