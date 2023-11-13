@@ -301,11 +301,10 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
     {
         // 현재 움직이고 있는지 확인
         Vector3 navSpeed = new Vector3(m_agent.velocity.x, 0f, m_agent.velocity.z);
-        bool moving = navSpeed.sqrMagnitude > 0.2f || m_isMoving;
-
+        bool isMoving = navSpeed.sqrMagnitude > 0.2f || m_isMoving;
         // move blend tree 값 설정 (정지 0, 걷기 0.5, 달리기 1)
         float targetMoveRatio = 0;
-        if (moving)
+        if (isMoving)
             targetMoveRatio = (isDashing ? 1 : 0.5f);
 
         // 현재 이동 애니메이션 보간

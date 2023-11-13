@@ -6,6 +6,10 @@ using UnityEngine;
 public class ActorHealth : MonoBehaviour, IHealth
 {
     private static readonly int s_deadAnimationKey = Animator.StringToHash("Dead");
+
+    private static readonly int s_hitAnimationKey = Animator.StringToHash("Hit");
+
+    private static readonly int s_blockImpactIndexAnimationKey = Animator.StringToHash("BlockImpactIndex");
     
     [SerializeField]
     private MonsterHealthData m_data;
@@ -59,6 +63,14 @@ public class ActorHealth : MonoBehaviour, IHealth
     {
         if (IsDead)
         {
+            return;
+        }
+
+        // 방어 모션 중에 공격 받을 시 데미지 무효, 충격 받는 모션 실행
+        if (m_status.IsBlocking) 
+        {
+            m_actor.Animator.SetTrigger(s_hitAnimationKey);
+            m_actor.Animator.SetFloat(s_blockImpactIndexAnimationKey, UnityEngine.Random.Range(0,3));
             return;
         }
 
