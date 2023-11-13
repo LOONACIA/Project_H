@@ -1,10 +1,11 @@
 ﻿using System;
+using UnityEngine;
 
 // ReSharper disable once CheckNamespace
 namespace LOONACIA.Unity
 {
     [AttributeUsage(AttributeTargets.Field)]
-    public class LayerAttribute : Attribute
+    public class LayerAttribute : PropertyAttribute
     {
     }
 }

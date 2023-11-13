@@ -83,6 +83,30 @@ public class EffectManager
 	}
     
     /// <summary>
+    /// 공격 시작에 따른 카메라 쉐이크 이펙트를 실행합니다.
+    /// </summary>
+    public void CameraShakeAttackStart()
+    {
+        GameManager.Camera.Animator.Play(ConstVariables.CAMERASHAKE_GOBLINNORMALATTACKSTART_ANIMATION_NAME);
+    }
+
+    /// <summary>
+    /// 공격 적중에 따른 카메라 쉐이크 이펙트를 실행합니다.
+    /// </summary>
+    public void CameraShakeAttackStop()
+    {
+        GameManager.Camera.Animator.SetTrigger("AttackHit");
+    }
+
+    /// <summary>
+    /// 스킬 시작에 따른 카메라 쉐이크 이펙트를 실행합니다.
+    /// </summary>
+    public void CameraShakeSkillStart()
+    {
+        GameManager.Camera.Animator.Play(ConstVariables.CAMERASHAKE_GOBLINNORMALSKILLSTART_ANIMATION_NAME);
+    }
+    
+    /// <summary>
     /// 출혈 이펙트를 실행합니다.
     /// </summary>
     /// <param name="monster">이펙트 실행 위치</param>
