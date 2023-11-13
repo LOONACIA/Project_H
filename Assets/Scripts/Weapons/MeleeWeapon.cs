@@ -10,33 +10,20 @@ using UnityEngine.Serialization;
  */
 public class MeleeWeapon : Weapon
 {
-    private AttackAnimationEventReceiver m_receiver;
-    
     [FormerlySerializedAs("m_hitBoxes")]
     [SerializeField]
     private List<HitBox> m_attackHitBoxes;
 
     private int m_attackHitBoxIndex = 0;
 
-    private void Start()
-    {
-        m_receiver = GetComponent<AttackAnimationEventReceiver>();
-        if (m_receiver)
-        {
-            m_receiver.AttackStart += OnAnimationStart;
-            m_receiver.AttackHit += OnAnimationEvent;
-            m_receiver.AttackFinish += OnAnimationEnd;
-        }
-    }
+    #region AnimationEvent
 
-    #region AttackEvent
-
-    private void OnAnimationStart(object sender, EventArgs e)
+    protected override void OnAnimationStart(object sender, EventArgs e)
     {
         m_attackHitBoxIndex = 0;
     }
     
-    protected virtual void OnAnimationEvent(object sender, EventArgs e)
+    protected override void OnAnimationEvent(object sender, EventArgs e)
     {
         var hitBox = m_attackHitBoxes[m_attackHitBoxIndex++ % m_attackHitBoxes.Count];
         if (hitBox == null)
@@ -46,21 +33,11 @@ public class MeleeWeapon : Weapon
         }
 
         var detectedObjects = DetectHitBox(hitBox);
-        InvokeAttackHit(detectedObjects);
-    }
-
-    private void OnAnimationEnd(object sender, EventArgs e)
-    {
-        
+        OnHitEvent(detectedObjects);
     }
 
     #endregion
     
-
-    // protected virtual void OnSkillAnimationEvent()
-    // {
-    //     OnSkillHit(new List<IHealth>());
-    // }
 #region HitBox
     private IEnumerable<IHealth> DetectHitBox(HitBox hitBox)
     {

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class HitBox : MonoBehaviour
+public class HitBoxComponent : MonoBehaviour
 {
     [SerializeField]
     private Vector3 m_halfExtents = new Vector3(1f, 1f, 1f);

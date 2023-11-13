@@ -2,13 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class GroundSmashSkill : Skill
 {
     public MonsterAttackData data;
     public GameObject groundSmashEffect;
 
-    public HitBox attackHitBox;
+    [FormerlySerializedAs("attackHitBox")] public HitBoxComponent attackHitBoxComponent;
 
     public GameObject slashVfx;
 
@@ -43,7 +44,7 @@ public class GroundSmashSkill : Skill
         bool isCheck = false;
 
         //히트박스를 체크
-        var hitObjects = attackHitBox.DetectHitBox();
+        var hitObjects = attackHitBoxComponent.DetectHitBox();
         
         //공격 체크
         foreach (var health in hitObjects)

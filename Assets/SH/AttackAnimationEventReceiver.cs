@@ -21,7 +21,7 @@ public class AttackAnimationEventReceiver : MonoBehaviour
         AttackFinish?.Invoke(this, EventArgs.Empty);
     }
 	
-    protected virtual void OnHitBoxCheck()
+    protected virtual void OnAttackAnimationEvent()
     {
         AttackHit?.Invoke(this, EventArgs.Empty);
     }
