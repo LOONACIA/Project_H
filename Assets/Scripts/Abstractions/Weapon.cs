@@ -8,12 +8,12 @@ using UnityEngine;
 /// </summary>
 public abstract class Weapon : MonoBehaviour
 {
-    [SerializeField] private AttackAnimationEventReceiver m_receiver;
-    
     /// <summary>
     /// 실제 공격 히트 시 히트한 대상(들)을 반환하는 이벤트입니다.
     /// </summary>
     public event EventHandler<IEnumerable<IHealth>> AttackHit;
+    
+    [SerializeField] private AttackAnimationEventReceiver m_receiver;
 
     #region HitEvent Functions
     

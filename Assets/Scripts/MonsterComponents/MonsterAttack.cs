@@ -43,7 +43,7 @@ public class MonsterAttack : MonoBehaviour
 
     public event EventHandler SkillFinish;
 
-    public Skill skill;
+    public Weapon skill;
 
     private void Awake()
 	{
@@ -98,8 +98,7 @@ public class MonsterAttack : MonoBehaviour
 		{
 			return;
 		}
-        //m_actor.Animator.SetTrigger(s_skillAnimationKey);
-        skill.Cast(m_actor, m_actor.Animator);
+        m_actor.Animator.SetTrigger(s_skillAnimationKey);
     }
 
 	private void HandleAttackHit(IEnumerable<IHealth> hitObjects)
@@ -162,8 +161,6 @@ public class MonsterAttack : MonoBehaviour
     {
         IsAttacking = false;
         SkillFinish?.Invoke(this, EventArgs.Empty);
-
-        skill.OnSkillAnimationEnd();
     }
 
     private void RegisterAnimationEvents(AttackAnimationEventReceiver receiver)
@@ -180,19 +177,11 @@ public class MonsterAttack : MonoBehaviour
 	private void RegisterWeaponEvents(Weapon weapon)
 	{
 		weapon.AttackHit += OnAttackHit;
-		
-		// weapon.SkillStart += OnSkillAnimationStart;
-		// weapon.SkillFinish += OnSkillAnimationEnd;
-		// weapon.SkillHit += OnSkillHit;
 	}
 
 	private void UnregisterWeaponEvents(Weapon weapon)
 	{
 		weapon.AttackHit -= OnAttackHit;
-		
-		// weapon.SkillStart -= OnSkillAnimationStart;
-		// weapon.SkillFinish -= OnSkillAnimationEnd;
-		// weapon.SkillHit -= OnSkillHit;
 	}
 
 	private void OnAttackHit(object sender, IEnumerable<IHealth> e)
@@ -205,8 +194,6 @@ public class MonsterAttack : MonoBehaviour
 	{
 		var hits = e.Where(hit => hit.gameObject != gameObject);
 		HandleSkillHit(hits);
-
-        skill.OnSkillAnimationEvent();
 	}
 	
 	private void OnValidate()

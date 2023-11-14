@@ -9,13 +9,13 @@ using UnityEngine.UIElements;
 public class HitBox
 {
     [SerializeField]
-    private Vector3 m_position;
+    private Vector3 m_position = Vector3.zero;
 
     [SerializeField]
-    private Vector3 m_halfExtents;
+    private Vector3 m_halfExtents = Vector3.one;
 
     [SerializeField]
-    private Quaternion m_rotation;
+    private Quaternion m_rotation = Quaternion.identity;
 
     [SerializeField]
     private Color m_gizmoColor = Color.red;
@@ -46,9 +46,12 @@ public class HitBox
         if (!m_showGizmo) return;
         
         Gizmos.color = GizmoColor;
-        Gizmos.matrix = Matrix4x4.TRS(parent.TransformPoint(Position),
-                                      parent.rotation * Rotation,
-                                      Vector3.one);
+        Matrix4x4 parentMat = Matrix4x4.TRS(parent.position, parent.rotation, Vector3.one);
+        Matrix4x4 hitBoxMat = Matrix4x4.TRS(Position, Rotation, Vector3.one);
+        // Gizmos.matrix = Matrix4x4.TRS(parent.TransformPoint(Position),
+        //                               parent.rotation,
+        //                               Vector3.one);
+        Gizmos.matrix = parentMat * hitBoxMat;
         //Debug.Log($"pos: {parent.TransformPoint(Position)}, {parent.rotation * Rotation}");
         Gizmos.DrawWireCube(Vector3.zero, HalfExtents * 2f);
 
