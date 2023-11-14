@@ -31,8 +31,10 @@ public class PossessionProcessor : MonoBehaviour
 
     public void TryPossess(Actor sender)
     {   
+        //표창이 박혀있지 않을 시, 해킹을 하지 않고 표창을 날림.
         if(m_isAblePossession == false)
         {
+            ThrowShuriken();
             return;
         }
 
@@ -107,8 +109,7 @@ public class PossessionProcessor : MonoBehaviour
     #region 표창 날리기
     public void ThrowShuriken()
     {
-
+        
     }
-
     #endregion
 }
