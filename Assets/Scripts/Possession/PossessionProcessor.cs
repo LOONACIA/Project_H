@@ -25,6 +25,11 @@ public class PossessionProcessor : MonoBehaviour
     /// </summary>
     public event EventHandler<Actor> Possessed;
 
+    /// <summary>
+    /// 표창이 박혀있는지 확인하는 이벤트, 박혀있다면 True이기에 빙의를 실행, 박혀있지 않다면 표창을 날림.
+    /// </summary>
+    public event EventHandler<bool> Shuriken;
+
     public void TryPossess(Actor sender)
     {
         m_sender = sender;
@@ -94,4 +99,12 @@ public class PossessionProcessor : MonoBehaviour
         Possessed?.Invoke(this, actor);
         StartTime();
     }
+
+    #region 표창 날리기
+    public void ThrowShuriken()
+    {
+
+    }
+
+    #endregion
 }
