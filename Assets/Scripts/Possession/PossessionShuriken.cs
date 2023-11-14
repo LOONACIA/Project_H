@@ -9,7 +9,7 @@ public class PossessionShuriken : MonoBehaviour
 
     #region PrivateVariables
     #endregion
-
+    
     #region PublicMethod
     #endregion
 
