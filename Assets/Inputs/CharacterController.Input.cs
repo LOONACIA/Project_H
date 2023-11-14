@@ -76,6 +76,21 @@ public partial class CharacterController
             }
         }
 
+        public void OnBlock(InputAction.CallbackContext context)
+        {
+            switch (context.phase)
+            {
+                case InputActionPhase.Started:
+                    m_controller.Block(true);
+                    break;
+                case InputActionPhase.Performed:
+                    break;
+                case InputActionPhase.Canceled:
+                    m_controller.Block(false);
+                    break;
+            }
+        }
+
         public void OnLook(InputAction.CallbackContext context)
         {
             m_controller.m_lookDelta = context.ReadValue<Vector2>();
