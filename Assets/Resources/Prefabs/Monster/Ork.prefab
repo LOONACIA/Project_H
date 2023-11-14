@@ -261,6 +261,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_hp: 0
   m_damage: 0
+  m_isBlocking: 0
 --- !u!1001 &122595507542623857
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -614,18 +615,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 797642134393786160}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &3883732865921794436
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 798635796685192412}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa601989c9460e449800a2f33248524d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2871853278180426375
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -638,16 +627,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ad36176aa803c44fbdede2bc7050bba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_monsterAttack: {fileID: 7180573643939554954}
+  m_animator: {fileID: 740178939538769434}
   m_attackHitBoxes:
   - m_position: {x: 0, y: 0, z: 0}
     m_halfExtents: {x: 0, y: 0, z: 0}
-    m_rotation: {x: 0, y: 0, z: 0, w: 0}
+    m_rotation: {x: 0, y: 0, z: 0, w: 1}
     m_gizmoColor: {r: 0, g: 0, b: 0, a: 0}
-  m_skillHitBoxes:
-  - m_position: {x: 0, y: 0, z: 0}
-    m_halfExtents: {x: 0, y: 0, z: 0}
-    m_rotation: {x: 0, y: 0, z: 0, w: 0}
-    m_gizmoColor: {r: 0, g: 0, b: 0, a: 0}
+    m_showGizmo: 1
+--- !u!114 &3883732865921794436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 798635796685192412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa601989c9460e449800a2f33248524d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2176287453059559825
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2562,6 +2561,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 8216525907423140730}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1535476106158151592
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8215250211543050390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c936006f1fdd084abb9785133b8ff0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &4909644706933892479
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2586,36 +2597,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ad36176aa803c44fbdede2bc7050bba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_monsterAttack: {fileID: 7180573643939554954}
+  m_animator: {fileID: 8309872895631430224}
   m_attackHitBoxes:
   - m_position: {x: 0.52, y: 1.809, z: 2.72}
     m_halfExtents: {x: 0.4, y: 0.4, z: 2}
     m_rotation: {x: 0.06973257, y: -0.026113184, z: -0.0018260117, w: -0.99722224}
     m_gizmoColor: {r: 1, g: 0, b: 0, a: 1}
+    m_showGizmo: 1
   - m_position: {x: 0.42, y: 1.739, z: 2.77}
     m_halfExtents: {x: 0.5, y: 0.4, z: 2}
     m_rotation: {x: -0.034890328, y: -0.02284786, z: -0.00079786376, w: 0.99912965}
     m_gizmoColor: {r: 1, g: 0, b: 0, a: 1}
+    m_showGizmo: 1
   - m_position: {x: 0.32, y: 1.681, z: 2.82}
     m_halfExtents: {x: 0.6, y: 0.4, z: 2}
     m_rotation: {x: 0, y: -0.06644805, z: 0, w: 0.99778986}
     m_gizmoColor: {r: 1, g: 0, b: 0, a: 1}
+    m_showGizmo: 1
   - m_position: {x: 0.32, y: 1.681, z: 2.82}
     m_halfExtents: {x: 0.6, y: 0.4, z: 2}
     m_rotation: {x: 0, y: -0.06644805, z: 0, w: 0.99778986}
     m_gizmoColor: {r: 1, g: 0, b: 0, a: 1}
+    m_showGizmo: 1
   - m_position: {x: -0.121, y: 1.414, z: 2.82}
     m_halfExtents: {x: 0.9, y: 0.6, z: 2}
     m_rotation: {x: -0.06893346, y: 0.15278517, z: -0.010683778, w: -0.9857945}
     m_gizmoColor: {r: 1, g: 0, b: 0, a: 1}
+    m_showGizmo: 1
   - m_position: {x: -0.231, y: 1.249, z: 2.72}
     m_halfExtents: {x: 1, y: 0.75, z: 2}
     m_rotation: {x: -0.08588133, y: 0.16973321, z: -0.014849725, w: -0.9816285}
     m_gizmoColor: {r: 1, g: 0, b: 0, a: 1}
-  m_skillHitBoxes:
-  - m_position: {x: 0, y: 3.2, z: 6.76}
-    m_halfExtents: {x: 4.5, y: 1, z: 7}
-    m_rotation: {x: 0, y: 0.066448, z: 0, w: -0.99778986}
-    m_gizmoColor: {r: 1, g: 0.6976725, b: 0, a: 1}
+    m_showGizmo: 1
 --- !u!4 &8220807123064275264 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4743577955424826, guid: 0d42bc61d684259409d481c6f5dd5d5c,

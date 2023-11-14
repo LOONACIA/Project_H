@@ -9,9 +9,11 @@ using UnityEngine.AI;
 [RequireComponent(typeof(MonsterMovement))]
 public class Monster : Actor
 {
+    private static readonly int s_blockAnimationKey = Animator.StringToHash("Block");
+
     // TODO: 빙의 게이지 관련 처리
     //private float m_stamina = 0f;
-    
+
     public MonsterAttack Attack { get; private set; }
     
     public MonsterMovement Movement { get; private set; }
@@ -24,22 +26,6 @@ public class Monster : Actor
 
         Attack = GetComponent<MonsterAttack>();
         Movement = GetComponent<MonsterMovement>();
-    }
-
-    protected override void OnEnable()
-    {
-        base.OnEnable();
-
-        Attack.AttackStart += OnAttackStart;
-        Attack.SkillStart += OnSkillStart;
-    }
-
-    protected override void OnDisable()
-    {
-        base.OnDisable();
-
-        Attack.AttackStart -= OnAttackStart;
-        Attack.SkillStart -= OnSkillStart;
     }
 
     public override void Move(Vector3 direction)
@@ -59,7 +45,7 @@ public class Monster : Actor
 
     public override void Skill()
     {
-        Attack.Skill();
+        //Attack.Skill();
     }
 
     public override void Dash()
@@ -82,23 +68,12 @@ public class Monster : Actor
         Status.Damage = Attack.Data.Damage;
     }
     
-    private void OnAttackStart(object sender, EventArgs e)
-    {
-        if (IsPossessed)
-        {
-            // TODO: 공격 시작 시 카메라 흔들기
-        }
-    }
-    
-    private void OnSkillStart(object sender, EventArgs e)
-    {
-        if (IsPossessed)
-        {
-            // TODO: 스킬 시작 시 카메라 흔들기
-        }
-    }
-
     public override void Block(bool value)
     {
+        if (IsPossessed)
+        {
+            Status.IsBlocking = value;
+            Animator.SetBool(s_blockAnimationKey, value);
+        }
     }
 }
