@@ -15,6 +15,10 @@ public class PossessionProcessor : MonoBehaviour
 
     private Actor m_sender;
 
+    // 빙의가 가능한지 여부 체크, 표창을 던질 지, 빙의를 할지를 판단함.
+    [SerializeField]
+    private bool m_isAblePossession = false;
+
     /// <summary>
     /// 빙의 타겟 선정에 성공할 경우, 빙의 시작 시 발생하는 이벤트.
     /// </summary>
@@ -25,13 +29,13 @@ public class PossessionProcessor : MonoBehaviour
     /// </summary>
     public event EventHandler<Actor> Possessed;
 
-    /// <summary>
-    /// 표창이 박혀있는지 확인하는 이벤트, 박혀있다면 True이기에 빙의를 실행, 박혀있지 않다면 표창을 날림.
-    /// </summary>
-    public event EventHandler<bool> Shuriken;
-
     public void TryPossess(Actor sender)
-    {
+    {   
+        if(m_isAblePossession == false)
+        {
+            return;
+        }
+
         m_sender = sender;
         IAnimationEventReceiver receiver = m_sender.GetComponentInChildren<IAnimationEventReceiver>();
         if (receiver != null)
