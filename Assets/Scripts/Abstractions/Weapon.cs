@@ -8,23 +8,38 @@ using UnityEngine;
 /// </summary>
 public abstract class Weapon : MonoBehaviour
 {
-    /// <summary>
-    /// 실제 공격 히트 시 히트한 대상(들)을 반환하는 이벤트입니다.
-    /// </summary>
-    public event EventHandler<IEnumerable<IHealth>> HitEventHandler;
-
-    [SerializeField] protected MonsterAttack m_monsterAttack;
-    protected Monster m_attacker;
-    [SerializeField] protected Animator m_animator;
-    protected AttackAnimationEventReceiver m_receiver;
-
+    public Animator Animator { get; private set; }
+    public Monster Owner { get; private set; }
+    public AttackAnimationEventReceiver Receiver { get; private set; }
+    public bool IsAttacking { get; set; }
 
     /// <summary>
     /// 실제 공격이 일어날 때 MonsterAttack의 attackEvent Handler에 의해 호출됩니다.
     /// </summary>
-    public abstract void StartAttack(object o, Monster attacker);
+    public void StartAttack(Monster attacker)
+    {
+        if (attacker != Owner)
+        {
+            ChangeOwner(attacker);
+        }
+        Attack();
+    }
     
-    protected virtual void InvokeHitEvent(IEnumerable<IHealth> hitObjects) { HitEventHandler?.Invoke(this, hitObjects); }
+    protected abstract void Attack();
+    
+    public void ChangeOwner(Monster owner)
+    {
+        //기존 Receiver에 등록된 이벤트 삭제
+        UnregisterAnimationEvents();
+        
+        //변수 초기화
+        Owner = owner;
+        Animator = owner.Animator;
+        Receiver = Animator.GetComponent<AttackAnimationEventReceiver>();
+        RegisterAnimationEvents();
+    }
+    
+    protected virtual void InvokeHitEvent(IEnumerable<IHealth> hitObjects) { Owner.Attack.OnHitEvent(this,hitObjects); }
 
     #region AnimationEvents
 
@@ -38,43 +53,29 @@ public abstract class Weapon : MonoBehaviour
     
     #region UnityEventFunctions
     
-    protected virtual void Awake()
+    protected void OnDestroy()
     {
-        m_attacker = m_monsterAttack.GetComponent<Monster>();
-        m_receiver = m_animator.GetComponent<AttackAnimationEventReceiver>();
-    }
-
-    protected virtual void OnEnable()
-    {
-        RegisterAnimationEvents();
-        
-        m_monsterAttack.attackEventHandler += StartAttack;
-    }
-
-    protected void OnDisable()
-    {
-        m_monsterAttack.attackEventHandler -= StartAttack;
-        
         UnregisterAnimationEvents();
     }
 
     #endregion
 
     #region EventRegisterFunctions
+    
     protected virtual void RegisterAnimationEvents()
     {
-        if (m_receiver == null) return;
-        m_receiver.AttackStart += OnAnimationStart;
-        m_receiver.AttackHit += OnAnimationEvent;
-        m_receiver.AttackFinish += OnAnimationEnd;
+        if (Receiver == null) return;
+        Receiver.AttackStart += OnAnimationStart;
+        Receiver.AttackHit += OnAnimationEvent;
+        Receiver.AttackFinish += OnAnimationEnd;
     }
 
     protected virtual void UnregisterAnimationEvents()
     {
-        if (m_receiver == null) return;
-        m_receiver.AttackStart -= OnAnimationStart;
-        m_receiver.AttackHit -= OnAnimationEvent;
-        m_receiver.AttackFinish -= OnAnimationEnd;
+        if (Receiver == null) return;
+        Receiver.AttackStart -= OnAnimationStart;
+        Receiver.AttackHit -= OnAnimationEvent;
+        Receiver.AttackFinish -= OnAnimationEnd;
     }
     #endregion
 }
