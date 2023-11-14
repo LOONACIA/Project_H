@@ -15,7 +15,6 @@ public class MonsterAttack : MonoBehaviour
 {
 	private static readonly int s_attackAnimationKey = Animator.StringToHash("Attack");
 	
-	private static readonly int s_skillAnimationKey = Animator.StringToHash("Skill");
 	
 	[SerializeField]
 	private MonsterAttackData m_data;
@@ -23,9 +22,6 @@ public class MonsterAttack : MonoBehaviour
 	private Monster m_actor;
 	
 	private ActorStatus m_status;
-	
-	private Weapon[] m_weapons;
-    private AttackAnimationEventReceiver[] m_attackAnimationEventReceivers;
 
 	private bool m_isHitBoxChecked;
 
@@ -34,23 +30,13 @@ public class MonsterAttack : MonoBehaviour
 	public bool CanAttack { get; set; } = true;
 	
 	public bool IsAttacking { get; protected set; }
-	
-	public event EventHandler AttackStart;
-	
-	public event EventHandler AttackFinish;
 
-    public event EventHandler SkillStart;
-
-    public event EventHandler SkillFinish;
-
-    public Weapon skill;
+    public event EventHandler<Monster> attackEventHandler;
 
     private void Awake()
 	{
 		m_actor = GetComponent<Monster>();
 		m_status = GetComponent<ActorStatus>();
-		m_weapons = GetComponentsInChildren<Weapon>(true);
-        m_attackAnimationEventReceivers = GetComponentsInChildren<AttackAnimationEventReceiver>(true);
     }
 
 	private void Start()
@@ -60,26 +46,13 @@ public class MonsterAttack : MonoBehaviour
 
 	private void OnEnable()
 	{
-        foreach (var receiver in m_attackAnimationEventReceivers)
-        {
-            RegisterAnimationEvents(receiver);
-        }
-		foreach (var weapon in m_weapons)
-		{
-			RegisterWeaponEvents(weapon);
-		}
-	}
+        //Weapon의 Hit판정이 일어났을 때에 대한 이벤트를 등록합니다.
+        //RegisterWeaponEvents(attackWeapon);
+    }
 
 	private void OnDisable()
 	{
-		foreach (var weapon in m_weapons)
-		{
-			UnregisterWeaponEvents(weapon);
-		}
-        foreach (var receiver in m_attackAnimationEventReceivers)
-        {
-            UnregisterAnimationEvents(receiver);
-        }
+        //UnregisterWeaponEvents(attackWeapon);
 	}
 
 	public void Attack()
@@ -89,27 +62,13 @@ public class MonsterAttack : MonoBehaviour
 			return;
 		}
 		
-		m_actor.Animator.SetTrigger(s_attackAnimationKey);
+		//m_actor.Animator.SetTrigger(s_attackAnimationKey);
+        attackEventHandler?.Invoke(this, m_actor);
 	}
 
-	public void Skill()
-	{
-		if (!CanAttack || IsAttacking)
-		{
-			return;
-		}
-        m_actor.Animator.SetTrigger(s_skillAnimationKey);
-    }
-
-	private void HandleAttackHit(IEnumerable<IHealth> hitObjects)
+	private void HandleHitEvent(IEnumerable<IHealth> hitObjects)
 	{
 		int damage = m_status.Damage;
-		HandleHitCore(hitObjects, damage);
-	}
-
-	private void HandleSkillHit(IEnumerable<IHealth> hitObjects)
-	{
-		int damage = m_data.SkillDamage;
 		HandleHitCore(hitObjects, damage);
 	}
 	
@@ -136,64 +95,21 @@ public class MonsterAttack : MonoBehaviour
 		}
 
 	}
-	
-	private void OnAttackAnimationStart(object sender, EventArgs e)
-	{
-		m_isHitBoxChecked = false;
-		IsAttacking = true;
-		AttackStart?.Invoke(this, EventArgs.Empty);
-	}
-	
-	private void OnAttackAnimationEnd(object sender, EventArgs e)
-	{
-		IsAttacking = false;
-		AttackFinish?.Invoke(this, EventArgs.Empty);
-	}
-    
-    private void OnSkillAnimationStart(object sender, EventArgs e)
-    {
-        m_isHitBoxChecked = false;
-        IsAttacking = true;
-        SkillStart?.Invoke(this, EventArgs.Empty);
-    }
-	
-    private void OnSkillAnimationEnd(object sender, EventArgs e)
-    {
-        IsAttacking = false;
-        SkillFinish?.Invoke(this, EventArgs.Empty);
-    }
-
-    private void RegisterAnimationEvents(AttackAnimationEventReceiver receiver)
-    {
-        receiver.AttackStart += OnAttackAnimationStart;
-        receiver.AttackFinish += OnAttackAnimationEnd;
-    }
-    private void UnregisterAnimationEvents(AttackAnimationEventReceiver receiver)
-    {
-        receiver.AttackStart -= OnAttackAnimationStart;
-        receiver.AttackFinish -= OnAttackAnimationEnd;
-    }
 
 	private void RegisterWeaponEvents(Weapon weapon)
 	{
-		weapon.AttackHit += OnAttackHit;
+		//weapon.HitEventHandler += OnHitEvent;
 	}
 
 	private void UnregisterWeaponEvents(Weapon weapon)
 	{
-		weapon.AttackHit -= OnAttackHit;
+		//weapon.HitEventHandler -= OnHitEvent;
 	}
 
-	private void OnAttackHit(object sender, IEnumerable<IHealth> e)
+	public void OnHitEvent(object sender, IEnumerable<IHealth> e)
 	{
 		var hits = e.Where(hit => hit.gameObject != gameObject);
-		HandleAttackHit(hits);
-	}
-	
-	private void OnSkillHit(object sender, IEnumerable<IHealth> e)
-	{
-		var hits = e.Where(hit => hit.gameObject != gameObject);
-		HandleSkillHit(hits);
+		HandleHitEvent(hits);
 	}
 	
 	private void OnValidate()

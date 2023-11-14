@@ -5,41 +5,64 @@ using UnityEngine;
 using UnityEngine.Serialization;
 
 /*
- * 공격 범위 및 대상을 판정하는 클래스
- * 실제 대미지 처리는 MonsterAttack 클래스에서 이루어짐
+ * Melee Weapon: 기본적인 공격 클래스입니다.
+ * 4연타가 존재하며, 각 공격 타격 중 실제 hit가 발생한다면 공격이 interrupt됩니다.
  */
 public class MeleeWeapon : Weapon
 {
+    private static readonly int s_attackAnimationKey = Animator.StringToHash("Attack");
+    
     [FormerlySerializedAs("m_hitBoxes")]
     [SerializeField]
     private List<HitBox> m_attackHitBoxes;
 
-    private int m_attackHitBoxIndex = 0;
+    private int m_hitEventIndex = 0;
+    private bool m_isHitBoxChecked = false;
+    private bool m_isAttacking = false;
+    
+    public override void StartAttack(object o, Monster attacker)
+    {
+        m_animator.SetTrigger(s_attackAnimationKey);
+        //TODO: 1인칭일 경우 카메라 쉐이킹
+        
+        //공격 관련 변수 초기화
+        m_isHitBoxChecked = false;
+        m_isAttacking = false;
+        m_hitEventIndex = 0;
+    }
 
     #region AnimationEvent
-
-    protected override void OnAnimationStart(object sender, EventArgs e)
-    {
-        m_attackHitBoxIndex = 0;
-    }
     
     protected override void OnAnimationEvent(object sender, EventArgs e)
     {
-        var hitBox = m_attackHitBoxes[m_attackHitBoxIndex++ % m_attackHitBoxes.Count];
+        //MeleeWeapon은 hit 판정 프레임 중 한번이라도 적에게 닿았다면 바로 취소합니다.
+        if (m_isHitBoxChecked) return;
+        Debug.Log($"melee hit: {m_hitEventIndex}");
+        
+        var hitBox = m_attackHitBoxes[m_hitEventIndex++ % m_attackHitBoxes.Count];
         if (hitBox == null)
         {
             Debug.LogError($"Attack is interrupted because hit box is null. {name}");
             return;
         }
 
-        var detectedObjects = hitBox.DetectHitBox(transform);
-        //Debug.Log($"Col: {m_attackHitBoxIndex}{detectedObjects.Count()}");
-        InvokeAttackHit(detectedObjects);
+        //내 몬스터와 다른 대상만 가져옴
+        var detectedObjects 
+            = hitBox.DetectHitBox(transform)
+                    .Where(hit=>hit.gameObject!=m_monsterAttack.gameObject);
+
+        //오브젝트가 하나라도 있다면?
+        if (detectedObjects.Any())
+        {
+            m_monsterAttack.OnHitEvent(this, detectedObjects);
+            m_isHitBoxChecked = true;
+        }
+        
     }
 
     #endregion
     
-#region HitBox
+    #region HitBox
 
     private void OnDrawGizmosSelected()
     {
@@ -48,8 +71,6 @@ public class MeleeWeapon : Weapon
             hitbox.DrawGizmo(transform);
         }
     }
-
-    
 
     #endregion
 }
