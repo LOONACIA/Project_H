@@ -13,6 +13,7 @@ using UnityEngine.EventSystems;
 public class MonsterAttack : MonoBehaviour
 {
     public static readonly int s_attackAnimationKey = Animator.StringToHash("Attack");
+    public static readonly int s_targetCheckAnimationKey = Animator.StringToHash("TargetCheck");
 
     [SerializeField] private Weapon firstPersonAttack;
     [SerializeField] private Weapon thirdPersonAttack;
