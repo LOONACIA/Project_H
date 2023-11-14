@@ -105,6 +105,8 @@ public abstract class Actor : MonoBehaviour
 
     public abstract void Dash();
 
+    public abstract void Block(bool value);
+
     public virtual void Possessed()
     {
         Animator.gameObject.SetActive(false);

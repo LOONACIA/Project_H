@@ -54,5 +54,9 @@ public class Ghost : Actor
     {
     }
 
+    public override void Block(bool value)
+    {
+    }
+
     #endregion
 }
