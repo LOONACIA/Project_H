@@ -9,9 +9,11 @@ using UnityEngine.AI;
 [RequireComponent(typeof(MonsterMovement))]
 public class Monster : Actor
 {
+    private static readonly int s_blockAnimationKey = Animator.StringToHash("Block");
+
     // TODO: 빙의 게이지 관련 처리
     //private float m_stamina = 0f;
-    
+
     public MonsterAttack Attack { get; private set; }
     
     public MonsterMovement Movement { get; private set; }
@@ -100,5 +102,10 @@ public class Monster : Actor
 
     public override void Block(bool value)
     {
+        if (IsPossessed)
+        {
+            Status.IsBlocking = value;
+            Animator.SetBool(s_blockAnimationKey, value);
+        }
     }
 }
