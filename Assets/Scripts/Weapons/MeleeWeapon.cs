@@ -5,8 +5,8 @@ using UnityEngine;
 using UnityEngine.Serialization;
 
 /*
- * 공격 범위 및 대상을 판정하는 클래스
- * 실제 대미지 처리는 MonsterAttack 클래스에서 이루어짐
+ * Melee Weapon: 기본적인 공격 클래스입니다.
+ * 4연타가 존재하며, 각 공격 타격 중 실제 hit가 발생한다면 공격이 interrupt됩니다.
  */
 public class MeleeWeapon : Weapon
 {
@@ -14,100 +14,63 @@ public class MeleeWeapon : Weapon
     [SerializeField]
     private List<HitBox> m_attackHitBoxes;
 
-    [SerializeField]
-    private List<HitBox> m_skillHitBoxes;
-
-    private int m_attackHitBoxIndex = 0;
-
-    private int m_skillHitBoxIndex = 0;
-
-    protected override void OnAttackAnimationStart()
+    private int m_hitEventIndex = 0;
+    private bool m_isHitBoxChecked = false;
+    
+    protected override void Attack()
     {
-        base.OnAttackAnimationStart();
-        m_attackHitBoxIndex = 0;
+        Animator.SetTrigger(MonsterAttack.s_attackAnimationKey);
+        //TODO: 1인칭일 경우 카메라 쉐이킹
+        
+        //공격 관련 변수 초기화
+        IsAttacking = true;
+        m_isHitBoxChecked = false;
+        m_hitEventIndex = 0;
     }
 
-    protected override void OnSkillAnimationStart()
+    #region AnimationEvent
+    
+    protected override void OnAnimationEvent(object sender, EventArgs e)
     {
-        base.OnSkillAnimationStart();
-        m_skillHitBoxIndex = 0;
-    }
-
-    protected virtual void OnAttackAnimationEvent()
-    {
-        var hitBox = m_attackHitBoxes[m_attackHitBoxIndex++ % m_attackHitBoxes.Count];
+        //MeleeWeapon은 hit 판정 프레임 중 한번이라도 적에게 닿았다면 바로 취소합니다.
+        if (m_isHitBoxChecked) return;
+        
+        var hitBox = m_attackHitBoxes[m_hitEventIndex++ % m_attackHitBoxes.Count];
         if (hitBox == null)
         {
             Debug.LogError($"Attack is interrupted because hit box is null. {name}");
             return;
         }
 
-        var detectedObjects = DetectHitBox(hitBox);
-        OnAttackHit(detectedObjects);
-    }
+        //내 몬스터와 다른 대상만 가져옴
+        var detectedObjects 
+            = hitBox.DetectHitBox(transform)
+                    .Where(hit=>hit.gameObject!=Owner.gameObject);
 
-    protected virtual void OnSkillAnimationEvent()
-    {
-        var hitBox = m_skillHitBoxes[m_skillHitBoxIndex++ % m_skillHitBoxes.Count];
-        if (hitBox == null)
+        //오브젝트가 하나라도 있다면?
+        if (detectedObjects.Any())
         {
-            Debug.LogError($"Skill is interrupted because hit box is null. {name}");
-            return;
+            InvokeHitEvent(detectedObjects);
+            m_isHitBoxChecked = true;
         }
-
-        var detectedObjects = DetectHitBox(hitBox);
-        OnSkillHit(detectedObjects);
     }
 
-    private IEnumerable<IHealth> DetectHitBox(HitBox hitBox)
+    protected override void OnAnimationEnd(object sender, EventArgs e)
     {
-        Quaternion rotation = Quaternion.Euler(transform.eulerAngles + hitBox.Rotation.eulerAngles);
-
-        return Physics.OverlapBox(transform.position + transform.TransformDirection(hitBox.Position),
-                hitBox.HalfExtents, rotation, LayerMask.GetMask("Monster"))
-            .Select(detectedObject => detectedObject.GetComponent<IHealth>())
-            .Where(health => health != null);
+        IsAttacking = false;
     }
+
+    #endregion
+    
+    #region HitBox
 
     private void OnDrawGizmosSelected()
     {
-        DrawHitBoxGizmos(m_attackHitBoxes);
-        DrawHitBoxGizmos(m_skillHitBoxes);
-    }
-
-    private void DrawHitBoxGizmos(IEnumerable<HitBox> hitBoxes)
-    {
-        foreach (var hitBox in hitBoxes)
+        foreach (var hitbox in m_attackHitBoxes)
         {
-            Gizmos.color = hitBox.GizmoColor;
-            Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, transform.localScale) *
-                            (Matrix4x4.Translate(hitBox.Position) *
-                             Matrix4x4.Rotate(Quaternion.Euler(hitBox.Rotation.eulerAngles)));
-            Gizmos.DrawWireCube(Vector3.zero, hitBox.HalfExtents * 2f);
+            hitbox.DrawGizmo(transform);
         }
     }
 
-    [Serializable]
-    private class HitBox
-    {
-        [SerializeField]
-        private Vector3 m_position;
-
-        [SerializeField]
-        private Vector3 m_halfExtents;
-
-        [SerializeField]
-        private Quaternion m_rotation;
-
-        [SerializeField]
-        private Color m_gizmoColor = Color.red;
-
-        public Vector3 Position => m_position;
-
-        public Vector3 HalfExtents => m_halfExtents;
-
-        public Quaternion Rotation => m_rotation;
-
-        public Color GizmoColor => m_gizmoColor;
-    }
+    #endregion
 }

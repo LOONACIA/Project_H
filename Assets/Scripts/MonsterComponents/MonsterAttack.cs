@@ -7,190 +7,85 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 /*
- * 공격을 시작하고, Weapon으로부터 전달받은 IHealth 객체에 피해를 가하는 함수
- * 판정은 Weapon 클래스에서 이루어짐
+ * 1인칭, 3인칭 공격을 시전, 데미지 처리
  */
-[RequireComponent(typeof(ActorStatus))]
+[RequireComponent(typeof (ActorStatus))]
 public class MonsterAttack : MonoBehaviour
 {
-	private static readonly int s_attackAnimationKey = Animator.StringToHash("Attack");
-	
-	private static readonly int s_skillAnimationKey = Animator.StringToHash("Skill");
-	
-	[SerializeField]
-	private MonsterAttackData m_data;
+    public static readonly int s_attackAnimationKey = Animator.StringToHash("Attack");
 
-	private Monster m_actor;
-	
-	private ActorStatus m_status;
-	
-	private Weapon[] m_weapons;
+    [SerializeField] private Weapon firstPersonAttack;
+    [SerializeField] private Weapon thirdPersonAttack;
+    [SerializeField]
+    private MonsterAttackData m_data;
 
-	private bool m_isHitBoxChecked;
+    private Monster m_actor;
 
-	public MonsterAttackData Data => m_data;
+    private ActorStatus m_status;
 
-	public bool CanAttack { get; set; } = true;
-	
-	public bool IsAttacking { get; protected set; }
-	
-	public event EventHandler AttackStart;
-	
-	public event EventHandler AttackFinish;
+    public MonsterAttackData Data => m_data;
 
-    public event EventHandler SkillStart;
+    public bool CanAttack { get; set; } = true;
 
-    public event EventHandler SkillFinish;
+    public bool IsAttacking { get; protected set; }
 
-	private void Awake()
-	{
-		m_actor = GetComponent<Monster>();
-		m_status = GetComponent<ActorStatus>();
-		m_weapons = GetComponentsInChildren<Weapon>(true);
-	}
+    public Weapon AttackWeapon => m_actor.IsPossessed ? firstPersonAttack : thirdPersonAttack;
 
-	private void Start()
-	{
-		m_status.Damage = m_data.Damage;
-	}
+    private void Awake()
+    {
+        m_actor = GetComponent<Monster>();
+        m_status = GetComponent<ActorStatus>();
+    }
 
-	private void OnEnable()
-	{
-		foreach (var weapon in m_weapons)
-		{
-			RegisterWeaponEvents(weapon);
-		}
-	}
+    private void Start()
+    {
+        m_status.Damage = m_data.Damage;
+    }
 
-	private void OnDisable()
-	{
-		foreach (var weapon in m_weapons)
-		{
-			UnregisterWeaponEvents(weapon);
-		}
-	}
+    public void Attack()
+    {
+        if (!CanAttack || IsAttacking)
+        {
+            return;
+        }
 
-	public void Attack()
-	{
-		if (!CanAttack || IsAttacking)
-		{
-			return;
-		}
-		
-		m_actor.Animator.SetTrigger(s_attackAnimationKey);
-	}
+        AttackWeapon.StartAttack(m_actor);
+    }
 
-	public void Skill()
-	{
-		if (!CanAttack || IsAttacking)
-		{
-			return;
-		}
-		
-		m_actor.Animator.SetTrigger(s_skillAnimationKey);
-	}
+    private void HandleHitEvent(IEnumerable<IHealth> hitObjects)
+    {
+        int damage = m_status.Damage;
+        HandleHitCore(hitObjects, damage);
+    }
 
-	private void HandleAttackHit(IEnumerable<IHealth> hitObjects)
-	{
-		int damage = m_status.Damage;
-		HandleHitCore(hitObjects, damage);
-	}
+    private void HandleHitCore(IEnumerable<IHealth> hitObjects, int damage)
+    {
+        foreach (var health in hitObjects)
+        {
+            // 빙의되지 않은 몬스터가 타겟이 아닌 대상을 공격하는 경우
+            if (!m_actor.IsPossessed &&
+                health.gameObject.TryGetComponent<Actor>(out var actor) && !m_actor.Targets.Contains(actor))
+            {
+                continue;
+            }
 
-	private void HandleSkillHit(IEnumerable<IHealth> hitObjects)
-	{
-		int damage = m_data.SkillDamage;
-		HandleHitCore(hitObjects, damage);
-	}
-	
-	private void HandleHitCore(IEnumerable<IHealth> hitObjects, int damage)
-	{
-		//이전 프레임에서 공격 판정이 처리되었다면 return
-		if (m_isHitBoxChecked)
-		{
-			return;
-		}
-
-		foreach (var health in hitObjects)
-		{
-			// 빙의되지 않은 몬스터가 타겟이 아닌 대상을 공격하는 경우
-			if (!m_actor.IsPossessed && 
-			    health.gameObject.TryGetComponent<Actor>(out var actor) && !m_actor.Targets.Contains(actor))
-			{
-				continue;
-			}
-			
-			Debug.Log($"{health.gameObject.name} is hit by {gameObject.name}, damage: {damage}");
+            Debug.Log($"{health.gameObject.name} is hit by {gameObject.name}, damage: {damage}");
             health.TakeDamage(damage, m_actor);
-		}
+        }
 
-		m_isHitBoxChecked = true;
-	}
-	
-	private void OnAttackAnimationStart(object sender, EventArgs e)
-	{
-		m_isHitBoxChecked = false;
-		IsAttacking = true;
-		AttackStart?.Invoke(this, EventArgs.Empty);
-	}
-	
-	private void OnAttackAnimationEnd(object sender, EventArgs e)
-	{
-		IsAttacking = false;
-		AttackFinish?.Invoke(this, EventArgs.Empty);
-	}
-    
-    private void OnSkillAnimationStart(object sender, EventArgs e)
-    {
-        m_isHitBoxChecked = false;
-        IsAttacking = true;
-        SkillStart?.Invoke(this, EventArgs.Empty);
-    }
-	
-    private void OnSkillAnimationEnd(object sender, EventArgs e)
-    {
-        IsAttacking = false;
-        SkillFinish?.Invoke(this, EventArgs.Empty);
     }
 
-	private void RegisterWeaponEvents(Weapon weapon)
-	{
-		weapon.AttackStart += OnAttackAnimationStart;
-		weapon.AttackFinish += OnAttackAnimationEnd;
-		weapon.AttackHit += OnAttackHit;
-		
-		weapon.SkillStart += OnSkillAnimationStart;
-		weapon.SkillFinish += OnSkillAnimationEnd;
-		weapon.SkillHit += OnSkillHit;
-	}
+    public void OnHitEvent(object sender, IEnumerable<IHealth> e)
+    {
+        var hits = e.Where(hit => hit.gameObject != gameObject);
+        HandleHitEvent(hits);
+    }
 
-	private void UnregisterWeaponEvents(Weapon weapon)
-	{
-		weapon.AttackStart -= OnAttackAnimationStart;
-		weapon.AttackFinish -= OnAttackAnimationEnd;
-		weapon.AttackHit -= OnAttackHit;
-		
-		weapon.SkillStart -= OnSkillAnimationStart;
-		weapon.SkillFinish -= OnSkillAnimationEnd;
-		weapon.SkillHit -= OnSkillHit;
-	}
-
-	private void OnAttackHit(object sender, IEnumerable<IHealth> e)
-	{
-		var hits = e.Where(hit => hit.gameObject != gameObject);
-		HandleAttackHit(hits);
-	}
-	
-	private void OnSkillHit(object sender, IEnumerable<IHealth> e)
-	{
-		var hits = e.Where(hit => hit.gameObject != gameObject);
-		HandleSkillHit(hits);
-	}
-	
-	private void OnValidate()
-	{
-		if (m_data == null)
-		{
+    private void OnValidate()
+    {
+        if (m_data == null)
+        {
             Debug.LogWarning($"{name}: {nameof(m_data)} is null");
-		}
-	}
+        }
+    }
 }
