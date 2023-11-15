@@ -13,14 +13,10 @@ public class MeleeWeapon : Weapon
     [SerializeField]
     private HitBox attackHitBox;
 
+    [Header("About Slash Direction")]
     [SerializeField]
-    private GameObject swordWeapon;
-
-    private int m_hitEventIndex = 0;
-    private bool m_isHitBoxChecked = false;
-
-    //콤보 공격 관련 변수
-    private bool m_canNextAttack = false;
+    private Vector2[] m_attackDirections;
+    private int m_attackCount = 0;
 
     protected override void Attack()
     {
@@ -43,14 +39,13 @@ public class MeleeWeapon : Weapon
 
         //공격 관련 변수 초기화
         IsAttacking = true;
-        //m_isHitBoxChecked = false;
-        m_hitEventIndex = 0;
-
-        //TODO: 무기별로 콤보 대기 타이밍이 다름. 현재는 애니메이션 기준이지만, 후에 시간 기준으로 변경할지 논의 필요.
-        m_canNextAttack = false;
 
         attackedEnemyList.Clear();
         Animator.SetBool(MonsterAttack.s_targetCheckAnimationKey, false);
+        
+        //공격 카운트 +1
+        m_attackCount += 1;
+        if (m_attackCount >= m_attackDirections.Length) m_attackCount = 0;
     }
 
     protected override void OnFollowThroughMotion()
@@ -86,12 +81,20 @@ public class MeleeWeapon : Weapon
             //오브젝트가 하나라도 있다면?
             if (temporaryDetectedList.Any())
             {
-                InvokeHitEvent(temporaryDetectedList);
+                AttackInfo info = new AttackInfo();
+                info.damage = 5;
+                
+                info.attackDirection = transform.TransformDirection(
+                    new Vector3(m_attackDirections[m_attackCount].x,
+                        m_attackDirections[m_attackCount].y,
+                        0f)).normalized;
+                Debug.Log($"{info.attackDirection}");
+                InvokeHitEvent(info, temporaryDetectedList);
                 //m_isHitBoxChecked = true;
                 Animator.SetBool(MonsterAttack.s_targetCheckAnimationKey, true);
+                
             }
             //다음 공격 가능
-            m_canNextAttack = true;
             temporaryDetectedList.Clear();
         }
     }
@@ -100,9 +103,33 @@ public class MeleeWeapon : Weapon
 
     #region HitBox
 
+    private void OnDrawGizmos()
+    {
+        if (m_attackCount < m_attackDirections.Length)
+        {
+            Vector2 dir = m_attackDirections[m_attackCount];
+            //dir = dir.normalized * 10.0f;
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawLine(
+                transform.TransformPoint(+dir.x,+dir.y,2.0f),
+                transform.TransformPoint(-dir.x,-dir.y,2.0f)
+            );
+        }
+    }
+
     private void OnDrawGizmosSelected()
     {
         attackHitBox.DrawGizmo(transform);
+        
+        Gizmos.matrix = Matrix4x4.identity;
+        foreach (var dir in m_attackDirections)
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawLine(
+                transform.TransformPoint(+dir.x,+dir.y,2.0f),
+                transform.TransformPoint(-dir.x,-dir.y,2.0f)
+                );
+        }
     }
 
     #endregion
