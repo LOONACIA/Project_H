@@ -16,8 +16,9 @@ public class PossessionProcessor : MonoBehaviour
     private Actor m_sender;
 
     // 빙의가 가능한지 여부 체크, 표창을 던질 지, 빙의를 할지를 판단함.
-    [SerializeField]
-    private bool m_isAblePossession = false;
+    public bool m_isAblePossession = false;
+
+    public PossessionShuriken m_shuriken;
 
     /// <summary>
     /// 빙의 타겟 선정에 성공할 경우, 빙의 시작 시 발생하는 이벤트.
@@ -30,14 +31,7 @@ public class PossessionProcessor : MonoBehaviour
     public event EventHandler<Actor> Possessed;
 
     public void TryPossess(Actor sender)
-    {   
-        //표창이 박혀있지 않을 시, 해킹을 하지 않고 표창을 날림.
-        if(m_isAblePossession == false)
-        {
-            ThrowShuriken();
-            return;
-        }
-
+    {
         m_sender = sender;
         IAnimationEventReceiver receiver = m_sender.GetComponentInChildren<IAnimationEventReceiver>();
         if (receiver != null)
@@ -45,36 +39,71 @@ public class PossessionProcessor : MonoBehaviour
             receiver.SetPossession(this);
         }
 
-        m_sender.Animator.SetTrigger(s_possess);
-    }
-
-    public void OnPossessAnimStart()
-    {
-        StopTime();
-        GameManager.Effect.ShowPreparePossessionEffect();
-    }
-
-    public void OnPossessAnimEnd()
-    {
-        GameManager.Effect.ShowBeginPossessionEffect();
-        GameObject target = RayToTarget();
-        if (target == null || !target.TryGetComponent<Actor>(out var actor))
+        //표창이 박혀있지 않을 시, 해킹을 하지 않고 표창을 날림.
+        if (m_isAblePossession == false)
         {
-            GameManager.Effect.ShowPossessionFailEffect();
-            OnPossessed(null);
+            m_sender.Animator.SetTrigger(s_possess);
             return;
         }
 
+        //표창이 박혔을 시, 빙의 시작
+        m_isAblePossession = false;
+        
+       
+
+        PossessTarget();
+
+        m_shuriken.DestroyShuriken();
+    }
+
+    //표창이 박힌 타겟에게 빙의
+    public void PossessTarget()
+    {
         var position = m_sender.FirstPersonCameraPivot.transform.position;
         var ghostObj = ManagerRoot.Resource.Instantiate(m_ghostPrefab, position, m_sender.transform.rotation);
         if (!ghostObj.TryGetComponent<Ghost>(out var ghost))
         {
             throw new InvalidOperationException($"{ghostObj.name} does not have {nameof(Ghost)} component.");
         }
-        
+
         Possessing?.Invoke(this, EventArgs.Empty);
-        
-        ghost.PossessToTarget(actor, () => OnPossessed(actor));
+
+        ghost.PossessToTarget(m_shuriken.targetActor, () => OnPossessed(m_shuriken.targetActor));
+    }
+
+    public void OnPossessAnimStart()
+    {
+        //StopTime();
+        //GameManager.Effect.ShowPreparePossessionEffect();
+
+        ThrowShuriken();
+    }
+
+    public void OnPossessAnimEnd()
+    {
+        OnPossessed(null);
+
+        // 그 전 코드
+
+        //GameManager.Effect.ShowBeginPossessionEffect();
+        //GameObject target = RayToTarget();
+        //if (target == null || !target.TryGetComponent<Actor>(out var actor))
+        //{
+        //    GameManager.Effect.ShowPossessionFailEffect();
+        //    OnPossessed(null);
+        //    return;
+        //}
+
+        //var position = m_sender.FirstPersonCameraPivot.transform.position;
+        //var ghostObj = ManagerRoot.Resource.Instantiate(m_ghostPrefab, position, m_sender.transform.rotation);
+        //if (!ghostObj.TryGetComponent<Ghost>(out var ghost))
+        //{
+        //    throw new InvalidOperationException($"{ghostObj.name} does not have {nameof(Ghost)} component.");
+        //}
+
+        //Possessing?.Invoke(this, EventArgs.Empty);
+
+        //ghost.PossessToTarget(actor, () => OnPossessed(actor));
     }
 
     /// <summary>
@@ -109,7 +138,21 @@ public class PossessionProcessor : MonoBehaviour
     #region 표창 날리기
     public void ThrowShuriken()
     {
-        
+        var cameraPivot = m_sender.FirstPersonCameraPivot;
+
+        Physics.Raycast(cameraPivot.transform.position, cameraPivot.transform.forward, out var hit, 300f);
+
+        m_shuriken = Instantiate(Resources.Load<GameObject>(ConstVariables.SHURIKEN_PATH), cameraPivot.transform.position + cameraPivot.transform.forward, Quaternion.identity).GetComponent<PossessionShuriken>();
+
+        // Ray를 쏜 곳에 몬스터가 있을 시,
+        if(1 << hit.transform.gameObject.layer == m_targetLayers)
+        {
+            m_shuriken.InitSetting(hit.transform.GetComponent<Actor>(), this);
+        }
+        else
+        {
+            m_shuriken.InitSetting(cameraPivot.transform.forward, this);
+        }
     }
     #endregion
 }
