@@ -13,10 +13,11 @@ public class MeleeWeapon : Weapon
     [SerializeField]
     private HitBox attackHitBox;
 
-    [Header("About Slash Direction")]
+    [Header("각 공격에 대한 정보. attackData의 Length만큼 공격 수가 있다고 가정합니다.")]
     [SerializeField]
-    private Vector2[] m_attackDirections;
-    private int m_attackCount = 0;
+    private MeleeAttackData[] m_attackData;
+    
+    public int ComboCount => Animator.GetInteger(ComboAnimBehaviour.s_attackCountAnimationHash);
 
     protected override void Attack()
     {
@@ -42,10 +43,6 @@ public class MeleeWeapon : Weapon
 
         attackedEnemyList.Clear();
         Animator.SetBool(MonsterAttack.s_targetCheckAnimationKey, false);
-        
-        //공격 카운트 +1
-        m_attackCount += 1;
-        if (m_attackCount >= m_attackDirections.Length) m_attackCount = 0;
     }
 
     protected override void OnFollowThroughMotion()
@@ -81,16 +78,13 @@ public class MeleeWeapon : Weapon
             //오브젝트가 하나라도 있다면?
             if (temporaryDetectedList.Any())
             {
+                Vector2 slashDir = m_attackData[ComboCount].slashDirection;
+                
                 AttackInfo info = new AttackInfo();
                 info.damage = 5;
+                info.attackDirection = transform.TransformDirection(new Vector3(slashDir.x, slashDir.y, 0f)).normalized;
                 
-                info.attackDirection = transform.TransformDirection(
-                    new Vector3(m_attackDirections[m_attackCount].x,
-                        m_attackDirections[m_attackCount].y,
-                        0f)).normalized;
-                Debug.Log($"{info.attackDirection}");
                 InvokeHitEvent(info, temporaryDetectedList);
-                //m_isHitBoxChecked = true;
                 Animator.SetBool(MonsterAttack.s_targetCheckAnimationKey, true);
                 
             }
@@ -105,15 +99,18 @@ public class MeleeWeapon : Weapon
 
     private void OnDrawGizmos()
     {
-        if (m_attackCount < m_attackDirections.Length)
+        if (Animator != null)
         {
-            Vector2 dir = m_attackDirections[m_attackCount];
-            //dir = dir.normalized * 10.0f;
-            Gizmos.color = Color.cyan;
-            Gizmos.DrawLine(
-                transform.TransformPoint(+dir.x,+dir.y,2.0f),
-                transform.TransformPoint(-dir.x,-dir.y,2.0f)
-            );
+            if (ComboCount < m_attackData.Length)
+            {
+                Vector2 dir = m_attackData[ComboCount].slashDirection;
+                //dir = dir.normalized * 10.0f;
+                Gizmos.color = Color.cyan;
+                Gizmos.DrawLine(
+                    transform.TransformPoint(+dir.x,+dir.y + 1.0f,2.0f),
+                    transform.TransformPoint(-dir.x,-dir.y + 1.0f,2.0f)
+                );
+            }
         }
     }
 
@@ -122,14 +119,26 @@ public class MeleeWeapon : Weapon
         attackHitBox.DrawGizmo(transform);
         
         Gizmos.matrix = Matrix4x4.identity;
-        foreach (var dir in m_attackDirections)
+        foreach (var d in m_attackData)
         {
+            Vector2 dir = d.slashDirection;
             Gizmos.color = Color.blue;
             Gizmos.DrawLine(
-                transform.TransformPoint(+dir.x,+dir.y,2.0f),
-                transform.TransformPoint(-dir.x,-dir.y,2.0f)
+                transform.TransformPoint(+dir.x,+dir.y + 1.0f,2.0f),
+                transform.TransformPoint(-dir.x,-dir.y + 1.0f,2.0f)
                 );
         }
+    }
+
+    #endregion
+
+    #region AttackData
+
+    [Serializable]
+    private class MeleeAttackData
+    {
+        public MonsterAttackData data;
+        public Vector2 slashDirection;
     }
 
     #endregion
