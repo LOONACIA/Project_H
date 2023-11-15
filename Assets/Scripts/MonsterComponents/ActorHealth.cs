@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 [RequireComponent(typeof(ActorStatus))]
@@ -63,23 +64,28 @@ public class ActorHealth : MonoBehaviour, IHealth
             receiver.DeathAnimationEnd -= OnDied;
         }
     }
-    
+
     public void TakeDamage(AttackInfo attackInfo, Actor attacker)
     {
         if (IsDead)
         {
             return;
         }
-        
+
         //공격 방향 테스트용 코드, Gizmo에서 사용합니다.
         m_damagedDirectionList.Add(attackInfo.attackDirection);
 
         // 방어 모션 중에 공격 받을 시 데미지 무효, 충격 받는 모션 실행
-        if (m_status.IsBlocking) 
+        if (m_status.IsBlocking)
         {
-            m_actor.Animator.SetTrigger(s_hitAnimationKey);
-            m_actor.Animator.SetFloat(s_blockImpactIndexAnimationKey, UnityEngine.Random.Range(0,3));
+            PlayBlockAnimation();
             return;
+        }
+
+        // 피격 모션 실행 
+        if (!m_actor.IsPossessed)
+        {
+            PlayHitAnimation(attackInfo, attacker);
         }
 
         m_status.Hp -= attackInfo.damage;
@@ -134,6 +140,34 @@ public class ActorHealth : MonoBehaviour, IHealth
         {  
             Gizmos.color = Color.cyan;
             Gizmos.DrawLine(transform.position -t + Vector3.up ,transform.position + (t) + Vector3.up);
-        }   
+        }
+    }
+
+    private void PlayHitAnimation(AttackInfo attackInfo = null, Actor attacker = null)
+    {
+        if (attackInfo != null && attacker != null)
+        {
+            var hitDirectionX = m_actor.transform.InverseTransformDirection(attackInfo.attackDirection);
+            var hitDirectionZ = m_actor.transform.InverseTransformDirection((m_actor.transform.position - attacker.transform.position).normalized);
+
+            if (hitDirectionZ.z > 0)
+            {
+                m_actor.Animator.SetFloat("HitDirectionX", 0);
+                m_actor.Animator.SetFloat("HitDirectionZ", hitDirectionZ.z);
+            }
+            else
+            { 
+                m_actor.Animator.SetFloat("HitDirectionX", hitDirectionX.x >= 0 ? 1 : -1);
+                m_actor.Animator.SetFloat("HitDirectionZ", 0);
+            }
+        }
+
+        m_actor.Animator.SetTrigger("Hit");
+    }
+
+    private void PlayBlockAnimation()
+    {
+        m_actor.Animator.SetTrigger(s_hitAnimationKey);
+        m_actor.Animator.SetFloat(s_blockImpactIndexAnimationKey, UnityEngine.Random.Range(0, 3));
     }
 }
