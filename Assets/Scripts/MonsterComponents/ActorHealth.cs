@@ -1,7 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(ActorStatus))]
 public class ActorHealth : MonoBehaviour, IHealth
@@ -11,10 +11,6 @@ public class ActorHealth : MonoBehaviour, IHealth
     private static readonly int s_hitAnimationKey = Animator.StringToHash("Hit");
 
     private static readonly int s_blockImpactIndexAnimationKey = Animator.StringToHash("BlockImpactIndex");
-
-    private static readonly int s_hitDirectionXAnimationKey = Animator.StringToHash("HitDirectionX");
-
-    private static readonly int s_hitDirectionYAnimationKey = Animator.StringToHash("HitDirectionY");
     
     [SerializeField]
     private MonsterHealthData m_data;
@@ -34,6 +30,10 @@ public class ActorHealth : MonoBehaviour, IHealth
     public int MaxHp => m_data.MaxHp;
 
     public bool IsDead => CurrentHp <= 0;
+    
+    
+    //데미지 리스트 테스트용입니다.
+    private List<Vector3> m_damagedDirectionList = new();
 
     protected void Awake()
     {
@@ -64,27 +64,25 @@ public class ActorHealth : MonoBehaviour, IHealth
         }
     }
     
-    public void TakeDamage(int damage, Actor attacker)
+    public void TakeDamage(AttackInfo attackInfo, Actor attacker)
     {
         if (IsDead)
         {
             return;
         }
+        
+        //공격 방향 테스트용 코드, Gizmo에서 사용합니다.
+        m_damagedDirectionList.Add(attackInfo.attackDirection);
 
-        // 방어 모션 중에 공격 받을 시, 데미지 계산 스킵 & 충격 받는 모션 실행
+        // 방어 모션 중에 공격 받을 시 데미지 무효, 충격 받는 모션 실행
         if (m_status.IsBlocking) 
         {
-            PlayBlockAnimation();
+            m_actor.Animator.SetTrigger(s_hitAnimationKey);
+            m_actor.Animator.SetFloat(s_blockImpactIndexAnimationKey, UnityEngine.Random.Range(0,3));
             return;
         }
 
-        // 몬스터가 데미지를 입을 시, 피격 애니메이션 실행
-        if (!m_actor.IsPossessed)
-        {
-            PlayHitAnimation();
-        }
-
-        m_status.Hp -= damage;
+        m_status.Hp -= attackInfo.damage;
         OnDamaged(attacker);
     }
 
@@ -127,30 +125,15 @@ public class ActorHealth : MonoBehaviour, IHealth
         }
     }
 
-    private void PlayBlockAnimation()
+
+    private void OnDrawGizmos()
     {
-        m_actor.Animator.SetTrigger(s_hitAnimationKey);
-        m_actor.Animator.SetFloat(s_blockImpactIndexAnimationKey, UnityEngine.Random.Range(0, 3));
-    }
-
-    private void PlayHitAnimation()
-    {
-        // temp
-        bool isKnockDown = false;
-        Vector2 tempVec = Random.insideUnitCircle;
-        tempVec.x = tempVec.x > 0 ? 1 : -1;
-        tempVec.y = tempVec.y > 0 ? 1 : -1;
-
-        if (isKnockDown)
-        {
-            m_actor.Animator.SetTrigger("KnockDown");
-        }
-        else
-        { 
-            m_actor.Animator.SetFloat(s_hitDirectionXAnimationKey, tempVec.x);
-            m_actor.Animator.SetFloat(s_hitDirectionYAnimationKey, tempVec.y);
-        }
-
-        m_actor.Animator.SetTrigger(s_hitAnimationKey);
+        Gizmos.matrix = Matrix4x4.identity;
+        
+        foreach (var t in m_damagedDirectionList)
+        {  
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawLine(transform.position -t + Vector3.up ,transform.position + (t) + Vector3.up);
+        }   
     }
 }
