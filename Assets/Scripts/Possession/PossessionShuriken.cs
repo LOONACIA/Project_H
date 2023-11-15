@@ -1,4 +1,5 @@
 using BehaviorDesigner.Runtime.Tasks.Unity.UnityCharacterController;
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject;
 using LOONACIA.Unity;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ public class PossessionShuriken : MonoBehaviour
 {
     #region PublicVariables
     PossessionProcessor processor;
+    public Actor targetActor;
     #endregion
 
     #region PrivateVariables
@@ -15,7 +17,7 @@ public class PossessionShuriken : MonoBehaviour
     private bool isTrace = false;
 
     private Rigidbody m_rb;
-    private Actor m_targetActor;
+    
     // 움직여야될 목표 위치
     private Vector3 m_targetDir;
 
@@ -33,7 +35,7 @@ public class PossessionShuriken : MonoBehaviour
 
     public void InitSetting(Actor _actor, PossessionProcessor _processor)
     {
-        m_targetActor = _actor;
+        targetActor = _actor;
         isTrace = true;
         processor = _processor;
     }
@@ -44,11 +46,16 @@ public class PossessionShuriken : MonoBehaviour
         processor = _processor;
     }
 
+    public void DestroyShuriken()
+    {
+        Destroy(gameObject);
+    }
+
     private void FixedUpdate()
     {
         if(isTrace)
         {
-            m_targetDir = ((m_targetActor.transform.position + new Vector3(0,2,0)) - transform.position).normalized;
+            m_targetDir = ((targetActor.transform.position + new Vector3(0,2,0)) - transform.position).normalized;
         }
 
         Move();
@@ -58,7 +65,6 @@ public class PossessionShuriken : MonoBehaviour
     #region PrivateMethod
     private void Move()
     {
-
         m_rb.MovePosition(transform.position + m_targetDir * m_speed * Time.fixedDeltaTime);
     }
 
@@ -67,8 +73,7 @@ public class PossessionShuriken : MonoBehaviour
         if(1 << other.gameObject.layer == m_targetLayer)
         {
             processor.m_isAblePossession = true;
-            Destroy(gameObject);
-            
+            GetComponent<Collider>().enabled = false;
         }
         else
         {

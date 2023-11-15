@@ -5,25 +5,30 @@ using UnityEngine;
 
 public class AttackAnimationEventReceiver : MonoBehaviour
 {
-    public event EventHandler AttackStart;
+    public event EventHandler onIdle;
+    public event EventHandler onLeadIn;
+    public event EventHandler onHit;
+    public event EventHandler onFollowThrough;
 	
-    public event EventHandler AttackFinish;
-	
-    public event EventHandler AttackHit;
-	
-    protected virtual void OnAttackAnimationStart()
+    protected virtual void OnAttackIdle()
     {
-        AttackStart?.Invoke(this, EventArgs.Empty);
+        onIdle?.Invoke(this, EventArgs.Empty);
     }
 
-    protected virtual void OnAttackAnimationEnd()
+    protected virtual void OnAttackLeadIn()
     {
-        AttackFinish?.Invoke(this, EventArgs.Empty);
+        onLeadIn?.Invoke(this, EventArgs.Empty);
     }
 	
-    protected virtual void OnAttackAnimationEvent()
+    protected virtual void OnAttackHit()
     {
-        AttackHit?.Invoke(this, EventArgs.Empty);
+        onHit?.Invoke(this, EventArgs.Empty);
+    }
+    
+    
+    protected virtual void OnAttackFollowThrough()
+    {
+        onFollowThrough?.Invoke(this, EventArgs.Empty);
     }
 	
 }
