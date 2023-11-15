@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -29,6 +30,10 @@ public class ActorHealth : MonoBehaviour, IHealth
     public int MaxHp => m_data.MaxHp;
 
     public bool IsDead => CurrentHp <= 0;
+    
+    
+    //데미지 리스트 테스트용입니다.
+    private List<Vector3> m_damagedDirectionList = new();
 
     protected void Awake()
     {
@@ -59,12 +64,15 @@ public class ActorHealth : MonoBehaviour, IHealth
         }
     }
     
-    public void TakeDamage(int damage, Actor attacker)
+    public void TakeDamage(AttackInfo attackInfo, Actor attacker)
     {
         if (IsDead)
         {
             return;
         }
+        
+        //공격 방향 테스트용 코드, Gizmo에서 사용합니다.
+        m_damagedDirectionList.Add(attackInfo.attackDirection);
 
         // 방어 모션 중에 공격 받을 시 데미지 무효, 충격 받는 모션 실행
         if (m_status.IsBlocking) 
@@ -74,7 +82,7 @@ public class ActorHealth : MonoBehaviour, IHealth
             return;
         }
 
-        m_status.Hp -= damage;
+        m_status.Hp -= attackInfo.damage;
         OnDamaged(attacker);
     }
 
@@ -115,5 +123,17 @@ public class ActorHealth : MonoBehaviour, IHealth
         {
             Debug.LogWarning($"{name}: {nameof(m_data)} is null");
         }
+    }
+
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.matrix = Matrix4x4.identity;
+        
+        foreach (var t in m_damagedDirectionList)
+        {  
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawLine(transform.position -t + Vector3.up ,transform.position + (t) + Vector3.up);
+        }   
     }
 }
