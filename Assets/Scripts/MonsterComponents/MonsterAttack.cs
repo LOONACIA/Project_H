@@ -5,6 +5,7 @@ using System.Linq;
 using LOONACIA.Unity;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UIElements;
 
 /*
  * 1인칭, 3인칭 공격을 시전, 데미지 처리
@@ -61,6 +62,11 @@ public class MonsterAttack : MonoBehaviour
 
     private void HandleHitCore(IEnumerable<IHealth> hitObjects, int damage)
     {
+        // 공격 성공 시 애니메이션 실행 
+        //StartCoroutine(AttackImpact());
+        m_actor.Animator.SetTrigger(s_targetCheckAnimationKey);
+
+
         foreach (var health in hitObjects)
         {
             // 빙의되지 않은 몬스터가 타겟이 아닌 대상을 공격하는 경우
@@ -88,5 +94,26 @@ public class MonsterAttack : MonoBehaviour
         {
             Debug.LogWarning($"{name}: {nameof(m_data)} is null");
         }
+    }
+
+    private IEnumerator AttackImpact()
+    { 
+        float startTime = Time.time;
+
+        //m_actor.Animator.GetCurrentAnimatorStateInfo(0).speed = -1;
+
+        m_actor.Animator.speed = -1;
+        yield return new WaitForSeconds(0.1f);
+        m_actor.Animator.speed = 1;
+
+        //m_actor.Animator.speed = -2;
+
+        //while (Time.time - startTime < 5f)
+        //{
+        //    Debug.Log(m_actor.Animator.speed);    
+        //    yield return null;
+        //}
+
+        //m_actor.Animator.SetTrigger(s_targetCheckAnimationKey);
     }
 }
