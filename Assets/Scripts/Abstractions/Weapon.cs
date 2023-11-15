@@ -8,6 +8,16 @@ using UnityEngine;
 /// </summary>
 public abstract class Weapon : MonoBehaviour
 {
+    public enum AttackState
+    {
+        IDLE,
+        LEAD_IN, //선딜
+        HIT, //실제 공격
+        FOLLOW_THROUGH, //후딜
+    }
+
+    public AttackState State { get; private set; }
+
     public Animator Animator { get; private set; }
     public Monster Owner { get; private set; }
     public AttackAnimationEventReceiver Receiver { get; private set; }
@@ -24,35 +34,69 @@ public abstract class Weapon : MonoBehaviour
         }
         Attack();
     }
-    
+
     protected abstract void Attack();
-    
+
     public void ChangeOwner(Monster owner)
     {
         //기존 Receiver에 등록된 이벤트 삭제
         UnregisterAnimationEvents();
-        
+
         //변수 초기화
         Owner = owner;
         Animator = owner.Animator;
         Receiver = Animator.GetComponent<AttackAnimationEventReceiver>();
         RegisterAnimationEvents();
     }
-    
-    protected virtual void InvokeHitEvent(IEnumerable<IHealth> hitObjects) { Owner.Attack.OnHitEvent(this,hitObjects); }
 
-    #region AnimationEvents
+    protected virtual void InvokeHitEvent(IEnumerable<IHealth> hitObjects) { Owner.Attack.OnHitEvent(this, hitObjects); }
 
-    protected virtual void OnAnimationStart(object sender, EventArgs e) { }
+    #region ProtectedAnimationEvents
 
-    protected virtual void OnAnimationEvent(object sender, EventArgs e) { }
+    protected virtual void OnIdleMotion() { }
 
-    protected virtual void OnAnimationEnd(object sender, EventArgs e) { }
+    protected virtual void OnLeadInMotion() { }
+
+    protected virtual void OnHitMotion() { }
+
+    protected virtual void OnFollowThroughMotion() { }
 
     #endregion
-    
+
+    #region AnimationInit
+
+    private void InitIdleMotion(object sender, EventArgs e)
+    {
+        if (State == AttackState.IDLE) return;
+        State = AttackState.IDLE;
+        OnIdleMotion();
+    }
+
+    private void InitLeadInMotion(object sender, EventArgs e)
+    {
+        if (State == AttackState.LEAD_IN) return;
+        State = AttackState.LEAD_IN;
+        OnLeadInMotion();
+    }
+
+    private void InitHitMotion(object sender, EventArgs e)
+    {
+        if (State == AttackState.HIT) return;
+        State = AttackState.HIT;
+        OnHitMotion();
+    }
+
+    private void InitFollowThroughMotion(object sender, EventArgs e)
+    {
+        if (State == AttackState.FOLLOW_THROUGH) return;
+        State = AttackState.FOLLOW_THROUGH;
+        OnFollowThroughMotion();
+    }
+
+    #endregion
+
     #region UnityEventFunctions
-    
+
     protected void OnDestroy()
     {
         UnregisterAnimationEvents();
@@ -61,21 +105,25 @@ public abstract class Weapon : MonoBehaviour
     #endregion
 
     #region EventRegisterFunctions
-    
+
     protected virtual void RegisterAnimationEvents()
     {
         if (Receiver == null) return;
-        Receiver.AttackStart += OnAnimationStart;
-        Receiver.AttackHit += OnAnimationEvent;
-        Receiver.AttackFinish += OnAnimationEnd;
+        Receiver.onIdle += InitIdleMotion;
+        Receiver.onLeadIn += InitLeadInMotion;
+        Receiver.onHit += InitHitMotion;
+        Receiver.onFollowThrough += InitFollowThroughMotion;
     }
 
     protected virtual void UnregisterAnimationEvents()
     {
         if (Receiver == null) return;
-        Receiver.AttackStart -= OnAnimationStart;
-        Receiver.AttackHit -= OnAnimationEvent;
-        Receiver.AttackFinish -= OnAnimationEnd;
+        Receiver.onIdle -= InitIdleMotion;
+        Receiver.onLeadIn -= InitLeadInMotion;
+        Receiver.onHit -= InitHitMotion;
+        Receiver.onFollowThrough -= InitFollowThroughMotion;
     }
+
     #endregion
+
 }
