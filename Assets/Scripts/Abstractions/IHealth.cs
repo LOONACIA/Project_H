@@ -17,5 +17,5 @@ public interface IHealth
     
     event EventHandler Died;
     
-    void TakeDamage(int damage, Actor attacker);
+    void TakeDamage(AttackInfo info, Actor attacker);
 }

@@ -54,13 +54,13 @@ public class MonsterAttack : MonoBehaviour
         AttackWeapon.StartAttack(m_actor);
     }
 
-    private void HandleHitEvent(IEnumerable<IHealth> hitObjects)
+    private void HandleHitEvent(AttackInfo info, IEnumerable<IHealth> hitObjects)
     {
-        int damage = m_status.Damage;
-        HandleHitCore(hitObjects, damage);
+        //int damage = m_status.Damage;
+        HandleHitCore(info, hitObjects);
     }
 
-    private void HandleHitCore(IEnumerable<IHealth> hitObjects, int damage)
+    private void HandleHitCore(AttackInfo info, IEnumerable<IHealth> hitObjects)
     {
         // 공격 성공 시 애니메이션 실행 
         //StartCoroutine(AttackImpact());
@@ -76,16 +76,16 @@ public class MonsterAttack : MonoBehaviour
                 continue;
             }
 
-            Debug.Log($"{health.gameObject.name} is hit by {gameObject.name}, damage: {damage}");
-            health.TakeDamage(damage, m_actor);
+            Debug.Log($"{health.gameObject.name} is hit by {gameObject.name}, damage: {info.damage}");
+            health.TakeDamage(info, m_actor);
         }
 
     }
 
-    public void OnHitEvent(object sender, IEnumerable<IHealth> e)
+    public void OnHitEvent(AttackInfo attackInfo, IEnumerable<IHealth> e)
     {
         var hits = e.Where(hit => hit.gameObject != gameObject);
-        HandleHitEvent(hits);
+        HandleHitEvent(attackInfo, hits);
     }
 
     private void OnValidate()
