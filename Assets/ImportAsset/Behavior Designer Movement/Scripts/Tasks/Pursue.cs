@@ -13,7 +13,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         [Tooltip("Multiplier for predicting the look ahead distance")]
         public SharedFloat targetDistPredictionMult = 20;
         [Tooltip("The GameObject that the agent is pursuing")]
-        public SharedGameObject target;
+        public SharedTransform target;
 
         // The position of the target at the last frame
         private Vector3 targetPosition;
