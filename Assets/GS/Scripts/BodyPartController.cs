@@ -1,26 +1,47 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BodyPartController : MonoBehaviour
 {
-    public ActorHealth actorHealth;
-    public event EventHandler TestEvent;
+    private IHealth m_health;
 
-    private List<Transform> parts = new();
+    private List<BodyPartScript> m_bodyPartScripts = new();
+
+    private GameObject m_bodyPartCollector;
 
     private void Start()
     {
-        var temp = GetComponentsInChildren<Transform>(true);
-        foreach (var temp2 in temp)
+        m_health = GetComponentInParent<IHealth>(true);
+        m_health.Dying += ReplaceBody;
+
+        var children = GetComponentsInChildren<Transform>(true);
+        foreach (var child in children)
         {
-            if (temp2.gameObject.name.Contains("_cell"))
+            if (child.gameObject.name.Contains("_cell"))
             { 
-                parts.Add(temp2);
-                var script = temp2.gameObject.AddComponent<BodyPartScript>();
-                script.actorHealth = actorHealth;
+                var bodyPartScript = child.gameObject.AddComponent<BodyPartScript>();
+                m_bodyPartScripts.Add(bodyPartScript);
             }
+        }
+
+        m_bodyPartCollector = GameObject.Find("BodyPartCollector");
+        if (m_bodyPartCollector == null)
+        {
+            m_bodyPartCollector = new GameObject() { name = "BodyPartCollector" };
+        }
+    }
+
+    private void ReplaceBody(object sender, EventArgs e)
+    {
+        gameObject.SetActive(false);
+
+        foreach (var bodyPartScript in m_bodyPartScripts)
+        {
+            bodyPartScript.ReplaceBodyPart();
+            bodyPartScript.transform.SetParent(m_bodyPartCollector.transform);
         }
     }
 }
