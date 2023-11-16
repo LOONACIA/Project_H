@@ -8,6 +8,9 @@ using UnityEngine;
 /// </summary>
 public abstract class Weapon : MonoBehaviour
 {
+    /// <summary>
+    /// State는 Animation Event가 발생할 때 해당 Event의 정보로 변경됩니다.
+    /// </summary>
     public enum AttackState
     {
         IDLE,
