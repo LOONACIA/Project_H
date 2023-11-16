@@ -49,8 +49,6 @@ public class PossessionProcessor : MonoBehaviour
         //표창이 박혔을 시, 빙의 시작
         m_isAblePossession = false;
         
-       
-
         PossessTarget();
 
         m_shuriken.DestroyShuriken();

@@ -59,8 +59,8 @@ public class BodyPartScript : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
-            //m_collider.isTrigger = true;
-            //m_rigidbody.isKinematic = true;
+            m_collider.isTrigger = true;
+            m_rigidbody.isKinematic = true;
 
             if (m_coroutine != null)
             { 

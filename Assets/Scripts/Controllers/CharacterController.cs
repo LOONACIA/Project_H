@@ -121,7 +121,7 @@ public partial class CharacterController : MonoBehaviour
             return;
         }
 
-        m_isOnPossessing = true;
+        //m_isOnPossessing = true;
 
         m_possession.TryPossess(m_character);
     }
@@ -157,6 +157,7 @@ public partial class CharacterController : MonoBehaviour
     private void OnPossessing(object sender, EventArgs e)
     {
         DisableInput();
+        m_isOnPossessing = true;
     }
 
     private void OnPossessed(object sender, Actor actor)

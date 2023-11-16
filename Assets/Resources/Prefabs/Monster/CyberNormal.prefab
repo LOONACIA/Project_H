@@ -114,6 +114,7 @@ GameObject:
   - component: {fileID: 5430721398783349178}
   - component: {fileID: 7180573643939554954}
   - component: {fileID: 6848251869324873253}
+  - component: {fileID: 301507556}
   m_Layer: 7
   m_Name: CyberNormal
   m_TagString: Untagged
@@ -264,6 +265,49 @@ MonoBehaviour:
   m_hp: 0
   m_damage: 0
   m_isBlocking: 0
+--- !u!114 &301507556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8703612408200316695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d7b55c7ecdb49a4a89fa5e6f9022861, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startWhenEnabled: 1
+  asynchronousLoad: 0
+  pauseWhenDisabled: 0
+  restartWhenComplete: 1
+  logTaskChanges: 0
+  group: 0
+  resetValuesOnRestart: 0
+  externalBehavior: {fileID: 11400000, guid: 40ac9c7ba1838ec48bd9b766dbdde6fa, type: 2}
+  mBehaviorSource:
+    behaviorName: Behavior
+    behaviorDescription: 
+    mTaskData:
+      types: []
+      parentIndex: 
+      startIndex: 
+      variableStartIndex: 
+      JSONSerialization: '{"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsHit","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockDown","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockBack","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsAttacking","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"Target","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsTargetPossessed","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"AttackDistance","IsShared":true,"SinglemValue":5},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"Self","IsShared":true,"TransformmValue":0},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"HP","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"Body","IsShared":true,"GameObjectmValue":1},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"SelfGameObj","IsShared":true,"GameObjectmValue":2},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsPatrolling","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedGameObjectList","Name":"PatrolPosition","IsShared":true,"List`1mValue":[]}]}'
+      fieldSerializationData:
+        typeName: []
+        fieldNameHash: 
+        startIndex: 
+        dataPosition: 
+        unityObjects:
+        - {fileID: 8703612408200316702}
+        - {fileID: 3180573980528633972}
+        - {fileID: 8703612408200316695}
+        byteData: 
+        byteDataArray: 
+      Version: 1.7.3
+  gizmoViewMode: 2
+  showBehaviorDesignerGizmo: 1
 --- !u!1001 &3457996860125786746
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -895,6 +939,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8703612408200316702}
     m_Modifications:
+    - target: {fileID: 3302196042621871299, guid: 9b7536b24a4e48845b3235888a3218c3,
+        type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4578575543919739985, guid: 9b7536b24a4e48845b3235888a3218c3,
         type: 3}
       propertyPath: m_IsActive
