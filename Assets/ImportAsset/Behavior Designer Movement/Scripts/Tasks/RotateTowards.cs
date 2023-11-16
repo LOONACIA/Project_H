@@ -18,7 +18,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         [Tooltip("Should the rotation only affect the Y axis?")]
         public SharedBool onlyY;
         [Tooltip("The GameObject that the agent is rotating towards")]
-        public SharedGameObject target;
+        public SharedTransform target;
         [Tooltip("If target is null then use the target rotation")]
         public SharedVector3 targetRotation;
 
