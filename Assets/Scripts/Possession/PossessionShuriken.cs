@@ -15,6 +15,7 @@ public class PossessionShuriken : MonoBehaviour
     #region PrivateVariables
     // 몬스터를 추적하는지, 아니면 그냥 날아가는지
     private bool isTrace = false;
+    private bool isStop = false;
 
     private Rigidbody m_rb;
     
@@ -64,7 +65,12 @@ public class PossessionShuriken : MonoBehaviour
 
     #region PrivateMethod
     private void Move()
-    {
+    {   
+        if(isStop)
+        {
+            return;
+        }
+
         m_rb.MovePosition(transform.position + m_targetDir * m_speed * Time.fixedDeltaTime);
     }
 
@@ -73,7 +79,9 @@ public class PossessionShuriken : MonoBehaviour
         if(1 << other.gameObject.layer == m_targetLayer)
         {
             processor.m_isAblePossession = true;
+            targetActor = other.gameObject.GetComponent<Actor>();   
             GetComponent<Collider>().enabled = false;
+            isStop = true;
         }
         else
         {
