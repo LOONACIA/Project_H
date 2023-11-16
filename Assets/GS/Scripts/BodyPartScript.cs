@@ -6,13 +6,15 @@ using UnityEngine.InputSystem.LowLevel;
 
 public class BodyPartScript : MonoBehaviour
 {
-    public ActorHealth actorHealth;
+    public GameObject actor;
 
     private Rigidbody m_rigidbody;
     private BoxCollider m_collider;
     private MeshRenderer m_meshRenderer;
 
     private bool m_isReplaced;
+
+    private Coroutine m_coroutine;
 
     private void Start()
     {
@@ -30,38 +32,47 @@ public class BodyPartScript : MonoBehaviour
 
         m_meshRenderer = GetComponent<MeshRenderer>();
         m_meshRenderer.enabled = false;
-
-        if (!actorHealth)
-        {
-            actorHealth.Dying -= ReplaceBodyPart;
-            actorHealth.Dying += ReplaceBodyPart;
-        }
     }
 
-    private void ReplaceBodyPart(object sender, EventArgs e)
+    public void ReplaceBodyPart()
     {
+        if (m_isReplaced) return;
+
+        m_isReplaced = true;
         m_rigidbody.isKinematic = false;
         m_collider.enabled = true;
         m_meshRenderer.enabled = true;
-        transform.parent = null;
 
+        transform.parent = null;
+        ExplodeBodyPart();
+
+        if (m_coroutine == null)
+            m_coroutine = StartCoroutine(DestroyBodyPart(5));
+    }
+
+    private void ExplodeBodyPart()
+    {
         m_rigidbody.AddExplosionForce(15, transform.position, 5);
     }
 
-
-    // temp
-    private void Update()
+    private void OnCollisionEnter(Collision collision)
     {
-        if (Input.GetKey(KeyCode.Alpha2) && !m_isReplaced)
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
-            m_isReplaced = true;
+            //m_collider.isTrigger = true;
+            //m_rigidbody.isKinematic = true;
 
-            m_rigidbody.isKinematic = false;
-            m_collider.enabled = true;
-            m_meshRenderer.enabled = true;
-            transform.parent = null;
-
-            m_rigidbody.AddExplosionForce(1, transform.position, 1);
+            if (m_coroutine != null)
+            { 
+                StopCoroutine(m_coroutine);
+                m_coroutine = StartCoroutine(DestroyBodyPart(3));
+            }
         }
+    }
+
+    private IEnumerator DestroyBodyPart(float interver)
+    { 
+        yield return new WaitForSeconds(interver);
+        Destroy(gameObject);
     }
 }
