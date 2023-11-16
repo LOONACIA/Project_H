@@ -19,6 +19,8 @@ public class MeleeWeapon : Weapon
     
     public int ComboCount => Animator.GetInteger(ComboAnimBehaviour.s_attackCountAnimationHash);
 
+    [SerializeField] private TrailCaster m_trailCaster;
+
     protected override void Attack()
     {
         //TODO: 이번 공격의 End보다 다음 공격의 Start가 먼저 호출될 수 있음.
@@ -43,11 +45,13 @@ public class MeleeWeapon : Weapon
 
         attackedEnemyList.Clear();
         Animator.SetBool(MonsterAttack.s_targetCheckAnimationKey, false);
+        m_trailCaster.StartCheck();
     }
 
     protected override void OnFollowThroughMotion()
     {
         IsAttacking = false;
+        m_trailCaster.EndCheck();
     }
 
     #endregion
@@ -62,9 +66,16 @@ public class MeleeWeapon : Weapon
             //if (m_isHitBoxChecked) return;
 
             //내 몬스터와 다른 대상만 가져옴
+            // var detectedObjects
+            //     = attackHitBox.DetectHitBox(transform)
+            //                   .Where(hit => hit.gameObject != Owner.gameObject);
+            
+            //트레일렌더러
             var detectedObjects
-                = attackHitBox.DetectHitBox(transform)
-                              .Where(hit => hit.gameObject != Owner.gameObject);
+                 = m_trailCaster.PopBuffer()
+                                .Select(detectedObject => detectedObject.transform.GetComponent<IHealth>())
+                                .Where(health => health != null)
+                               .Where(hit => hit.gameObject != Owner.gameObject);
 
             foreach (var detected in detectedObjects)
             {

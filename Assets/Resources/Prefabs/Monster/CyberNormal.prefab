@@ -484,6 +484,28 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 6302940956731547193, guid: db6329c2e6a99fd4a8b579fd9f9d2348, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: db6329c2e6a99fd4a8b579fd9f9d2348, type: 3}
+--- !u!1 &8684574735050746942 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6302940956731547204, guid: db6329c2e6a99fd4a8b579fd9f9d2348,
+    type: 3}
+  m_PrefabInstance: {fileID: 3457996860125786746}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &260903534989171647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8684574735050746942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a85380ebcea07b4eba1bd255ea03f95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  start: {x: -0.42, y: 0, z: 0}
+  end: {x: 1.16, y: 0, z: 0}
+  trailCount: 6
+  useFixedUpdate: 0
 --- !u!4 &8684574735050746943 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6302940956731547205, guid: db6329c2e6a99fd4a8b579fd9f9d2348,
@@ -713,6 +735,7 @@ MonoBehaviour:
     slashDirection: {x: -0.75, y: 0.5}
   - data: {fileID: 11400000, guid: fbd5079d895037e42b80373a7a03d296, type: 2}
     slashDirection: {x: 0.75, y: 0.5}
+  m_trailCaster: {fileID: 260903534989171647}
 --- !u!114 &837805312130279616
 MonoBehaviour:
   m_ObjectHideFlags: 0
