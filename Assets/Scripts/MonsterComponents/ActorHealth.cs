@@ -101,7 +101,7 @@ public class ActorHealth : MonoBehaviour, IHealth
     private void OnDamaged(Actor attacker)
     {
         Damaged?.Invoke(this, attacker);
-        
+
         if (IsDead)
         {
             Dying?.Invoke(this, EventArgs.Empty);
@@ -112,7 +112,7 @@ public class ActorHealth : MonoBehaviour, IHealth
             }
         }
     }
-    
+
     private void OnDied(object sender, EventArgs e)
     {
         Death();
