@@ -12,6 +12,7 @@ public class RocketProjectile : MonoBehaviour
     //시전자 정보
     [HideInInspector]public GameObject owner = null;
     [HideInInspector]public Weapon shooter = null;
+    [HideInInspector] public MonsterAttackData attackData;
     
     //방향성, 이동성
     public Vector3 direction = Vector3.forward;
@@ -48,14 +49,18 @@ public class RocketProjectile : MonoBehaviour
             //공격 판정
             var detectedObjects
                 =hitSphere.DetectHitSphere(transform)
-                               .Where(hit => hit.gameObject != shooter.Owner.gameObject);
+                          .Select(hit => new AttackInfo(
+                                      attackData.Damage,
+                                      hit.gameObject.transform.position - transform.position,
+                                      shooter.Owner,
+                                      hit
+                                      ))
+                               .Where(hit => hit.hitObject.gameObject != shooter.Owner.gameObject);
 
             //오브젝트가 하나라도 있다면?
             if (detectedObjects.Any())
             {
-                AttackInfo info = new AttackInfo(5, direction,detectedObjects);
-                
-                shooter.InvokeHitEvent(info);
+                shooter.InvokeHitEvent(detectedObjects);
             }
             
             //타격 이펙트

@@ -56,7 +56,7 @@ public class TrailCaster : MonoBehaviour
     }
     
     /// <summary>
-    /// 마지막 PopBuffer()호출 전까지의 충돌 정보를 반환합니다. 반환의 중복이 없는 것이 보장됩니다.
+    /// 마지막 PopBuffer()호출 전까지의 충돌 정보를 반환합니다. 한 공격 사이클 동안 반환되는 값은 중복이 없는 것이 보장됩니다.
     /// </summary>
     /// <returns></returns>
     public IEnumerable<RaycastHit> PopBuffer()
