@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_radius: 7.5
   m_gizmoColor: {r: 1, g: 0, b: 0, a: 1}
-  m_showHitBox: 1
+  m_showHitBox: 0
 --- !u!1 &8055079644228312963
 GameObject:
   m_ObjectHideFlags: 0
@@ -175,7 +175,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5596bc8711aad9e49812659f9b2d1867, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  owner: {fileID: 0}
   direction: {x: 0, y: 0, z: 1}
   speed: 20
   explosionVfx: {fileID: 2944396702758532163, guid: e190bf97c041e58448af6b043116cba0,
     type: 3}
+  hitBox:
+    m_position: {x: 0, y: 0, z: 0}
+    m_halfExtents: {x: 5, y: 5, z: 5}
+    m_rotation: {x: 0, y: 0, z: 0, w: 1}
+    m_gizmoColor: {r: 1, g: 0, b: 0, a: 1}
+    m_showGizmo: 1

@@ -18,6 +18,11 @@ public class MonsterAttack : MonoBehaviour
 
     [SerializeField] private Weapon firstPersonAttack;
     [SerializeField] private Weapon thirdPersonAttack;
+    
+    
+    [SerializeField] private Weapon firstPersonSkill;
+    [SerializeField] private Weapon thirdPersonSkill;
+    
     [SerializeField]
     private MonsterAttackData m_data;
 
@@ -32,6 +37,7 @@ public class MonsterAttack : MonoBehaviour
     public bool IsAttacking { get; protected set; }
 
     public Weapon AttackWeapon => m_actor.IsPossessed ? firstPersonAttack : thirdPersonAttack;
+    public Weapon SkillWeapon => m_actor.IsPossessed ? firstPersonSkill : thirdPersonSkill;
 
     private void Awake()
     {
@@ -52,6 +58,16 @@ public class MonsterAttack : MonoBehaviour
         }
 
         AttackWeapon.StartAttack(m_actor);
+    }
+
+    public void Skill()
+    {
+        if (!CanAttack || IsAttacking)
+        {
+            return;
+        }
+        
+        SkillWeapon.StartAttack(m_actor);
     }
 
     private void HandleHitEvent(AttackInfo info, IEnumerable<IHealth> hitObjects)

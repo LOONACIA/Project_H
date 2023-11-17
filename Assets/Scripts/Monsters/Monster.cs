@@ -45,7 +45,7 @@ public class Monster : Actor
 
     public override void Skill()
     {
-        //Attack.Skill();
+        Attack.Skill();
     }
 
     public override void Dash()
