@@ -70,14 +70,16 @@ public class MonsterAttack : MonoBehaviour
         SkillWeapon.StartAttack(m_actor);
     }
 
-    private void HandleHitEvent(AttackInfo info, IEnumerable<IHealth> hitObjects)
+    private void HandleHitEvent(AttackInfo info)
     {
         //int damage = m_status.Damage;
-        HandleHitCore(info, hitObjects);
+        HandleHitCore(info);
     }
 
-    private void HandleHitCore(AttackInfo info, IEnumerable<IHealth> hitObjects)
+    private void HandleHitCore(AttackInfo info)
     {
+        IEnumerable<IHealth> hitObjects = info.hitObjects;
+        
         // 공격 성공 시 애니메이션 실행 
         //StartCoroutine(AttackImpact());
         m_actor.Animator.SetTrigger(s_targetCheckAnimationKey);
@@ -98,10 +100,10 @@ public class MonsterAttack : MonoBehaviour
 
     }
 
-    public void OnHitEvent(AttackInfo attackInfo, IEnumerable<IHealth> e)
+    public void OnHitEvent(AttackInfo attackInfo)
     {
-        var hits = e.Where(hit => hit.gameObject != gameObject);
-        HandleHitEvent(attackInfo, hits);
+        var hits = attackInfo.hitObjects.Where(hit => hit.gameObject != gameObject);
+        HandleHitEvent(attackInfo);
     }
 
     private void OnValidate()

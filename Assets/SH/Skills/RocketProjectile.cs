@@ -53,11 +53,9 @@ public class RocketProjectile : MonoBehaviour
             //오브젝트가 하나라도 있다면?
             if (detectedObjects.Any())
             {
-                AttackInfo info = new AttackInfo();
-                info.damage = 5;
-                info.attackDirection = direction;
+                AttackInfo info = new AttackInfo(5, direction,detectedObjects);
                 
-                shooter.InvokeHitEvent(info, detectedObjects);
+                shooter.InvokeHitEvent(info);
             }
             
             //타격 이펙트
