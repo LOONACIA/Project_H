@@ -9,8 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 379916410987015986}
+  - component: {fileID: 4371738288935527728}
   m_Layer: 7
-  m_Name: SkillBox
+  m_Name: RocketLauncherSkill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -24,13 +25,30 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 179407590350592319}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.2, z: 6.84}
+  m_LocalPosition: {x: 0, y: 1.2, z: 1.55}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8703612408200316702}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4371738288935527728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 179407590350592319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f24b0d15d26df5409c670b025632b32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data: {fileID: 0}
+  rocketProjectile: {fileID: 5772304690384904770, guid: 069a53e5eab42424aa148d82f0f056d1,
+    type: 3}
+  spawnPosition: {x: 0, y: 0, z: 0}
+  isShowingSpawnPositionGizmo: 1
 --- !u!1 &679570410002487720
 GameObject:
   m_ObjectHideFlags: 0
@@ -249,6 +267,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firstPersonAttack: {fileID: 1150087238}
   thirdPersonAttack: {fileID: 2369670753218292855}
+  firstPersonSkill: {fileID: 4371738288935527728}
+  thirdPersonSkill: {fileID: 0}
   m_data: {fileID: 11400000, guid: d620c25030d388a489b49d237f2ed684, type: 2}
 --- !u!114 &6848251869324873253
 MonoBehaviour:

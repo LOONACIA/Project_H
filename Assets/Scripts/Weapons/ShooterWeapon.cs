@@ -69,8 +69,7 @@ public class ShooterWeapon : Weapon
             ManagerRoot.Resource.Instantiate(m_projectilePrefab, spawnPosition, m_spawnPosition.rotation)
                 .GetComponent<Projectile>();
 
-        // TODO: hitObjects를 AttackInfo에 통합
-        projectile.Init(Owner.gameObject, info => InvokeHitEvent(info, null));
+        projectile.Init(Owner.gameObject, info => InvokeHitEvent(info));
         if (projectile.TryGetComponent<Rigidbody>(out var projectileRigidbody))
         {
             projectileRigidbody.AddForce(direction * m_shootForce, ForceMode.VelocityChange);

@@ -18,6 +18,11 @@ public class MonsterAttack : MonoBehaviour
 
     [SerializeField] private Weapon firstPersonAttack;
     [SerializeField] private Weapon thirdPersonAttack;
+    
+    
+    [SerializeField] private Weapon firstPersonSkill;
+    [SerializeField] private Weapon thirdPersonSkill;
+    
     [SerializeField]
     private MonsterAttackData m_data;
 
@@ -32,6 +37,7 @@ public class MonsterAttack : MonoBehaviour
     public bool IsAttacking { get; protected set; }
 
     public Weapon AttackWeapon => m_actor.IsPossessed ? firstPersonAttack : thirdPersonAttack;
+    public Weapon SkillWeapon => m_actor.IsPossessed ? firstPersonSkill : thirdPersonSkill;
 
     private void Awake()
     {
@@ -54,14 +60,26 @@ public class MonsterAttack : MonoBehaviour
         AttackWeapon.StartAttack(m_actor);
     }
 
-    private void HandleHitEvent(AttackInfo info, IEnumerable<IHealth> hitObjects)
+    public void Skill()
     {
-        //int damage = m_status.Damage;
-        HandleHitCore(info, hitObjects);
+        if (!CanAttack || IsAttacking)
+        {
+            return;
+        }
+        
+        SkillWeapon.StartAttack(m_actor);
     }
 
-    private void HandleHitCore(AttackInfo info, IEnumerable<IHealth> hitObjects)
+    private void HandleHitEvent(AttackInfo info)
     {
+        //int damage = m_status.Damage;
+        HandleHitCore(info);
+    }
+
+    private void HandleHitCore(AttackInfo info)
+    {
+        IEnumerable<IHealth> hitObjects = info.hitObjects;
+        
         // 공격 성공 시 애니메이션 실행 
         //StartCoroutine(AttackImpact());
         m_actor.Animator.SetTrigger(s_targetCheckAnimationKey);
@@ -82,10 +100,10 @@ public class MonsterAttack : MonoBehaviour
 
     }
 
-    public void OnHitEvent(AttackInfo attackInfo, IEnumerable<IHealth> e)
+    public void OnHitEvent(AttackInfo attackInfo)
     {
-        var hits = e.Where(hit => hit.gameObject != gameObject);
-        HandleHitEvent(attackInfo, hits);
+        var hits = attackInfo.hitObjects.Where(hit => hit.gameObject != gameObject);
+        HandleHitEvent(attackInfo);
     }
 
     private void OnValidate()

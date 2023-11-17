@@ -91,11 +91,12 @@ public class MeleeWeapon : Weapon
             {
                 Vector2 slashDir = m_attackData[ComboCount].slashDirection;
                 
-                AttackInfo info = new AttackInfo();
-                info.damage = 5;
-                info.attackDirection = transform.TransformDirection(new Vector3(slashDir.x, slashDir.y, 0f)).normalized;
+                AttackInfo info = new AttackInfo(
+                    5,
+                    transform.TransformDirection(new Vector3(slashDir.x, slashDir.y, 0f)).normalized,
+                    temporaryDetectedList);
                 
-                InvokeHitEvent(info, temporaryDetectedList);
+                InvokeHitEvent(info);
                 Animator.SetBool(MonsterAttack.s_targetCheckAnimationKey, true);
                 
             }
