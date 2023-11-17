@@ -52,7 +52,7 @@ public abstract class Weapon : MonoBehaviour
         RegisterAnimationEvents();
     }
 
-    protected virtual void InvokeHitEvent(AttackInfo attackInfo, IEnumerable<IHealth> hitObjects) { Owner.Attack.OnHitEvent(attackInfo, hitObjects); }
+    public virtual void InvokeHitEvent(AttackInfo attackInfo) { Owner.Attack.OnHitEvent(attackInfo); }
 
     #region ProtectedAnimationEvents
 
