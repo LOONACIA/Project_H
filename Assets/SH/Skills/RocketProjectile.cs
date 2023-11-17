@@ -6,18 +6,29 @@ using UnityEngine;
 
 public class RocketProjectile : MonoBehaviour
 {
+
+    #region PublicVariables
+
     //시전자 정보
     [HideInInspector]public GameObject owner = null;
     [HideInInspector]public Weapon shooter = null;
     
-    
+    //방향성, 이동성
     public Vector3 direction = Vector3.forward;
     public float speed = 3.0f;
+    
+    //폭발 VFX
     public GameObject explosionVfx;
 
-    public HitBox hitBox;
+    #endregion
+
+    #region PrivateVariables
     
     private Rigidbody m_rigidbody;
+
+    #endregion
+    public HitSphere hitSphere;
+    
 
     private void Start()
     {
@@ -36,8 +47,8 @@ public class RocketProjectile : MonoBehaviour
         {
             //공격 판정
             var detectedObjects
-                =hitBox.DetectHitBox(transform)
-                               .Where(hit => hit.gameObject != owner.gameObject);
+                =hitSphere.DetectHitSphere(transform)
+                               .Where(hit => hit.gameObject != shooter.Owner.gameObject);
 
             //오브젝트가 하나라도 있다면?
             if (detectedObjects.Any())
@@ -60,7 +71,7 @@ public class RocketProjectile : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        hitBox.DrawGizmo(transform);
+        hitSphere.DrawGizmo(transform);
     }
 
 }
