@@ -10,16 +10,18 @@ using UnityEngine.Serialization;
  */
 public class MeleeWeapon : Weapon
 {
-    [SerializeField]
-    private HitBox attackHitBox;
+    public MonsterAttackData attackData;
 
-    [Header("각 공격에 대한 정보. attackData의 Length만큼 공격 수가 있다고 가정합니다.")]
-    [SerializeField]
-    private MeleeAttackData[] m_attackData;
-    
     public int ComboCount => Animator.GetInteger(ComboAnimBehaviour.s_attackCountAnimationHash);
 
     [SerializeField] private TrailCaster m_trailCaster;
+
+    #region PrivateVariables
+    
+    private List<AttackInfo> m_attackInfoBuffer = new List<AttackInfo>();
+    
+
+    #endregion
 
     protected override void Attack()
     {
@@ -32,10 +34,6 @@ public class MeleeWeapon : Weapon
 
     #region AnimationEvent
 
-    private Dictionary<long, GameObject> attackedEnemyList = new();
-    private List<IHealth> temporaryDetectedList = new();
-
-
     protected override void OnHitMotion()
     {
         //TODO: 1인칭일 경우 카메라 쉐이킹
@@ -43,7 +41,6 @@ public class MeleeWeapon : Weapon
         //공격 관련 변수 초기화
         IsAttacking = true;
 
-        attackedEnemyList.Clear();
         Animator.SetBool(MonsterAttack.s_targetCheckAnimationKey, false);
         m_trailCaster.StartCheck();
     }
@@ -62,97 +59,35 @@ public class MeleeWeapon : Weapon
     {
         if (State == AttackState.HIT)
         {
-            //MeleeWeapon은 hit 판정 프레임 중 한번이라도 적에게 닿았다면 바로 취소합니다.
-            //if (m_isHitBoxChecked) return;
+            //검의 TrailCaster로 충돌체크
+            IEnumerable<RaycastHit> detectedRayCast = m_trailCaster.PopBuffer();
 
-            //내 몬스터와 다른 대상만 가져옴
-            // var detectedObjects
-            //     = attackHitBox.DetectHitBox(transform)
-            //                   .Where(hit => hit.gameObject != Owner.gameObject);
+            //공격한 오브젝트 버퍼 초기화
+            m_attackInfoBuffer.Clear();
             
-            //트레일렌더러
-            var detectedObjects
-                 = m_trailCaster.PopBuffer()
-                                .Select(detectedObject => detectedObject.transform.GetComponent<IHealth>())
-                                .Where(health => health != null)
-                               .Where(hit => hit.gameObject != Owner.gameObject);
-
-            foreach (var detected in detectedObjects)
+            //AttackInfo 제작해줌
+            foreach (var hit in detectedRayCast)
             {
-                if (!attackedEnemyList.TryGetValue(detected.gameObject.GetInstanceID(), out var t))
+                IHealth health = hit.transform.GetComponent<IHealth>();
+
+                //체력이 없는 오브젝트거나, 본인이 타겟된 경우는 체크하지 않음.
+                if (health != null && hit.transform.gameObject != Owner.gameObject)
                 {
-                    temporaryDetectedList.Add(detected);
-                    attackedEnemyList.Add(detected.gameObject.GetInstanceID(), detected.gameObject);
+                    m_attackInfoBuffer.Add(new AttackInfo(attackData.Damage, hit.normal, Owner, health));
                 }
             }
 
-            //오브젝트가 하나라도 있다면?
-            if (temporaryDetectedList.Any())
+            //11.17: trailCaster에서 중복처리를 하므로 여기선 하지 않아도 됨
+
+            //공격한 오브젝트가 존재한다면, 공격 정보를 MonsterAttack으로 넘겨줌
+            if (m_attackInfoBuffer.Any())
             {
-                Vector2 slashDir = m_attackData[ComboCount].slashDirection;
-                
-                AttackInfo info = new AttackInfo(
-                    5,
-                    transform.TransformDirection(new Vector3(slashDir.x, slashDir.y, 0f)).normalized,
-                    temporaryDetectedList);
-                
-                InvokeHitEvent(info);
+                InvokeHitEvent(m_attackInfoBuffer);
                 Animator.SetBool(MonsterAttack.s_targetCheckAnimationKey, true);
-                
-            }
-            //다음 공격 가능
-            temporaryDetectedList.Clear();
-        }
-    }
 
-    #endregion
-
-    #region HitBox
-
-    private void OnDrawGizmos()
-    {
-        if (Animator != null)
-        {
-            if (ComboCount < m_attackData.Length)
-            {
-                Vector2 dir = m_attackData[ComboCount].slashDirection;
-                //dir = dir.normalized * 10.0f;
-                Gizmos.color = Color.cyan;
-                Gizmos.DrawLine(
-                    transform.TransformPoint(+dir.x,+dir.y + 1.0f,2.0f),
-                    transform.TransformPoint(-dir.x,-dir.y + 1.0f,2.0f)
-                );
             }
         }
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        attackHitBox.DrawGizmo(transform);
-        
-        Gizmos.matrix = Matrix4x4.identity;
-        foreach (var d in m_attackData)
-        {
-            Vector2 dir = d.slashDirection;
-            Gizmos.color = Color.blue;
-            Gizmos.DrawLine(
-                transform.TransformPoint(+dir.x,+dir.y + 1.0f,2.0f),
-                transform.TransformPoint(-dir.x,-dir.y + 1.0f,2.0f)
-                );
-        }
-    }
-
     #endregion
-
-    #region AttackData
-
-    [Serializable]
-    private class MeleeAttackData
-    {
-        public MonsterAttackData data;
-        public Vector2 slashDirection;
-    }
-
-    #endregion
-
 }

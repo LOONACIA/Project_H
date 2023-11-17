@@ -7,7 +7,7 @@ using UnityEngine.Serialization;
 
 public class RocketLauncherSkill: Weapon
 {
-    public MonsterAttackData data;
+    public MonsterAttackData attackData;
     public RocketProjectile rocketProjectile;
 
     public Vector3 spawnPosition;
@@ -26,6 +26,7 @@ public class RocketLauncherSkill: Weapon
         rp.direction = Owner.FirstPersonCameraPivot.transform.forward;
         rp.owner = Owner.gameObject;
         rp.shooter = this;
+        rp.attackData = attackData;
     }
 
     private void OnDrawGizmos()
