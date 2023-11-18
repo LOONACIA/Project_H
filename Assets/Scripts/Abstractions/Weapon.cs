@@ -20,11 +20,13 @@ public abstract class Weapon : MonoBehaviour
     }
 
     public AttackState State { get; private set; }
-
     public Animator Animator { get; private set; }
     public Monster Owner { get; private set; }
     public AttackAnimationEventReceiver Receiver { get; private set; }
     public bool IsAttacking { get; set; }
+
+    [field: SerializeField]
+    public WeaponData WeaponData { get; private set; }
 
     /// <summary>
     /// 실제 공격이 일어날 때 MonsterAttack의 attackEvent Handler에 의해 호출됩니다.
