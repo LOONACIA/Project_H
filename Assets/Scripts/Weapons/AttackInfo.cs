@@ -35,10 +35,10 @@ public class AttackInfo
    /// <summary>
    /// MonsterAttackData를 받아 AttackInfo에 대응하는 값에 대입합니다.
    /// </summary>
-   public AttackInfo(MonsterAttackData attackData, Vector3 attackDirection, Monster attacker, IHealth hitObject)
+   public AttackInfo(WeaponData weaponData, Vector3 attackDirection, Monster attacker, IHealth hitObject)
    {
        //MonsterAttackData
-       this.damage = attackData.Damage;
+       this.damage = weaponData.Damage;
        
        //공격 자체에 대한 정보
        this.attackDirection = attackDirection;

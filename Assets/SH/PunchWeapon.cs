@@ -7,7 +7,6 @@ using UnityEngine;
 public class PunchWeapon : Weapon
 {
     public HitBox hitBox;
-    public MonsterAttackData punchData;
     
     protected override void Attack()
     {
@@ -17,7 +16,7 @@ public class PunchWeapon : Weapon
     protected override void OnHitMotion()
     {
         var detectedList = hitBox.DetectHitBox(transform)
-                                 .Select(info => new AttackInfo(punchData, hitBox.Position, Owner, info));
+                                 .Select(info => new AttackInfo(WeaponData, hitBox.Position, Owner, info));
 
         if (detectedList.Any())
         {
