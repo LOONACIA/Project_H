@@ -1636,7 +1636,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &8142206944974298960
 Transform:
   m_ObjectHideFlags: 0
@@ -2919,6 +2919,8 @@ GameObject:
   - component: {fileID: 3302196042621871299}
   - component: {fileID: 8987307335564648449}
   - component: {fileID: 8987307335564648448}
+  - component: {fileID: 4397906429914967778}
+  - component: {fileID: 6174002598956168650}
   m_Layer: 0
   m_Name: DestroyBody
   m_TagString: Untagged
@@ -2956,7 +2958,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: b6aa588856247804eb4723a58b9ac17f, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -2988,8 +2990,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ad36176aa803c44fbdede2bc7050bba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackData: {fileID: 0}
+  <WeaponData>k__BackingField: {fileID: 0}
   m_trailCaster: {fileID: 6276442166353758124}
+--- !u!114 &4397906429914967778
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8104295381562614787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d03c6d82a33dec94e966c1d207df021f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6174002598956168650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8104295381562614787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c936006f1fdd084abb9785133b8ff0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8415792728254049164
 GameObject:
   m_ObjectHideFlags: 0
@@ -3192,7 +3218,7 @@ GameObject:
   - component: {fileID: 8987307334904535081}
   - component: {fileID: 8987307334904535087}
   - component: {fileID: 8987307334904535080}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cyborg_Ninja_Killer_cell.027
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3276,7 +3302,7 @@ GameObject:
   - component: {fileID: 8987307335265041263}
   - component: {fileID: 8987307335265041261}
   - component: {fileID: 8987307335265041262}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cyborg_Ninja_Killer_cell.028
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3360,7 +3386,7 @@ GameObject:
   - component: {fileID: 8987307335281511406}
   - component: {fileID: 8987307335281511404}
   - component: {fileID: 8987307335281511405}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cyborg_Ninja_Killer_cell.009
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3444,7 +3470,7 @@ GameObject:
   - component: {fileID: 8987307335375358146}
   - component: {fileID: 8987307335375358144}
   - component: {fileID: 8987307335375358145}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cyborg_Ninja_Killer_cell.017
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3528,7 +3554,7 @@ GameObject:
   - component: {fileID: 8987307335504743446}
   - component: {fileID: 8987307335504743444}
   - component: {fileID: 8987307335504743445}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cyborg_Ninja_Killer_cell.022
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3612,7 +3638,7 @@ GameObject:
   - component: {fileID: 8987307335764981611}
   - component: {fileID: 8987307335764981609}
   - component: {fileID: 8987307335764981610}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cyborg_Ninja_Killer_cell.025
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3696,7 +3722,7 @@ GameObject:
   - component: {fileID: 8987307335821883933}
   - component: {fileID: 8987307335821883907}
   - component: {fileID: 8987307335821883932}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cyborg_Ninja_Killer_cell.003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3780,7 +3806,7 @@ GameObject:
   - component: {fileID: 8987307335904203484}
   - component: {fileID: 8987307335904203458}
   - component: {fileID: 8987307335904203459}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cyborg_Ninja_Killer_cell.015
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3864,7 +3890,7 @@ GameObject:
   - component: {fileID: 8987307335907745577}
   - component: {fileID: 8987307335907745583}
   - component: {fileID: 8987307335907745576}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cyborg_Ninja_Killer_cell.020
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3948,7 +3974,7 @@ GameObject:
   - component: {fileID: 8987307336020586798}
   - component: {fileID: 8987307336020586796}
   - component: {fileID: 8987307336020586797}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cyborg_Ninja_Killer_cell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4032,7 +4058,7 @@ GameObject:
   - component: {fileID: 8987307336103461482}
   - component: {fileID: 8987307336103461480}
   - component: {fileID: 8987307336103461481}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cyborg_Ninja_Killer_cell.023
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4116,7 +4142,7 @@ GameObject:
   - component: {fileID: 8987307336332734692}
   - component: {fileID: 8987307336332734698}
   - component: {fileID: 8987307336332734699}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cyborg_Ninja_Killer_cell.019
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4200,7 +4226,7 @@ GameObject:
   - component: {fileID: 8987307336355643738}
   - component: {fileID: 8987307336355643736}
   - component: {fileID: 8987307336355643737}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cyborg_Ninja_Killer_cell.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4284,7 +4310,7 @@ GameObject:
   - component: {fileID: 8987307336361625417}
   - component: {fileID: 8987307336361625423}
   - component: {fileID: 8987307336361625416}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cyborg_Ninja_Killer_cell.008
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4368,7 +4394,7 @@ GameObject:
   - component: {fileID: 8987307336528777597}
   - component: {fileID: 8987307336528777571}
   - component: {fileID: 8987307336528777596}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cyborg_Ninja_Killer_cell.016
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4452,7 +4478,7 @@ GameObject:
   - component: {fileID: 8987307336653310810}
   - component: {fileID: 8987307336653310808}
   - component: {fileID: 8987307336653310809}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cyborg_Ninja_Killer_cell.024
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4536,7 +4562,7 @@ GameObject:
   - component: {fileID: 8987307336670523859}
   - component: {fileID: 8987307336670523857}
   - component: {fileID: 8987307336670523858}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cyborg_Ninja_Killer_cell.004
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4620,7 +4646,7 @@ GameObject:
   - component: {fileID: 8987307336710915940}
   - component: {fileID: 8987307336710915946}
   - component: {fileID: 8987307336710915947}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cyborg_Ninja_Killer_cell.021
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4704,7 +4730,7 @@ GameObject:
   - component: {fileID: 8987307336738456963}
   - component: {fileID: 8987307336738456961}
   - component: {fileID: 8987307336738456962}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cyborg_Ninja_Killer_cell.026
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4788,7 +4814,7 @@ GameObject:
   - component: {fileID: 8987307336741858966}
   - component: {fileID: 8987307336741858964}
   - component: {fileID: 8987307336741858965}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cyborg_Ninja_Killer_cell.012
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4872,7 +4898,7 @@ GameObject:
   - component: {fileID: 8987307336742464929}
   - component: {fileID: 8987307336742464935}
   - component: {fileID: 8987307336742464928}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cyborg_Ninja_Killer_cell.010
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4956,7 +4982,7 @@ GameObject:
   - component: {fileID: 8987307336750134601}
   - component: {fileID: 8987307336750134607}
   - component: {fileID: 8987307336750134600}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cyborg_Ninja_Killer_cell.005
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5040,7 +5066,7 @@ GameObject:
   - component: {fileID: 8987307336761835488}
   - component: {fileID: 8987307336761835494}
   - component: {fileID: 8987307336761835495}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cyborg_Ninja_Killer_cell.007
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5124,7 +5150,7 @@ GameObject:
   - component: {fileID: 8987307336769813912}
   - component: {fileID: 8987307336769813918}
   - component: {fileID: 8987307336769813919}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cyborg_Ninja_Killer_cell.013
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5208,7 +5234,7 @@ GameObject:
   - component: {fileID: 8987307336867705328}
   - component: {fileID: 8987307336867705334}
   - component: {fileID: 8987307336867705335}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cyborg_Ninja_Killer_cell.018
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5292,7 +5318,7 @@ GameObject:
   - component: {fileID: 8987307336877847794}
   - component: {fileID: 8987307336877847792}
   - component: {fileID: 8987307336877847793}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cyborg_Ninja_Killer_cell.014
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5376,7 +5402,7 @@ GameObject:
   - component: {fileID: 8987307336927927080}
   - component: {fileID: 8987307336927927086}
   - component: {fileID: 8987307336927927087}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cyborg_Ninja_Killer_cell.006
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5460,7 +5486,7 @@ GameObject:
   - component: {fileID: 8987307336947718198}
   - component: {fileID: 8987307336947718196}
   - component: {fileID: 8987307336947718197}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cyborg_Ninja_Killer_cell.011
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5544,7 +5570,7 @@ GameObject:
   - component: {fileID: 8987307337004870342}
   - component: {fileID: 8987307337004870340}
   - component: {fileID: 8987307337004870341}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cyborg_Ninja_Killer_cell.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}

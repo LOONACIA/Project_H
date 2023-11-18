@@ -44,7 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f24b0d15d26df5409c670b025632b32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackData: {fileID: 11400000, guid: d620c25030d388a489b49d237f2ed684, type: 2}
+  <WeaponData>k__BackingField: {fileID: 11400000, guid: 113569b14627dbe4e97377b58ee7f453,
+    type: 2}
   rocketProjectile: {fileID: 5772304690384904770, guid: 069a53e5eab42424aa148d82f0f056d1,
     type: 3}
   spawnPosition: {x: 0, y: 0, z: 0}
@@ -313,7 +314,7 @@ MonoBehaviour:
       parentIndex: 
       startIndex: 
       variableStartIndex: 
-      JSONSerialization: '{"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsHit","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockDown","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockBack","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsAttacking","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"Target","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsTargetPossessed","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"AttackDistance","IsShared":true,"SinglemValue":5},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"Self","IsShared":true,"TransformmValue":0},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"HP","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"Body","IsShared":true,"GameObjectmValue":1}]}'
+      JSONSerialization: '{"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsHit","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockDown","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockBack","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsAttacking","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"Target","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsTargetPossessed","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"AttackDistance","IsShared":true,"SinglemValue":5},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"Self","IsShared":true,"TransformmValue":0},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"HP","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"Body","IsShared":true,"GameObjectmValue":1},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"SelfGameObject","IsShared":true,"GameObjectmValue":2}]}'
       fieldSerializationData:
         typeName: []
         fieldNameHash: 
@@ -322,6 +323,7 @@ MonoBehaviour:
         unityObjects:
         - {fileID: 8703612408200316702}
         - {fileID: 3180573980528633972}
+        - {fileID: 8703612408200316695}
         byteData: 
         byteDataArray: 
       Version: 1.7.3
@@ -418,7 +420,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 200219ac35b3e894e9c581379979e9b2, type: 2}
+      objectReference: {fileID: 9100000, guid: 1c4731513353d464e983bb704a3a1bce, type: 2}
     - target: {fileID: 5866666021909216657, guid: d8ee0e1eb7e4f0d4384639073f7acb66,
         type: 3}
       propertyPath: m_ApplyRootMotion
@@ -474,7 +476,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ad36176aa803c44fbdede2bc7050bba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackData: {fileID: 11400000, guid: fbd5079d895037e42b80373a7a03d296, type: 2}
+  <WeaponData>k__BackingField: {fileID: 11400000, guid: baae725b5072d4c45ab83d14e273498c,
+    type: 2}
   m_trailCaster: {fileID: 260903534989171647}
 --- !u!114 &837805312130279616
 MonoBehaviour:
@@ -716,16 +719,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8703612408200316702}
     m_Modifications:
-    - target: {fileID: 3302196042621871299, guid: 9b7536b24a4e48845b3235888a3218c3,
-        type: 3}
-      propertyPath: m_ApplyRootMotion
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4578575543919739985, guid: 9b7536b24a4e48845b3235888a3218c3,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8104295381562614787, guid: 9b7536b24a4e48845b3235888a3218c3,
         type: 3}
       propertyPath: m_Name
@@ -812,18 +805,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 6655078458774948983}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4397906429914967778
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3180573980528633972}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d03c6d82a33dec94e966c1d207df021f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!95 &8180884754503035060 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 3302196042621871299, guid: 9b7536b24a4e48845b3235888a3218c3,
@@ -855,12 +836,12 @@ PrefabInstance:
     - target: {fileID: 1358065989294938390, guid: 23c65171aeeeb094c818f3a3b1deff91,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.351
+      value: -0.24
       objectReference: {fileID: 0}
     - target: {fileID: 1358065989294938390, guid: 23c65171aeeeb094c818f3a3b1deff91,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.114
+      value: 0.074
       objectReference: {fileID: 0}
     - target: {fileID: 1358065989294938390, guid: 23c65171aeeeb094c818f3a3b1deff91,
         type: 3}
