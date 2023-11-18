@@ -10,8 +10,6 @@ using UnityEngine.Serialization;
  */
 public class MeleeWeapon : Weapon
 {
-    public MonsterAttackData attackData;
-
     public int ComboCount => Animator.GetInteger(ComboAnimBehaviour.s_attackCountAnimationHash);
 
     [SerializeField] private TrailCaster m_trailCaster;
@@ -73,7 +71,7 @@ public class MeleeWeapon : Weapon
                 //체력이 없는 오브젝트거나, 본인이 타겟된 경우는 체크하지 않음.
                 if (health != null && hit.transform.gameObject != Owner.gameObject)
                 {
-                    m_attackInfoBuffer.Add(new AttackInfo(attackData.Damage, hit.normal, Owner, health));
+                    m_attackInfoBuffer.Add(new AttackInfo(WeaponData.Damage, hit.normal, Owner, health));
                 }
             }
 
