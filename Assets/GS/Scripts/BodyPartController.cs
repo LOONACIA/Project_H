@@ -24,6 +24,8 @@ public class BodyPartController : MonoBehaviour
             { 
                 var bodyPartScript = child.gameObject.AddComponent<BodyPartScript>();
                 m_bodyPartScripts.Add(bodyPartScript);
+
+                child.gameObject.layer = LayerMask.NameToLayer("Body Parts");
             }
         }
 
