@@ -39,6 +39,8 @@ public abstract class Actor : MonoBehaviour
 
     public GameObject FirstPersonCameraPivot => m_firstPersonCameraPivot;
 
+    public event EventHandler Dying;
+
     protected virtual void Awake()
     {
         m_agent = GetComponent<NavMeshAgent>();
@@ -165,6 +167,8 @@ public abstract class Actor : MonoBehaviour
     protected virtual void OnDying()
     {
         // Actor 제거 시 별도 처리가 필요한 경우 이곳에 작성합니다.
+        Dying?.Invoke(this, EventArgs.Empty);
+        
         if (m_collider != null)
         {
             m_collider.enabled = false;
