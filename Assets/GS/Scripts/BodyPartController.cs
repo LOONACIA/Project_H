@@ -20,9 +20,10 @@ public class BodyPartController : MonoBehaviour
         var children = GetComponentsInChildren<Transform>(true);
         foreach (var child in children)
         {
-            if (child.gameObject.name.Contains("_cell"))
+            if (child.gameObject.layer == LayerMask.NameToLayer("Body Parts"))
             { 
                 var bodyPartScript = child.gameObject.AddComponent<BodyPartScript>();
+                
                 m_bodyPartScripts.Add(bodyPartScript);
 
                 child.gameObject.layer = LayerMask.NameToLayer("Body Parts");
@@ -38,12 +39,14 @@ public class BodyPartController : MonoBehaviour
 
     private void ReplaceBody(object sender, EventArgs e)
     {
-        gameObject.SetActive(false);
-
         foreach (var bodyPartScript in m_bodyPartScripts)
         {
+            bodyPartScript.gameObject.SetActive(true);
+
             bodyPartScript.ReplaceBodyPart();
             bodyPartScript.transform.SetParent(m_bodyPartCollector.transform);
         }
+
+        gameObject.SetActive(false);
     }
 }
