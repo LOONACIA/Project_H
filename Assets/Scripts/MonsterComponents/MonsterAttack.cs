@@ -52,7 +52,7 @@ public class MonsterAttack : MonoBehaviour
 
     public void Attack()
     {
-        if (!CanAttack || IsAttacking)
+        if (!CanAttack || IsAttacking || m_status.IsKnockedDown)
         {
             return;
         }
@@ -62,7 +62,7 @@ public class MonsterAttack : MonoBehaviour
 
     public void Skill()
     {
-        if (!CanAttack || IsAttacking)
+        if (!CanAttack || IsAttacking || m_status.IsKnockedDown)
         {
             return;
         }
@@ -73,6 +73,7 @@ public class MonsterAttack : MonoBehaviour
     private void HandleHitEvent(IEnumerable<AttackInfo> info)
     {
         //int damage = m_status.Damage;
+        //TODO: 플레이어의 공격 정보 반영하여 데미지 처리
         HandleHitCore(info);
     }
 

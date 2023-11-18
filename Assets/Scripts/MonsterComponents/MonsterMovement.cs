@@ -88,7 +88,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
     public void Move(Vector3 directionInput)
     {
         // Awake에서 호출되는 경우
-        if (m_rigidbody is null || m_data is null)
+        if (m_rigidbody is null || m_data is null || m_actor.Status.IsKnockedDown)
         {
             // 아무 것도 하지 않음
             return;

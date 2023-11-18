@@ -87,6 +87,12 @@ public class ActorHealth : MonoBehaviour, IHealth
         {
             PlayHitAnimation(attackInfo, attacker);
         }
+        
+        //넉다운 적용
+        if (attackInfo.knockDownTime>0f)
+        {
+            m_status.SetKnockDown(attackInfo.knockDownTime);
+        }
 
         m_status.Hp -= attackInfo.damage;
         OnDamaged(attacker);

@@ -16,7 +16,9 @@ public class PunchWeapon : Weapon
     protected override void OnHitMotion()
     {
         var detectedList = hitBox.DetectHitBox(transform)
-                                 .Select(info => new AttackInfo(WeaponData, hitBox.Position, Owner, info));
+                                 .Where(health => health.gameObject!=Owner.gameObject)
+                                 .Select(info => new AttackInfo(WeaponData, hitBox.Position, Owner, info))
+                                 ;
 
         if (detectedList.Any())
         {
