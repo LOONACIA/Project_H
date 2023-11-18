@@ -54,12 +54,21 @@ public class PossessionShuriken : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(isTrace)
+        //Target에 꽂혀있을 때
+        if (isStop)
         {
-            m_targetDir = ((targetActor.transform.position + new Vector3(0,2,0)) - transform.position).normalized;
+            CheckAblePossession();
         }
+        // 슈리켄이 날아가는 도중에
+        else
+        {
+            if (isTrace)
+            {
+                m_targetDir = ((targetActor.transform.position + new Vector3(0, 2, 0)) - transform.position).normalized;
+            }
 
-        Move();
+            Move();
+        }
     }
     #endregion
 
@@ -72,6 +81,17 @@ public class PossessionShuriken : MonoBehaviour
         }
 
         m_rb.MovePosition(transform.position + m_targetDir * m_speed * Time.fixedDeltaTime);
+    }
+
+    private void CheckAblePossession()
+    {
+        if (targetActor.Status.Hp > 0)
+        {
+            return;
+        }
+
+        processor.m_isAblePossession = false;
+        Destroy(gameObject);
     }
 
     private void OnTriggerEnter(Collider other)
