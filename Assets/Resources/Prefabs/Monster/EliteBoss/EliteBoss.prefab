@@ -48,6 +48,7 @@ GameObject:
   - component: {fileID: 8559379134317808564}
   - component: {fileID: 3076032040674420976}
   - component: {fileID: 5784414157522077008}
+  - component: {fileID: 2739919845484230568}
   m_Layer: 7
   m_Name: EliteBoss
   m_TagString: Untagged
@@ -199,6 +200,49 @@ MonoBehaviour:
   m_hp: 0
   m_damage: 0
   m_isBlocking: 0
+--- !u!114 &2739919845484230568
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6516522328200591599}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d7b55c7ecdb49a4a89fa5e6f9022861, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startWhenEnabled: 1
+  asynchronousLoad: 0
+  pauseWhenDisabled: 0
+  restartWhenComplete: 1
+  logTaskChanges: 0
+  group: 0
+  resetValuesOnRestart: 0
+  externalBehavior: {fileID: 11400000, guid: 40ac9c7ba1838ec48bd9b766dbdde6fa, type: 2}
+  mBehaviorSource:
+    behaviorName: Behavior
+    behaviorDescription: 
+    mTaskData:
+      types: []
+      parentIndex: 
+      startIndex: 
+      variableStartIndex: 
+      JSONSerialization: '{"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsHit","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockDown","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockBack","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsAttacking","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"Target","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsTargetPossessed","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"AttackDistance","IsShared":true,"SinglemValue":10},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"Self","IsShared":true,"TransformmValue":0},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"HP","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"Body","IsShared":true,"GameObjectmValue":1},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"SelfGameObject","IsShared":true,"GameObjectmValue":2}]}'
+      fieldSerializationData:
+        typeName: []
+        fieldNameHash: 
+        startIndex: 
+        dataPosition: 
+        unityObjects:
+        - {fileID: 2434682749924052122}
+        - {fileID: 4636026940924360165}
+        - {fileID: 6516522328200591599}
+        byteData: 
+        byteDataArray: 
+      Version: 1.7.3
+  gizmoViewMode: 2
+  showBehaviorDesignerGizmo: 1
 --- !u!1 &7027120903777459876
 GameObject:
   m_ObjectHideFlags: 0
@@ -696,12 +740,18 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 8021699848314855766}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 4636026940924360165}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6ad36176aa803c44fbdede2bc7050bba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &4636026940924360165 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3388031222607467699, guid: afa057bc0540ac741bb5b6dfda58c025,
+    type: 3}
+  m_PrefabInstance: {fileID: 8021699848314855766}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5412668540784193375 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2616420816891612681, guid: afa057bc0540ac741bb5b6dfda58c025,
