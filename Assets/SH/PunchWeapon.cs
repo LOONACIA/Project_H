@@ -17,7 +17,7 @@ public class PunchWeapon : Weapon
     {
         var detectedList = hitBox.DetectHitBox(transform)
                                  .Where(health => health.gameObject!=Owner.gameObject)
-                                 .Select(info => new AttackInfo(WeaponData, hitBox.Position, Owner, info))
+                                 .Select(info => new AttackInfo(WeaponData, hitBox.Position, Owner, info,(transform.position - Owner.transform.position).normalized))
                                  ;
 
         if (detectedList.Any())
