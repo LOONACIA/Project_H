@@ -145,11 +145,11 @@ public class PossessionProcessor : MonoBehaviour
         // Ray를 쏜 곳에 몬스터가 있을 시,
         if(1 << hit.transform.gameObject.layer == m_targetLayers)
         {
-            m_shuriken.InitSetting(hit.transform.GetComponent<Actor>(), this);
+            m_shuriken.InitSetting(hit.transform.GetComponent<Actor>(), this, m_sender);
         }
         else
         {
-            m_shuriken.InitSetting(cameraPivot.transform.forward, this);
+            m_shuriken.InitSetting(cameraPivot.transform.forward, this, m_sender);
         }
     }
     #endregion

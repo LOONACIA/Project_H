@@ -12,7 +12,7 @@ public class RocketProjectile : MonoBehaviour
     //시전자 정보
     [HideInInspector]public GameObject owner = null;
     [HideInInspector]public Weapon shooter = null;
-    [HideInInspector] public MonsterAttackData attackData;
+    [HideInInspector] public WeaponData weaponData;
     
     //방향성, 이동성
     public Vector3 direction = Vector3.forward;
@@ -50,7 +50,7 @@ public class RocketProjectile : MonoBehaviour
             var detectedObjects
                 =hitSphere.DetectHitSphere(transform)
                           .Select(hit => new AttackInfo(
-                                      attackData.Damage,
+                                      weaponData.Damage,
                                       hit.gameObject.transform.position - transform.position,
                                       shooter.Owner,
                                       hit
