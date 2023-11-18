@@ -83,10 +83,10 @@ public class ActorHealth : MonoBehaviour, IHealth
         }
 
         // 피격 모션 실행 
-        //if (!m_actor.IsPossessed)
-        //{
-        //    PlayHitAnimation(attackInfo, attacker);
-        //}
+        if (!m_actor.IsPossessed)
+        {
+            PlayHitAnimation(attackInfo, attacker);
+        }
 
         m_status.Hp -= attackInfo.damage;
         OnDamaged(attacker);
