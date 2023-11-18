@@ -23,7 +23,7 @@ public abstract class Weapon : MonoBehaviour
     public Animator Animator { get; private set; }
     public Monster Owner { get; private set; }
     public AttackAnimationEventReceiver Receiver { get; private set; }
-    public bool IsAttacking { get; set; }
+    public bool IsAttacking { get; private set; }
 
     [field: SerializeField]
     public WeaponData WeaponData { get; private set; }
@@ -37,6 +37,9 @@ public abstract class Weapon : MonoBehaviour
         {
             ChangeOwner(attacker);
         }
+        
+        //공격 중 = true;
+        IsAttacking = true;
         Attack();
     }
 
@@ -79,6 +82,9 @@ public abstract class Weapon : MonoBehaviour
 
     private void InitLeadInMotion(object sender, EventArgs e)
     {
+        //내가 공격중이 아니라면 return;
+        if (!IsAttacking) return;
+        
         if (State == AttackState.LEAD_IN) return;
         State = AttackState.LEAD_IN;
         OnLeadInMotion();
@@ -86,6 +92,9 @@ public abstract class Weapon : MonoBehaviour
 
     private void InitHitMotion(object sender, EventArgs e)
     {
+        //내가 공격중이 아니라면 return;
+        if (!IsAttacking) return;
+        
         if (State == AttackState.HIT) return;
         State = AttackState.HIT;
         OnHitMotion();
@@ -93,6 +102,13 @@ public abstract class Weapon : MonoBehaviour
 
     private void InitFollowThroughMotion(object sender, EventArgs e)
     {
+        //내가 공격중이 아니라면 return;
+        if (!IsAttacking) return;
+        
+        //Follow Through: Attack이 끝나고 후딜 시작되는 상황
+        //공격 종료 판정
+        IsAttacking = false;
+        
         if (State == AttackState.FOLLOW_THROUGH) return;
         State = AttackState.FOLLOW_THROUGH;
         OnFollowThroughMotion();
