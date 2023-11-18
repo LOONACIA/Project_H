@@ -1,12 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem.LowLevel;
 
 public class BodyPartScript : MonoBehaviour
 {
     public GameObject actor;
+
+    public bool isParent = false;
 
     private Rigidbody m_rigidbody;
     private BoxCollider m_collider;
@@ -31,7 +34,15 @@ public class BodyPartScript : MonoBehaviour
         }
 
         m_meshRenderer = GetComponent<MeshRenderer>();
-        m_meshRenderer.enabled = false;
+
+        if( m_meshRenderer == null)
+        {
+            isParent = true;
+        }
+        else
+        {
+            m_meshRenderer.enabled = false;
+        }
     }
 
     public void ReplaceBodyPart()
