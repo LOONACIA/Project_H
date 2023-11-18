@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -26,6 +27,21 @@ public class Monster : Actor
 
         Attack = GetComponent<MonsterAttack>();
         Movement = GetComponent<MonsterMovement>();
+    }
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        
+        Targets.CollectionChanged -= OnTargetCollectionChanged;
+        Targets.CollectionChanged += OnTargetCollectionChanged;
+    }
+
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+        
+        Targets.CollectionChanged -= OnTargetCollectionChanged;
     }
 
     public override void Move(Vector3 direction)
@@ -74,6 +90,39 @@ public class Monster : Actor
         {
             Status.IsBlocking = value;
             Animator.SetBool(s_blockAnimationKey, value);
+        }
+    }
+    
+    private void OnTargetCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (e.OldItems is not null)
+        {
+            foreach (Actor target in e.OldItems)
+            {
+                target.Dying -= OnTargetDying;
+            }
+        }
+
+        if (e.NewItems is not null)
+        {
+            foreach (Actor target in e.NewItems)
+            {
+                target.Dying += OnTargetDying;
+            }
+        }
+    }
+
+    private void OnTargetDying(object sender, EventArgs e)
+    {
+        if (sender is not Actor actor)
+        {
+            return;
+        }
+
+        int targetIndex = Targets.IndexOf(actor);
+        if (targetIndex != -1)
+        {
+            Targets.RemoveAt(targetIndex);
         }
     }
 }

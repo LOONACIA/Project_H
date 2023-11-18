@@ -19,14 +19,18 @@ public class CheckIsHit : Conditional
         m_owner = GetComponent<Monster>();
         m_health = GetComponent<ActorHealth>();
         m_health.Damaged += OnDamaged; ;
-        IsHit.Value = false;
     }
 
     public override TaskStatus OnUpdate()
     {
+        if(IsHit.Value == true)
+        {
+            return TaskStatus.Success;
 
+        }
+        return TaskStatus.Failure;
         // 마지막 호출 이후 대미지를 입었고, 공격자가 빙의된 상태라면
-        return IsHit.Value == true ? TaskStatus.Success : TaskStatus.Failure;
+        //return IsHit.Value == true ? TaskStatus.Success : TaskStatus.Failure;
 
     }
 

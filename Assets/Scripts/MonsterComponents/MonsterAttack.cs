@@ -70,23 +70,22 @@ public class MonsterAttack : MonoBehaviour
         SkillWeapon.StartAttack(m_actor);
     }
 
-    private void HandleHitEvent(AttackInfo info)
+    private void HandleHitEvent(IEnumerable<AttackInfo> info)
     {
         //int damage = m_status.Damage;
         HandleHitCore(info);
     }
 
-    private void HandleHitCore(AttackInfo info)
+    private void HandleHitCore(IEnumerable<AttackInfo> info)
     {
-        IEnumerable<IHealth> hitObjects = info.hitObjects;
-        
         // 공격 성공 시 애니메이션 실행 
         //StartCoroutine(AttackImpact());
         m_actor.Animator.SetTrigger(s_targetCheckAnimationKey);
 
 
-        foreach (var health in hitObjects)
+        foreach (var hit in info)
         {
+            IHealth health = hit.hitObject;
             // 빙의되지 않은 몬스터가 타겟이 아닌 대상을 공격하는 경우
             if (!m_actor.IsPossessed &&
                 health.gameObject.TryGetComponent<Actor>(out var actor) && !m_actor.Targets.Contains(actor))
@@ -94,15 +93,15 @@ public class MonsterAttack : MonoBehaviour
                 continue;
             }
 
-            Debug.Log($"{health.gameObject.name} is hit by {gameObject.name}, damage: {info.damage}");
-            health.TakeDamage(info, m_actor);
+            Debug.Log($"{health.gameObject.name} is hit by {gameObject.name}, damage: {hit.damage}");
+            health.TakeDamage(hit, m_actor);
         }
 
     }
 
-    public void OnHitEvent(AttackInfo attackInfo)
+    public void OnHitEvent(IEnumerable<AttackInfo> attackInfo)
     {
-        var hits = attackInfo.hitObjects.Where(hit => hit.gameObject != gameObject);
+        var hits = attackInfo.Where(hit => hit.hitObject.gameObject != gameObject);
         HandleHitEvent(attackInfo);
     }
 

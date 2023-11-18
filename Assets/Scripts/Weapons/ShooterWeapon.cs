@@ -68,8 +68,7 @@ public class ShooterWeapon : Weapon
         var projectile =
             ManagerRoot.Resource.Instantiate(m_projectilePrefab, spawnPosition, m_spawnPosition.rotation)
                 .GetComponent<Projectile>();
-
-        projectile.Init(Owner.gameObject, info => InvokeHitEvent(info));
+        projectile.Init(Owner.gameObject, info => InvokeHitEvent(new AttackInfo[1]{info}));
         if (projectile.TryGetComponent<Rigidbody>(out var projectileRigidbody))
         {
             projectileRigidbody.AddForce(direction * m_shootForce, ForceMode.VelocityChange);

@@ -44,11 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f24b0d15d26df5409c670b025632b32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 0}
+  attackData: {fileID: 11400000, guid: d620c25030d388a489b49d237f2ed684, type: 2}
   rocketProjectile: {fileID: 5772304690384904770, guid: 069a53e5eab42424aa148d82f0f056d1,
     type: 3}
   spawnPosition: {x: 0, y: 0, z: 0}
-  isShowingSpawnPositionGizmo: 1
+  isShowingSpawnPositionGizmo: 0
 --- !u!1 &679570410002487720
 GameObject:
   m_ObjectHideFlags: 0
@@ -474,21 +474,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ad36176aa803c44fbdede2bc7050bba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackHitBox:
-    m_position: {x: 0, y: 1, z: 1.79}
-    m_halfExtents: {x: 1.2, y: 1.2, z: 2}
-    m_rotation: {x: 0, y: 0, z: 0, w: 1}
-    m_gizmoColor: {r: 1, g: 0, b: 0, a: 1}
-    m_showGizmo: 1
-  m_attackData:
-  - data: {fileID: 11400000, guid: fbd5079d895037e42b80373a7a03d296, type: 2}
-    slashDirection: {x: -0.75, y: -0.5}
-  - data: {fileID: 11400000, guid: fbd5079d895037e42b80373a7a03d296, type: 2}
-    slashDirection: {x: 0.75, y: -0.5}
-  - data: {fileID: 11400000, guid: fbd5079d895037e42b80373a7a03d296, type: 2}
-    slashDirection: {x: -0.75, y: 0.5}
-  - data: {fileID: 11400000, guid: fbd5079d895037e42b80373a7a03d296, type: 2}
-    slashDirection: {x: 0.75, y: 0.5}
+  attackData: {fileID: 11400000, guid: fbd5079d895037e42b80373a7a03d296, type: 2}
   m_trailCaster: {fileID: 260903534989171647}
 --- !u!114 &837805312130279616
 MonoBehaviour:
