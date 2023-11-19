@@ -10,14 +10,15 @@ public class PunchWeapon : Weapon
     
     protected override void Attack()
     {
-        Animator.SetTrigger("Attack");
+        
     }
 
     protected override void OnHitMotion()
     {
+        Vector3 dir = transform.TransformPoint(hitBox.Position) - transform.position;
+        
         var detectedList = hitBox.DetectHitBox(transform)
-                                 .Where(health => health.gameObject!=Owner.gameObject)
-                                 .Select(info => new AttackInfo(WeaponData, hitBox.Position, Owner, info,(transform.position - Owner.transform.position).normalized))
+                                 .Select(info => new WeaponAttackInfo(info,dir,dir))
                                  ;
 
         if (detectedList.Any())

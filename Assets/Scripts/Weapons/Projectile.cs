@@ -39,7 +39,7 @@ public class Projectile : MonoBehaviour
         m_collider.isTrigger = true;
     }
 
-    public void Init(GameObject owner, Action<AttackInfo> onHit)
+    public void Init(GameObject owner, Action<WeaponAttackInfo> onHit)
     {
         m_owner = owner;
     }
