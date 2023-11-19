@@ -327,8 +327,8 @@ MonoBehaviour:
         byteData: 
         byteDataArray: 
       Version: 1.7.3
-  gizmoViewMode: 2
-  showBehaviorDesignerGizmo: 1
+  gizmoViewMode: 0
+  showBehaviorDesignerGizmo: 0
 --- !u!1001 &5567367985697212185
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -432,11 +432,11 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5169211162883151947
+--- !u!114 &2825350481712741281 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 7671577283016670392, guid: be6ca77ef9c7808459cba8e94e9262b1,
+    type: 3}
+  m_PrefabInstance: {fileID: 5567367985697212185}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 248925726454133927}
   m_Enabled: 1
@@ -444,10 +444,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a85380ebcea07b4eba1bd255ea03f95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useFixedUpdate: 0
-  m_trailStartPoint: {x: 0, y: 0.01, z: 0}
-  m_trailEndPoint: {x: 0, y: 1.39, z: 0}
-  m_trailCount: 4
 --- !u!1001 &6287837401449212578
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -595,7 +591,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ad36176aa803c44fbdede2bc7050bba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_trailCaster: {fileID: 5169211162883151947}
+  m_trailCaster: {fileID: 2825350481712741281}
 --- !u!114 &837805312130279616
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -917,7 +913,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 8987307335564648448, guid: 9b7536b24a4e48845b3235888a3218c3,
+        type: 3}
+      propertyPath: m_trailCaster
+      value: 
+      objectReference: {fileID: 5839544505233474380}
+    m_RemovedComponents:
+    - {fileID: 8710755369517487374, guid: 9b7536b24a4e48845b3235888a3218c3, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 9b7536b24a4e48845b3235888a3218c3, type: 3}
 --- !u!114 &2369670753218292855 stripped
 MonoBehaviour:
@@ -959,6 +961,18 @@ MonoBehaviour:
     type: 3}
   spawnPosition: {x: 0, y: 0, z: 0}
   isShowingSpawnPositionGizmo: 0
+--- !u!114 &5839544505233474380 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 959737658746343227, guid: 9b7536b24a4e48845b3235888a3218c3,
+    type: 3}
+  m_PrefabInstance: {fileID: 6655078458774948983}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a85380ebcea07b4eba1bd255ea03f95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!95 &8180884754503035060 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 3302196042621871299, guid: 9b7536b24a4e48845b3235888a3218c3,

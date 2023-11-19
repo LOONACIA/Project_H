@@ -25,7 +25,6 @@ public class AttackAnimationEventReceiver : MonoBehaviour
         m_attackWeapon.EnterHitState(this,null);
     }
     
-    
     protected virtual void OnAttackFollowThrough()
     {
         m_attackWeapon.EnterFollowThroughState(this,null);
