@@ -327,8 +327,8 @@ MonoBehaviour:
         byteData: 
         byteDataArray: 
       Version: 1.7.3
-  gizmoViewMode: 0
-  showBehaviorDesignerGizmo: 0
+  gizmoViewMode: 2
+  showBehaviorDesignerGizmo: 1
 --- !u!1001 &5567367985697212185
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -595,9 +595,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ad36176aa803c44fbdede2bc7050bba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_trailCaster: {fileID: 260903534989171647}
-  <WeaponData>k__BackingField: {fileID: 11400000, guid: baae725b5072d4c45ab83d14e273498c,
-    type: 2}
+  m_trailCaster: {fileID: 5169211162883151947}
 --- !u!114 &837805312130279616
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -640,10 +638,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: Weapon
       objectReference: {fileID: 0}
+    - target: {fileID: 2362090466680621552, guid: c2b5094ad6bd8a148b10d12e0d434598,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2362090466680621553, guid: c2b5094ad6bd8a148b10d12e0d434598,
         type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2362090466680621553, guid: c2b5094ad6bd8a148b10d12e0d434598,
         type: 3}
@@ -697,18 +700,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c2b5094ad6bd8a148b10d12e0d434598, type: 3}
---- !u!114 &260903534989171647 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6619429534681906801, guid: c2b5094ad6bd8a148b10d12e0d434598,
-    type: 3}
-  m_PrefabInstance: {fileID: 6359674721497114062}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a85380ebcea07b4eba1bd255ea03f95, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &6614450645330581753
 PrefabInstance:
   m_ObjectHideFlags: 0
