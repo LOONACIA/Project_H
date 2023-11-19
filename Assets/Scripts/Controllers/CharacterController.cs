@@ -58,10 +58,12 @@ public partial class CharacterController : MonoBehaviour
 
     private void OnEnable()
     {
+        RegisterActorEvents();
     }
 
     private void OnDisable()
     {
+        UnregisterActorEvents();
     }
 
     private void Update()

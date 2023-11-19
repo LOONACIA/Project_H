@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-[RequireComponent(typeof(BoxCollider))]
 public class TrailCaster : MonoBehaviour
 {
     #region PublicVariables
