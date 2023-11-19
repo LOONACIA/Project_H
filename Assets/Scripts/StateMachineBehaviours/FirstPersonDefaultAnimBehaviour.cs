@@ -12,5 +12,7 @@ public class FirstPersonDefaultAnimBehaviour : StateMachineBehaviour
         animator.ResetTrigger("Possess");
         animator.ResetTrigger("Hit");
         animator.ResetTrigger("TargetCheck");
+        
+        animator.GetComponent<AttackAnimationEventReceiver>().OnAttackIdle();
     }
 }
