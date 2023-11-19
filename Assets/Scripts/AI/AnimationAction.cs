@@ -12,6 +12,7 @@ public class AnimationAction : Action
     public SharedBool isAttacking;
     public override void OnAwake()
     {
+        
         m_monster = GetComponent<Monster>();
     }
 
@@ -22,6 +23,7 @@ public class AnimationAction : Action
         isAttacking.Value = m_monster.Attack.IsAttacking;
         if (isAttacking.Value)
         {
+            Debug.Log("공격중");
             return TaskStatus.Running;
         }
         Debug.Log(isAttacking.Value);
