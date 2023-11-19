@@ -10,7 +10,7 @@ public class AttackAnimationEventReceiver : MonoBehaviour
     public event EventHandler onHit;
     public event EventHandler onFollowThrough;
 	
-    protected virtual void OnAttackIdle()
+    public virtual void OnAttackIdle()
     {
         onIdle?.Invoke(this, EventArgs.Empty);
     }
