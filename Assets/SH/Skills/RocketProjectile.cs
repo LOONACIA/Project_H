@@ -10,9 +10,7 @@ public class RocketProjectile : MonoBehaviour
     #region PublicVariables
 
     //시전자 정보
-    [HideInInspector]public GameObject owner = null;
     [HideInInspector]public Weapon shooter = null;
-    [HideInInspector] public WeaponData weaponData;
     
     //방향성, 이동성
     public Vector3 direction = Vector3.forward;
@@ -48,14 +46,11 @@ public class RocketProjectile : MonoBehaviour
         {
             //공격 판정
             var detectedObjects
-                =hitSphere.DetectHitSphere(transform)
-                          .Select(hit => new AttackInfo(
-                                      weaponData.Damage,
-                                      hit.gameObject.transform.position - transform.position,
-                                      shooter.Owner,
-                                      hit
-                                      ))
-                               .Where(hit => hit.hitObject.gameObject != shooter.Owner.gameObject);
+                = hitSphere.DetectHitSphere(transform)
+                           .Select(hit => new WeaponAttackInfo(
+                                       hit,
+                                       hit.gameObject.transform.position - transform.position
+                                   ));
 
             //오브젝트가 하나라도 있다면?
             if (detectedObjects.Any())
