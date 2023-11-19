@@ -36,16 +36,12 @@ public class MeleeWeapon : Weapon
     {
         //TODO: 1인칭일 경우 카메라 쉐이킹
 
-        //공격 관련 변수 초기화
-        IsAttacking = true;
-
         Animator.SetBool(MonsterAttack.s_targetCheckAnimationKey, false);
         m_trailCaster.StartCheck();
     }
 
     protected override void OnFollowThroughMotion()
     {
-        IsAttacking = false;
         m_trailCaster.EndCheck();
     }
 

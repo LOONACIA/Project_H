@@ -87,6 +87,19 @@ public class ActorHealth : MonoBehaviour, IHealth
         {
             PlayHitAnimation(attackInfo, attacker);
         }
+        
+        //넉다운 적용
+        if (attackInfo.knockDownTime>0f)
+        {
+            m_status.SetKnockDown(attackInfo.knockDownTime);
+        }
+        
+        //넉백 적용
+        if (attackInfo.knockBackPower > 0f)
+        {
+            MonsterMovement movement = GetComponent<MonsterMovement>();
+            movement.TryKnockBack(attackInfo.knockBackDirection, attackInfo.knockBackPower, attackInfo.isKnockBackOverwrite);
+        }
 
         m_status.Hp -= attackInfo.damage;
         OnDamaged(attacker);
