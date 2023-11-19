@@ -29,6 +29,14 @@ public class UIHpIndicator : UIScene
         m_player = player;
         m_player.HpChanged += OnPlayerHpChanged;
     }
+    
+    protected override void Init()
+    {
+        base.Init();
+        
+        Bind<Slider, Sliders>();
+        Bind<TextMeshProUGUI, Texts>();
+    }
 
     private void OnPlayerHpChanged(object sender, int e)
     {
@@ -38,13 +46,5 @@ public class UIHpIndicator : UIScene
 
         var text = Get<TextMeshProUGUI, Texts>(Texts.HpText);
         text.text = e.ToString();
-    }
-
-    protected override void Init()
-    {
-        base.Init();
-        
-        Bind<Slider, Sliders>();
-        Bind<TextMeshProUGUI, Texts>();
     }
 }
