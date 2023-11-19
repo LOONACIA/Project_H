@@ -34,7 +34,8 @@ public class MonsterAttack : MonoBehaviour
 
     public bool CanAttack { get; set; } = true;
 
-    public bool IsAttacking { get; protected set; }
+    [field: SerializeField]
+    public bool IsAttacking { get; set; }
 
     public Weapon AttackWeapon => m_actor.IsPossessed ? firstPersonAttack : thirdPersonAttack;
     public Weapon SkillWeapon => m_actor.IsPossessed ? firstPersonSkill : thirdPersonSkill;
@@ -56,7 +57,6 @@ public class MonsterAttack : MonoBehaviour
         {
             return;
         }
-
         AttackWeapon.StartAttack(m_actor);
     }
 
@@ -66,7 +66,6 @@ public class MonsterAttack : MonoBehaviour
         {
             return;
         }
-        
         SkillWeapon.StartAttack(m_actor);
     }
 

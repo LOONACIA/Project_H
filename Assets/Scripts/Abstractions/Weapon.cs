@@ -40,6 +40,7 @@ public abstract class Weapon : MonoBehaviour
         
         //공격 중 = true;
         IsAttacking = true;
+        Owner.Attack.IsAttacking = true;
         Attack();
     }
 
@@ -77,6 +78,10 @@ public abstract class Weapon : MonoBehaviour
     {
         if (State == AttackState.IDLE) return;
         State = AttackState.IDLE;
+        if (Owner)
+        {
+            Owner.Attack.IsAttacking = false;
+        }
         OnIdleMotion();
     }
 
@@ -108,6 +113,7 @@ public abstract class Weapon : MonoBehaviour
         //Follow Through: Attack이 끝나고 후딜 시작되는 상황
         //공격 종료 판정
         IsAttacking = false;
+        Owner.Attack.IsAttacking = false;
         
         if (State == AttackState.FOLLOW_THROUGH) return;
         State = AttackState.FOLLOW_THROUGH;
