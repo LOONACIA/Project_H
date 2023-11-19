@@ -44,8 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f24b0d15d26df5409c670b025632b32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <WeaponData>k__BackingField: {fileID: 11400000, guid: 113569b14627dbe4e97377b58ee7f453,
-    type: 2}
   rocketProjectile: {fileID: 5772304690384904770, guid: 069a53e5eab42424aa148d82f0f056d1,
     type: 3}
   spawnPosition: {x: 0, y: 0, z: 0}
@@ -271,6 +269,7 @@ MonoBehaviour:
   firstPersonSkill: {fileID: 4371738288935527728}
   thirdPersonSkill: {fileID: 0}
   m_data: {fileID: 11400000, guid: d620c25030d388a489b49d237f2ed684, type: 2}
+  <IsAttacking>k__BackingField: 0
 --- !u!114 &6848251869324873253
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -286,6 +285,7 @@ MonoBehaviour:
   m_hp: 0
   m_damage: 0
   m_isBlocking: 0
+  m_knockDownTime: 0
 --- !u!114 &301507556
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -476,8 +476,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ad36176aa803c44fbdede2bc7050bba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <WeaponData>k__BackingField: {fileID: 11400000, guid: baae725b5072d4c45ab83d14e273498c,
-    type: 2}
   m_trailCaster: {fileID: 260903534989171647}
 --- !u!114 &837805312130279616
 MonoBehaviour:
@@ -491,6 +489,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c936006f1fdd084abb9785133b8ff0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_attackWeapon: {fileID: 1150087238}
+  m_skillWeapon: {fileID: 2707275188741247136}
+--- !u!114 &2707275188741247136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6594267234909460467}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f24b0d15d26df5409c670b025632b32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rocketProjectile: {fileID: 5772304690384904770, guid: 069a53e5eab42424aa148d82f0f056d1,
+    type: 3}
+  spawnPosition: {x: 0, y: 0, z: 0}
+  isShowingSpawnPositionGizmo: 0
 --- !u!1001 &6359674721497114062
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -719,6 +735,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8703612408200316702}
     m_Modifications:
+    - target: {fileID: 6174002598956168650, guid: 9b7536b24a4e48845b3235888a3218c3,
+        type: 3}
+      propertyPath: m_skillWeapon
+      value: 
+      objectReference: {fileID: 3771983893327770333}
+    - target: {fileID: 6174002598956168650, guid: 9b7536b24a4e48845b3235888a3218c3,
+        type: 3}
+      propertyPath: m_attackWeapon
+      value: 
+      objectReference: {fileID: 2369670753218292855}
     - target: {fileID: 8104295381562614787, guid: 9b7536b24a4e48845b3235888a3218c3,
         type: 3}
       propertyPath: m_Name
@@ -805,6 +831,22 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 6655078458774948983}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3771983893327770333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3180573980528633972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f24b0d15d26df5409c670b025632b32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rocketProjectile: {fileID: 5772304690384904770, guid: 069a53e5eab42424aa148d82f0f056d1,
+    type: 3}
+  spawnPosition: {x: 0, y: 0, z: 0}
+  isShowingSpawnPositionGizmo: 0
 --- !u!95 &8180884754503035060 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 3302196042621871299, guid: 9b7536b24a4e48845b3235888a3218c3,

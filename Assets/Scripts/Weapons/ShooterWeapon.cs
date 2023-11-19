@@ -68,7 +68,7 @@ public class ShooterWeapon : Weapon
         var projectile =
             ManagerRoot.Resource.Instantiate(m_projectilePrefab, spawnPosition, m_spawnPosition.rotation)
                 .GetComponent<Projectile>();
-        projectile.Init(Owner.gameObject, info => InvokeHitEvent(new AttackInfo[1]{info}));
+        //projectile.Init(Owner.gameObject, info => InvokeHitEvent(new WeaponAttackInfo[1]{info}));
         if (projectile.TryGetComponent<Rigidbody>(out var projectileRigidbody))
         {
             projectileRigidbody.AddForce(direction * m_shootForce, ForceMode.VelocityChange);
@@ -77,7 +77,7 @@ public class ShooterWeapon : Weapon
 
     protected override void Attack()
     {
-        Animator.SetTrigger(MonsterAttack.s_attackAnimationKey);
+        //Animator.SetTrigger(MonsterAttack.s_attackAnimationKey);
     }
 
     protected override void OnLeadInMotion()
