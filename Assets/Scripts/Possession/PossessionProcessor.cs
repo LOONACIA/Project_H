@@ -23,7 +23,7 @@ public class PossessionProcessor : MonoBehaviour
     /// <summary>
     /// 빙의 타겟 선정에 성공할 경우, 빙의 시작 시 발생하는 이벤트.
     /// </summary>
-    public event EventHandler Possessing; 
+    public event EventHandler Possessing;
 
     /// <summary>
     /// 빙의 시 발생하는 이벤트. 성공하면 대상 몬스터가 전달되고, 실패하면 null이 전달됨.
