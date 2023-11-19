@@ -17,8 +17,9 @@ public class UpdateStatus : Action
 
     public SharedFloat AttackDistance;
 
+    public SharedBool isAttacking;
+
     private Monster m_owner;
-    
     public override void OnAwake()
     {
         m_owner = GetComponent<Monster>();
@@ -36,5 +37,6 @@ public class UpdateStatus : Action
         Target.Value = closestTarget != null ? closestTarget.transform : null;
 
         Hp.Value = m_owner.Status.Hp;
+        isAttacking.Value = m_owner.Attack.IsAttacking;
     }
 }
