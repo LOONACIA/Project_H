@@ -268,6 +268,7 @@ MonoBehaviour:
   thirdPersonAttack: {fileID: 2369670753218292855}
   firstPersonSkill: {fileID: 4371738288935527728}
   thirdPersonSkill: {fileID: 0}
+  blockPushWeapon: {fileID: 1150087238}
   m_data: {fileID: 11400000, guid: d620c25030d388a489b49d237f2ed684, type: 2}
   <IsAttacking>k__BackingField: 0
 --- !u!114 &6848251869324873253
@@ -327,8 +328,8 @@ MonoBehaviour:
         byteData: 
         byteDataArray: 
       Version: 1.7.3
-  gizmoViewMode: 0
-  showBehaviorDesignerGizmo: 0
+  gizmoViewMode: 2
+  showBehaviorDesignerGizmo: 1
 --- !u!1001 &5567367985697212185
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -606,6 +607,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_attackWeapon: {fileID: 1150087238}
   m_skillWeapon: {fileID: 2707275188741247136}
+  m_blockPushWeapon: {fileID: 3070019673241585413}
 --- !u!114 &2707275188741247136
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -622,6 +624,24 @@ MonoBehaviour:
     type: 3}
   spawnPosition: {x: 0, y: 0, z: 0}
   isShowingSpawnPositionGizmo: 0
+--- !u!114 &3070019673241585413
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6594267234909460467}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cec7e6f2fe0ec594e8df7782e64f6bd6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitBox:
+    m_position: {x: 0, y: 1.76, z: 1.03}
+    m_halfExtents: {x: 1, y: 1, z: 1}
+    m_rotation: {x: 0, y: 0, z: 0, w: 1}
+    m_gizmoColor: {r: 0.51523685, g: 0, b: 1, a: 1}
+    m_showGizmo: 1
 --- !u!1001 &6359674721497114062
 PrefabInstance:
   m_ObjectHideFlags: 0
