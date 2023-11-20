@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace
-namespace LOONACIA.Unity
+namespace LOONACIA.Unity.Editor
 {
     public static class SerializedPropertyExtension
     {
