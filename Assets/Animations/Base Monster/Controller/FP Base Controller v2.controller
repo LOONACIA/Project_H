@@ -26,7 +26,7 @@ AnimatorStateMachine:
     m_Position: {x: 400, y: -80, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -1527899341612975438}
-    m_Position: {x: 390, y: 230, z: 0}
+    m_Position: {x: 390, y: 240, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -3214955442115364776}
     m_Position: {x: 650, y: -80, z: 0}
@@ -634,6 +634,19 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!114 &-5722703677709390946
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: defe783a797902b49a146c8949fd6dcf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_initialRange: {x: 0, y: 0.5}
 --- !u!1101 &-5588861044945444208
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -1385,11 +1398,12 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Block Push
-  m_Speed: 1
+  m_Speed: 2
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 3367231512853044963}
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: -5722703677709390946}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -2416,7 +2430,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 6baff539e207b7444bc27720a2c1a37a, type: 2}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1.5
+    m_TimeScale: 2
     m_CycleOffset: 0
     m_DirectBlendParameter: DashMultiplier
     m_Mirror: 0
@@ -2424,7 +2438,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 837306b85597535479a5fe3ed78b6276, type: 2}
     m_Threshold: 1
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1.5
+    m_TimeScale: 2
     m_CycleOffset: 0
     m_DirectBlendParameter: DashMultiplier
     m_Mirror: 0
@@ -2432,7 +2446,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 7330d584a3cddc148b9e6e0738a8ffba, type: 2}
     m_Threshold: 2
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
+    m_TimeScale: 2
     m_CycleOffset: 0
     m_DirectBlendParameter: DashMultiplier
     m_Mirror: 0
