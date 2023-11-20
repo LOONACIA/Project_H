@@ -4,27 +4,20 @@ using UnityEngine;
 
 public class InitializeAttackTriggerBehaviour : StateMachineBehaviour
 {
-    [SerializeField]
-    Vector2 m_initialRange = new Vector2(0,1);
+    [SerializeField, Range(0,1)]
+    private float m_initNormalizedTime = 1;
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        m_initialRange.x = Mathf.Clamp(m_initialRange.x, 0, 1);
-        m_initialRange.y = Mathf.Clamp(m_initialRange.y, 0, 1);
-
-        m_initialRange.x = Mathf.Clamp(m_initialRange.x, 0, m_initialRange.y); 
-        m_initialRange.y = Mathf.Clamp(m_initialRange.y, m_initialRange.x, 1); 
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        Debug.Log($"OnStateUpdate {stateInfo.normalizedTime}");
-
-        if (stateInfo.normalizedTime > m_initialRange.x && stateInfo.normalizedTime < m_initialRange.y)
+        if (stateInfo.normalizedTime < m_initNormalizedTime)
         {
-            animator.ResetTrigger("Attack");
+            animator.ResetTrigger(ConstVariables.ANIMATOR_PARAMETER_ATTACK);
         }
     }
 
