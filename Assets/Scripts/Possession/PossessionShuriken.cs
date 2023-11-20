@@ -71,7 +71,7 @@ public class PossessionShuriken : MonoBehaviour
         {
             if (isTrace)
             {
-                m_targetDir = ((targetActor.transform.position + new Vector3(0, 2, 0)) - transform.position).normalized;
+                m_targetDir = ((targetActor.transform.position + new Vector3(0, 1, 0)) - transform.position).normalized;
             }
 
             Move();
@@ -111,6 +111,7 @@ public class PossessionShuriken : MonoBehaviour
             processor.m_isAblePossession = true;
             targetActor = other.gameObject.GetComponent<Actor>();   
             GetComponent<Collider>().enabled = false;
+            m_rb.isKinematic = true;
             GetComponent<MeshRenderer>().enabled = false;
             isStop = true;
         }
