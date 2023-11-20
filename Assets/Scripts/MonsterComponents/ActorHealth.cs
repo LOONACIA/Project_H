@@ -67,9 +67,6 @@ public class ActorHealth : MonoBehaviour, IHealth
             return;
         }
 
-        //공격 방향 테스트용 코드, Gizmo에서 사용합니다.
-        m_damagedDirectionList.Add(attackDirection);
-
         // 방어 모션 중에 공격 받을 시 데미지 무효, 충격 받는 모션 실행
         if (m_status.IsBlocking)
         {

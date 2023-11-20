@@ -3,11 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Animator))]
 public class AttackAnimationEventReceiver : MonoBehaviour
 {
-    [SerializeField] private Weapon m_attackWeapon;
-    [SerializeField] private Weapon m_skillWeapon;
-    [SerializeField] private Weapon m_blockPushWeapon;
+    private Weapon m_attackWeapon;
+    private Weapon m_skillWeapon;
+    private Weapon m_blockPushWeapon;
     
     #region Attack
     
@@ -80,4 +81,44 @@ public class AttackAnimationEventReceiver : MonoBehaviour
 
 
     #endregion
+
+    private void Awake()
+    {
+        Weapon[] weapons = GetComponents<Weapon>();
+        RegisterWeaponComponents(weapons, ref m_attackWeapon, ref m_skillWeapon, ref m_blockPushWeapon);
+    }
+
+    private void RegisterWeaponComponents(Weapon[] weapons, ref Weapon attackWeapon, ref Weapon skillWeapon, ref Weapon blockPushWeapon)
+    {
+        foreach (var weapon in weapons)
+        {
+            switch (weapon.Type)
+            {
+                case Weapon.WeaponType.ATTACK_WEAPON:
+                    if (attackWeapon != null)
+                    {
+                        Debug.LogError("AttackWeapon 중복 등록됨");
+                    }
+                    attackWeapon = weapon;
+                    break;
+                case Weapon.WeaponType.SKILL_WEAPON:
+                    if (skillWeapon != null)
+                    {
+                        Debug.LogError("SkillWeapon 중복 등록됨");
+                    }
+                    skillWeapon = weapon;
+                    break;
+                case Weapon.WeaponType.BLOCKPUSH_WEAPON:
+                    if (blockPushWeapon != null)
+                    {
+                        Debug.LogError("BlockPushWeapon 중복 등록됨");
+                    }
+                    blockPushWeapon = weapon;
+                    break;
+                default:
+                    Debug.LogError("초기화 오류: 등록되지 않은 Weapon 등록됨");
+                    break;
+            }
+        }
+    }
 }
