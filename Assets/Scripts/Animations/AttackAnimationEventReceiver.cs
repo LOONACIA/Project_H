@@ -7,6 +7,7 @@ public class AttackAnimationEventReceiver : MonoBehaviour
 {
     [SerializeField] private Weapon m_attackWeapon;
     [SerializeField] private Weapon m_skillWeapon;
+    [SerializeField] private Weapon m_blockPushWeapon;
     
     #region Attack
     
@@ -53,7 +54,30 @@ public class AttackAnimationEventReceiver : MonoBehaviour
     {
         m_skillWeapon.EnterFollowThroughState(this,null);
     }
-    
+
     #endregion
-	
+
+    #region BlockPush
+    public virtual void OnBlockPushIdle()
+    {
+        m_blockPushWeapon.EnterIdleState(this, null);
+    }
+
+    protected virtual void OnBlockPushLeadIn()
+    {
+        m_blockPushWeapon.EnterLeadInState(this, null);
+    }
+
+    protected virtual void OnBlockPushHit()
+    {
+        m_blockPushWeapon.EnterHitState(this, null);
+    }
+
+    protected virtual void OnBlockPushFollowThrough()
+    {
+        m_blockPushWeapon.EnterFollowThroughState(this, null);
+    }
+
+
+    #endregion
 }
