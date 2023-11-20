@@ -36,6 +36,10 @@ public abstract class Actor : MonoBehaviour
     public bool IsPossessed { get; private set; }
 
     public Animator Animator => IsPossessed ? m_firstPersonAnimator : m_thirdPersonAnimator;
+    
+    public Animator FirstPersonAnimator => m_firstPersonAnimator;
+    
+    public Animator ThirdPersonAnimator => m_thirdPersonAnimator;
 
     public GameObject FirstPersonCameraPivot => m_firstPersonCameraPivot;
 
