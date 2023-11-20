@@ -1,3 +1,4 @@
+using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,6 +7,8 @@ using UnityEngine;
 
 public class SetTargetIfDamaged : Conditional
 {
+    public SharedTransform Target;
+
     private Monster m_owner;
 
     private ActorHealth m_health;
@@ -31,6 +34,7 @@ public class SetTargetIfDamaged : Conditional
                 m_owner.Targets.Add(m_attacker);
             }
 
+            Target.Value = m_attacker.transform;
             m_attacker = null;
             return TaskStatus.Success;
         }
