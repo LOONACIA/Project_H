@@ -39,10 +39,6 @@ public class ActorHealth : MonoBehaviour, IHealth
     {
         m_actor = GetComponent<Monster>();
         m_status = GetComponent<ActorStatus>();
-    }
-
-    protected virtual void Start()
-    {
         m_status.Hp = m_data.MaxHp;
     }
 

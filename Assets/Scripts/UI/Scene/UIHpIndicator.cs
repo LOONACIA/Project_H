@@ -41,8 +41,8 @@ public class UIHpIndicator : UIScene
     private void OnPlayerHpChanged(object sender, int e)
     {
         var slider = Get<Slider, Sliders>(Sliders.HpSlider);
-        slider.value = e;
         slider.maxValue = m_player.Character.Health.MaxHp;
+        slider.value = e;
 
         var text = Get<TextMeshProUGUI, Texts>(Texts.HpText);
         text.text = e.ToString();
