@@ -550,7 +550,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c936006f1fdd084abb9785133b8ff0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_attackWeapon: {fileID: 0}
+  m_attackWeapon: {fileID: 6566073188088549051}
   m_skillWeapon: {fileID: 0}
   m_blockPushWeapon: {fileID: 0}
 --- !u!114 &6566073188088549051
@@ -853,6 +853,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: caf01dd5152f3934d8079e6160aa3b1e, type: 2}
+    - target: {fileID: 4781234643338773258, guid: afa057bc0540ac741bb5b6dfda58c025,
+        type: 3}
+      propertyPath: m_trailCaster
+      value: 
+      objectReference: {fileID: 437726222632953169}
     - target: {fileID: 4812041920024820278, guid: afa057bc0540ac741bb5b6dfda58c025,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -908,6 +913,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: caf01dd5152f3934d8079e6160aa3b1e, type: 2}
+    - target: {fileID: 7892712000142239676, guid: afa057bc0540ac741bb5b6dfda58c025,
+        type: 3}
+      propertyPath: m_attackWeapon
+      value: 
+      objectReference: {fileID: 3245008533802148444}
     - target: {fileID: 8241833333965536749, guid: afa057bc0540ac741bb5b6dfda58c025,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -995,3 +1005,25 @@ Animator:
     type: 3}
   m_PrefabInstance: {fileID: 8021699848314855766}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &5518897604201173843 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2577710056367124997, guid: afa057bc0540ac741bb5b6dfda58c025,
+    type: 3}
+  m_PrefabInstance: {fileID: 8021699848314855766}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &437726222632953169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5518897604201173843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a85380ebcea07b4eba1bd255ea03f95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useFixedUpdate: 0
+  m_trailStartPoint: {x: 0, y: 2.2, z: 0}
+  m_trailEndPoint: {x: 0, y: 0, z: 0}
+  m_trailCount: 8
