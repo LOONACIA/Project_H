@@ -172,15 +172,16 @@ public partial class CharacterController : MonoBehaviour
 
     private void RegisterActorEvents()
     {
-        if (m_character != null)
+        if (m_character != null && m_character.Health != null)
         {
+            m_character.Health.Damaged -= OnDamaged;
             m_character.Health.Damaged += OnDamaged;
         }
     }
     
     private void UnregisterActorEvents()
     {
-        if (m_character != null)
+        if (m_character != null && m_character.Health != null)
         {
             m_character.Health.Damaged -= OnDamaged;
         }
@@ -224,12 +225,14 @@ public partial class CharacterController : MonoBehaviour
         }
 
         m_cameraRotationX = 0f;
+        UnregisterActorEvents();
         if (oldActor != null)
         {
             oldActor.Unpossessed();
         }
 
         m_character = newActor;
+        RegisterActorEvents();
         m_character.Possessed();
         m_cameraHolder = m_character.FirstPersonCameraPivot.transform;
         
