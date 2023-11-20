@@ -185,6 +185,7 @@ MonoBehaviour:
   firstPersonSkill: {fileID: 0}
   thirdPersonSkill: {fileID: 0}
   m_data: {fileID: 11400000, guid: d620c25030d388a489b49d237f2ed684, type: 2}
+  <IsAttacking>k__BackingField: 0
 --- !u!114 &5784414157522077008
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -200,6 +201,7 @@ MonoBehaviour:
   m_hp: 0
   m_damage: 0
   m_isBlocking: 0
+  m_knockDownTime: 0
 --- !u!114 &196284125825091651
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -302,12 +304,12 @@ PrefabInstance:
     - target: {fileID: 1358065989294938390, guid: 23c65171aeeeb094c818f3a3b1deff91,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.72
+      value: 0.644
       objectReference: {fileID: 0}
     - target: {fileID: 1358065989294938390, guid: 23c65171aeeeb094c818f3a3b1deff91,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0.531
       objectReference: {fileID: 0}
     - target: {fileID: 1358065989294938390, guid: 23c65171aeeeb094c818f3a3b1deff91,
         type: 3}
@@ -560,8 +562,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ad36176aa803c44fbdede2bc7050bba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <WeaponData>k__BackingField: {fileID: 0}
-  m_trailCaster: {fileID: 0}
+  <WeaponData>k__BackingField: {fileID: 11400000, guid: baae725b5072d4c45ab83d14e273498c,
+    type: 2}
+  m_trailCaster: {fileID: 6002054460145169069}
 --- !u!114 &8917208615033188827
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -655,6 +658,28 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 0cf38e0cd0fc4a64fb8d54cfa1fb38ff, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 368701ff7ccf3b14584c2a459ea51db1, type: 3}
+--- !u!1 &7093287766973409334 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100000, guid: 368701ff7ccf3b14584c2a459ea51db1,
+    type: 3}
+  m_PrefabInstance: {fileID: 7093287766973443734}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6002054460145169069
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7093287766973409334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a85380ebcea07b4eba1bd255ea03f95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useFixedUpdate: 0
+  m_trailStartPoint: {x: 0, y: 5.33, z: 0}
+  m_trailEndPoint: {x: 0, y: 1.39, z: 0}
+  m_trailCount: 8
 --- !u!1001 &8021699848314855766
 PrefabInstance:
   m_ObjectHideFlags: 0
