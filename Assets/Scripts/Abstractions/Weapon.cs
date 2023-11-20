@@ -13,16 +13,15 @@ public abstract class Weapon : MonoBehaviour
 
     [field: SerializeField]
     public WeaponType Type { get; private set; }
-
-    public event EventHandler<IEnumerable<WeaponAttackInfo>> onHitEvent;
-
+    
     public AttackState State { get; private set; }
 
+    public event EventHandler<IEnumerable<WeaponAttackInfo>> OnHitEvent;
+
     #endregion
-
-
+    
     /// <summary>
-    /// 실제 공격이 일어날 때 MonsterAttack의 attackEvent Handler에 의해 호출됩니다.
+    /// 실제 공격이 일어날 때 MonsterAtaack의 attackEvent Handler에 의해 호출됩니다.
     /// </summary>
     public void StartAttack()
     {
@@ -31,7 +30,10 @@ public abstract class Weapon : MonoBehaviour
 
     protected abstract void Attack();
 
-    public virtual void InvokeHitEvent(IEnumerable<WeaponAttackInfo> attackInfo) { onHitEvent?.Invoke(this, attackInfo); }
+    public virtual void InvokeHitEvent(IEnumerable<WeaponAttackInfo> attackInfo)
+    {
+        OnHitEvent?.Invoke(this, attackInfo);
+    }
 
     #region ProtectedAnimationEvents
 
@@ -72,7 +74,7 @@ public abstract class Weapon : MonoBehaviour
     {
         //Follow Through: Attack이 끝나고 후딜 시작되는 상황
         //공격 종료 판정
-        
+
         if (State == AttackState.FOLLOW_THROUGH) return;
         State = AttackState.FOLLOW_THROUGH;
         OnFollowThroughMotion();
@@ -86,8 +88,8 @@ public abstract class Weapon : MonoBehaviour
         SKILL_WEAPON,
         BLOCKPUSH_WEAPON,
     }
-    
-    
+
+
     /// <summary>
     /// State는 Animation Event가 발생할 때 해당 Event의 정보로 변경됩니다.
     /// </summary>
