@@ -43,11 +43,21 @@ public class AlarmTarget : Action
             {
                 monster.Targets.Clear();
             }
-            
-            if (monster != target && !monster.Targets.Contains(target))
+
+            if (monster == target || monster.Targets.Contains(target))
             {
-                monster.Targets.Add(target);
+                continue;
             }
+
+            // 만약 벽이 두 몬스터 사이에 있다면, 타겟으로 지정하지 않습니다.
+            Vector3 direction = (target.transform.position - monster.transform.position).normalized;
+            if (Physics.Raycast(monster.transform.position, direction,
+                    Vector3.Distance(target.transform.position, monster.transform.position), LayerMask.GetMask("Wall")))
+            {
+                continue;
+            }
+            
+            monster.Targets.Add(target);
         }
     }
 }
