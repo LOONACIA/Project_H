@@ -108,6 +108,7 @@ public class ShooterWeapon : Weapon
     // TODO: Remove test code
     private void DrawLine(Vector3 target)
     {
+        m_renderer.positionCount = 2;
         m_renderer.SetPosition(0, m_spawnPosition.position);
         m_renderer.SetPosition(1, target);
 
