@@ -1,3 +1,4 @@
+using BehaviorDesigner.Runtime;
 using LOONACIA.Unity.Managers;
 using System;
 using System.Collections;
@@ -17,6 +18,8 @@ public abstract class Actor : MonoBehaviour
     protected Rigidbody m_rigidbody;
 
     protected Collider m_collider;
+
+    protected BehaviorTree m_behaviorTree;
 
     [SerializeField]
     private GameObject m_firstPersonCameraPivot;
@@ -50,6 +53,7 @@ public abstract class Actor : MonoBehaviour
         m_agent = GetComponent<NavMeshAgent>();
         m_collider = GetComponent<Collider>();
         m_rigidbody = GetComponent<Rigidbody>();
+        m_behaviorTree = GetComponent<BehaviorTree>();
         Health = GetComponent<ActorHealth>();
         Status = GetComponent<ActorStatus>();
         EnableAIComponents();
@@ -146,6 +150,11 @@ public abstract class Actor : MonoBehaviour
             m_rigidbody.isKinematic = true;
         }
 
+        if (m_behaviorTree != null)
+        {
+            m_behaviorTree.enabled = true;
+        }
+
         if (Animator != null)
         {
             m_firstPersonAnimator.gameObject.SetActive(false);
@@ -154,6 +163,11 @@ public abstract class Actor : MonoBehaviour
     
     protected void DisableAIComponents()
     {
+        if (m_behaviorTree != null)
+        {
+            m_behaviorTree.enabled = false;
+        }
+
         if (m_agent != null)
         {
             m_agent.enabled = false;
