@@ -44,6 +44,7 @@ public class MonsterAttack : MonoBehaviour
 
     public Weapon AttackWeapon => m_actor.IsPossessed ? m_firstPersonAttack : m_thirdPersonAttack;
     public Weapon SkillWeapon => m_actor.IsPossessed ? m_firstPersonSkill : m_thirdPersonSkill;
+    public Weapon BlockPushWeapon => m_actor.IsPossessed ? m_firstPersonBlockPush : m_thirdPersonBlockPush;
 
     private void Awake()
     {
@@ -58,8 +59,8 @@ public class MonsterAttack : MonoBehaviour
 
     private void Start()
     {
-        m_status.Damage = m_data.Damage;
-        
+        m_status.Damage = m_data.Attack.Damage;
+
         RegisterHitEvents();
     }
 
@@ -80,7 +81,7 @@ public class MonsterAttack : MonoBehaviour
 
     public void Skill()
     {
-        if (!CanAttack || IsAttacking )
+        if (!CanAttack || IsAttacking)
         {
             return;
         }
@@ -88,14 +89,14 @@ public class MonsterAttack : MonoBehaviour
         SkillWeapon.StartAttack();
     }
 
-    private void HandleHitEvent(IEnumerable<WeaponAttackInfo> info)
+    private void HandleHitEvent(MonsterAttackData.AttackData data, IEnumerable<WeaponAttackInfo> info)
     {
         //int damage = m_status.Damage;
         //TODO: 플레이어의 공격 정보 반영하여 데미지 처리
-        HandleHitCore(info);
+        HandleHitCore(data, info);
     }
 
-    private void HandleHitCore(IEnumerable<WeaponAttackInfo> info)
+    private void HandleHitCore(MonsterAttackData.AttackData data, IEnumerable<WeaponAttackInfo> info)
     {
         // 공격 성공 시 애니메이션 실행 
         //StartCoroutine(AttackImpact());
@@ -112,16 +113,16 @@ public class MonsterAttack : MonoBehaviour
                 continue;
             }
 
-            Debug.Log($"{health.gameObject.name} is hit by {gameObject.name}, damage: {m_data.Damage}");
-            
+            Debug.Log($"{health.gameObject.name} is hit by {gameObject.name}, damage: {data.Damage}");
+
             //데미지 처리
-            health.TakeDamage(m_data.Damage,hit.AttackDirection, m_actor);
+            health.TakeDamage(data.Damage, hit.AttackDirection, m_actor);
 
             //넉다운 적용
-            // if (m_data.knockDownTime>0f)
-            // {
-            //     m_status.SetKnockDown(weaponAttackInfo.knockDownTime);
-            // }
+             // if (m_data.knockDownTime>0f)
+             // {
+             //     //m_status.SetKnockDown(weaponAttackInfo.knockDownTime);
+             // }
 
             //넉백 적용
             //TODO: 공격, 스킬, 밀쳐내기 등의 넉백여부 구분 필요
@@ -139,11 +140,20 @@ public class MonsterAttack : MonoBehaviour
 
     public void OnHitEvent(object o, IEnumerable<WeaponAttackInfo> attackInfo)
     {
+        //대상 무기의 공격 데이터를 설정정함
+        Weapon hitWeapon = o as Weapon;
+        if (hitWeapon == null)
+        {
+            Debug.LogError("무기가 아닌 오브젝트가 공격 호출함: "+o.ToString());
+            return;
+        }
+        MonsterAttackData.AttackData data = GetWeaponDataByType(hitWeapon.Type);
+
         var hits = attackInfo.Where(hit => hit.HitObject.gameObject != gameObject);
-        
+
         m_actor.Animator.SetTrigger(s_targetCheckAnimationKey);
-        
-        HandleHitEvent(hits);
+
+        HandleHitEvent(data, hits);
     }
 
     private void OnValidate()
@@ -157,12 +167,12 @@ public class MonsterAttack : MonoBehaviour
     private void RegisterHitEvents()
     {
         Weapon[] weapons = GetComponentsInChildren<Weapon>(true);
-        foreach(var weapon in weapons)
+        foreach (var weapon in weapons)
         {
             weapon.onHitEvent += OnHitEvent;
         }
     }
-    
+
     private void UnregisterHitEvents()
     {
         Weapon[] weapons = GetComponentsInChildren<Weapon>(true);
@@ -173,7 +183,7 @@ public class MonsterAttack : MonoBehaviour
     }
 
     private IEnumerator AttackImpact()
-    { 
+    {
         float startTime = Time.time;
 
         //m_actor.Animator.GetCurrentAnimatorStateInfo(0).speed = -1;
@@ -223,8 +233,26 @@ public class MonsterAttack : MonoBehaviour
                 default:
                     Debug.LogError("초기화 오류: 등록되지 않은 Weapon 등록됨");
                     break;
-            }   
+            }
         }
-        
+
+    }
+
+    private MonsterAttackData.AttackData GetWeaponDataByType(Weapon.WeaponType type)
+    {
+        switch (type)
+        {
+            case Weapon.WeaponType.SKILL_WEAPON:
+                return m_data.Skill;
+                break;
+            case Weapon.WeaponType.ATTACK_WEAPON:
+                return m_data.Attack;
+                break;
+            case Weapon.WeaponType.BLOCKPUSH_WEAPON:
+                return m_data.BlockPush;
+                break;
+            default:
+                return null;
+        }
     }
 }
