@@ -10,13 +10,11 @@ using UnityEngine.Serialization;
  */
 public class MeleeWeapon : Weapon
 {
-    public int ComboCount => Animator.GetInteger(ComboAnimBehaviour.s_attackCountAnimationHash);
-
     [SerializeField] private TrailCaster m_trailCaster;
 
     #region PrivateVariables
     
-    private List<AttackInfo> m_attackInfoBuffer = new List<AttackInfo>();
+    private List<WeaponAttackInfo> m_attackInfoBuffer = new List<WeaponAttackInfo>();
     
 
     #endregion
@@ -26,8 +24,6 @@ public class MeleeWeapon : Weapon
         //TODO: 이번 공격의 End보다 다음 공격의 Start가 먼저 호출될 수 있음.
         //공격 중인데 다음 공격 딜레이가 오지 않았다면 return;
         //if (IsAttacking && !m_canNextAttack) return;
-
-        Animator.SetTrigger(MonsterAttack.s_attackAnimationKey);
     }
 
     #region AnimationEvent
@@ -35,8 +31,6 @@ public class MeleeWeapon : Weapon
     protected override void OnHitMotion()
     {
         //TODO: 1인칭일 경우 카메라 쉐이킹
-
-        Animator.SetBool(MonsterAttack.s_targetCheckAnimationKey, false);
         m_trailCaster.StartCheck();
     }
 
@@ -65,9 +59,9 @@ public class MeleeWeapon : Weapon
                 IHealth health = hit.transform.GetComponent<IHealth>();
 
                 //체력이 없는 오브젝트거나, 본인이 타겟된 경우는 체크하지 않음.
-                if (health != null && hit.transform.gameObject != Owner.gameObject)
+                if (health != null)
                 {
-                    m_attackInfoBuffer.Add(new AttackInfo(WeaponData.Damage, hit.normal, Owner, health));
+                    m_attackInfoBuffer.Add(new WeaponAttackInfo(health,hit.normal));
                 }
             }
 
@@ -77,8 +71,6 @@ public class MeleeWeapon : Weapon
             if (m_attackInfoBuffer.Any())
             {
                 InvokeHitEvent(m_attackInfoBuffer);
-                Animator.SetBool(MonsterAttack.s_targetCheckAnimationKey, true);
-
             }
         }
     }

@@ -14,16 +14,21 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         public SharedFloat targetDistPredictionMult = 20;
         [Tooltip("The GameObject that the agent is pursuing")]
         public SharedTransform target;
+        private MonsterMovement m_monsterMovement;
 
         // The position of the target at the last frame
         private Vector3 targetPosition;
-
+        public override void OnAwake()
+        {
+            base.OnAwake();
+            m_monsterMovement = GetComponent<MonsterMovement>();
+        }
         public override void OnStart()
         {
             base.OnStart();
 
             targetPosition = target.Value.transform.position;
-            SetDestination(Target());
+            m_monsterMovement.MoveTo(Target());
         }
 
         // Pursue the destination. Return success once the agent has reached the destination.
@@ -35,7 +40,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             }
 
             // Target will return the predicated position
-            SetDestination(Target());
+            m_monsterMovement.MoveTo(Target());
 
             return TaskStatus.Running;
         }

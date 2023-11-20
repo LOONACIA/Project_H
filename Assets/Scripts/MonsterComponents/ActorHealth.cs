@@ -65,7 +65,7 @@ public class ActorHealth : MonoBehaviour, IHealth
         }
     }
 
-    public void TakeDamage(AttackInfo attackInfo, Actor attacker)
+    public void TakeDamage(int damage, Vector3 attackDirection, Actor attacker)
     {
         if (IsDead)
         {
@@ -73,7 +73,7 @@ public class ActorHealth : MonoBehaviour, IHealth
         }
 
         //공격 방향 테스트용 코드, Gizmo에서 사용합니다.
-        m_damagedDirectionList.Add(attackInfo.attackDirection);
+        m_damagedDirectionList.Add(attackDirection);
 
         // 방어 모션 중에 공격 받을 시 데미지 무효, 충격 받는 모션 실행
         if (m_status.IsBlocking)
@@ -85,23 +85,10 @@ public class ActorHealth : MonoBehaviour, IHealth
         // 피격 모션 실행 
         if (!m_actor.IsPossessed)
         {
-            PlayHitAnimation(attackInfo, attacker);
-        }
-        
-        //넉다운 적용
-        if (attackInfo.knockDownTime>0f)
-        {
-            m_status.SetKnockDown(attackInfo.knockDownTime);
-        }
-        
-        //넉백 적용
-        if (attackInfo.knockBackPower > 0f)
-        {
-            MonsterMovement movement = GetComponent<MonsterMovement>();
-            movement.TryKnockBack(attackInfo.knockBackDirection, attackInfo.knockBackPower, attackInfo.isKnockBackOverwrite);
+            PlayHitAnimation(attackDirection, attacker);
         }
 
-        m_status.Hp -= attackInfo.damage;
+        m_status.Hp -= damage;
         OnDamaged(attacker);
     }
 
@@ -156,11 +143,11 @@ public class ActorHealth : MonoBehaviour, IHealth
         }
     }
 
-    private void PlayHitAnimation(AttackInfo attackInfo = null, Actor attacker = null)
+    private void PlayHitAnimation(Vector3 attackDirection = new Vector3(), Actor attacker = null)
     {
-        if (attackInfo != null && attacker != null)
+        if (attacker != null)
         {
-            var hitDirectionX = m_actor.transform.InverseTransformDirection(attackInfo.attackDirection);
+            var hitDirectionX = m_actor.transform.InverseTransformDirection(attackDirection);
             var hitDirectionZ = m_actor.transform.InverseTransformDirection((m_actor.transform.position - attacker.transform.position).normalized);
 
             if (hitDirectionZ.z > 0)

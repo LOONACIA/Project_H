@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using LOONACIA.Unity;
 using UnityEngine;
+using UnityEngine.Android;
 using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
 
@@ -14,6 +15,7 @@ using UnityEngine.UIElements;
 public class MonsterAttack : MonoBehaviour
 {
     public static readonly int s_attackAnimationKey = Animator.StringToHash("Attack");
+    public static readonly int s_skillAnimationKey = Animator.StringToHash("Skill");
     public static readonly int s_targetCheckAnimationKey = Animator.StringToHash("TargetCheck");
 
     [SerializeField] private Weapon firstPersonAttack;
@@ -49,34 +51,43 @@ public class MonsterAttack : MonoBehaviour
     private void Start()
     {
         m_status.Damage = m_data.Damage;
+        
+        RegisterHitEvents();
+    }
+
+    private void OnDestroy()
+    {
+        UnregisterHitEvents();
     }
 
     public void Attack()
     {
-        if (!CanAttack || IsAttacking || m_status.IsKnockedDown)
+        if (!CanAttack || IsAttacking)
         {
             return;
         }
-        AttackWeapon.StartAttack(m_actor);
+        m_actor.Animator.SetTrigger(s_attackAnimationKey);
+        AttackWeapon.StartAttack();
     }
 
     public void Skill()
     {
-        if (!CanAttack || IsAttacking || m_status.IsKnockedDown)
+        if (!CanAttack || IsAttacking )
         {
             return;
         }
-        SkillWeapon.StartAttack(m_actor);
+        m_actor.Animator.SetTrigger(s_skillAnimationKey);
+        SkillWeapon.StartAttack();
     }
 
-    private void HandleHitEvent(IEnumerable<AttackInfo> info)
+    private void HandleHitEvent(IEnumerable<WeaponAttackInfo> info)
     {
         //int damage = m_status.Damage;
         //TODO: 플레이어의 공격 정보 반영하여 데미지 처리
         HandleHitCore(info);
     }
 
-    private void HandleHitCore(IEnumerable<AttackInfo> info)
+    private void HandleHitCore(IEnumerable<WeaponAttackInfo> info)
     {
         // 공격 성공 시 애니메이션 실행 
         //StartCoroutine(AttackImpact());
@@ -85,7 +96,7 @@ public class MonsterAttack : MonoBehaviour
 
         foreach (var hit in info)
         {
-            IHealth health = hit.hitObject;
+            IHealth health = hit.HitObject;
             // 빙의되지 않은 몬스터가 타겟이 아닌 대상을 공격하는 경우
             if (!m_actor.IsPossessed &&
                 health.gameObject.TryGetComponent<Actor>(out var actor) && !m_actor.Targets.Contains(actor))
@@ -93,16 +104,38 @@ public class MonsterAttack : MonoBehaviour
                 continue;
             }
 
-            Debug.Log($"{health.gameObject.name} is hit by {gameObject.name}, damage: {hit.damage}");
-            health.TakeDamage(hit, m_actor);
+            Debug.Log($"{health.gameObject.name} is hit by {gameObject.name}, damage: {m_data.Damage}");
+            
+            //데미지 처리
+            health.TakeDamage(m_data.Damage,hit.AttackDirection, m_actor);
+
+            //넉다운 적용
+            // if (m_data.knockDownTime>0f)
+            // {
+            //     m_status.SetKnockDown(weaponAttackInfo.knockDownTime);
+            // }
+
+            //넉백 적용
+            //TODO: 공격, 스킬, 밀쳐내기 등의 넉백여부 구분 필요
+            if (hit.KnockBackDirection != Vector3.zero)
+            {
+                MonsterMovement movement = health.gameObject.GetComponent<MonsterMovement>();
+
+                Debug.Log(hit.KnockBackDirection);
+                //TODO: 공격 종류별로 넉백 파워 수정 필요
+                movement.TryKnockBack(hit.KnockBackDirection, 25);
+            }
         }
 
     }
 
-    public void OnHitEvent(IEnumerable<AttackInfo> attackInfo)
+    public void OnHitEvent(object o, IEnumerable<WeaponAttackInfo> attackInfo)
     {
-        var hits = attackInfo.Where(hit => hit.hitObject.gameObject != gameObject);
-        HandleHitEvent(attackInfo);
+        var hits = attackInfo.Where(hit => hit.HitObject.gameObject != gameObject);
+        
+        m_actor.Animator.SetTrigger(s_targetCheckAnimationKey);
+        
+        HandleHitEvent(hits);
     }
 
     private void OnValidate()
@@ -110,6 +143,24 @@ public class MonsterAttack : MonoBehaviour
         if (m_data == null)
         {
             Debug.LogWarning($"{name}: {nameof(m_data)} is null");
+        }
+    }
+
+    private void RegisterHitEvents()
+    {
+        Weapon[] weapons = GetComponentsInChildren<Weapon>(true);
+        foreach(var weapon in weapons)
+        {
+            weapon.onHitEvent += OnHitEvent;
+        }
+    }
+    
+    private void UnregisterHitEvents()
+    {
+        Weapon[] weapons = GetComponentsInChildren<Weapon>(true);
+        foreach (var weapon in weapons)
+        {
+            weapon.onHitEvent -= OnHitEvent;
         }
     }
 

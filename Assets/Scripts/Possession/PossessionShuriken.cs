@@ -111,6 +111,7 @@ public class PossessionShuriken : MonoBehaviour
             processor.m_isAblePossession = true;
             targetActor = other.gameObject.GetComponent<Actor>();   
             GetComponent<Collider>().enabled = false;
+            GetComponent<MeshRenderer>().enabled = false;
             isStop = true;
         }
         else

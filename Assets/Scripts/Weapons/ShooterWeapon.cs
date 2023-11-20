@@ -50,7 +50,7 @@ public class ShooterWeapon : Weapon
     
     protected override void Attack()
     {
-        Animator.SetTrigger(MonsterAttack.s_attackAnimationKey);
+        //Animator.SetTrigger(MonsterAttack.s_attackAnimationKey);
     }
 
     protected override void OnLeadInMotion()
@@ -96,14 +96,14 @@ public class ShooterWeapon : Weapon
         DrawLine(target);
     }
 
-    private IEnumerable<AttackInfo> ProcessHit(IEnumerable<RaycastHit> hits)
+    private IEnumerable<WeaponAttackInfo> ProcessHit(IEnumerable<RaycastHit> hits)
     {
         foreach (var hit in hits)
         {
             if (hit.transform.TryGetComponent(out IHealth health))
             {
                 // TODO: AttackInfo 변경 시 수정 필요
-                yield return new(m_damage, hit.normal, Owner, health);
+                yield return new(health, hit.normal);
             }
         }
     }

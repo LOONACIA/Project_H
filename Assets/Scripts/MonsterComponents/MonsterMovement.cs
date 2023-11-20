@@ -147,6 +147,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
     {
         if (m_agent.enabled)
         {
+            m_agent.isStopped = false;
             m_agent.SetDestination(destination);
             m_agent.speed = m_data.MoveSpeed;
         }
