@@ -75,7 +75,11 @@ public class ActorStatus : MonoBehaviour
     private void Awake()
     {
         m_behaviorTree = GetComponent<BehaviorTree>();
-        m_aiKnockDownTime = m_behaviorTree.GetVariable("KnockDownTime") as SharedFloat;
+        if (m_behaviorTree)
+        {
+            SharedVariable holder = m_behaviorTree.GetVariable("KnockDownTime");
+            m_aiKnockDownTime = holder as SharedFloat;
+        }
     }
 
     private void Update()
