@@ -11,23 +11,28 @@ using UnityEngine.UIElements;
 /*
  * 1인칭, 3인칭 공격을 시전, 데미지 처리
  */
-[RequireComponent(typeof (ActorStatus))]
+[RequireComponent(typeof(ActorStatus))]
 public class MonsterAttack : MonoBehaviour
 {
-    public static readonly int s_attackAnimationKey = Animator.StringToHash("Attack");
-    public static readonly int s_skillAnimationKey = Animator.StringToHash("Skill");
-    public static readonly int s_targetCheckAnimationKey = Animator.StringToHash("TargetCheck");
+    private static readonly int s_attackAnimationKey = Animator.StringToHash("Attack");
+    
+    private static readonly int s_skillAnimationKey = Animator.StringToHash("Skill");
+    
+    private static readonly int s_targetCheckAnimationKey = Animator.StringToHash("TargetCheck");
 
     private Weapon m_firstPersonAttack;
+    
     private Weapon m_thirdPersonAttack;
-    
+
     private Weapon m_firstPersonSkill;
-    private Weapon m_thirdPersonSkill;
     
+    private Weapon m_thirdPersonSkill;
+
     //현재 미사용, 등록만 되어있음
     private Weapon m_firstPersonBlockPush;
-    private Weapon m_thirdPersonBlockPush;
     
+    private Weapon m_thirdPersonBlockPush;
+
     [SerializeField]
     private MonsterAttackData m_data;
 
@@ -43,6 +48,7 @@ public class MonsterAttack : MonoBehaviour
     public bool IsAttacking { get; set; }
 
     public Weapon AttackWeapon => m_actor.IsPossessed ? m_firstPersonAttack : m_thirdPersonAttack;
+    
     public Weapon SkillWeapon => m_actor.IsPossessed ? m_firstPersonSkill : m_thirdPersonSkill;
     public Weapon BlockPushWeapon => m_actor.IsPossessed ? m_firstPersonBlockPush : m_thirdPersonBlockPush;
 
@@ -50,11 +56,13 @@ public class MonsterAttack : MonoBehaviour
     {
         m_actor = GetComponent<Monster>();
         m_status = GetComponent<ActorStatus>();
-        
-        Weapon[] wpWeapons = m_actor.FirstPersonAnimator.GetComponents<Weapon>();
+
+        Weapon[] fpWeapons = m_actor.FirstPersonAnimator.GetComponents<Weapon>();
         Weapon[] tpWeapons = m_actor.ThirdPersonAnimator.GetComponents<Weapon>();
-        RegisterWeaponComponents(wpWeapons, ref m_firstPersonAttack, ref m_firstPersonSkill, ref m_firstPersonBlockPush);
-        RegisterWeaponComponents(tpWeapons, ref m_thirdPersonAttack, ref m_thirdPersonSkill, ref m_thirdPersonBlockPush);
+        RegisterWeaponComponents(fpWeapons, ref m_firstPersonAttack, ref m_firstPersonSkill,
+            ref m_firstPersonBlockPush);
+        RegisterWeaponComponents(tpWeapons, ref m_thirdPersonAttack, ref m_thirdPersonSkill,
+            ref m_thirdPersonBlockPush);
     }
 
     private void Start()
@@ -75,6 +83,7 @@ public class MonsterAttack : MonoBehaviour
         {
             return;
         }
+
         m_actor.Animator.SetTrigger(s_attackAnimationKey);
         AttackWeapon.StartAttack();
     }
@@ -85,6 +94,7 @@ public class MonsterAttack : MonoBehaviour
         {
             return;
         }
+
         m_actor.Animator.SetTrigger(s_skillAnimationKey);
         SkillWeapon.StartAttack();
     }
@@ -135,7 +145,6 @@ public class MonsterAttack : MonoBehaviour
                 movement.TryKnockBack(hit.KnockBackDirection, 14);
             }
         }
-
     }
 
     public void OnHitEvent(object o, IEnumerable<WeaponAttackInfo> attackInfo)
@@ -169,7 +178,7 @@ public class MonsterAttack : MonoBehaviour
         Weapon[] weapons = GetComponentsInChildren<Weapon>(true);
         foreach (var weapon in weapons)
         {
-            weapon.onHitEvent += OnHitEvent;
+            weapon.OnHitEvent += OnHitEvent;
         }
     }
 
@@ -178,30 +187,10 @@ public class MonsterAttack : MonoBehaviour
         Weapon[] weapons = GetComponentsInChildren<Weapon>(true);
         foreach (var weapon in weapons)
         {
-            weapon.onHitEvent -= OnHitEvent;
+            weapon.OnHitEvent -= OnHitEvent;
         }
     }
 
-    private IEnumerator AttackImpact()
-    {
-        float startTime = Time.time;
-
-        //m_actor.Animator.GetCurrentAnimatorStateInfo(0).speed = -1;
-
-        m_actor.Animator.speed = -1;
-        yield return new WaitForSeconds(0.1f);
-        m_actor.Animator.speed = 1;
-
-        //m_actor.Animator.speed = -2;
-
-        //while (Time.time - startTime < 5f)
-        //{
-        //    Debug.Log(m_actor.Animator.speed);    
-        //    yield return null;
-        //}
-
-        //m_actor.Animator.SetTrigger(s_targetCheckAnimationKey);
-    }
 
     private void RegisterWeaponComponents(Weapon[] weapons, ref Weapon attackWeapon, ref Weapon skillWeapon, ref Weapon blockPushWeapon)
     {
@@ -214,6 +203,7 @@ public class MonsterAttack : MonoBehaviour
                     {
                         Debug.LogError("AttackWeapon 중복 등록됨");
                     }
+
                     attackWeapon = weapon;
                     break;
                 case Weapon.WeaponType.SKILL_WEAPON:
@@ -221,6 +211,7 @@ public class MonsterAttack : MonoBehaviour
                     {
                         Debug.LogError("SkillWeapon 중복 등록됨");
                     }
+
                     skillWeapon = weapon;
                     break;
                 case Weapon.WeaponType.BLOCKPUSH_WEAPON:
@@ -228,6 +219,7 @@ public class MonsterAttack : MonoBehaviour
                     {
                         Debug.LogError("BlockPushWeapon 중복 등록됨");
                     }
+
                     blockPushWeapon = weapon;
                     break;
                 default:
