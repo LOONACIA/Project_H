@@ -21,9 +21,9 @@ public class TrailCaster : MonoBehaviour
     [SerializeField] private int m_trailCount = 6;
 
     //Cast 위치 체크용 변수
-    [SerializeField]private Vector3[] oldPos;
-    [SerializeField]private Vector3[] curPos;
-    [SerializeField]private Vector3[] localTrailPos;
+    private Vector3[] oldPos;
+    private Vector3[] curPos;
+    private Vector3[] localTrailPos;
 
     //위치 체킹 중에 중복된 적을 검출하지 않기 위한 변수
     private Dictionary<long, RaycastHit> attackedList = new ();
