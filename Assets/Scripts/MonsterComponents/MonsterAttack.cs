@@ -21,7 +21,6 @@ public class MonsterAttack : MonoBehaviour
     [SerializeField] private Weapon firstPersonAttack;
     [SerializeField] private Weapon thirdPersonAttack;
     
-    
     [SerializeField] private Weapon firstPersonSkill;
     [SerializeField] private Weapon thirdPersonSkill;
     
