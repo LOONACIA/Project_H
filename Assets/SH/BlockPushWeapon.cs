@@ -16,7 +16,7 @@ public class BlockPushWeapon : Weapon
 
     protected override void OnHitMotion()
     {
-        Vector3 dir = transform.TransformDirection(new Vector3(0f, 0.3f, 1f)).normalized;
+        Vector3 dir = transform.TransformDirection(new Vector3(0f, 0f, 1f)).normalized;
         var detectedList = hitBox.DetectHitBox(transform)
                                  .Select(info => new WeaponAttackInfo(info,dir,dir))
                                  ;

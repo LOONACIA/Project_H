@@ -42,7 +42,8 @@ public partial class CharacterController : MonoBehaviour
         m_possession = GetComponent<PossessionProcessor>();
         m_possession.Possessing += OnPossessing;
         m_possession.Possessed += OnPossessed;
-        
+
+        GameManager.UI.ShowCrosshair();
         GameManager.UI.ShowHpIndicator(this);
     }
 
