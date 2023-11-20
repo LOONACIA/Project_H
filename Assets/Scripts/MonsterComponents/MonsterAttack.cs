@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using LOONACIA.Unity;
 using UnityEngine;
+using UnityEngine.Android;
 using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
 
@@ -107,19 +108,23 @@ public class MonsterAttack : MonoBehaviour
             
             //데미지 처리
             health.TakeDamage(m_data.Damage,hit.AttackDirection, m_actor);
-            
+
             //넉다운 적용
             // if (m_data.knockDownTime>0f)
             // {
             //     m_status.SetKnockDown(weaponAttackInfo.knockDownTime);
             // }
-            //
-            // //넉백 적용
-            // if (m_data.knockBackPower > 0f)
-            // {
-            //     MonsterMovement movement = GetComponent<MonsterMovement>();
-            //     movement.TryKnockBack(weaponAttackInfo.knockBackDirection, weaponAttackInfo.knockBackPower, weaponAttackInfo.isKnockBackOverwrite);
-            // }
+
+            //넉백 적용
+            //TODO: 공격, 스킬, 밀쳐내기 등의 넉백여부 구분 필요
+            if (hit.KnockBackDirection != Vector3.zero)
+            {
+                MonsterMovement movement = health.gameObject.GetComponent<MonsterMovement>();
+
+                Debug.Log(hit.KnockBackDirection);
+                //TODO: 공격 종류별로 넉백 파워 수정 필요
+                movement.TryKnockBack(hit.KnockBackDirection, 25);
+            }
         }
 
     }
@@ -143,18 +148,20 @@ public class MonsterAttack : MonoBehaviour
 
     private void RegisterHitEvents()
     {
-        if(firstPersonAttack)firstPersonAttack.onHitEvent += OnHitEvent;
-        if(thirdPersonAttack)thirdPersonAttack.onHitEvent += OnHitEvent;
-        if(firstPersonSkill)firstPersonSkill.onHitEvent += OnHitEvent;
-        if(thirdPersonSkill)thirdPersonSkill.onHitEvent += OnHitEvent;
+        Weapon[] weapons = GetComponentsInChildren<Weapon>(true);
+        foreach(var weapon in weapons)
+        {
+            weapon.onHitEvent += OnHitEvent;
+        }
     }
     
     private void UnregisterHitEvents()
     {
-        if(firstPersonAttack)firstPersonAttack.onHitEvent -= OnHitEvent;
-        if(thirdPersonAttack)thirdPersonAttack.onHitEvent -= OnHitEvent;
-        if(firstPersonSkill)firstPersonSkill.onHitEvent -= OnHitEvent;
-        if(thirdPersonSkill)thirdPersonSkill.onHitEvent -= OnHitEvent;
+        Weapon[] weapons = GetComponentsInChildren<Weapon>(true);
+        foreach (var weapon in weapons)
+        {
+            weapon.onHitEvent -= OnHitEvent;
+        }
     }
 
     private IEnumerator AttackImpact()
