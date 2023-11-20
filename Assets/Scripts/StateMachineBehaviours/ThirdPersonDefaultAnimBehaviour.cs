@@ -10,7 +10,7 @@ public class ThirdPersonDefaultAnimBehaviour : StateMachineBehaviour
         animator.ResetTrigger("Attack");
         animator.ResetTrigger("Hit");
         animator.ResetTrigger("Dead");
-        animator.ResetTrigger("KnockDown");
+        //animator.ResetTrigger("KnockDown");
         animator.ResetTrigger("KnockBack");
     }
 }
