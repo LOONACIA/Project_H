@@ -6,26 +6,13 @@ using UnityEngine;
 /// <summary>
 /// 공격, 스킬의 부모 클래스
 /// </summary>
+[RequireComponent(typeof(AttackAnimationEventReceiver))]
 public abstract class Weapon : MonoBehaviour
 {
-    /// <summary>
-    /// State는 Animation Event가 발생할 때 해당 Event의 정보로 변경됩니다.
-    /// </summary>
-    public enum AttackState
-    {
-        IDLE,
-        LEAD_IN, //선딜
-        HIT, //실제 공격
-        FOLLOW_THROUGH, //후딜
-    }
-
-    #region Variables
-    
-    private bool m_isAttackTriggered = false;
-
-    #endregion
-
     #region Properties
+
+    [field: SerializeField]
+    public WeaponType Type { get; private set; }
 
     public event EventHandler<IEnumerable<WeaponAttackInfo>> onHitEvent;
 
@@ -39,7 +26,6 @@ public abstract class Weapon : MonoBehaviour
     /// </summary>
     public void StartAttack()
     {
-        m_isAttackTriggered = true;
         Attack();
     }
 
@@ -94,4 +80,22 @@ public abstract class Weapon : MonoBehaviour
 
     #endregion
 
+    public enum WeaponType
+    {
+        ATTACK_WEAPON,
+        SKILL_WEAPON,
+        BLOCKPUSH_WEAPON,
+    }
+    
+    
+    /// <summary>
+    /// State는 Animation Event가 발생할 때 해당 Event의 정보로 변경됩니다.
+    /// </summary>
+    public enum AttackState
+    {
+        IDLE,
+        LEAD_IN, //선딜
+        HIT, //실제 공격
+        FOLLOW_THROUGH, //후딜
+    }
 }

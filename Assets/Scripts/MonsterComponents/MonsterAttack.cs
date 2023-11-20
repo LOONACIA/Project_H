@@ -18,11 +18,15 @@ public class MonsterAttack : MonoBehaviour
     public static readonly int s_skillAnimationKey = Animator.StringToHash("Skill");
     public static readonly int s_targetCheckAnimationKey = Animator.StringToHash("TargetCheck");
 
-    [SerializeField] private Weapon firstPersonAttack;
-    [SerializeField] private Weapon thirdPersonAttack;
+    private Weapon m_firstPersonAttack;
+    private Weapon m_thirdPersonAttack;
     
-    [SerializeField] private Weapon firstPersonSkill;
-    [SerializeField] private Weapon thirdPersonSkill;
+    private Weapon m_firstPersonSkill;
+    private Weapon m_thirdPersonSkill;
+    
+    //현재 미사용, 등록만 되어있음
+    private Weapon m_firstPersonBlockPush;
+    private Weapon m_thirdPersonBlockPush;
     
     [SerializeField]
     private MonsterAttackData m_data;
@@ -38,13 +42,18 @@ public class MonsterAttack : MonoBehaviour
     [field: SerializeField]
     public bool IsAttacking { get; set; }
 
-    public Weapon AttackWeapon => m_actor.IsPossessed ? firstPersonAttack : thirdPersonAttack;
-    public Weapon SkillWeapon => m_actor.IsPossessed ? firstPersonSkill : thirdPersonSkill;
+    public Weapon AttackWeapon => m_actor.IsPossessed ? m_firstPersonAttack : m_thirdPersonAttack;
+    public Weapon SkillWeapon => m_actor.IsPossessed ? m_firstPersonSkill : m_thirdPersonSkill;
 
     private void Awake()
     {
         m_actor = GetComponent<Monster>();
         m_status = GetComponent<ActorStatus>();
+        
+        Weapon[] wpWeapons = m_actor.FirstPersonAnimator.GetComponents<Weapon>();
+        Weapon[] tpWeapons = m_actor.ThirdPersonAnimator.GetComponents<Weapon>();
+        RegisterWeaponComponents(wpWeapons, ref m_firstPersonAttack, ref m_firstPersonSkill, ref m_firstPersonBlockPush);
+        RegisterWeaponComponents(tpWeapons, ref m_thirdPersonAttack, ref m_thirdPersonSkill, ref m_thirdPersonBlockPush);
     }
 
     private void Start()
@@ -182,5 +191,40 @@ public class MonsterAttack : MonoBehaviour
         //}
 
         //m_actor.Animator.SetTrigger(s_targetCheckAnimationKey);
+    }
+
+    private void RegisterWeaponComponents(Weapon[] weapons, ref Weapon attackWeapon, ref Weapon skillWeapon, ref Weapon blockPushWeapon)
+    {
+        foreach (var weapon in weapons)
+        {
+            switch (weapon.Type)
+            {
+                case Weapon.WeaponType.ATTACK_WEAPON:
+                    if (attackWeapon != null)
+                    {
+                        Debug.LogError("AttackWeapon 중복 등록됨");
+                    }
+                    attackWeapon = weapon;
+                    break;
+                case Weapon.WeaponType.SKILL_WEAPON:
+                    if (skillWeapon != null)
+                    {
+                        Debug.LogError("SkillWeapon 중복 등록됨");
+                    }
+                    skillWeapon = weapon;
+                    break;
+                case Weapon.WeaponType.BLOCKPUSH_WEAPON:
+                    if (blockPushWeapon != null)
+                    {
+                        Debug.LogError("BlockPushWeapon 중복 등록됨");
+                    }
+                    blockPushWeapon = weapon;
+                    break;
+                default:
+                    Debug.LogError("초기화 오류: 등록되지 않은 Weapon 등록됨");
+                    break;
+            }   
+        }
+        
     }
 }
