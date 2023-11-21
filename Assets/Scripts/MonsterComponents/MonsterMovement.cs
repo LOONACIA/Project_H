@@ -12,6 +12,8 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
 {
+    private static readonly int s_animatorKnockBack = Animator.StringToHash("KnockBack");
+
     public bool isDashing;
 
     private bool m_isMoving;
@@ -68,12 +70,6 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
     {
         get => m_isOnGround;
         set => SetField(ref m_isOnGround, value);
-    }
-
-    public bool IsKnockBack
-    {
-        get;
-        private set;
     }
     
     public event PropertyChangedEventHandler PropertyChanged;
@@ -174,9 +170,10 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
 
     public void TryKnockBack(Vector3 direction, float power, bool overwrite = true)
     {
-        IsKnockBack = true;
+        //넉백값 변경
+        m_actor.Status.IsKnockBack = true;
         m_lastKnockBackTime = Time.time;
-        
+        m_actor.Animator.SetBool(s_animatorKnockBack, true);
         
         m_agent.enabled = false;
         m_rigidbody.isKinematic = false;
@@ -241,7 +238,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
 
     private void CheckKnockBackEnd()
     {
-        if (!IsKnockBack) return;
+        if (!m_actor.Status.IsKnockBack) return;
         
         //최소 넉백시간이 지나지 않았다면 return;
         if (m_lastKnockBackTime + m_minKnockBackTime > Time.time) return;
@@ -252,7 +249,8 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
             //속도가 최소보다 작아졌으므로 KnockBack 종료
             m_agent.enabled = true;
             m_rigidbody.isKinematic = true;
-            IsKnockBack = false;
+            m_actor.Status.IsKnockBack = false;
+            m_actor.Animator.SetBool(s_animatorKnockBack, true);
             //Debug.Log("넉백 끝!");
         }
     }

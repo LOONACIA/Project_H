@@ -7,17 +7,27 @@ using UnityEngine;
 public class GameUIManager
 {
     private UICrosshair m_crosshair;
-    
+
+    private UIShieldIndicator m_shieldIndicator;
+
     public void Init()
     {
     }
-    
+
     public void ShowHpIndicator(CharacterController player)
     {
         var ui = ManagerRoot.UI.ShowSceneUI<UIHpIndicator>();
         ui.SetPlayer(player);
     }
-    
+
+    public void GenerateShieldIndicator(CharacterController player)
+    {
+        m_shieldIndicator = ManagerRoot.UI.ShowSceneUI<UIShieldIndicator>();
+        m_shieldIndicator.SetPlayer(player);
+
+        m_shieldIndicator.HideIndicator();
+    }
+
     public void ShowCrosshair()
     {
         // If crosshair is already shown

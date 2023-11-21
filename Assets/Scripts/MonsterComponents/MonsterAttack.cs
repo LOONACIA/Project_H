@@ -142,9 +142,8 @@ public class MonsterAttack : MonoBehaviour
             {
                 MonsterMovement movement = health.gameObject.GetComponent<MonsterMovement>();
 
-                Debug.Log(hit.KnockBackDirection);
                 //TODO: 공격 종류별로 넉백 파워 수정 필요
-                movement.TryKnockBack(hit.KnockBackDirection, 14);
+                movement.TryKnockBack(hit.KnockBackDirection, data.KnockBackPower);
             }
         }
     }
