@@ -30,19 +30,9 @@ public class ActorStatus : MonoBehaviour
     
     [SerializeField]
     [ReadOnly]
-    private bool m_isKnockDown;
-
-    [SerializeField]
-    [ReadOnly]
     private bool m_isKnockBack;
     
-    
-
     private Shield m_shield;
-
-    private BehaviorTree m_behaviorTree;
-
-
 
     public int Hp
     {
@@ -109,17 +99,7 @@ public class ActorStatus : MonoBehaviour
             KnockDownTime = duration;
         }
     }
-
-    private void Awake()
-    {
-        m_behaviorTree = GetComponent<BehaviorTree>();
-        //if (m_behaviorTree)
-        //{
-        //    SharedVariable holder = m_behaviorTree.GetVariable("KnockDownTime");
-        //    m_aiKnockDownTime = holder as SharedFloat;
-        //}
-    }
-
+    
     private void Update()
     {
         UpdateKnockDownTime();
@@ -136,7 +116,7 @@ public class ActorStatus : MonoBehaviour
             KnockDownTime = 0f;
             return;
         }
-
+        
         KnockDownTime -= Time.deltaTime;
         if (KnockDownTime < 0.0f)
         {
