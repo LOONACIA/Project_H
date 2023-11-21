@@ -12,6 +12,8 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
 {
+    private static readonly int s_animatorKnockBack = Animator.StringToHash("KnockBack");
+
     public bool isDashing;
 
     private bool m_isMoving;
@@ -71,9 +73,6 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
     }
     
     public event PropertyChangedEventHandler PropertyChanged;
-
-    public event EventHandler<Actor> OnKnockBack;
-    public event EventHandler<Actor> OnKnockBackEnd;
     
 	private void Start()
     {
@@ -174,7 +173,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         //넉백값 변경
         m_actor.Status.IsKnockBack = true;
         m_lastKnockBackTime = Time.time;
-        OnKnockBackEnd?.Invoke(this,m_actor);
+        m_actor.Animator.SetBool(s_animatorKnockBack, true);
         
         m_agent.enabled = false;
         m_rigidbody.isKinematic = false;
@@ -251,7 +250,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
             m_agent.enabled = true;
             m_rigidbody.isKinematic = true;
             m_actor.Status.IsKnockBack = false;
-            OnKnockBackEnd?.Invoke(this,m_actor);
+            m_actor.Animator.SetBool(s_animatorKnockBack, true);
             //Debug.Log("넉백 끝!");
         }
     }
