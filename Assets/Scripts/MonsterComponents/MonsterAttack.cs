@@ -44,8 +44,14 @@ public class MonsterAttack : MonoBehaviour
 
     public bool CanAttack { get; set; } = true;
 
-    [field: SerializeField]
-    public bool IsAttacking { get; set; }
+    public bool IsAttacking 
+    {
+        get
+        {
+            if (AttackWeapon == null) return false;
+            return AttackWeapon.State != Weapon.AttackState.IDLE;
+        }
+    }
 
     public Weapon AttackWeapon => m_actor.IsPossessed ? m_firstPersonAttack : m_thirdPersonAttack;
     
