@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -52,6 +53,9 @@ public class ShieldSkill : Weapon
 
 public class Shield
 {
+    public event EventHandler OnShieldChanged;
+
+
     // 쉴드 생성한 시간
     private float startTime;
 
@@ -71,6 +75,9 @@ public class Shield
         private set => m_shieldPoint = value; 
     }
 
+    public float MaxShieldPoint { get; private set; }
+
+
     public bool IsVaild
     {
         get 
@@ -84,7 +91,8 @@ public class Shield
 
     public Shield(float shieldPoint, float shieldDuration, GameObject shieldObject = null)
     {
-        ShieldPoint = shieldPoint;
+        MaxShieldPoint = shieldPoint;
+        ShieldPoint = MaxShieldPoint;
         ShieldDuration = shieldDuration;
 
         if (shieldObject != null) 
@@ -96,5 +104,6 @@ public class Shield
     public void TakeDamage(float damage)
     {
         ShieldPoint -= damage;
+        OnShieldChanged.Invoke(this, null);
     }
 }

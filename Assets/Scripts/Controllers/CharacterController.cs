@@ -32,6 +32,8 @@ public partial class CharacterController : MonoBehaviour
 
     public event EventHandler<int> HpChanged;
 
+    public event EventHandler ShieldChanged;
+
     private void Awake()
     {
         if (m_data == null)
@@ -45,6 +47,7 @@ public partial class CharacterController : MonoBehaviour
 
         GameManager.UI.ShowCrosshair();
         GameManager.UI.ShowHpIndicator(this);
+        GameManager.UI.GenerateShieldIndicator(this);
     }
 
     private void Start()
@@ -178,13 +181,24 @@ public partial class CharacterController : MonoBehaviour
             m_character.Health.Damaged -= OnDamaged;
             m_character.Health.Damaged += OnDamaged;
         }
+
+        if (m_character != null && m_character.Status != null)
+        {
+            m_character.Status.OnShieldChanged -= ChangeShield;
+            m_character.Status.OnShieldChanged += ChangeShield;
+        }
     }
-    
+
     private void UnregisterActorEvents()
     {
         if (m_character != null && m_character.Health != null)
         {
             m_character.Health.Damaged -= OnDamaged;
+        }
+
+        if (m_character != null && m_character.Status != null)
+        {
+            m_character.Status.OnShieldChanged -= ShieldChanged;
         }
     }
 
@@ -238,5 +252,11 @@ public partial class CharacterController : MonoBehaviour
         m_cameraHolder = m_character.FirstPersonCameraPivot.transform;
         
         HpChanged?.Invoke(this, Character.Health.CurrentHp);
+        ShieldChanged?.Invoke(this, null);
+    }
+
+    private void ChangeShield(object sender, EventArgs e)
+    {
+        ShieldChanged?.Invoke(this, null);
     }
 }
