@@ -74,14 +74,14 @@ public class Monster : Actor
         base.Possessed();
 
         // TODO: 빙의 게이지 관련 처리
-        Status.Damage = Attack.Data.PossessedDamage;
+        Status.Damage = Attack.Data.PossessedAttack.Damage;
     }
 
     public override void Unpossessed()
     {
         base.Unpossessed();
 
-        Status.Damage = Attack.Data.Damage;
+        Status.Damage = Attack.Data.Attack.Damage;
     }
     
     public override void Block(bool value)

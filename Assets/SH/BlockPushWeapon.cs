@@ -7,7 +7,6 @@ using UnityEngine;
 public class BlockPushWeapon : Weapon
 {
     public HitBox hitBox;
-    public Transform hitTransform;
     
     protected override void Attack()
     {
