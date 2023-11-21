@@ -8,7 +8,7 @@ namespace BehaviorDesigner.Runtime.Tasks
     {
         public override TaskStatus OnUpdate()
         {
-            return TaskStatus.Running;
+            return TaskStatus.Success;
         }
     }
 }

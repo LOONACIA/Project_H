@@ -36,7 +36,6 @@ public class ActorStatus : MonoBehaviour
     
 
     private BehaviorTree m_behaviorTree;
-    private SharedFloat m_aiKnockDownTime;
     
     public int Hp
     {
@@ -71,12 +70,6 @@ public class ActorStatus : MonoBehaviour
         private set
         {
             m_knockDownTime = value;
-            
-            //넉다운 타임이 변경될 경우, AI와 싱크를 맞춰줍니다.
-            if (m_aiKnockDownTime != null)
-            {
-                m_aiKnockDownTime.SetValue(value);
-            }
         }
     }
 
@@ -92,11 +85,11 @@ public class ActorStatus : MonoBehaviour
     private void Awake()
     {
         m_behaviorTree = GetComponent<BehaviorTree>();
-        if (m_behaviorTree)
-        {
-            SharedVariable holder = m_behaviorTree.GetVariable("KnockDownTime");
-            m_aiKnockDownTime = holder as SharedFloat;
-        }
+        //if (m_behaviorTree)
+        //{
+        //    SharedVariable holder = m_behaviorTree.GetVariable("KnockDownTime");
+        //    m_aiKnockDownTime = holder as SharedFloat;
+        //}
     }
 
     private void Update()
