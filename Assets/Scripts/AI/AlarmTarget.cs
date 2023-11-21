@@ -16,7 +16,7 @@ public class AlarmTarget : Action
     public override TaskStatus OnUpdate()
     {
         Actor actor = Target.Value.GetComponent<Actor>();
-        SendMessageToOtherMonsters(actor, Radius.Value);
+        SendMessageToOtherMonsters(actor);
         return TaskStatus.Success;
     }
 
@@ -57,7 +57,7 @@ public class AlarmTarget : Action
             {
                 continue;
             }
-            
+
             monster.Targets.Add(target);
         }
     }
