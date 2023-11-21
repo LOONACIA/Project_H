@@ -54,7 +54,7 @@ public class ActorHealth : MonoBehaviour, IHealth
         }
     }
 
-    public void TakeDamage(int damage, Vector3 attackDirection, Actor attacker)
+    public void TakeDamage(DamageInfo info)
     {
         if (IsDead)
         {
@@ -71,11 +71,11 @@ public class ActorHealth : MonoBehaviour, IHealth
         // 피격 모션 실행 
         if (!m_actor.IsPossessed)
         {
-            PlayHitAnimation(attackDirection, attacker);
+            PlayHitAnimation(info.AttackDirection, info.Attacker);
         }
 
-        m_status.Hp -= damage;
-        OnDamaged(attacker);
+        m_status.Hp -= info.Damage;
+        OnDamaged(info.Attacker);
     }
 
     public void Kill()
