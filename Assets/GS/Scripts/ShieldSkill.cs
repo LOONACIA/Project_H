@@ -34,17 +34,19 @@ public class ShieldSkill : Weapon
     {
         // todo : 쉴드 생성 이펙트 실행
 
-        // 쉴드 프리팹 생성
-        GameObject shieldObject = new();
+        // 쉴드 프리팹 생성 & MonsterStatus로 전달
         if (m_shieldPrefab != null)
         {
-            shieldObject = Instantiate(m_shieldPrefab);
+            GameObject shieldObject = Instantiate(m_shieldPrefab);
             shieldObject.transform.SetParent(m_actor.transform);
             shieldObject.transform.localPosition = m_shieldOffset;
+            
+            m_actorStatus.Shield = new Shield(m_shieldPoint, m_shieldDuration, shieldObject);
         }
-
-        // 쉴드 객체 생성 & MonsterStatus로 전달
-        m_actorStatus.Shield = new Shield(m_shieldPoint, m_shieldDuration, shieldObject);
+        else
+        {
+            m_actorStatus.Shield = new Shield(m_shieldPoint, m_shieldDuration);
+        }
     }
 }
 
@@ -80,11 +82,13 @@ public class Shield
         }
     }
 
-    public Shield(float shieldPoint, float shieldDuration, GameObject shieldObject)
+    public Shield(float shieldPoint, float shieldDuration, GameObject shieldObject = null)
     {
         ShieldPoint = shieldPoint;
         ShieldDuration = shieldDuration;
-        ShieldObject = shieldObject;
+
+        if (shieldObject != null) 
+            ShieldObject = shieldObject;
 
         startTime = Time.time;
     }

@@ -71,7 +71,7 @@ public class ActorHealth : MonoBehaviour, IHealth
         // 쉴드를 가지고 있는 경우에 데미지 무효
         if (m_status.Shield != null)
         {
-            m_status.Shield.TakeDamage(damage);
+            m_status.Shield.TakeDamage(info.Damage);
             return;
         }
 

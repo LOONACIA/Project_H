@@ -180,10 +180,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13c67e7df8c5dd243b21486e4fb80466, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firstPersonAttack: {fileID: 6566073188088549051}
-  thirdPersonAttack: {fileID: 3245008533802148444}
-  firstPersonSkill: {fileID: 0}
-  thirdPersonSkill: {fileID: 0}
   m_data: {fileID: 11400000, guid: d620c25030d388a489b49d237f2ed684, type: 2}
   <IsAttacking>k__BackingField: 0
 --- !u!114 &5784414157522077008
@@ -314,27 +310,27 @@ PrefabInstance:
     - target: {fileID: 1358065989294938390, guid: 23c65171aeeeb094c818f3a3b1deff91,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.9890159
       objectReference: {fileID: 0}
     - target: {fileID: 1358065989294938390, guid: 23c65171aeeeb094c818f3a3b1deff91,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0.14780942
       objectReference: {fileID: 0}
     - target: {fileID: 1358065989294938390, guid: 23c65171aeeeb094c818f3a3b1deff91,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1358065989294938390, guid: 23c65171aeeeb094c818f3a3b1deff91,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1358065989294938390, guid: 23c65171aeeeb094c818f3a3b1deff91,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
+      value: 17
       objectReference: {fileID: 0}
     - target: {fileID: 1358065989294938390, guid: 23c65171aeeeb094c818f3a3b1deff91,
         type: 3}
@@ -538,6 +534,23 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4350432534145434977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7985948921782031619}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5abb798fd19a6f44a0dde4a017eb0be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Type>k__BackingField: 1
+  m_shieldPoint: 100
+  m_shieldDuration: 5
+  m_shieldPrefab: {fileID: 0}
+  m_shieldOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &6237387627204506682
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -550,9 +563,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c936006f1fdd084abb9785133b8ff0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_attackWeapon: {fileID: 6566073188088549051}
-  m_skillWeapon: {fileID: 0}
-  m_blockPushWeapon: {fileID: 0}
 --- !u!114 &6566073188088549051
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -565,6 +575,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ad36176aa803c44fbdede2bc7050bba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <Type>k__BackingField: 0
   m_trailCaster: {fileID: 6002054460145169069}
 --- !u!114 &8917208615033188827
 MonoBehaviour:
@@ -678,8 +689,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   useFixedUpdate: 0
-  m_trailStartPoint: {x: 0, y: 5.33, z: 0}
-  m_trailEndPoint: {x: 0, y: 1.39, z: 0}
+  m_trailStartPoint: {x: 0, y: 0, z: 0}
+  m_trailEndPoint: {x: 0, y: 2.5, z: 0}
   m_trailCount: 8
 --- !u!1001 &8021699848314855766
 PrefabInstance:
