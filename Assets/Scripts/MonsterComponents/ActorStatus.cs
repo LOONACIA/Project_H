@@ -8,6 +8,9 @@ using UnityEngine.Serialization;
 
 public class ActorStatus : MonoBehaviour
 {
+    public event EventHandler OnShieldChanged;
+
+
     [SerializeField]
     [ReadOnly]
     [Tooltip("Hp는 " + nameof(ActorHealth) + "에서 관리됨")]
@@ -20,7 +23,7 @@ public class ActorStatus : MonoBehaviour
     [SerializeField]
     [ReadOnly]
     private bool m_isBlocking;
-    
+
     [SerializeField]
     [ReadOnly]
     private float m_knockDownTime;
@@ -35,8 +38,12 @@ public class ActorStatus : MonoBehaviour
     
     
 
+    private Shield m_shield;
+
     private BehaviorTree m_behaviorTree;
-    
+
+
+
     public int Hp
     {
         get => m_hp;
@@ -55,8 +62,25 @@ public class ActorStatus : MonoBehaviour
         set => m_isBlocking = value;
     }
 
-    public bool IsKnockedDown => m_knockDownTime>0f;
+    public Shield Shield
+    {
+        get => m_shield;
+        set
+        {
+            // 기존에 생성한 오브젝트 제거
+            if (m_shield?.ShieldObject != null)
+                Destroy(m_shield.ShieldObject);
 
+            m_shield = value;
+
+            if (m_shield != null) 
+                m_shield.OnShieldChanged += ChangeShield;
+
+            OnShieldChanged?.Invoke(this, null);
+        }
+    }
+
+    public bool IsKnockedDown => m_knockDownTime > 0f;
     //주의: IsKnockBack값의 수정은 Monster류, Actor류 클래스에서만 일어나야함.
     public bool IsKnockBack
     {
@@ -65,6 +89,7 @@ public class ActorStatus : MonoBehaviour
     }
 
     public float KnockDownTime
+
     {
         get => m_knockDownTime;
         private set
@@ -95,6 +120,7 @@ public class ActorStatus : MonoBehaviour
     private void Update()
     {
         UpdateKnockDownTime();
+        UpdateShield();
     }
 
     /// <summary>
@@ -107,11 +133,30 @@ public class ActorStatus : MonoBehaviour
             KnockDownTime = 0f;
             return;
         }
-        
+
         KnockDownTime -= Time.deltaTime;
         if (KnockDownTime < 0.0f)
         {
             KnockDownTime = 0f;
         }
+    }
+
+    private void UpdateShield()
+    {
+        if (Shield == null) return;
+
+        // 쉴드가 더이상 유효하지 않으면 제거
+        if (!Shield.IsVaild)
+        {
+            if (Shield.ShieldObject != null)
+                Destroy(Shield.ShieldObject);
+
+            Shield = null;
+        }
+    }
+
+    private void ChangeShield(object sender, EventArgs e)
+    {
+        OnShieldChanged?.Invoke(this, null);
     }
 }
