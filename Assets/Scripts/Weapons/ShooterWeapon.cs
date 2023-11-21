@@ -23,7 +23,8 @@ public class ShooterWeapon : Weapon
     private LayerMask m_aimLayers;
 
     [SerializeField]
-    private int m_damage = 5;
+    [Layer]
+    private int m_damageLayer;
 
     [SerializeField]
     private float m_maxDistance = 100f;
@@ -50,7 +51,6 @@ public class ShooterWeapon : Weapon
     
     protected override void Attack()
     {
-        //Animator.SetTrigger(MonsterAttack.s_attackAnimationKey);
     }
 
     protected override void OnLeadInMotion()
@@ -85,7 +85,11 @@ public class ShooterWeapon : Weapon
         Vector3 dir = cameraTransform.forward;
 
         m_ray = new(cameraPosition, dir);
-        RaycastHit[] hits = Physics.RaycastAll(m_ray, m_maxDistance, m_aimLayers);
+        var hits = Physics.RaycastAll(m_ray, m_maxDistance, m_aimLayers)
+            .OrderBy(hit => hit.distance)
+            .TakeWhile(hit => hit.transform.gameObject.layer == m_damageLayer)
+            .ToArray();
+        
         InvokeHitEvent(ProcessHit(hits));
 
         // TODO: Remove test code
@@ -108,6 +112,7 @@ public class ShooterWeapon : Weapon
     // TODO: Remove test code
     private void DrawLine(Vector3 target)
     {
+        m_renderer.positionCount = 2;
         m_renderer.SetPosition(0, m_spawnPosition.position);
         m_renderer.SetPosition(1, target);
 
