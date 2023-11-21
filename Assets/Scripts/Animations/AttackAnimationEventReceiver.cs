@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
-public class AttackAnimationEventReceiver : MonoBehaviour
+public class AttackAnimationEventReceiver : MonoBehaviour 
 {
     private Weapon m_attackWeapon;
     private Weapon m_skillWeapon;

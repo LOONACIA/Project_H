@@ -27,9 +27,6 @@ public class ShooterWeapon : Weapon
     private int m_damageLayer;
 
     [SerializeField]
-    private int m_damage = 5;
-
-    [SerializeField]
     private float m_maxDistance = 100f;
 
     private CinemachineVirtualCamera m_vcam;
@@ -54,7 +51,6 @@ public class ShooterWeapon : Weapon
     
     protected override void Attack()
     {
-        //Animator.SetTrigger(MonsterAttack.s_attackAnimationKey);
     }
 
     protected override void OnLeadInMotion()
@@ -93,6 +89,7 @@ public class ShooterWeapon : Weapon
             .OrderBy(hit => hit.distance)
             .TakeWhile(hit => hit.transform.gameObject.layer == m_damageLayer)
             .ToArray();
+        
         InvokeHitEvent(ProcessHit(hits));
 
         // TODO: Remove test code

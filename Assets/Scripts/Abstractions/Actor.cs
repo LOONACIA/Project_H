@@ -18,6 +18,9 @@ public abstract class Actor : MonoBehaviour
     protected Rigidbody m_rigidbody;
 
     protected Collider m_collider;
+    
+    [SerializeField]
+    private ActorData m_data;
 
     protected BehaviorTree m_behaviorTree;
 
@@ -30,11 +33,11 @@ public abstract class Actor : MonoBehaviour
     [SerializeField]
     private Animator m_thirdPersonAnimator;
     
+    public ActorData Data => m_data;
+    
     public ActorHealth Health { get; private set; }
     
     public ActorStatus Status { get; private set; }
-
-    public StateMachine<Actor> StateMachine { get; } = new();
     
     public bool IsPossessed { get; private set; }
 
@@ -57,13 +60,6 @@ public abstract class Actor : MonoBehaviour
         Health = GetComponent<ActorHealth>();
         Status = GetComponent<ActorStatus>();
         EnableAIComponents();
-    }
-    
-    protected virtual void Start()
-    {
-        InitStateMachine();
-		
-        StateMachine.ChangeState(State.Idle);
     }
     
     protected virtual void OnEnable()
@@ -91,18 +87,10 @@ public abstract class Actor : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (!IsPossessed)
-        {
-            StateMachine.Execute();
-        }
     }
 
     protected virtual void FixedUpdate()
     {
-        if (!IsPossessed)
-        {
-            StateMachine.FixedExecute();
-        }
     }
 
     public abstract void Move(Vector3 direction);
@@ -131,11 +119,6 @@ public abstract class Actor : MonoBehaviour
         IsPossessed = false;
         Animator.gameObject.SetActive(true);
         EnableAIComponents();
-    }
-    
-    protected virtual void InitStateMachine()
-    {
-        StateMachine.AddState(new IdleState<Actor>(this));
     }
 
     protected void EnableAIComponents()
@@ -212,5 +195,13 @@ public abstract class Actor : MonoBehaviour
     {
         yield return new WaitForSeconds(seconds);
         ManagerRoot.Resource.Release(gameObject);
+    }
+    
+    private void OnValidate()
+    {
+        if (m_data == null && GetType() != typeof(Ghost))
+        {
+            Debug.LogWarning($"{name}: {nameof(m_data)} is null");
+        }
     }
 }
