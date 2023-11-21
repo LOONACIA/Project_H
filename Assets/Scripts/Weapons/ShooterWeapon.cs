@@ -23,6 +23,10 @@ public class ShooterWeapon : Weapon
     private LayerMask m_aimLayers;
 
     [SerializeField]
+    [Layer]
+    private int m_damageLayer;
+
+    [SerializeField]
     private int m_damage = 5;
 
     [SerializeField]
@@ -85,7 +89,10 @@ public class ShooterWeapon : Weapon
         Vector3 dir = cameraTransform.forward;
 
         m_ray = new(cameraPosition, dir);
-        RaycastHit[] hits = Physics.RaycastAll(m_ray, m_maxDistance, m_aimLayers);
+        var hits = Physics.RaycastAll(m_ray, m_maxDistance, m_aimLayers)
+            .OrderBy(hit => hit.distance)
+            .TakeWhile(hit => hit.transform.gameObject.layer == m_damageLayer)
+            .ToArray();
         InvokeHitEvent(ProcessHit(hits));
 
         // TODO: Remove test code
