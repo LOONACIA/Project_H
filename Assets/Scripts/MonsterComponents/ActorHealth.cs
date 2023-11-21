@@ -6,12 +6,6 @@ using UnityEngine;
 [RequireComponent(typeof(ActorStatus))]
 public class ActorHealth : MonoBehaviour, IHealth
 {
-    private static readonly int s_deadAnimationKey = Animator.StringToHash("Dead");
-
-    private static readonly int s_hitAnimationKey = Animator.StringToHash("Hit");
-
-    private static readonly int s_blockImpactIndexAnimationKey = Animator.StringToHash("BlockImpactIndex");
-    
     [SerializeField]
     private MonsterHealthData m_data;
 
@@ -60,7 +54,7 @@ public class ActorHealth : MonoBehaviour, IHealth
         }
     }
 
-    public void TakeDamage(int damage, Vector3 attackDirection, Actor attacker)
+    public void TakeDamage(DamageInfo info)
     {
         if (IsDead)
         {
@@ -77,11 +71,11 @@ public class ActorHealth : MonoBehaviour, IHealth
         // 피격 모션 실행 
         if (!m_actor.IsPossessed)
         {
-            PlayHitAnimation(attackDirection, attacker);
+            PlayHitAnimation(info.AttackDirection, info.Attacker);
         }
 
-        m_status.Hp -= damage;
-        OnDamaged(attacker);
+        m_status.Hp -= info.Damage;
+        OnDamaged(info.Attacker);
     }
 
     public void Kill()
@@ -100,7 +94,7 @@ public class ActorHealth : MonoBehaviour, IHealth
             bool hasAnimation = m_actor.Animator.parameters.Any(param => param.name == "Dead");
             if (hasAnimation)
             {
-                m_actor.Animator.SetTrigger(s_deadAnimationKey);
+                m_actor.Animator.SetTrigger(ConstVariables.ANIMATOR_PARAMETER_DEAD);
             }
         }
     }
@@ -144,13 +138,13 @@ public class ActorHealth : MonoBehaviour, IHealth
 
             if (hitDirectionZ.z > 0)
             {
-                m_actor.Animator.SetFloat("HitDirectionX", 0);
-                m_actor.Animator.SetFloat("HitDirectionZ", hitDirectionZ.z);
+                m_actor.Animator.SetFloat(ConstVariables.ANIMATOR_PARAMETER_HIT_DIRECTION_X, 0);
+                m_actor.Animator.SetFloat(ConstVariables.ANIMATOR_PARAMETER_HIT_DIRECTION_Z, hitDirectionZ.z);
             }
             else
             { 
-                m_actor.Animator.SetFloat("HitDirectionX", hitDirectionX.x >= 0 ? 1 : -1);
-                m_actor.Animator.SetFloat("HitDirectionZ", 0);
+                m_actor.Animator.SetFloat(ConstVariables.ANIMATOR_PARAMETER_HIT_DIRECTION_X, hitDirectionX.x >= 0 ? 1 : -1);
+                m_actor.Animator.SetFloat(ConstVariables.ANIMATOR_PARAMETER_HIT_DIRECTION_Z, 0);
             }
         }
 
@@ -159,7 +153,7 @@ public class ActorHealth : MonoBehaviour, IHealth
 
     private void PlayBlockAnimation()
     {
-        m_actor.Animator.SetTrigger(s_hitAnimationKey);
-        m_actor.Animator.SetFloat(s_blockImpactIndexAnimationKey, UnityEngine.Random.Range(0, 3));
+        m_actor.Animator.SetTrigger(ConstVariables.ANIMATOR_PARAMETER_HIT);
+        m_actor.Animator.SetFloat(ConstVariables.ANIMATOR_PARAMETER_BLOCK_IMPACK_INDEX, UnityEngine.Random.Range(0, 3));
     }
 }

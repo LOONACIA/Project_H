@@ -18,4 +18,15 @@ public static class ConstVariables
 
     [Header("Shuriken")]
     public const string SHURIKEN_PATH = "Prefabs/Possession/Shuriken";
+
+    [Header("Animator Parameter")]
+    public const string ANIMATOR_PARAMETER_ATTACK = "Attack";
+    public const string ANIMATOR_PARAMETER_SKILL = "Skill";
+    public const string ANIMATOR_PARAMETER_POSSESS = "Possess";
+    public const string ANIMATOR_PARAMETER_DEAD = "Dead";
+    public const string ANIMATOR_PARAMETER_HIT = "Hit";
+    public const string ANIMATOR_PARAMETER_TARGET_CHECK = "TargetCheck";
+    public const string ANIMATOR_PARAMETER_BLOCK_IMPACK_INDEX = "BlockImpactIndex";
+    public const string ANIMATOR_PARAMETER_HIT_DIRECTION_X = "HitDirectionX";
+    public const string ANIMATOR_PARAMETER_HIT_DIRECTION_Z = "HitDirectionZ";
 }

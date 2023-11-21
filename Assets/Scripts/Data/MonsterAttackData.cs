@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,18 +6,30 @@ using UnityEngine;
 [CreateAssetMenu(fileName = nameof(MonsterAttackData), menuName = "Data/" + nameof(MonsterAttackData))]
 public class MonsterAttackData : ScriptableObject
 {
-	[SerializeField]
-	private int m_damage;
+    //플레이어 데이터
+    [field:SerializeField] public AttackData Attack { get; private set; }
+    [field:SerializeField] public AttackData Skill { get; private set; }
+    [field:SerializeField] public AttackData BlockPush { get; private set; }
+    
+    //빙의 데이터
+    [field:SerializeField] public AttackData PossessedAttack { get; private set; }
+    [field:SerializeField] public AttackData PossessedSkill { get; private set; }
+    [field:SerializeField] public AttackData PossessedBlockPush { get; private set; }
 
-	[SerializeField]
-	private int m_possessedDamage;
+    [Serializable]
+    public class AttackData
+    {
+        [SerializeField] private string m_name;
+        
+        [SerializeField]private int m_damage;
+        [SerializeField]private float m_knockDownTime;
+        [SerializeField]private float m_knockBackPower;
 
-	[SerializeField]
-	private int m_skillDamage;
-
-	public int Damage => m_damage;
-	
-	public int PossessedDamage => m_possessedDamage;
-
-	public int SkillDamage => m_skillDamage;
+        public string Name => m_name;
+        
+        public int Damage => m_damage;
+        public float KnockDownTime => m_knockDownTime;
+        public float KnockBackPower => m_knockBackPower;
+    }
+    
 }

@@ -21,7 +21,7 @@ public class RocketLauncherSkill: Weapon
     
     protected override void OnHitMotion()
     {
-        RocketProjectile rp = Instantiate(rocketProjectile, transform.position, transform.rotation);
+        RocketProjectile rp = Instantiate(rocketProjectile, transform.TransformPoint(spawnPosition), transform.rotation);
         rp.direction = transform.forward;
         rp.shooter = this;
     }
