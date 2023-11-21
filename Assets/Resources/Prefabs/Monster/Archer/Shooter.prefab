@@ -2349,6 +2349,8 @@ GameObject:
   - component: {fileID: 8050883869927905788}
   - component: {fileID: 7356614132321951199}
   - component: {fileID: 3948780592775871067}
+  - component: {fileID: 4393568028201117633}
+  - component: {fileID: 904821695442896687}
   m_Layer: 0
   m_Name: TP_ShootPosition
   m_TagString: Untagged
@@ -2383,12 +2385,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4afe83e5ebf455418b64cf3417feee3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <Type>k__BackingField: 0
   m_projectilePrefab: {fileID: 0}
   m_spawnPosition: {fileID: 4136400623538547320}
   m_shootForce: 50
   m_aimLayers:
     serializedVersion: 2
     m_Bits: 192
+  m_damageLayer: 0
   m_damage: 5
   m_maxDistance: 100
 --- !u!120 &3948780592775871067
@@ -2488,6 +2492,39 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
+--- !u!95 &4393568028201117633
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5880503984733900974}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &904821695442896687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5880503984733900974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c936006f1fdd084abb9785133b8ff0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5939729221463625737
 GameObject:
   m_ObjectHideFlags: 0
@@ -2679,10 +2716,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13c67e7df8c5dd243b21486e4fb80466, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firstPersonAttack: {fileID: 4973473469406333362}
-  thirdPersonAttack: {fileID: 8607922272375020098}
-  firstPersonSkill: {fileID: 4973473469406333362}
-  thirdPersonSkill: {fileID: 8607922272375020098}
   m_data: {fileID: 11400000, guid: b558537a8a5db114e8c7d7039bf36012, type: 2}
   <IsAttacking>k__BackingField: 0
 --- !u!114 &8173361625719973639
@@ -2770,8 +2803,8 @@ MonoBehaviour:
         byteData: 
         byteDataArray: 
       Version: 1.7.3
-  gizmoViewMode: 0
-  showBehaviorDesignerGizmo: 0
+  gizmoViewMode: 2
+  showBehaviorDesignerGizmo: 1
 --- !u!1 &6118068614681366062
 GameObject:
   m_ObjectHideFlags: 0
@@ -2910,9 +2943,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c936006f1fdd084abb9785133b8ff0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_attackWeapon: {fileID: 8607922272375020098}
-  m_skillWeapon: {fileID: 8607922272375020098}
-  m_blockPushWeapon: {fileID: 8607922272375020098}
 --- !u!114 &693149620
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2949,12 +2979,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4afe83e5ebf455418b64cf3417feee3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <Type>k__BackingField: 0
   m_projectilePrefab: {fileID: 0}
   m_spawnPosition: {fileID: 8050883869927905788}
   m_shootForce: 50
   m_aimLayers:
     serializedVersion: 2
     m_Bits: 448
+  m_damageLayer: 7
   m_damage: 5
   m_maxDistance: 100
 --- !u!120 &1146002011495906965
@@ -5949,9 +5981,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c936006f1fdd084abb9785133b8ff0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_attackWeapon: {fileID: 4973473469406333362}
-  m_skillWeapon: {fileID: 4973473469406333362}
-  m_blockPushWeapon: {fileID: 4973473469406333362}
 --- !u!114 &245746834912033953
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5976,12 +6005,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4afe83e5ebf455418b64cf3417feee3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <Type>k__BackingField: 0
   m_projectilePrefab: {fileID: 0}
   m_spawnPosition: {fileID: 4136400623538547320}
   m_shootForce: 50
   m_aimLayers:
     serializedVersion: 2
     m_Bits: 448
+  m_damageLayer: 7
   m_damage: 5
   m_maxDistance: 100
 --- !u!1001 &8730431535472347233
