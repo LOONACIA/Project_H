@@ -19,6 +19,12 @@ public static class ConstVariables
     [Header("Shuriken")]
     public const string SHURIKEN_PATH = "Prefabs/Possession/Shuriken";
 
+
+    [Header("Wall")]
+    public const string WALL_NORMALMATERIAL_PATH = "Materials/Wall/WallMaterial";
+    public const string WALL_NORMALOUTLINEMATERIAL_PATH = "Materials/Wall/WallOutline";
+    public const string WALL_POSSESSIONLOADINGMATERIAL_PATH = "Materials/Wall/WallLoadingMaterial";
+
     [Header("Animator Parameter")]
     public const string ANIMATOR_PARAMETER_ATTACK = "Attack";
     public const string ANIMATOR_PARAMETER_SKILL = "Skill";

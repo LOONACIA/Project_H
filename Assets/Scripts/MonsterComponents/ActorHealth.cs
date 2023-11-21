@@ -68,6 +68,13 @@ public class ActorHealth : MonoBehaviour, IHealth
             return;
         }
 
+        // 쉴드를 가지고 있는 경우에 데미지 무효
+        if (m_status.Shield != null)
+        {
+            m_status.Shield.TakeDamage(info.Damage);
+            return;
+        }
+
         // 피격 모션 실행 
         if (!m_actor.IsPossessed)
         {
