@@ -13,6 +13,13 @@ public class FirstPersonDefaultAnimBehaviour : StateMachineBehaviour
         animator.ResetTrigger(ConstVariables.ANIMATOR_PARAMETER_HIT);
         animator.ResetTrigger(ConstVariables.ANIMATOR_PARAMETER_TARGET_CHECK);
         
-        animator.GetComponent<AttackAnimationEventReceiver>().OnAttackIdle();
+        //공격 무기에 IDLE 시그널 보냄
+        AttackAnimationEventReceiver receiver = animator.GetComponent<AttackAnimationEventReceiver>();
+        if (receiver != null)
+        {
+            receiver.OnAttackIdle();
+            receiver.OnBlockPushIdle();
+            receiver.OnSkillIdle();
+        }
     }
 }
