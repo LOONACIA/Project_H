@@ -50,6 +50,7 @@ public class MonsterAttack : MonoBehaviour
     public Weapon AttackWeapon => m_actor.IsPossessed ? m_firstPersonAttack : m_thirdPersonAttack;
     
     public Weapon SkillWeapon => m_actor.IsPossessed ? m_firstPersonSkill : m_thirdPersonSkill;
+    
     public Weapon BlockPushWeapon => m_actor.IsPossessed ? m_firstPersonBlockPush : m_thirdPersonBlockPush;
 
     private void Awake()
@@ -141,9 +142,8 @@ public class MonsterAttack : MonoBehaviour
             {
                 MonsterMovement movement = health.gameObject.GetComponent<MonsterMovement>();
 
-                Debug.Log(hit.KnockBackDirection);
                 //TODO: 공격 종류별로 넉백 파워 수정 필요
-                movement.TryKnockBack(hit.KnockBackDirection, 14);
+                movement.TryKnockBack(hit.KnockBackDirection, data.KnockBackPower);
             }
         }
     }
@@ -192,7 +192,6 @@ public class MonsterAttack : MonoBehaviour
         }
     }
 
-
     private void RegisterWeaponComponents(Weapon[] weapons, ref Weapon attackWeapon, ref Weapon skillWeapon, ref Weapon blockPushWeapon)
     {
         foreach (var weapon in weapons)
@@ -233,19 +232,12 @@ public class MonsterAttack : MonoBehaviour
 
     private MonsterAttackData.AttackData GetWeaponDataByType(Weapon.WeaponType type)
     {
-        switch (type)
+        return type switch
         {
-            case Weapon.WeaponType.SKILL_WEAPON:
-                return m_data.Skill;
-                break;
-            case Weapon.WeaponType.ATTACK_WEAPON:
-                return m_data.Attack;
-                break;
-            case Weapon.WeaponType.BLOCKPUSH_WEAPON:
-                return m_data.BlockPush;
-                break;
-            default:
-                return null;
-        }
+            Weapon.WeaponType.SKILL_WEAPON => m_data.Skill,
+            Weapon.WeaponType.ATTACK_WEAPON => m_data.Attack,
+            Weapon.WeaponType.BLOCKPUSH_WEAPON => m_data.BlockPush,
+            _ => null
+        };
     }
 }

@@ -27,6 +27,16 @@ public class ActorStatus : MonoBehaviour
     [SerializeField]
     [ReadOnly]
     private float m_knockDownTime;
+    
+    [SerializeField]
+    [ReadOnly]
+    private bool m_isKnockDown;
+
+    [SerializeField]
+    [ReadOnly]
+    private bool m_isKnockBack;
+    
+    
 
     private Shield m_shield;
 
@@ -71,6 +81,13 @@ public class ActorStatus : MonoBehaviour
     }
 
     public bool IsKnockedDown => m_knockDownTime > 0f;
+    //주의: IsKnockBack값의 수정은 Monster류, Actor류 클래스에서만 일어나야함.
+    public bool IsKnockBack
+    {
+        get => m_isKnockBack;
+        set => m_isKnockBack = value;   
+    }
+
     public float KnockDownTime
 
     {
