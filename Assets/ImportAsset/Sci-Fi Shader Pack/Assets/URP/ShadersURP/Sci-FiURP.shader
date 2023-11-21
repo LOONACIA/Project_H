@@ -546,7 +546,7 @@ Shader "SciFI_URP/Sci-FiURP"
 				
 				float2 temp_cast_1 = (_DissolveTiling).xx;
 				float2 texCoord12 = IN.ase_texcoord7.xy * temp_cast_1 + float2( 0,0 );
-				float2 panner16 = ( 1.0 * _Time.y * float2( 0,-0.5 ) + texCoord12);
+				float2 panner16 = ( 0.5 * _Time.y * float2( 0,-0.5 ) + texCoord12);
 				float temp_output_33_0 = ( 1.0 - tex2D( _Noises, panner16 ).r );
 				float temp_output_17_0 = (1.0 + (_DissolvePower - 0.0) * (-0.1 - 1.0) / (1.0 - 0.0));
 				float temp_output_35_0 = ( -0.3 + temp_output_10_0 );
@@ -558,14 +558,14 @@ Shader "SciFI_URP/Sci-FiURP"
 				float4 lerpResult76 = lerp( ( _DissolveColor * ( 1.0 - step( temp_output_33_0 , ( temp_output_17_0 + _DissolveColorPower ) ) ) ) , lerpResult66 , lerpResult68);
 				float2 temp_cast_2 = (_FirstTextureTiling).xx;
 				float2 texCoord57 = IN.ase_texcoord7.xy * temp_cast_2 + float2( 0,0 );
-				float2 panner64 = ( 1.0 * _Time.y * float2( 0,-0.5 ) + texCoord57);
+				float2 panner64 = ( 0.5 * _Time.y * float2( 0,-0.5 ) + texCoord57);
 				float4 tex2DNode72 = tex2D( _Noises, panner64 );
 				float clampResult71 = clamp( abs( ( ( vpY15 + temp_output_14_0 + _FirstTextureHight ) * -1.0 * _FirstTextureScale ) ) , 0.0 , 1.0 );
 				float lerpResult75 = lerp( tex2DNode72.g , 0.0 , clampResult71);
 				float4 lerpResult80 = lerp( lerpResult76 , _FirstTextureColor , lerpResult75);
 				float2 temp_cast_3 = (_SecondTextureTiling).xx;
 				float2 texCoord50 = IN.ase_texcoord7.xy * temp_cast_3 + float2( 0,0 );
-				float2 panner65 = ( 1.0 * _Time.y * float2( 0,-0.5 ) + texCoord50);
+				float2 panner65 = ( 0.5 * _Time.y * float2( 0,-0.5 ) + texCoord50);
 				float4 tex2DNode69 = tex2D( _Noises, panner65 );
 				float clampResult70 = clamp( abs( ( ( vpY15 + temp_output_14_0 + _SecondTextureHight ) * -1.0 * _SecondTextureScale ) ) , 0.0 , 1.0 );
 				float lerpResult74 = lerp( tex2DNode69.b , 0.0 , clampResult70);
