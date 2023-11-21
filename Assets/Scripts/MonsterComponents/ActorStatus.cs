@@ -71,6 +71,9 @@ public class ActorStatus : MonoBehaviour
             if (m_shield?.ShieldObject != null)
                 Destroy(m_shield.ShieldObject);
 
+            if (m_shield != null)
+                m_shield.OnShieldChanged -= ChangeShield;
+
             m_shield = value;
 
             if (m_shield != null) 
