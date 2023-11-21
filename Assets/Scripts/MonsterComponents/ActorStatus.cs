@@ -25,6 +25,8 @@ public class ActorStatus : MonoBehaviour
     [ReadOnly]
     private float m_knockDownTime;
 
+    private Shield m_shield;
+
     private BehaviorTree m_behaviorTree;
     private SharedFloat m_aiKnockDownTime;
     
@@ -46,9 +48,21 @@ public class ActorStatus : MonoBehaviour
         set => m_isBlocking = value;
     }
 
-    public bool IsKnockedDown => m_knockDownTime>0f;
+    public Shield Shield
+    {
+        get => m_shield;
+        set
+        {
+            if (m_shield?.ShieldObject != null)
+                Destroy(m_shield.ShieldObject); 
 
+            m_shield = value; 
+        }
+    }
+
+    public bool IsKnockedDown => m_knockDownTime>0f;
     public float KnockDownTime
+
     {
         get => m_knockDownTime;
         private set
@@ -85,6 +99,7 @@ public class ActorStatus : MonoBehaviour
     private void Update()
     {
         UpdateKnockDownTime();
+        UpdateShield();
     }
 
     /// <summary>
@@ -102,6 +117,20 @@ public class ActorStatus : MonoBehaviour
         if (KnockDownTime < 0.0f)
         {
             KnockDownTime = 0f;
+        }
+    }
+
+    private void UpdateShield()
+    {
+        if (Shield == null)  return;
+
+        // 쉴드가 더이상 유효하지 않으면 제거
+        if (!Shield.IsVaild) 
+        {
+            if (Shield.ShieldObject != null)
+                Destroy(Shield.ShieldObject);
+
+            Shield = null;
         }
     }
 }
