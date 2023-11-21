@@ -33,10 +33,6 @@ public class ActorStatus : MonoBehaviour
     [ReadOnly]
     private bool m_isKnockBack;
     
-    
-
-    private BehaviorTree m_behaviorTree;
-    
     public int Hp
     {
         get => m_hp;
@@ -81,17 +77,7 @@ public class ActorStatus : MonoBehaviour
             KnockDownTime = duration;
         }
     }
-
-    private void Awake()
-    {
-        m_behaviorTree = GetComponent<BehaviorTree>();
-        //if (m_behaviorTree)
-        //{
-        //    SharedVariable holder = m_behaviorTree.GetVariable("KnockDownTime");
-        //    m_aiKnockDownTime = holder as SharedFloat;
-        //}
-    }
-
+    
     private void Update()
     {
         UpdateKnockDownTime();
@@ -107,7 +93,6 @@ public class ActorStatus : MonoBehaviour
             KnockDownTime = 0f;
             return;
         }
-        
         KnockDownTime -= Time.deltaTime;
         if (KnockDownTime < 0.0f)
         {

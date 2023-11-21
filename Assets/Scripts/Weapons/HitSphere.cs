@@ -25,12 +25,12 @@ public class HitSphere
 
     public Color GizmoColor => m_gizmoColor;
     
-    public IEnumerable<IHealth> DetectHitSphere(Transform parent)
+    public IEnumerable<Actor> DetectHitSphere(Transform parent)
     {
         return Physics.OverlapSphere(parent.TransformPoint(Position),
                                      Radius,
                                      LayerMask.GetMask("Monster"))
-                      .Select(detectedObject => detectedObject.GetComponent<IHealth>())
+                      .Select(detectedObject => detectedObject.GetComponent<Actor>())
                       .Where(health => health != null);
     }
 

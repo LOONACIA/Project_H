@@ -52,12 +52,12 @@ public class MeleeWeapon : Weapon
             //AttackInfo 제작해줌
             foreach (var hit in detectedRayCast)
             {
-                IHealth health = hit.transform.GetComponent<IHealth>();
+                Actor hitObject = hit.transform.GetComponent<Actor>();
 
                 //체력이 없는 오브젝트거나, 본인이 타겟된 경우는 체크하지 않음.
-                if (health != null)
+                if (hitObject != null)
                 {
-                    m_attackInfoBuffer.Add(new WeaponAttackInfo(health, hit.normal));
+                    m_attackInfoBuffer.Add(new WeaponAttackInfo(hitObject, hit.normal));
                 }
             }
 
