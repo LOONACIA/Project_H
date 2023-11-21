@@ -16,13 +16,12 @@ public class AlarmTarget : Action
     public override TaskStatus OnUpdate()
     {
         Actor actor = Target.Value.GetComponent<Actor>();
-        SendMessageToOtherMonsters(actor, Radius.Value);
+        SendMessageToOtherMonsters(actor);
         return TaskStatus.Success;
     }
 
     public override void OnReset()
     {
-
     }
 
     /// <summary>
@@ -50,13 +49,15 @@ public class AlarmTarget : Action
             }
 
             // 만약 벽이 두 몬스터 사이에 있다면, 타겟으로 지정하지 않습니다.
-            Vector3 direction = (target.transform.position - monster.transform.position).normalized;
-            if (Physics.Raycast(monster.transform.position, direction,
-                    Vector3.Distance(target.transform.position, monster.transform.position), LayerMask.GetMask("Wall")))
+            Vector3 targetPosition = target.transform.position;
+            Vector3 recipientPosition = monster.transform.position;
+            Vector3 direction = (targetPosition - recipientPosition).normalized;
+            float distance = Vector3.Distance(targetPosition, recipientPosition);
+            if (Physics.Raycast(recipientPosition, direction, distance, LayerMask.GetMask("Wall")))
             {
                 continue;
             }
-            
+
             monster.Targets.Add(target);
         }
     }

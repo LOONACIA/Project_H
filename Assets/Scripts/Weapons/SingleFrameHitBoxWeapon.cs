@@ -4,10 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class BlockPushWeapon : Weapon
+public class SingleFrameHitBoxWeapon : Weapon
 {
     public HitBox hitBox;
-    public Transform hitTransform;
     
     protected override void Attack()
     {
@@ -17,6 +16,7 @@ public class BlockPushWeapon : Weapon
     protected override void OnHitMotion()
     {
         Vector3 dir = transform.TransformDirection(new Vector3(0f, 0f, 1f)).normalized;
+        
         var detectedList = hitBox.DetectHitBox(transform)
                                  .Select(info => new WeaponAttackInfo(info,dir,dir))
                                  ;

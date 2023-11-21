@@ -40,7 +40,12 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             }
 
             // Target will return the predicated position
-            m_monsterMovement.MoveTo(Target());
+            var target = Target();
+            if (target == Vector3.zero)
+            {
+                return TaskStatus.Failure;
+            }
+            m_monsterMovement.MoveTo(target);
 
             return TaskStatus.Running;
         }
@@ -48,6 +53,11 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         // Predict the position of the target
         private Vector3 Target()
         {
+            if (target.Value == null)
+            {
+                return Vector3.zero;
+            }
+
             // Calculate the current distance to the target and the current speed
             var distance = (target.Value.transform.position - transform.position).magnitude;
             var speed = Velocity().magnitude;
