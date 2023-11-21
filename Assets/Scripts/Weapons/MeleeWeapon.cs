@@ -10,14 +10,10 @@ using UnityEngine.Serialization;
  */
 public class MeleeWeapon : Weapon
 {
-    [SerializeField] private TrailCaster m_trailCaster;
+    [SerializeField]
+    private TrailCaster m_trailCaster;
 
-    #region PrivateVariables
-    
-    private List<WeaponAttackInfo> m_attackInfoBuffer = new List<WeaponAttackInfo>();
-    
-
-    #endregion
+    private List<WeaponAttackInfo> m_attackInfoBuffer = new();
 
     protected override void Attack()
     {
@@ -52,7 +48,7 @@ public class MeleeWeapon : Weapon
 
             //공격한 오브젝트 버퍼 초기화
             m_attackInfoBuffer.Clear();
-            
+
             //AttackInfo 제작해줌
             foreach (var hit in detectedRayCast)
             {
@@ -61,7 +57,7 @@ public class MeleeWeapon : Weapon
                 //체력이 없는 오브젝트거나, 본인이 타겟된 경우는 체크하지 않음.
                 if (health != null)
                 {
-                    m_attackInfoBuffer.Add(new WeaponAttackInfo(health,hit.normal));
+                    m_attackInfoBuffer.Add(new WeaponAttackInfo(health, hit.normal));
                 }
             }
 
