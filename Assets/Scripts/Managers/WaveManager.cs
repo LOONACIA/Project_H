@@ -24,7 +24,7 @@ public class WaveManager : MonoBehaviour
     {
         m_spawnPos = this.transform.GetComponent<Collider>();
         Monster monster = GetComponent<Monster>();
-        m_enemySpawnCoroutine = CoroutineEx.Create(this, EnemySpawn(spawnPos));
+        m_enemySpawnCoroutine = CoroutineEx.Create(this, EnemySpawn(m_spawnPos));
         if (m_spawnedEnemy == enemyCount)
         {
             if (m_enemySpawnCoroutine?.IsRunning is true)

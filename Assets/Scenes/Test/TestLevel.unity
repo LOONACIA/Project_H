@@ -113,7 +113,7 @@ NavMeshSettings:
     agentClimb: 0.4
     ledgeDropHeight: 0
     maxJumpAcrossDistance: 0
-    minRegionArea: 2
+    minRegionArea: 0.5
     manualCellSize: 0
     cellSize: 0.16666667
     manualTileSize: 0
@@ -1040,7 +1040,6 @@ GameObject:
   - component: {fileID: 70459549}
   - component: {fileID: 70459548}
   - component: {fileID: 70459547}
-  - component: {fileID: 70459550}
   m_Layer: 6
   m_Name: Cube (129)
   m_TagString: Untagged
@@ -1127,22 +1126,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 70459545}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!208 &70459550
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 70459545}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
 --- !u!1 &74624662
 GameObject:
   m_ObjectHideFlags: 0
@@ -1800,7 +1783,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &104151787
 Transform:
@@ -4726,6 +4709,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 749494631}
     m_Modifications:
+    - target: {fileID: 523145165, guid: 5d4b230dfd37f3a409d3f677b520b90f, type: 3}
+      propertyPath: mBehaviorSource.mTaskData.JSONSerialization
+      value: '{"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsHit","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockDown","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockBack","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsAttacking","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"TargetTransform","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"TargetObject","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsTargetPossessed","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"AttackDistance","IsShared":true,"SinglemValue":5},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"Self","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"HP","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"Body","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"SelfGameObject","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"KnockDownTime","IsShared":true,"SinglemValue":0}]}'
+      objectReference: {fileID: 0}
+    - target: {fileID: 523145165, guid: 5d4b230dfd37f3a409d3f677b520b90f, type: 3}
+      propertyPath: mBehaviorSource.mTaskData.fieldSerializationData.unityObjects.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6118068614016348069, guid: 5d4b230dfd37f3a409d3f677b520b90f,
         type: 3}
       propertyPath: m_RootOrder
@@ -4800,7 +4791,6 @@ GameObject:
   - component: {fileID: 336240166}
   - component: {fileID: 336240165}
   - component: {fileID: 336240164}
-  - component: {fileID: 336240167}
   m_Layer: 6
   m_Name: Cube (130)
   m_TagString: Untagged
@@ -4887,22 +4877,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 336240162}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!208 &336240167
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 336240162}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
 --- !u!1 &351608113
 GameObject:
   m_ObjectHideFlags: 0
@@ -5008,14 +4982,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 749494631}
     m_Modifications:
-    - target: {fileID: 301507556, guid: 8c5d468e29b59f34e8ebd842b7b885b1, type: 3}
-      propertyPath: mBehaviorSource.mTaskData.JSONSerialization
-      value: '{"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsHit","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockDown","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockBack","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsAttacking","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"TargetTransform","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"TargetObject","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsTargetPossessed","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"AttackDistance","IsShared":true,"SinglemValue":5},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"Self","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"HP","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"Body","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"SelfGameObject","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"KnockDownTime","IsShared":true,"SinglemValue":0}]}'
-      objectReference: {fileID: 0}
-    - target: {fileID: 301507556, guid: 8c5d468e29b59f34e8ebd842b7b885b1, type: 3}
-      propertyPath: mBehaviorSource.mTaskData.fieldSerializationData.unityObjects.Array.size
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8703612408200316695, guid: 8c5d468e29b59f34e8ebd842b7b885b1,
         type: 3}
       propertyPath: m_Name
@@ -5226,13 +5192,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 362717239}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 36.701267, y: 9.1449585, z: 83.35645}
   m_LocalScale: {x: 5.403648, y: 6.789918, z: 2.9129267}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1592092879}
-  m_RootOrder: 22
+  m_Father: {fileID: 785069710}
+  m_RootOrder: 47
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!208 &362717241
 NavMeshObstacle:
@@ -5363,8 +5329,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnEnemy: {fileID: 8703612408200316695, guid: 8c5d468e29b59f34e8ebd842b7b885b1,
     type: 3}
-  spawnPos: {fileID: 364181671}
   enemyCount: 5
+  m_spawnPos: {fileID: 0}
+  m_spawnDelay: 0
 --- !u!65 &364181671
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5980,14 +5947,13 @@ GameObject:
   - component: {fileID: 394049928}
   - component: {fileID: 394049927}
   - component: {fileID: 394049926}
-  - component: {fileID: 394049925}
   - component: {fileID: 394049924}
   m_Layer: 12
   m_Name: Cube (147)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &394049923
 Transform:
@@ -6018,24 +5984,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnEnemy: {fileID: 6118068614016348070, guid: 5d4b230dfd37f3a409d3f677b520b90f,
     type: 3}
-  spawnPos: {fileID: 0}
   enemyCount: 1
---- !u!208 &394049925
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 394049922}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
+  m_spawnPos: {fileID: 0}
+  m_spawnDelay: 0
 --- !u!65 &394049926
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6044,7 +5995,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 394049922}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
@@ -6517,13 +6468,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 485188717}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 27.595001, y: 12.209499, z: 90.085884}
   m_LocalScale: {x: 12.808886, y: 12.919, z: 16.371792}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1592092879}
-  m_RootOrder: 20
+  m_Father: {fileID: 785069710}
+  m_RootOrder: 45
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!208 &485188719
 NavMeshObstacle:
@@ -6617,14 +6568,13 @@ GameObject:
   - component: {fileID: 496019643}
   - component: {fileID: 496019642}
   - component: {fileID: 496019641}
-  - component: {fileID: 496019640}
   - component: {fileID: 496019639}
   m_Layer: 12
   m_Name: Cube (155)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &496019638
 Transform:
@@ -6634,7 +6584,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 496019637}
   m_LocalRotation: {x: -0, y: -0.7191939, z: -0, w: 0.6948095}
-  m_LocalPosition: {x: 28.258375, y: 15.75, z: 114.58}
+  m_LocalPosition: {x: 28.5, y: 15.75, z: 114.58}
   m_LocalScale: {x: 2, y: 1, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6655,24 +6605,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnEnemy: {fileID: 6118068614016348070, guid: 5d4b230dfd37f3a409d3f677b520b90f,
     type: 3}
-  spawnPos: {fileID: 0}
   enemyCount: 1
---- !u!208 &496019640
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 496019637}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
+  m_spawnPos: {fileID: 0}
+  m_spawnDelay: 0
 --- !u!65 &496019641
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6681,7 +6616,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 496019637}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
@@ -6794,7 +6729,6 @@ GameObject:
   - component: {fileID: 511411954}
   - component: {fileID: 511411953}
   - component: {fileID: 511411952}
-  - component: {fileID: 511411955}
   m_Layer: 6
   m_Name: Cube (132)
   m_TagString: Untagged
@@ -6881,22 +6815,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 511411950}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!208 &511411955
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 511411950}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
 --- !u!1 &546339697
 GameObject:
   m_ObjectHideFlags: 0
@@ -7111,7 +7029,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &551532732
 Transform:
@@ -7220,14 +7138,13 @@ GameObject:
   - component: {fileID: 554007671}
   - component: {fileID: 554007670}
   - component: {fileID: 554007669}
-  - component: {fileID: 554007668}
   - component: {fileID: 554007667}
   m_Layer: 12
   m_Name: Cube (158)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &554007666
 Transform:
@@ -7237,7 +7154,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 554007665}
   m_LocalRotation: {x: -0, y: -0.7191939, z: -0, w: 0.6948095}
-  m_LocalPosition: {x: 55.91837, y: 15.75, z: 89.33}
+  m_LocalPosition: {x: 55.91837, y: 15.75, z: 89}
   m_LocalScale: {x: 2, y: 1, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7258,24 +7175,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnEnemy: {fileID: 6118068614016348070, guid: 5d4b230dfd37f3a409d3f677b520b90f,
     type: 3}
-  spawnPos: {fileID: 0}
   enemyCount: 1
---- !u!208 &554007668
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 554007665}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
+  m_spawnPos: {fileID: 0}
+  m_spawnDelay: 0
 --- !u!65 &554007669
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7284,7 +7186,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 554007665}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
@@ -7578,13 +7480,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 563028834}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 29.296032, y: 8.131663, z: 106.9}
   m_LocalScale: {x: 5.403648, y: 4.7633266, z: 5.151573}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1592092879}
-  m_RootOrder: 28
+  m_Father: {fileID: 785069710}
+  m_RootOrder: 53
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!208 &563028836
 NavMeshObstacle:
@@ -7684,7 +7586,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &563278617
 Transform:
@@ -8384,14 +8286,13 @@ GameObject:
   - component: {fileID: 645362537}
   - component: {fileID: 645362536}
   - component: {fileID: 645362535}
-  - component: {fileID: 645362534}
   - component: {fileID: 645362533}
   m_Layer: 12
   m_Name: Cube (161)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &645362532
 Transform:
@@ -8422,24 +8323,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnEnemy: {fileID: 6118068614016348070, guid: 5d4b230dfd37f3a409d3f677b520b90f,
     type: 3}
-  spawnPos: {fileID: 0}
   enemyCount: 1
---- !u!208 &645362534
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 645362531}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
+  m_spawnPos: {fileID: 0}
+  m_spawnDelay: 0
 --- !u!65 &645362535
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8448,7 +8334,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 645362531}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
@@ -8750,7 +8636,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &662440768
 Transform:
@@ -9950,7 +9836,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &717245080
 Transform:
@@ -10194,8 +10080,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnEnemy: {fileID: 8703612408200316695, guid: 8c5d468e29b59f34e8ebd842b7b885b1,
     type: 3}
-  spawnPos: {fileID: 743266660}
   enemyCount: 5
+  m_spawnPos: {fileID: 0}
+  m_spawnDelay: 0
 --- !u!65 &743266660
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10967,7 +10854,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &772360527
 Transform:
@@ -11137,6 +11024,16 @@ Transform:
   - {fileID: 985605928}
   - {fileID: 1545463903}
   - {fileID: 1174648522}
+  - {fileID: 485188718}
+  - {fileID: 1213524453}
+  - {fileID: 362717240}
+  - {fileID: 1891049348}
+  - {fileID: 1761000509}
+  - {fileID: 1432749408}
+  - {fileID: 1842200001}
+  - {fileID: 1750992011}
+  - {fileID: 563028835}
+  - {fileID: 1900657577}
   m_Father: {fileID: 2043541018}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -11152,7 +11049,6 @@ GameObject:
   - component: {fileID: 799912492}
   - component: {fileID: 799912491}
   - component: {fileID: 799912490}
-  - component: {fileID: 799912493}
   m_Layer: 6
   m_Name: Cube (134)
   m_TagString: Untagged
@@ -11239,22 +11135,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 799912488}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!208 &799912493
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 799912488}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
 --- !u!1 &802599637
 GameObject:
   m_ObjectHideFlags: 0
@@ -11304,8 +11184,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnEnemy: {fileID: 8703612408200316695, guid: 8c5d468e29b59f34e8ebd842b7b885b1,
     type: 3}
-  spawnPos: {fileID: 802599640}
   enemyCount: 5
+  m_spawnPos: {fileID: 0}
+  m_spawnDelay: 0
 --- !u!65 &802599640
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11386,7 +11267,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &805896968
 Transform:
@@ -11501,7 +11382,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &816725696
 Transform:
@@ -11921,7 +11802,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &883483008
 Transform:
@@ -12533,8 +12414,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnEnemy: {fileID: 8703612408200316695, guid: 8c5d468e29b59f34e8ebd842b7b885b1,
     type: 3}
-  spawnPos: {fileID: 910142697}
   enemyCount: 5
+  m_spawnPos: {fileID: 0}
+  m_spawnDelay: 0
 --- !u!65 &910142697
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12609,7 +12491,6 @@ GameObject:
   - component: {fileID: 927264179}
   - component: {fileID: 927264178}
   - component: {fileID: 927264177}
-  - component: {fileID: 927264180}
   m_Layer: 6
   m_Name: Cube (133)
   m_TagString: Untagged
@@ -12696,22 +12577,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 927264175}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!208 &927264180
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 927264175}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
 --- !u!1 &929007547
 GameObject:
   m_ObjectHideFlags: 0
@@ -13156,7 +13021,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &937106376
 Transform:
@@ -13977,14 +13842,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 985605927}
-  m_LocalRotation: {x: -0, y: -0.7191939, z: -0, w: 0.6948095}
-  m_LocalPosition: {x: 64.01837, y: 10.25, z: 98.42}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 64.5, y: 10.75, z: 98.736725}
   m_LocalScale: {x: 2, y: 10, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 785069710}
   m_RootOrder: 42
-  m_LocalEulerAnglesHint: {x: 0, y: -91.976, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!65 &985605929
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14359,14 +14224,13 @@ GameObject:
   - component: {fileID: 1014300511}
   - component: {fileID: 1014300510}
   - component: {fileID: 1014300509}
-  - component: {fileID: 1014300508}
   - component: {fileID: 1014300507}
   m_Layer: 12
   m_Name: Cube (157)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1014300506
 Transform:
@@ -14376,7 +14240,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1014300505}
   m_LocalRotation: {x: -0, y: -0.7191939, z: -0, w: 0.6948095}
-  m_LocalPosition: {x: 37.138374, y: 15.75, z: 89.98}
+  m_LocalPosition: {x: 37.13837, y: 15.75, z: 89}
   m_LocalScale: {x: 2, y: 1, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -14397,24 +14261,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnEnemy: {fileID: 6118068614016348070, guid: 5d4b230dfd37f3a409d3f677b520b90f,
     type: 3}
-  spawnPos: {fileID: 0}
   enemyCount: 1
---- !u!208 &1014300508
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1014300505}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
+  m_spawnPos: {fileID: 0}
+  m_spawnDelay: 0
 --- !u!65 &1014300509
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14423,7 +14272,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1014300505}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
@@ -14918,7 +14767,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1068666103}
   m_LocalRotation: {x: -0, y: -0.7191939, z: -0, w: 0.6948095}
-  m_LocalPosition: {x: 64.01837, y: 10.25, z: 114.58}
+  m_LocalPosition: {x: 64.5, y: 10.25, z: 114.58}
   m_LocalScale: {x: 2, y: 10, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -15530,14 +15379,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 749494631}
     m_Modifications:
-    - target: {fileID: 301507556, guid: 8c5d468e29b59f34e8ebd842b7b885b1, type: 3}
-      propertyPath: mBehaviorSource.mTaskData.JSONSerialization
-      value: '{"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsHit","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockDown","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockBack","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsAttacking","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"TargetTransform","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"TargetObject","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsTargetPossessed","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"AttackDistance","IsShared":true,"SinglemValue":5},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"Self","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"HP","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"Body","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"SelfGameObject","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"KnockDownTime","IsShared":true,"SinglemValue":0}]}'
-      objectReference: {fileID: 0}
-    - target: {fileID: 301507556, guid: 8c5d468e29b59f34e8ebd842b7b885b1, type: 3}
-      propertyPath: mBehaviorSource.mTaskData.fieldSerializationData.unityObjects.Array.size
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8703612408200316695, guid: 8c5d468e29b59f34e8ebd842b7b885b1,
         type: 3}
       propertyPath: m_Name
@@ -15724,8 +15565,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnEnemy: {fileID: 8703612408200316695, guid: 8c5d468e29b59f34e8ebd842b7b885b1,
     type: 3}
-  spawnPos: {fileID: 1157463910}
   enemyCount: 5
+  m_spawnPos: {fileID: 0}
+  m_spawnDelay: 0
 --- !u!65 &1157463910
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -16684,13 +16526,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1213524452}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 23.892384, y: 9.75, z: 106.92244}
   m_LocalScale: {x: 5.403648, y: 8, z: 17.301311}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1592092879}
-  m_RootOrder: 21
+  m_Father: {fileID: 785069710}
+  m_RootOrder: 46
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!208 &1213524454
 NavMeshObstacle:
@@ -17003,7 +16845,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1233199216
 Transform:
@@ -17319,7 +17161,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh35024
+  m_Name: pb_Mesh39096
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -18385,7 +18227,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1355903779
 Transform:
@@ -18915,14 +18757,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 749494631}
     m_Modifications:
-    - target: {fileID: 301507556, guid: 8c5d468e29b59f34e8ebd842b7b885b1, type: 3}
-      propertyPath: mBehaviorSource.mTaskData.JSONSerialization
-      value: '{"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsHit","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockDown","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockBack","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsAttacking","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"TargetTransform","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"TargetObject","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsTargetPossessed","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"AttackDistance","IsShared":true,"SinglemValue":5},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"Self","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"HP","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"Body","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"SelfGameObject","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"KnockDownTime","IsShared":true,"SinglemValue":0}]}'
-      objectReference: {fileID: 0}
-    - target: {fileID: 301507556, guid: 8c5d468e29b59f34e8ebd842b7b885b1, type: 3}
-      propertyPath: mBehaviorSource.mTaskData.fieldSerializationData.unityObjects.Array.size
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8703612408200316695, guid: 8c5d468e29b59f34e8ebd842b7b885b1,
         type: 3}
       propertyPath: m_Name
@@ -19611,13 +19445,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1432749407}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 64.81393, y: 11.709499, z: 123.74192}
   m_LocalScale: {x: 12.808886, y: 12.919, z: 16.371792}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1592092879}
-  m_RootOrder: 25
+  m_Father: {fileID: 785069710}
+  m_RootOrder: 50
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!208 &1432749409
 NavMeshObstacle:
@@ -19809,7 +19643,6 @@ GameObject:
   - component: {fileID: 1450465850}
   - component: {fileID: 1450465849}
   - component: {fileID: 1450465848}
-  - component: {fileID: 1450465851}
   m_Layer: 6
   m_Name: Cube (131)
   m_TagString: Untagged
@@ -19896,22 +19729,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1450465846}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!208 &1450465851
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1450465846}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
 --- !u!1 &1458224002
 GameObject:
   m_ObjectHideFlags: 0
@@ -19930,7 +19747,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1458224003
 Transform:
@@ -20269,7 +20086,6 @@ GameObject:
   - component: {fileID: 1464066195}
   - component: {fileID: 1464066194}
   - component: {fileID: 1464066193}
-  - component: {fileID: 1464066196}
   m_Layer: 6
   m_Name: Cube (135)
   m_TagString: Untagged
@@ -20356,22 +20172,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1464066191}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!208 &1464066196
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1464066191}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
 --- !u!1 &1480103547
 GameObject:
   m_ObjectHideFlags: 0
@@ -20560,7 +20360,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1482876261
 Transform:
@@ -21200,7 +21000,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1521677431
 Transform:
@@ -21315,7 +21115,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1531329155
 Transform:
@@ -21569,14 +21369,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 749494631}
     m_Modifications:
-    - target: {fileID: 301507556, guid: 8c5d468e29b59f34e8ebd842b7b885b1, type: 3}
-      propertyPath: mBehaviorSource.mTaskData.JSONSerialization
-      value: '{"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsHit","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockDown","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockBack","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsAttacking","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"TargetTransform","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"TargetObject","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsTargetPossessed","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"AttackDistance","IsShared":true,"SinglemValue":5},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"Self","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"HP","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"Body","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"SelfGameObject","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"KnockDownTime","IsShared":true,"SinglemValue":0}]}'
-      objectReference: {fileID: 0}
-    - target: {fileID: 301507556, guid: 8c5d468e29b59f34e8ebd842b7b885b1, type: 3}
-      propertyPath: mBehaviorSource.mTaskData.fieldSerializationData.unityObjects.Array.size
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8703612408200316695, guid: 8c5d468e29b59f34e8ebd842b7b885b1,
         type: 3}
       propertyPath: m_Name
@@ -21882,14 +21674,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 749494631}
     m_Modifications:
-    - target: {fileID: 301507556, guid: 8c5d468e29b59f34e8ebd842b7b885b1, type: 3}
-      propertyPath: mBehaviorSource.mTaskData.JSONSerialization
-      value: '{"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsHit","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockDown","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockBack","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsAttacking","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"TargetTransform","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"TargetObject","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsTargetPossessed","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"AttackDistance","IsShared":true,"SinglemValue":5},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"Self","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"HP","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"Body","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"SelfGameObject","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"KnockDownTime","IsShared":true,"SinglemValue":0}]}'
-      objectReference: {fileID: 0}
-    - target: {fileID: 301507556, guid: 8c5d468e29b59f34e8ebd842b7b885b1, type: 3}
-      propertyPath: mBehaviorSource.mTaskData.fieldSerializationData.unityObjects.Array.size
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8703612408200316695, guid: 8c5d468e29b59f34e8ebd842b7b885b1,
         type: 3}
       propertyPath: m_Name
@@ -22450,8 +22234,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnEnemy: {fileID: 8703612408200316695, guid: 8c5d468e29b59f34e8ebd842b7b885b1,
     type: 3}
-  spawnPos: {fileID: 1579630187}
   enemyCount: 5
+  m_spawnPos: {fileID: 0}
+  m_spawnDelay: 0
 --- !u!65 &1579630187
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -22775,16 +22560,6 @@ Transform:
   - {fileID: 717245080}
   - {fileID: 1972594955}
   - {fileID: 2104946278}
-  - {fileID: 485188718}
-  - {fileID: 1213524453}
-  - {fileID: 362717240}
-  - {fileID: 1891049348}
-  - {fileID: 1761000509}
-  - {fileID: 1432749408}
-  - {fileID: 1842200001}
-  - {fileID: 1750992011}
-  - {fileID: 563028835}
-  - {fileID: 1900657577}
   m_Father: {fileID: 1342896202}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -23008,14 +22783,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 749494631}
     m_Modifications:
-    - target: {fileID: 301507556, guid: 8c5d468e29b59f34e8ebd842b7b885b1, type: 3}
-      propertyPath: mBehaviorSource.mTaskData.JSONSerialization
-      value: '{"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsHit","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockDown","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockBack","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsAttacking","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"TargetTransform","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"TargetObject","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsTargetPossessed","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"AttackDistance","IsShared":true,"SinglemValue":5},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"Self","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"HP","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"Body","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"SelfGameObject","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"KnockDownTime","IsShared":true,"SinglemValue":0}]}'
-      objectReference: {fileID: 0}
-    - target: {fileID: 301507556, guid: 8c5d468e29b59f34e8ebd842b7b885b1, type: 3}
-      propertyPath: mBehaviorSource.mTaskData.fieldSerializationData.unityObjects.Array.size
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8703612408200316695, guid: 8c5d468e29b59f34e8ebd842b7b885b1,
         type: 3}
       propertyPath: m_Name
@@ -23091,10 +22858,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 749494631}
     m_Modifications:
-    - target: {fileID: 301507556, guid: 8c5d468e29b59f34e8ebd842b7b885b1, type: 3}
-      propertyPath: mBehaviorSource.mTaskData.JSONSerialization
-      value: '{"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsHit","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockDown","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockBack","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsAttacking","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"TargetTransform","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"TargetObject","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsTargetPossessed","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"AttackDistance","IsShared":true,"SinglemValue":3},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"Self","IsShared":true,"TransformmValue":0},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"HP","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"Body","IsShared":true,"GameObjectmValue":1},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"SelfGameObject","IsShared":true,"GameObjectmValue":2},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"KnockDownTime","IsShared":true,"SinglemValue":0}]}'
-      objectReference: {fileID: 0}
     - target: {fileID: 8703612408200316695, guid: 8c5d468e29b59f34e8ebd842b7b885b1,
         type: 3}
       propertyPath: m_Name
@@ -24917,13 +24680,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1750992010}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 68.516556, y: 8.75, z: 106.422455}
   m_LocalScale: {x: 5.403648, y: 6, z: 17.301311}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1592092879}
-  m_RootOrder: 27
+  m_Father: {fileID: 785069710}
+  m_RootOrder: 52
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!208 &1750992012
 NavMeshObstacle:
@@ -25032,13 +24795,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1761000508}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 27.622814, y: 12.209499, z: 124.2141}
   m_LocalScale: {x: 12.808886, y: 12.919, z: 16.371792}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1592092879}
-  m_RootOrder: 24
+  m_Father: {fileID: 785069710}
+  m_RootOrder: 49
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!208 &1761000510
 NavMeshObstacle:
@@ -25169,8 +24932,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnEnemy: {fileID: 8703612408200316695, guid: 8c5d468e29b59f34e8ebd842b7b885b1,
     type: 3}
-  spawnPos: {fileID: 1763074082}
   enemyCount: 5
+  m_spawnPos: {fileID: 0}
+  m_spawnDelay: 0
 --- !u!65 &1763074082
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -25671,7 +25435,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1800060977
 Transform:
@@ -26198,13 +25962,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1842200000}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 64.813934, y: 12.209499, z: 89.5859}
   m_LocalScale: {x: 12.808886, y: 12.919, z: 16.371792}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1592092879}
-  m_RootOrder: 26
+  m_Father: {fileID: 785069710}
+  m_RootOrder: 51
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!208 &1842200002
 NavMeshObstacle:
@@ -26298,7 +26062,6 @@ GameObject:
   - component: {fileID: 1850272726}
   - component: {fileID: 1850272725}
   - component: {fileID: 1850272724}
-  - component: {fileID: 1850272727}
   m_Layer: 6
   m_Name: Cube (136)
   m_TagString: Untagged
@@ -26385,22 +26148,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1850272722}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!208 &1850272727
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1850272722}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
 --- !u!1 &1856161409
 GameObject:
   m_ObjectHideFlags: 0
@@ -26888,13 +26635,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1891049347}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 36.701267, y: 7.527804, z: 86.26939}
   m_LocalScale: {x: 5.403648, y: 3.5556085, z: 2.9129267}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1592092879}
-  m_RootOrder: 23
+  m_Father: {fileID: 785069710}
+  m_RootOrder: 48
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!208 &1891049349
 NavMeshObstacle:
@@ -27101,13 +26848,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1900657576}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 63.112915, y: 7.2092214, z: 106.66}
   m_LocalScale: {x: 5.403648, y: 2.9184425, z: 5.151573}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1592092879}
-  m_RootOrder: 29
+  m_Father: {fileID: 785069710}
+  m_RootOrder: 54
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!208 &1900657578
 NavMeshObstacle:
@@ -32186,7 +31933,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1972594955
 Transform:
@@ -32766,8 +32513,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2008451376}
-  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 62.206013, y: 8.33, z: 42.570023}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 124.25004, y: 15.399, z: 22.475992}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -32793,7 +32540,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &2021577046
 Transform:
@@ -33262,8 +33009,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnEnemy: {fileID: 8703612408200316695, guid: 8c5d468e29b59f34e8ebd842b7b885b1,
     type: 3}
-  spawnPos: {fileID: 2046876629}
   enemyCount: 5
+  m_spawnPos: {fileID: 0}
+  m_spawnDelay: 0
 --- !u!65 &2046876629
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -33338,14 +33086,13 @@ GameObject:
   - component: {fileID: 2047167838}
   - component: {fileID: 2047167837}
   - component: {fileID: 2047167836}
-  - component: {fileID: 2047167835}
   - component: {fileID: 2047167834}
   m_Layer: 12
   m_Name: Cube (156)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &2047167833
 Transform:
@@ -33355,7 +33102,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2047167832}
   m_LocalRotation: {x: -0, y: -0.7191939, z: -0, w: 0.6948095}
-  m_LocalPosition: {x: 28.828373, y: 15.75, z: 99.76}
+  m_LocalPosition: {x: 28.5, y: 15.75, z: 99.76}
   m_LocalScale: {x: 2, y: 1, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -33376,24 +33123,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnEnemy: {fileID: 6118068614016348070, guid: 5d4b230dfd37f3a409d3f677b520b90f,
     type: 3}
-  spawnPos: {fileID: 0}
   enemyCount: 1
---- !u!208 &2047167835
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2047167832}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
+  m_spawnPos: {fileID: 0}
+  m_spawnDelay: 0
 --- !u!65 &2047167836
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -33402,7 +33134,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2047167832}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
@@ -33468,14 +33200,13 @@ GameObject:
   - component: {fileID: 2054397995}
   - component: {fileID: 2054397994}
   - component: {fileID: 2054397993}
-  - component: {fileID: 2054397992}
   - component: {fileID: 2054397991}
   m_Layer: 12
   m_Name: Cube (159)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &2054397990
 Transform:
@@ -33506,24 +33237,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnEnemy: {fileID: 6118068614016348070, guid: 5d4b230dfd37f3a409d3f677b520b90f,
     type: 3}
-  spawnPos: {fileID: 0}
   enemyCount: 1
---- !u!208 &2054397992
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2054397989}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
+  m_spawnPos: {fileID: 0}
+  m_spawnDelay: 0
 --- !u!65 &2054397993
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -33532,7 +33248,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2054397989}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
@@ -34404,7 +34120,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &2104946278
 Transform:
@@ -34611,14 +34327,13 @@ GameObject:
   - component: {fileID: 2112322083}
   - component: {fileID: 2112322082}
   - component: {fileID: 2112322081}
-  - component: {fileID: 2112322080}
   - component: {fileID: 2112322079}
   m_Layer: 12
   m_Name: Cube (160)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &2112322078
 Transform:
@@ -34649,24 +34364,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnEnemy: {fileID: 6118068614016348070, guid: 5d4b230dfd37f3a409d3f677b520b90f,
     type: 3}
-  spawnPos: {fileID: 0}
   enemyCount: 1
---- !u!208 &2112322080
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2112322077}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
+  m_spawnPos: {fileID: 0}
+  m_spawnDelay: 0
 --- !u!65 &2112322081
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -34675,7 +34375,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2112322077}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
