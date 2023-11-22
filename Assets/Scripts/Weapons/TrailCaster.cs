@@ -15,10 +15,6 @@ public class TrailCaster : MonoBehaviour
 
     #region PrivateVariables
 
-    [Header("TrailCast 점들의 시작점, 끝점")]
-    [SerializeField] private Vector3 m_trailStartPoint;
-    [SerializeField] private Vector3 m_trailEndPoint;
-
     [Header("TrailCast 점의 시작점, 끝점 좌표의 y축을 따릅니다.")]
     [SerializeField] private float m_trailStart;
     [SerializeField] private float m_trailEnd;
@@ -63,7 +59,7 @@ public class TrailCaster : MonoBehaviour
         {
             for (int j = 0; j < m_trailCountY; j++)
             {
-                oldPos[0, j] = curPos[0, j] = transform.TransformPoint(m_trailRotation*localTrailPos[0, j]);
+                oldPos[i, j] = curPos[i, j] = transform.TransformPoint(m_trailRotation*localTrailPos[i, j]);
             }
         }
         IsChecking = true;
