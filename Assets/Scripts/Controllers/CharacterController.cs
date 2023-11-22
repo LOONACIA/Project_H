@@ -72,11 +72,16 @@ public partial class CharacterController : MonoBehaviour
 
     private void Update()
     {
+#if UNITY_EDITOR
         Look();
+#endif
     }
 
     private void FixedUpdate()
     {
+#if !UNITY_EDITOR
+        Look();
+#endif
         Move();
     }
 
@@ -142,8 +147,8 @@ public partial class CharacterController : MonoBehaviour
 
     private void Look()
     {
-        float xDelta = m_lookDelta.x * m_data.CameraHorizontalSensitivity * Time.unscaledDeltaTime;
-        float yDelta = m_lookDelta.y * m_data.CameraVerticalSensitivity * Time.unscaledDeltaTime;
+        float xDelta = m_lookDelta.x * m_data.CameraHorizontalSensitivity * Time.fixedUnscaledDeltaTime;
+        float yDelta = m_lookDelta.y * m_data.CameraVerticalSensitivity * Time.fixedUnscaledDeltaTime;
 
         float z = m_cameraHolder.eulerAngles.z;
 
