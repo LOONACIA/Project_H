@@ -2504,7 +2504,7 @@ Shader "SciFI_URP/DissolveURP"
 		
 	}
 	/*ase_lod*/
-	CustomEditor "UnityEditor.ShaderGraph.PBRMasterGUI"
+	CustomEditor"UnityEditor.ShaderGraph.GenericShaderGraphMaterialGUI"
 	Fallback "Hidden/InternalErrorShader"
 	
 }

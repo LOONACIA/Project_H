@@ -1,6 +1,8 @@
 using System;
 using LOONACIA.Unity;
 using LOONACIA.Unity.Managers;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PossessionProcessor : MonoBehaviour
@@ -17,6 +19,8 @@ public class PossessionProcessor : MonoBehaviour
 
     // 빙의가 가능한지 여부 체크, 표창을 던질 지, 빙의를 할지를 판단함.
     public bool m_isAblePossession = false;
+    
+    public bool m_isHitTarget = false;
 
     public PossessionShuriken m_shuriken;
 
@@ -30,6 +34,16 @@ public class PossessionProcessor : MonoBehaviour
     /// </summary>
     public event EventHandler<Actor> Possessed;
 
+    /// <summary>
+    /// 빙의 타겟에게 표창이 적중할 경우 발생하는 이벤트.
+    /// </summary>
+    public event EventHandler TargetHit;
+
+    /// <summary>
+    /// 빙의 가능한 상태일 경우 발생하는 이벤트.
+    /// </summary>
+    public event EventHandler Possessable;
+
     public void TryPossess(Actor sender)
     {
         m_sender = sender;
@@ -39,19 +53,26 @@ public class PossessionProcessor : MonoBehaviour
             receiver.SetPossession(this);
         }
 
-        //표창이 박혀있지 않을 시, 해킹을 하지 않고 표창을 날림.
-        if (m_isAblePossession == false)
+        //표창이 박혀있는지 체크
+        // TODO: 풀링 시 suriken null check 로직 수정 필요
+        if (!m_isHitTarget || m_shuriken == null)
         {
             m_sender.Animator.SetTrigger(s_possess);
             return;
         }
 
+        //표창이 박혀있는데 빙의가 아직 불가능하면 return
+        if (!m_isAblePossession)
+            return;
+
         //표창이 박혔을 시, 빙의 시작
         m_isAblePossession = false;
+        m_isHitTarget = false;
         
         PossessTarget();
 
-        m_shuriken.DestroyShuriken();
+        ManagerRoot.Resource.Release(m_shuriken.gameObject);
+        //m_shuriken.DestroyShuriken();
     }
 
     //표창이 박힌 타겟에게 빙의
@@ -79,7 +100,7 @@ public class PossessionProcessor : MonoBehaviour
 
     public void OnPossessAnimEnd()
     {
-        OnPossessed(null);
+        //OnPossessed(null);
 
         // 그 전 코드
 
@@ -138,19 +159,39 @@ public class PossessionProcessor : MonoBehaviour
     {
         var cameraPivot = m_sender.FirstPersonCameraPivot;
 
-        Physics.Raycast(cameraPivot.transform.position, cameraPivot.transform.forward, out var hit, 300f);
+        bool isHit = Physics.Raycast(cameraPivot.transform.position, cameraPivot.transform.forward, out var hit, 300f);
 
         m_shuriken = Instantiate(Resources.Load<GameObject>(ConstVariables.SHURIKEN_PATH), cameraPivot.transform.position + cameraPivot.transform.forward, Quaternion.identity).GetComponent<PossessionShuriken>();
 
         // Ray를 쏜 곳에 몬스터가 있을 시,
-        if(1 << hit.transform?.gameObject.layer == m_targetLayers)
+        if (isHit && 1 << hit.transform.gameObject.layer == m_targetLayers)
         {
-            m_shuriken.InitSetting(hit.transform.GetComponent<Actor>(), this, m_sender);
+            m_shuriken.InitSetting(hit.transform.GetComponent<Actor>(), m_sender, OnTargetHit);
         }
         else
         {
-            m_shuriken.InitSetting(cameraPivot.transform.forward, this, m_sender);
+            m_shuriken.InitSetting(cameraPivot.transform.forward, m_sender, OnTargetHit);
         }
     }
+
+    private void OnTargetHit(Actor actor)
+    {
+        m_isHitTarget = true;
+        TargetHit?.Invoke(this, EventArgs.Empty);
+        TryHacking(actor);
+    }
+
+    private void TryHacking(Actor actor)
+    {
+        StartCoroutine(CoWaitForPossession(actor.Data.PossessionRequiredTime));
+    }
+    
+    private IEnumerator CoWaitForPossession(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        m_isAblePossession = true;
+        Possessable?.Invoke(this, EventArgs.Empty);
+    }
+    
     #endregion
 }
