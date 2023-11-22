@@ -13,12 +13,12 @@ public struct WeaponAttackInfo
     }
 
     public WeaponAttackInfo(Actor hitObject, Vector3 attackDirection)
-        : this(hitObject, attackDirection, Vector3.zero, Vector3.zero)
+        : this(hitObject, attackDirection, hitObject.transform.position, attackDirection)
     {
     }
     
     public WeaponAttackInfo(Actor hitObject, Vector3 attackDirection, Vector3 hitPosition)
-        : this(hitObject, attackDirection, hitPosition, Vector3.zero)
+        : this(hitObject, attackDirection, hitPosition, attackDirection)
     {
     }
 

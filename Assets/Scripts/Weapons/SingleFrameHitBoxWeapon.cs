@@ -7,6 +7,7 @@ using UnityEngine;
 public class SingleFrameHitBoxWeapon : Weapon
 {
     public HitBox hitBox;
+    public Vector3 knockBackDirection = Vector3.forward;
     
     protected override void Attack()
     {
@@ -15,10 +16,10 @@ public class SingleFrameHitBoxWeapon : Weapon
 
     protected override void OnHitMotion()
     {
-        Vector3 dir = transform.TransformDirection(hitBox.Position.normalized);
+        Vector3 dir = transform.TransformDirection(knockBackDirection);
         
         var detectedList = hitBox.DetectHitBox(transform)
-                                 .Select(info => new WeaponAttackInfo(info,dir))
+                                 .Select(info => new WeaponAttackInfo(info,dir.normalized))
                                  ;
 
         if (detectedList.Any())
