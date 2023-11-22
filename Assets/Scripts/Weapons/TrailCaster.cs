@@ -172,7 +172,7 @@ public class TrailCaster : MonoBehaviour
                 Vector3 localDir = oldPos[i, j] - curPos[i, j];
                 RaycastHit[] hits = Physics.RaycastAll(
                     curPos[i, j],
-                    oldPos[i, j] - curPos[i, j],
+                    curPos[i, j]-oldPos[i,j],
                     localDir.magnitude,
                     LayerMask.GetMask("Monster"));
                 for (int k = 0; k < hits.Length; k++)
@@ -181,8 +181,8 @@ public class TrailCaster : MonoBehaviour
                     int jid = hits[k].transform.gameObject.GetInstanceID();
                     if (!attackedList.ContainsKey(jid))
                     {
-                        //현재 레이를 실제 무기의 진행방향의 정 반대로 쏘므로, 충돌 방향을 수정해줌
-                        hits[k].normal = hits[k].normal * -1;
+                        //임시: raycast의 방향을 반환함
+                        hits[k].normal = curPos[i, j] - oldPos[i, j];
 
                         attackedList.Add(jid, hits[k]);
                         buffer.Add(hits[k]);

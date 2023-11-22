@@ -57,7 +57,7 @@ public class MeleeWeapon : Weapon
                 //체력이 없는 오브젝트거나, 본인이 타겟된 경우는 체크하지 않음.
                 if (hitObject != null)
                 {
-                    m_attackInfoBuffer.Add(new WeaponAttackInfo(hitObject, hit.normal));
+                    m_attackInfoBuffer.Add(new WeaponAttackInfo(hitObject, hit.normal,hit.point));
                 }
             }
 

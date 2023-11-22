@@ -15,7 +15,7 @@ public class ActorHealth : MonoBehaviour, IHealth
 
     public event EventHandler<Actor> Damaged;
 
-    public event EventHandler Dying;
+    public event EventHandler<DamageInfo> Dying;
 
     public event EventHandler Died;
 
@@ -26,9 +26,6 @@ public class ActorHealth : MonoBehaviour, IHealth
     public bool IsDead => CurrentHp <= 0;
     
     
-    //데미지 리스트 테스트용입니다.
-    private List<Vector3> m_damagedDirectionList = new();
-
     protected void Awake()
     {
         m_actor = GetComponent<Monster>();
@@ -82,22 +79,23 @@ public class ActorHealth : MonoBehaviour, IHealth
         }
 
         m_status.Hp -= info.Damage;
-        OnDamaged(info.Attacker);
+        OnDamaged(info);
     }
 
     public void Kill()
     {
+        //강제 사망처리 코드
         m_status.Hp = 0;
-        OnDamaged(null);
+        OnDamaged(new DamageInfo(0,Vector3.zero,Vector3.zero,null));
     }
     
-    private void OnDamaged(Actor attacker)
+    private void OnDamaged(DamageInfo info)
     {
-        Damaged?.Invoke(this, attacker);
+        Damaged?.Invoke(this, info.Attacker);
 
         if (IsDead)
         {
-            Dying?.Invoke(this, EventArgs.Empty);
+            Dying?.Invoke(this, info);
             bool hasAnimation = m_actor.Animator.parameters.Any(param => param.name == "Dead");
             if (hasAnimation)
             {
@@ -121,18 +119,6 @@ public class ActorHealth : MonoBehaviour, IHealth
         if (m_data == null)
         {
             Debug.LogWarning($"{name}: {nameof(m_data)} is null");
-        }
-    }
-
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.matrix = Matrix4x4.identity;
-        
-        foreach (var t in m_damagedDirectionList)
-        {  
-            Gizmos.color = Color.cyan;
-            Gizmos.DrawLine(transform.position -t + Vector3.up ,transform.position + (t) + Vector3.up);
         }
     }
 

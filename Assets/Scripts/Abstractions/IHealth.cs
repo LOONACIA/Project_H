@@ -13,7 +13,7 @@ public interface IHealth
     
     event EventHandler<Actor> Damaged;
 
-    event EventHandler Dying;
+    event EventHandler<DamageInfo> Dying;
     
     event EventHandler Died;
     

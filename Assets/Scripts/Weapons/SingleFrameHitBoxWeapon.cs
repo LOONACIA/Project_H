@@ -15,10 +15,10 @@ public class SingleFrameHitBoxWeapon : Weapon
 
     protected override void OnHitMotion()
     {
-        Vector3 dir = transform.TransformDirection(new Vector3(0f, 0f, 1f)).normalized;
+        Vector3 dir = transform.TransformDirection(hitBox.Position.normalized);
         
         var detectedList = hitBox.DetectHitBox(transform)
-                                 .Select(info => new WeaponAttackInfo(info,dir,dir))
+                                 .Select(info => new WeaponAttackInfo(info,dir))
                                  ;
 
         if (detectedList.Any())

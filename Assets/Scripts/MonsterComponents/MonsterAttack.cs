@@ -135,7 +135,7 @@ public class MonsterAttack : MonoBehaviour
             Debug.Log($"{health.gameObject.name} is hit by {gameObject.name}, damage: {data.Damage}");
 
             //데미지 처리
-            DamageInfo damageInfo = new DamageInfo(data.Damage, hit.AttackDirection, m_actor);
+            DamageInfo damageInfo = new DamageInfo(data.Damage, hit.AttackDirection, hit.HitPosition,m_actor);
 
             //넉다운 적용
              if (data.KnockDownTime>0f)
