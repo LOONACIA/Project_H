@@ -17,6 +17,7 @@ public class PossessionProcessor : MonoBehaviour
 
     // 빙의가 가능한지 여부 체크, 표창을 던질 지, 빙의를 할지를 판단함.
     public bool m_isAblePossession = false;
+    public bool m_isHitTarget = false;
 
     public PossessionShuriken m_shuriken;
 
@@ -39,15 +40,20 @@ public class PossessionProcessor : MonoBehaviour
             receiver.SetPossession(this);
         }
 
-        //표창이 박혀있지 않을 시, 해킹을 하지 않고 표창을 날림.
-        if (m_isAblePossession == false)
+        //표창이 박혀있는지 체크
+        if (m_isHitTarget == false)
         {
             m_sender.Animator.SetTrigger(s_possess);
             return;
         }
 
+        //표창이 박혀있는데 빙의가 아직 불가능하면 return
+        if (m_isAblePossession == false)
+            return;
+
         //표창이 박혔을 시, 빙의 시작
         m_isAblePossession = false;
+        m_isHitTarget = false;
         
         PossessTarget();
 
