@@ -7,18 +7,18 @@ public struct WeaponAttackInfo
 {
     #region Constructor
 
-    public WeaponAttackInfo(IHealth hitObject)
+    public WeaponAttackInfo(Actor hitObject)
         : this(hitObject, Vector3.zero, Vector3.zero)
     {
     }
 
-    public WeaponAttackInfo(IHealth hitObject, Vector3 attackDirection)
+    public WeaponAttackInfo(Actor hitObject, Vector3 attackDirection)
         : this(hitObject, Vector3.zero, Vector3.zero)
     {
     }
 
     public WeaponAttackInfo(
-        IHealth hitObject,
+        Actor hitObject,
         Vector3 attackDirection,
         Vector3 knockBackDirection)
     {
@@ -32,7 +32,7 @@ public struct WeaponAttackInfo
     #region Properties
     public Vector3 AttackDirection { get; }
 
-    public IHealth HitObject { get; }
+    public Actor HitObject { get; }
 
     public Vector3 KnockBackDirection { get; }
     #endregion
