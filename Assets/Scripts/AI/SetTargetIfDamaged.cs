@@ -42,9 +42,9 @@ public class SetTargetIfDamaged : Conditional
         return TaskStatus.Failure;
     }
     
-    private void OnDamaged(object sender, Actor e)
+    private void OnDamaged(object sender, DamageInfo e)
     {
         // 대미지를 입으면 Attacker에 대입
-        m_attacker = e;
+        m_attacker = e.Attacker;
     }
 }

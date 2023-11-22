@@ -37,13 +37,13 @@ public class BodyPartController : MonoBehaviour
         }
     }
 
-    private void ReplaceBody(object sender, EventArgs e)
+    private void ReplaceBody(object sender, DamageInfo info)
     {
         foreach (var bodyPartScript in m_bodyPartScripts)
         {
             bodyPartScript.gameObject.SetActive(true);
 
-            bodyPartScript.ReplaceBodyPart();
+            bodyPartScript.ReplaceBodyPart(info);
             bodyPartScript.transform.SetParent(m_bodyPartCollector.transform);
         }
 

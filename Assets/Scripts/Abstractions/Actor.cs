@@ -181,7 +181,7 @@ public abstract class Actor : MonoBehaviour
         StartCoroutine(CoDie(ConstVariables.MONSTER_DESTROY_WAIT_TIME));
     }
     
-    private void OnDying(object sender, EventArgs e)
+    private void OnDying(object sender, DamageInfo info)
     {
         OnDying();
     }

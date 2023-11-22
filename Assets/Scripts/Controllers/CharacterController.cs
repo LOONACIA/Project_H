@@ -208,7 +208,7 @@ public partial class CharacterController : MonoBehaviour
         }
     }
 
-    private void OnDamaged(object sender, Actor e)
+    private void OnDamaged(object sender, DamageInfo e)
     {
         HpChanged?.Invoke(this, Character.Health.CurrentHp);
     }
