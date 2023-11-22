@@ -13,7 +13,7 @@ public class ActorHealth : MonoBehaviour, IHealth
 
     private ActorStatus m_status;
 
-    public event EventHandler<Actor> Damaged;
+    public event EventHandler<DamageInfo> Damaged;
 
     public event EventHandler<DamageInfo> Dying;
 
@@ -91,7 +91,7 @@ public class ActorHealth : MonoBehaviour, IHealth
     
     private void OnDamaged(DamageInfo info)
     {
-        Damaged?.Invoke(this, info.Attacker);
+        Damaged?.Invoke(this, info);
 
         if (IsDead)
         {

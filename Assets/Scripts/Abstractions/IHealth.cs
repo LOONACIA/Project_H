@@ -11,7 +11,7 @@ public interface IHealth
     
     void Kill();
     
-    event EventHandler<Actor> Damaged;
+    event EventHandler<DamageInfo> Damaged;
 
     event EventHandler<DamageInfo> Dying;
     
