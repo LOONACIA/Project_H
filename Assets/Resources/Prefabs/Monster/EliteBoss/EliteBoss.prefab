@@ -165,6 +165,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 063b3b13758ebd240bd661240502062c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_data: {fileID: 0}
   m_firstPersonCameraPivot: {fileID: 7027120903777459876}
   m_firstPersonAnimator: {fileID: 146952606421129334}
   m_thirdPersonAnimator: {fileID: 5518897603482814599}
@@ -198,6 +199,8 @@ MonoBehaviour:
   m_damage: 0
   m_isBlocking: 0
   m_knockDownTime: 0
+  m_isKnockDown: 0
+  m_isKnockBack: 0
 --- !u!114 &196284125825091651
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -548,9 +551,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Type>k__BackingField: 1
   m_shieldPoint: 100
-  m_shieldDuration: 5
-  m_shieldPrefab: {fileID: 0}
-  m_shieldOffset: {x: 0, y: 0, z: 0}
+  m_shieldDuration: 10
+  m_shieldPrefab: {fileID: 8212799518268938820, guid: b58923a9bdaca3344a6c1ae4d91f36c8,
+    type: 3}
+  m_shieldOffset: {x: 0, y: 2, z: 0}
 --- !u!114 &6237387627204506682
 MonoBehaviour:
   m_ObjectHideFlags: 0
