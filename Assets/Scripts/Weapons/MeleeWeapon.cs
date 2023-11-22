@@ -44,20 +44,20 @@ public class MeleeWeapon : Weapon
         if (State == AttackState.HIT)
         {
             //검의 TrailCaster로 충돌체크
-            IEnumerable<RaycastHit> detectedRayCast = m_trailCaster.PopBuffer();
+            IEnumerable<TrailCaster.HitInfo> detectedRayCast = m_trailCaster.PopBuffer();
 
             //공격한 오브젝트 버퍼 초기화
             m_attackInfoBuffer.Clear();
 
             //AttackInfo 제작해줌
-            foreach (var hit in detectedRayCast)
+            foreach (var hitInfo in detectedRayCast)
             {
-                Actor hitObject = hit.transform.GetComponent<Actor>();
+                Actor hitObject = hitInfo.Hit.transform.GetComponent<Actor>();
 
                 //체력이 없는 오브젝트거나, 본인이 타겟된 경우는 체크하지 않음.
                 if (hitObject != null)
                 {
-                    m_attackInfoBuffer.Add(new WeaponAttackInfo(hitObject, hit.normal,hit.point));
+                    m_attackInfoBuffer.Add(new WeaponAttackInfo(hitObject, hitInfo.AttackDirection,hitInfo.Hit.point));
                 }
             }
 
