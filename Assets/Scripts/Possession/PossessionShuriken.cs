@@ -1,5 +1,6 @@
 using BehaviorDesigner.Runtime.Tasks.Unity.UnityCharacterController;
 using BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject;
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityTransform;
 using LOONACIA.Unity;
 using System.Collections;
 using System.Collections.Generic;
@@ -59,6 +60,12 @@ public class PossessionShuriken : MonoBehaviour
         Destroy(gameObject);
     }
 
+    private void OnDisable()
+    {
+        processor.m_isHitTarget = false;
+        processor.m_isAblePossession = false;
+    }
+
     private void FixedUpdate()
     {
         //Target에 꽂혀있을 때
@@ -101,25 +108,46 @@ public class PossessionShuriken : MonoBehaviour
         Destroy(gameObject);
     }
 
+    private void HitTarget()
+    {   
+        processor.m_isHitTarget = true;
+        isStop = true;
+        m_rb.isKinematic = true;
+
+        GetComponent<Collider>().enabled = false;
+
+        StartCoroutine(nameof(IE_StartPossesionTimer), targetActor.Data.PossessionRequiredTime);
+
+        transform.SetParent(targetActor.transform);
+    }
+
+    private void AblePossesion()
+    {
+        GetComponent<MeshRenderer>().enabled = false;
+        processor.m_isAblePossession = true;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if(1 << other.gameObject.layer == m_targetLayer)
         {
             if (other.gameObject == throwActor.gameObject)
                 return;
-
-            processor.m_isAblePossession = true;
-            targetActor = other.gameObject.GetComponent<Actor>();   
-            GetComponent<Collider>().enabled = false;
-            m_rb.isKinematic = true;
-            GetComponent<MeshRenderer>().enabled = false;
-            isStop = true;
+            targetActor = other.gameObject.GetComponent<Actor>();
+            HitTarget();
         }
         else
         {
             Debug.Log("부서진다.." + other.gameObject.layer);
             Destroy(gameObject);
         }
+    }
+
+    private IEnumerator IE_StartPossesionTimer(float _time)
+    {
+        yield return new WaitForSeconds(_time);
+
+        AblePossesion();
     }
     #endregion
 }
