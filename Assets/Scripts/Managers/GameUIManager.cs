@@ -10,6 +10,8 @@ public class GameUIManager
 
     private UIShieldIndicator m_shieldIndicator;
 
+    private UIShuriken m_shuriken;
+
     public void Init()
     {
     }
@@ -26,6 +28,18 @@ public class GameUIManager
         m_shieldIndicator.SetPlayer(player);
 
         m_shieldIndicator.HideIndicator();
+    }
+
+    public void ShowShurikenIndicator(PossessionProcessor processor)
+    {
+        if (m_shuriken is not null)
+        {
+            // Do nothing
+            return;
+        }
+
+        m_shuriken = ManagerRoot.UI.ShowSceneUI<UIShuriken>();
+        m_shuriken.SetPossessionProcessor(processor);
     }
 
     public void ShowCrosshair()
