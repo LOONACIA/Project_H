@@ -12,7 +12,6 @@ public class AnimationAction : Action
     public SharedBool isAttacking;
     public override void OnAwake()
     {
-        
         m_monster = GetComponent<Monster>();
     }
 
@@ -32,6 +31,6 @@ public class AnimationAction : Action
 
     public override void OnReset()
     {
-
+        isAttacking = false;
     }
 }

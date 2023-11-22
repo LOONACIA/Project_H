@@ -49,7 +49,7 @@ public class MonsterAttack : MonoBehaviour
         get
         {
             if (AttackWeapon == null) return false;
-            return AttackWeapon.State != Weapon.AttackState.IDLE;
+            return AttackWeapon.State is Weapon.AttackState.IDLE or Weapon.AttackState.FOLLOW_THROUGH;
         }
     }
 
