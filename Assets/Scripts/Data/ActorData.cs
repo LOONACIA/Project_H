@@ -4,7 +4,7 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = nameof(ActorData), menuName = "Data/" + nameof(ActorData))]
 public class ActorData : ScriptableObject
-{
+{   
     [SerializeField]
     [Tooltip("Actor 타입")]
     private ActorType m_type;
