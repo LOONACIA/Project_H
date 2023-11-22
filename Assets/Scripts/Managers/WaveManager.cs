@@ -1,5 +1,6 @@
 using LOONACIA.Unity.Coroutines;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -9,18 +10,21 @@ using UnityEngine.Rendering;
 public class WaveManager : MonoBehaviour
 {
     public GameObject spawnEnemy;
-    public Collider spawnPos;
     public int enemyCount;
+
+    [SerializeField]
+    private Collider m_spawnPos;
+    [SerializeField]
+    private float m_spawnDelay;
 
     private int m_spawnedEnemy = 0;
     private CoroutineEx m_enemySpawnCoroutine;
-    private Monster m_monsterBase;
-
     // Start is called before the first frame update
     private void OnEnable()
     {
+        m_spawnPos = this.transform.GetComponent<Collider>();
         Monster monster = GetComponent<Monster>();
-        m_enemySpawnCoroutine = CoroutineEx.Create(this, EnemySpawn(spawnPos));
+        m_enemySpawnCoroutine = CoroutineEx.Create(this, EnemySpawn(m_spawnPos));
         if (m_spawnedEnemy == enemyCount)
         {
             if (m_enemySpawnCoroutine?.IsRunning is true)
@@ -32,7 +36,6 @@ public class WaveManager : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     /// <summary>
     /// 전달 받은 최종 좌표로 프리팹 인스턴스화
     /// </summary>
@@ -40,6 +43,7 @@ public class WaveManager : MonoBehaviour
     /// <returns></returns>
     IEnumerator EnemySpawn(Collider spawnableAreaCollider)
     {
+        yield return new WaitForSeconds(m_spawnDelay);
         var character = FindObjectsOfType<Monster>()
             .SingleOrDefault(monster => monster.IsPossessed);
 
