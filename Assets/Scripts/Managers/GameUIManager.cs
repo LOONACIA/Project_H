@@ -30,7 +30,7 @@ public class GameUIManager
         m_shieldIndicator.HideIndicator();
     }
 
-    public void ShowShurikenIndicator()
+    public void ShowShurikenIndicator(PossessionProcessor processor)
     {
         if (m_shuriken is not null)
         {
@@ -39,6 +39,7 @@ public class GameUIManager
         }
 
         m_shuriken = ManagerRoot.UI.ShowSceneUI<UIShuriken>();
+        m_shuriken.SetPossessionProcessor(processor);
     }
 
     public void ShowCrosshair()
