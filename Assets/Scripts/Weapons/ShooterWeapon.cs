@@ -90,21 +90,21 @@ public class ShooterWeapon : Weapon
             .TakeWhile(hit => hit.transform.gameObject.layer == m_damageLayer)
             .ToArray();
         
-        InvokeHitEvent(ProcessHit(hits));
+        InvokeHitEvent(ProcessHit(hits, dir));
 
         // TODO: Remove test code
         Vector3 target = hits.Length > 0 ? hits.Last().point : m_ray.GetPoint(m_maxDistance);
         DrawLine(target);
     }
 
-    private IEnumerable<WeaponAttackInfo> ProcessHit(IEnumerable<RaycastHit> hits)
+    private IEnumerable<WeaponAttackInfo> ProcessHit(IEnumerable<RaycastHit> hits, Vector3 direction)
     {
         foreach (var hit in hits)
         {
             if (hit.transform.TryGetComponent(out Actor actor))
             {
                 // TODO: AttackInfo 변경 시 수정 필요
-                yield return new(actor, hit.normal);
+                yield return new(actor, direction,hit.point);
             }
         }
     }

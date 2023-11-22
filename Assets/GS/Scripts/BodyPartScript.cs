@@ -1,4 +1,5 @@
 using LOONACIA.Unity;
+using RenownedGames.ApexEditor;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -47,7 +48,7 @@ public class BodyPartScript : MonoBehaviour
         //}
     }
 
-    public void ReplaceBodyPart()
+    public void ReplaceBodyPart(DamageInfo info)
     {
         if (m_rigidbody == null ||  m_collider == null) return;
 
@@ -56,15 +57,16 @@ public class BodyPartScript : MonoBehaviour
         //_meshRenderer.enabled = true;
 
         transform.parent = null;
-        ExplodeBodyPart();
+        ExplodeBodyPart(info.AttackDirection);
 
         if (m_coroutine == null)
             m_coroutine = StartCoroutine(DestroyBodyPart(m_initInterval));
     }
 
-    private void ExplodeBodyPart()
+    private void ExplodeBodyPart(Vector3 attackDirection)
     {
-        m_rigidbody.AddExplosionForce(m_explosionForce, transform.position, m_explosionRadius);
+        //m_rigidbody.AddExplosionForce(m_explosionForce, explosionPosition, m_explosionRadius);
+        m_rigidbody.AddForce(attackDirection*m_explosionForce,ForceMode.Impulse);
     }
 
     private void OnCollisionEnter(Collision collision)

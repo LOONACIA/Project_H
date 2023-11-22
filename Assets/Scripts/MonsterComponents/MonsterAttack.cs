@@ -135,7 +135,7 @@ public class MonsterAttack : MonoBehaviour
             Debug.Log($"{health.gameObject.name} is hit by {gameObject.name}, damage: {data.Damage}");
 
             //데미지 처리
-            DamageInfo damageInfo = new DamageInfo(data.Damage, hit.AttackDirection, m_actor);
+            DamageInfo damageInfo = new DamageInfo(data.Damage, hit.AttackDirection, hit.HitPosition,m_actor);
 
             //넉다운 적용
              if (data.KnockDownTime>0f)
@@ -146,7 +146,7 @@ public class MonsterAttack : MonoBehaviour
 
             //넉백 적용
             //TODO: 공격, 스킬, 밀쳐내기 등의 넉백여부 구분 필요
-            if (hit.KnockBackDirection != Vector3.zero)
+            if (data.KnockBackPower != 0f)
             {
                 MonsterMovement movement = health.gameObject.GetComponent<MonsterMovement>();
 
@@ -168,7 +168,7 @@ public class MonsterAttack : MonoBehaviour
             Debug.LogError("무기가 아닌 오브젝트가 공격 호출함: "+o.ToString());
             return;
         }
-        MonsterAttackData.AttackData data = GetWeaponDataByType(hitWeapon.Type);
+        MonsterAttackData.AttackData data = GetWeaponDataByType(m_actor.IsPossessed,hitWeapon.Type);
 
         var hits = attackInfo.Where(hit => hit.HitObject.gameObject != gameObject);
 
@@ -241,14 +241,27 @@ public class MonsterAttack : MonoBehaviour
 
     }
 
-    private MonsterAttackData.AttackData GetWeaponDataByType(Weapon.WeaponType type)
+    private MonsterAttackData.AttackData GetWeaponDataByType(bool isPossessed, Weapon.WeaponType type)
     {
-        return type switch
+        if (isPossessed)
         {
-            Weapon.WeaponType.SKILL_WEAPON => m_data.Skill,
-            Weapon.WeaponType.ATTACK_WEAPON => m_data.Attack,
-            Weapon.WeaponType.BLOCKPUSH_WEAPON => m_data.BlockPush,
-            _ => null
-        };
+            return type switch
+            {
+                Weapon.WeaponType.SKILL_WEAPON => m_data.PossessedSkill,
+                Weapon.WeaponType.ATTACK_WEAPON => m_data.PossessedAttack,
+                Weapon.WeaponType.BLOCKPUSH_WEAPON => m_data.PossessedBlockPush,
+                _ => null
+            };
+        }
+        else
+        {
+            return type switch
+            {
+                Weapon.WeaponType.SKILL_WEAPON => m_data.Skill,
+                Weapon.WeaponType.ATTACK_WEAPON => m_data.Attack,
+                Weapon.WeaponType.BLOCKPUSH_WEAPON => m_data.BlockPush,
+                _ => null
+            };
+        }
     }
 }

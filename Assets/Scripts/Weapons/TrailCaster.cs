@@ -36,8 +36,8 @@ public class TrailCaster : MonoBehaviour
     private Vector3[,] localTrailPos;
 
     //위치 체킹 중에 중복된 적을 검출하지 않기 위한 변수
-    private Dictionary<long, RaycastHit> attackedList = new();
-    private List<RaycastHit> buffer = new();
+    private Dictionary<long, HitInfo> attackedList = new();
+    private List<HitInfo> buffer = new();
 
     [Header("Gizmo 관련 변수, localScale에 영향을 받습니다.")]
     [SerializeField] private bool m_showGizmo = true;
@@ -75,9 +75,9 @@ public class TrailCaster : MonoBehaviour
     /// 마지막 PopBuffer()호출 전까지의 충돌 정보를 반환합니다. 한 공격 사이클 동안 반환되는 값은 중복이 없는 것이 보장됩니다.
     /// </summary>
     /// <returns></returns>
-    public IEnumerable<RaycastHit> PopBuffer()
+    public IEnumerable<HitInfo> PopBuffer()
     {
-        var result = new List<RaycastHit>(buffer);
+        var result = new List<HitInfo>(buffer);
         buffer.Clear();
         return result;
     }
@@ -172,7 +172,7 @@ public class TrailCaster : MonoBehaviour
                 Vector3 localDir = oldPos[i, j] - curPos[i, j];
                 RaycastHit[] hits = Physics.RaycastAll(
                     curPos[i, j],
-                    oldPos[i, j] - curPos[i, j],
+                    curPos[i, j]-oldPos[i,j],
                     localDir.magnitude,
                     LayerMask.GetMask("Monster"));
                 for (int k = 0; k < hits.Length; k++)
@@ -181,11 +181,9 @@ public class TrailCaster : MonoBehaviour
                     int jid = hits[k].transform.gameObject.GetInstanceID();
                     if (!attackedList.ContainsKey(jid))
                     {
-                        //현재 레이를 실제 무기의 진행방향의 정 반대로 쏘므로, 충돌 방향을 수정해줌
-                        hits[k].normal = hits[k].normal * -1;
-
-                        attackedList.Add(jid, hits[k]);
-                        buffer.Add(hits[k]);
+                        HitInfo info = new HitInfo(curPos[i, j] - oldPos[i, j], hits[k]);
+                        attackedList.Add(jid, info);
+                        buffer.Add(info);
                     }
                 }
 
@@ -199,4 +197,18 @@ public class TrailCaster : MonoBehaviour
 
     #endregion
 
+    [Serializable]
+    public struct HitInfo
+    {
+        //TrailCaster를 통해 충돌한 정보 반환을 위한 구조체
+        public HitInfo(Vector3 attackDirection, RaycastHit hit)
+        {
+            AttackDirection = attackDirection;
+            Hit = hit;
+        }
+        
+        public Vector3 AttackDirection { get; }
+        public RaycastHit Hit;
+
+    }
 }
