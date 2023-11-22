@@ -48,7 +48,7 @@ public partial class CharacterController : MonoBehaviour
         GameManager.UI.ShowCrosshair();
         GameManager.UI.ShowHpIndicator(this);
         GameManager.UI.GenerateShieldIndicator(this);
-        GameManager.UI.ShowShurikenIndicator();
+        GameManager.UI.ShowShurikenIndicator(m_possession);
     }
 
     private void Start()
