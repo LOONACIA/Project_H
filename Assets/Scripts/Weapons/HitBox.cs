@@ -31,13 +31,13 @@ public class HitBox
 
     public Color GizmoColor => m_gizmoColor;
     
-    public IEnumerable<IHealth> DetectHitBox(Transform parent)
+    public IEnumerable<Actor> DetectHitBox(Transform parent)
     {
         Quaternion rotation = Quaternion.Euler(parent.eulerAngles + Rotation.eulerAngles);
 
         return Physics.OverlapBox(parent.TransformPoint(Position),
                                   HalfExtents, parent.rotation * Rotation, LayerMask.GetMask("Monster"))
-                      .Select(detectedObject => detectedObject.GetComponent<IHealth>())
+                      .Select(detectedObject => detectedObject.GetComponent<Actor>())
                       .Where(health => health != null);
     }
 

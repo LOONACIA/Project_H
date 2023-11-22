@@ -44,8 +44,14 @@ public class MonsterAttack : MonoBehaviour
 
     public bool CanAttack { get; set; } = true;
 
-    [field: SerializeField]
-    public bool IsAttacking { get; set; }
+    public bool IsAttacking 
+    {
+        get
+        {
+            if (AttackWeapon == null) return false;
+            return AttackWeapon.State != Weapon.AttackState.IDLE;
+        }
+    }
 
     public Weapon AttackWeapon => m_actor.IsPossessed ? m_firstPersonAttack : m_thirdPersonAttack;
     
@@ -80,6 +86,7 @@ public class MonsterAttack : MonoBehaviour
 
     public void Attack()
     {
+        //TODO: KnockBack, KnockDown 중 공격 못하게 할 것인가?
         if (!CanAttack || IsAttacking)
         {
             return;
@@ -91,6 +98,7 @@ public class MonsterAttack : MonoBehaviour
 
     public void Skill()
     {
+        //TODO: KnockBack, KnockDown 중 스킬 못하게 할 것인가?
         if (!CanAttack || IsAttacking)
         {
             return;
@@ -116,7 +124,7 @@ public class MonsterAttack : MonoBehaviour
 
         foreach (var hit in info)
         {
-            IHealth health = hit.HitObject;
+            IHealth health = hit.HitObject.Health;
             // 빙의되지 않은 몬스터가 타겟이 아닌 대상을 공격하는 경우
             if (!m_actor.IsPossessed &&
                 health.gameObject.TryGetComponent<Actor>(out var actor) && !m_actor.Targets.Contains(actor))
@@ -128,13 +136,13 @@ public class MonsterAttack : MonoBehaviour
 
             //데미지 처리
             DamageInfo damageInfo = new DamageInfo(data.Damage, hit.AttackDirection, m_actor);
-            health.TakeDamage(damageInfo);
 
             //넉다운 적용
-             // if (m_data.knockDownTime>0f)
-             // {
-             //     //m_status.SetKnockDown(weaponAttackInfo.knockDownTime);
-             // }
+             if (data.KnockDownTime>0f)
+             {
+                 
+                 hit.HitObject.Status.SetKnockDown(data.KnockDownTime);
+             }
 
             //넉백 적용
             //TODO: 공격, 스킬, 밀쳐내기 등의 넉백여부 구분 필요
@@ -142,10 +150,12 @@ public class MonsterAttack : MonoBehaviour
             {
                 MonsterMovement movement = health.gameObject.GetComponent<MonsterMovement>();
 
-                Debug.Log(hit.KnockBackDirection);
                 //TODO: 공격 종류별로 넉백 파워 수정 필요
-                movement.TryKnockBack(hit.KnockBackDirection, 14);
+                movement.TryKnockBack(hit.KnockBackDirection, data.KnockBackPower);
             }
+            
+            //BT의 Hit이벤트가 등록되어있어 CC등 처리 후 마지막에 실행
+            health.TakeDamage(damageInfo);
         }
     }
 

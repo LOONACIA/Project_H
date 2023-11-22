@@ -101,10 +101,10 @@ public class ShooterWeapon : Weapon
     {
         foreach (var hit in hits)
         {
-            if (hit.transform.TryGetComponent(out IHealth health))
+            if (hit.transform.TryGetComponent(out Actor actor))
             {
                 // TODO: AttackInfo 변경 시 수정 필요
-                yield return new(health, hit.normal);
+                yield return new(actor, hit.normal);
             }
         }
     }

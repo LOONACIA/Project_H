@@ -14,21 +14,25 @@ public class AttackAnimationEventReceiver : MonoBehaviour
     
     public virtual void OnAttackIdle()
     {
+        if (m_attackWeapon == null) return;
         m_attackWeapon.EnterIdleState(this, null);
     }
 
     protected virtual void OnAttackLeadIn()
     {
+        if (m_attackWeapon == null) return;
         m_attackWeapon.EnterLeadInState(this, null);
     }
 	
     protected virtual void OnAttackHit()
     {
+        if (m_attackWeapon == null) return;
         m_attackWeapon.EnterHitState(this,null);
     }
     
     protected virtual void OnAttackFollowThrough()
     {
+        if (m_attackWeapon == null) return;
         m_attackWeapon.EnterFollowThroughState(this,null);
     }
     
@@ -38,21 +42,25 @@ public class AttackAnimationEventReceiver : MonoBehaviour
     
     public virtual void OnSkillIdle()
     {
+        if (m_skillWeapon == null) return;
         m_skillWeapon.EnterIdleState(this, null);
     }
 
     protected virtual void OnSkillLeadIn()
     {
+        if (m_skillWeapon == null) return;
         m_skillWeapon.EnterLeadInState(this, null);
     }
 	
     protected virtual void OnSkillHit()
     {
+        if (m_skillWeapon == null) return;
         m_skillWeapon.EnterHitState(this,null);
     }
     
     protected virtual void OnSkillFollowThrough()
     {
+        if (m_skillWeapon == null) return;
         m_skillWeapon.EnterFollowThroughState(this,null);
     }
 
@@ -61,21 +69,25 @@ public class AttackAnimationEventReceiver : MonoBehaviour
     #region BlockPush
     public virtual void OnBlockPushIdle()
     {
+        if (m_blockPushWeapon == null) return;
         m_blockPushWeapon.EnterIdleState(this, null);
     }
 
     protected virtual void OnBlockPushLeadIn()
     {
+        if (m_blockPushWeapon == null) return;
         m_blockPushWeapon.EnterLeadInState(this, null);
     }
 
     protected virtual void OnBlockPushHit()
     {
+        if (m_blockPushWeapon == null) return;
         m_blockPushWeapon.EnterHitState(this, null);
     }
 
     protected virtual void OnBlockPushFollowThrough()
     {
+        if (m_blockPushWeapon == null) return;
         m_blockPushWeapon.EnterFollowThroughState(this, null);
     }
 
