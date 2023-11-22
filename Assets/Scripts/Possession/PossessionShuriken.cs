@@ -1,5 +1,6 @@
 using BehaviorDesigner.Runtime.Tasks.Unity.UnityCharacterController;
 using BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject;
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityTransform;
 using LOONACIA.Unity;
 using System.Collections;
 using System.Collections.Generic;
@@ -59,6 +60,12 @@ public class PossessionShuriken : MonoBehaviour
         Destroy(gameObject);
     }
 
+    private void OnDisable()
+    {
+        processor.m_isHitTarget = false;
+        processor.m_isAblePossession = false;
+    }
+
     private void FixedUpdate()
     {
         //Target에 꽂혀있을 때
@@ -110,9 +117,9 @@ public class PossessionShuriken : MonoBehaviour
         GetComponent<Collider>().enabled = false;
 
         StartCoroutine(nameof(IE_StartPossesionTimer), targetActor.Data.PossessionRequiredTime);
-    }
 
-   
+        transform.SetParent(targetActor.transform);
+    }
 
     private void AblePossesion()
     {
