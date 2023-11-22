@@ -168,7 +168,7 @@ public class MonsterAttack : MonoBehaviour
             Debug.LogError("무기가 아닌 오브젝트가 공격 호출함: "+o.ToString());
             return;
         }
-        MonsterAttackData.AttackData data = GetWeaponDataByType(hitWeapon.Type);
+        MonsterAttackData.AttackData data = GetWeaponDataByType(m_actor.IsPossessed,hitWeapon.Type);
 
         var hits = attackInfo.Where(hit => hit.HitObject.gameObject != gameObject);
 
@@ -241,14 +241,27 @@ public class MonsterAttack : MonoBehaviour
 
     }
 
-    private MonsterAttackData.AttackData GetWeaponDataByType(Weapon.WeaponType type)
+    private MonsterAttackData.AttackData GetWeaponDataByType(bool isPossessed, Weapon.WeaponType type)
     {
-        return type switch
+        if (isPossessed)
         {
-            Weapon.WeaponType.SKILL_WEAPON => m_data.Skill,
-            Weapon.WeaponType.ATTACK_WEAPON => m_data.Attack,
-            Weapon.WeaponType.BLOCKPUSH_WEAPON => m_data.BlockPush,
-            _ => null
-        };
+            return type switch
+            {
+                Weapon.WeaponType.SKILL_WEAPON => m_data.PossessedSkill,
+                Weapon.WeaponType.ATTACK_WEAPON => m_data.PossessedAttack,
+                Weapon.WeaponType.BLOCKPUSH_WEAPON => m_data.PossessedBlockPush,
+                _ => null
+            };
+        }
+        else
+        {
+            return type switch
+            {
+                Weapon.WeaponType.SKILL_WEAPON => m_data.Skill,
+                Weapon.WeaponType.ATTACK_WEAPON => m_data.Attack,
+                Weapon.WeaponType.BLOCKPUSH_WEAPON => m_data.BlockPush,
+                _ => null
+            };
+        }
     }
 }
