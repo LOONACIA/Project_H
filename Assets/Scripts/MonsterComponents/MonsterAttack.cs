@@ -49,7 +49,7 @@ public class MonsterAttack : MonoBehaviour
         get
         {
             if (AttackWeapon == null) return false;
-            return AttackWeapon.State != Weapon.AttackState.IDLE;
+            return AttackWeapon.State is Weapon.AttackState.IDLE or Weapon.AttackState.FOLLOW_THROUGH;
         }
     }
 
@@ -87,7 +87,7 @@ public class MonsterAttack : MonoBehaviour
     public void Attack()
     {
         //TODO: KnockBack, KnockDown 중 공격 못하게 할 것인가?
-        if (!CanAttack || IsAttacking)
+        if (!CanAttack)
         {
             return;
         }
