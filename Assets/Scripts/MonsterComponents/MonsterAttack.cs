@@ -87,7 +87,7 @@ public class MonsterAttack : MonoBehaviour
     public void Attack()
     {
         //TODO: KnockBack, KnockDown 중 공격 못하게 할 것인가?
-        if (!CanAttack || IsAttacking)
+        if (!CanAttack)
         {
             return;
         }
@@ -99,7 +99,7 @@ public class MonsterAttack : MonoBehaviour
     public void Skill()
     {
         //TODO: KnockBack, KnockDown 중 스킬 못하게 할 것인가?
-        if (!CanAttack || IsAttacking)
+        if (!CanAttack)
         {
             return;
         }
