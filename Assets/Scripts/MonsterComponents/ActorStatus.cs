@@ -8,9 +8,6 @@ using UnityEngine.Serialization;
 
 public class ActorStatus : MonoBehaviour
 {
-    public event EventHandler OnShieldChanged;
-
-
     [SerializeField]
     [ReadOnly]
     [Tooltip("Hp는 " + nameof(ActorHealth) + "에서 관리됨")]
@@ -69,7 +66,7 @@ public class ActorStatus : MonoBehaviour
             if (m_shield != null) 
                 m_shield.OnShieldChanged += ChangeShield;
 
-            OnShieldChanged?.Invoke(this, null);
+            ShieldChanged?.Invoke(this, null);
         }
     }
 
@@ -82,7 +79,6 @@ public class ActorStatus : MonoBehaviour
     }
 
     public float KnockDownTime
-
     {
         get => m_knockDownTime;
         private set
@@ -90,6 +86,8 @@ public class ActorStatus : MonoBehaviour
             m_knockDownTime = value;
         }
     }
+    
+    public event EventHandler ShieldChanged;
 
     public void SetKnockDown(float duration)
     {
@@ -140,6 +138,6 @@ public class ActorStatus : MonoBehaviour
 
     private void ChangeShield(object sender, EventArgs e)
     {
-        OnShieldChanged?.Invoke(this, null);
+        ShieldChanged?.Invoke(this, null);
     }
 }
