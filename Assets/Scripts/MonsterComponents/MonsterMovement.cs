@@ -145,7 +145,17 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         {
             m_agent.isStopped = false;
             m_agent.SetDestination(destination);
-            m_agent.speed = m_data.MoveSpeed;
+
+            if (!IsOnGround)
+            {
+                // 몬스터가 떨어지는 경우 중력 영향을 받음
+                m_agent.speed += Physics.gravity.y * Time.deltaTime * -1;
+                m_agent.speed = Mathf.Clamp(m_agent.speed, 0, 30);
+            }
+            else
+            { 
+                m_agent.speed = m_data.MoveSpeed;
+            }
         }
     }
 
