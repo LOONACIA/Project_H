@@ -12,6 +12,7 @@ public class CameraEffect : MonoBehaviour
     private void Update()
     {
         GameManager.Camera.CurrentCamera.transform.localRotation = Quaternion.Euler(cameraRotation);
+        Debug.Log(GameManager.Camera.CurrentCamera.transform.localRotation.eulerAngles.y);
     }
     #endregion
 

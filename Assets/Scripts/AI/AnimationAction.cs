@@ -22,10 +22,10 @@ public class AnimationAction : Action
         isAttacking.Value = m_monster.Attack.IsAttacking;
         if (isAttacking.Value)
         {
-            Debug.Log("공격중");
+            //Debug.Log("공격중");
             return TaskStatus.Running;
         }
-        Debug.Log(isAttacking.Value);
+        //Debug.Log(isAttacking.Value);
         return TaskStatus.Success;
     }
 

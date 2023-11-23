@@ -639,7 +639,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 28351b095c1626d448e3673201d63434, type: 2}
+  m_Motion: {fileID: 7400000, guid: 681016a44512b4147aada0c0df4da1e5, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -1732,6 +1732,25 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!1107 &-956821643269614216
+AnimatorStateMachine:
+  serializedVersion: 6
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Camera Layer
+  m_ChildStates: []
+  m_ChildStateMachines: []
+  m_AnyStateTransitions: []
+  m_EntryTransitions: []
+  m_StateMachineTransitions: {}
+  m_StateMachineBehaviours: []
+  m_AnyStatePosition: {x: 50, y: 20, z: 0}
+  m_EntryPosition: {x: 50, y: 120, z: 0}
+  m_ExitPosition: {x: 800, y: 120, z: 0}
+  m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
+  m_DefaultState: {fileID: 0}
 --- !u!206 &-693075082990854104
 BlendTree:
   m_ObjectHideFlags: 1
@@ -1962,30 +1981,6 @@ AnimatorController:
     m_BlendingMode: 0
     m_SyncedLayerIndex: -1
     m_DefaultWeight: 0
-    m_IKPass: 0
-    m_SyncedLayerAffectsTiming: 0
-    m_Controller: {fileID: 9100000}
-  - serializedVersion: 5
-    m_Name: Camera Layer
-    m_StateMachine: {fileID: 8754341754505202114}
-    m_Mask: {fileID: 0}
-    m_Motions:
-    - serializedVersion: 2
-      m_State: {fileID: 1919805658622575496}
-      m_Motion: {fileID: 7400000, guid: 38e11a0ba3f5e9d47b0bdc80ea63e4cd, type: 2}
-    - serializedVersion: 2
-      m_State: {fileID: -7318467255719390466}
-      m_Motion: {fileID: 7400000, guid: 7155e1e185b6d1c4c947eee20ac235d8, type: 2}
-    - serializedVersion: 2
-      m_State: {fileID: -2361965157360919631}
-      m_Motion: {fileID: 7400000, guid: 09823724fe6da7f45be1f772a580b486, type: 2}
-    - serializedVersion: 2
-      m_State: {fileID: -6346250410295465093}
-      m_Motion: {fileID: 7400000, guid: 28351b095c1626d448e3673201d63434, type: 2}
-    m_Behaviours: []
-    m_BlendingMode: 1
-    m_SyncedLayerIndex: 0
-    m_DefaultWeight: 1
     m_IKPass: 0
     m_SyncedLayerAffectsTiming: 0
     m_Controller: {fileID: 9100000}
@@ -2341,10 +2336,10 @@ AnimatorStateMachine:
     m_Position: {x: 430, y: 850, z: 0}
   - serializedVersion: 1
     m_StateMachine: {fileID: 6422518809223115005}
-    m_Position: {x: 120, y: 850, z: 0}
+    m_Position: {x: 130, y: 860, z: 0}
   - serializedVersion: 1
     m_StateMachine: {fileID: -8419227729142179924}
-    m_Position: {x: -200, y: 850, z: 0}
+    m_Position: {x: -200, y: 840, z: 0}
   m_AnyStateTransitions: []
   m_EntryTransitions: []
   m_StateMachineTransitions:
@@ -2843,7 +2838,7 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0
+  m_TransitionDuration: 0.1
   m_TransitionOffset: 0
   m_ExitTime: 1
   m_HasExitTime: 1
