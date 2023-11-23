@@ -72,7 +72,7 @@ public class ActorStatus : MonoBehaviour
 
             if (m_shield != null) 
                 m_shield.ShieldChanged += OnShieldChanged;
-            
+
             ShieldChanged?.Invoke(this, EventArgs.Empty);
         }
     }
