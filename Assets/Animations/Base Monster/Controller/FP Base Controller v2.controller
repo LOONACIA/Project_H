@@ -1732,6 +1732,25 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!1107 &-956821643269614216
+AnimatorStateMachine:
+  serializedVersion: 6
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Camera Layer
+  m_ChildStates: []
+  m_ChildStateMachines: []
+  m_AnyStateTransitions: []
+  m_EntryTransitions: []
+  m_StateMachineTransitions: {}
+  m_StateMachineBehaviours: []
+  m_AnyStatePosition: {x: 50, y: 20, z: 0}
+  m_EntryPosition: {x: 50, y: 120, z: 0}
+  m_ExitPosition: {x: 800, y: 120, z: 0}
+  m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
+  m_DefaultState: {fileID: 0}
 --- !u!206 &-693075082990854104
 BlendTree:
   m_ObjectHideFlags: 1
@@ -2317,18 +2336,18 @@ AnimatorStateMachine:
     m_Position: {x: 430, y: 850, z: 0}
   - serializedVersion: 1
     m_StateMachine: {fileID: 6422518809223115005}
-    m_Position: {x: 120, y: 850, z: 0}
+    m_Position: {x: 130, y: 860, z: 0}
   - serializedVersion: 1
     m_StateMachine: {fileID: -8419227729142179924}
     m_Position: {x: -200, y: 840, z: 0}
   m_AnyStateTransitions: []
   m_EntryTransitions: []
   m_StateMachineTransitions:
-  - first: {fileID: -9056721883859141389}
+  - first: {fileID: 6422518809223115005}
     second: []
   - first: {fileID: -6131613422109678378}
     second: []
-  - first: {fileID: 6422518809223115005}
+  - first: {fileID: -9056721883859141389}
     second: []
   m_StateMachineBehaviours: []
   m_AnyStatePosition: {x: -300, y: 540, z: 0}
