@@ -72,7 +72,7 @@ public class ActorStatus : MonoBehaviour
 
             if (m_shield != null) 
                 m_shield.ShieldChanged += OnShieldChanged;
-
+            
             ShieldChanged?.Invoke(this, EventArgs.Empty);
         }
     }
@@ -92,7 +92,7 @@ public class ActorStatus : MonoBehaviour
     }
     
     public event EventHandler<int> HpChanged;
-    
+
     public event EventHandler ShieldChanged;
 
     public void SetKnockDown(float duration)
