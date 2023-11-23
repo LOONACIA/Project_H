@@ -56,7 +56,7 @@ public class UIShieldIndicator : UIScene
     private void OnPlayerShieldChanged(object sender, EventArgs e)
     {
         if (m_player.Character.Status.Shield == null
-            || !m_player.Character.Status.Shield.IsVaild)
+            || !m_player.Character.Status.Shield.IsValid)
         {
             HideIndicator();
         }

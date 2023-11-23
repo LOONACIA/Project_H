@@ -133,8 +133,6 @@ public partial class CharacterController : MonoBehaviour
             return;
         }
 
-        //m_isOnPossessing = true;
-
         m_possession.TryPossess(m_character);
     }
 
@@ -182,35 +180,33 @@ public partial class CharacterController : MonoBehaviour
 
     private void RegisterActorEvents()
     {
-        if (m_character != null && m_character.Health != null)
-        {
-            m_character.Health.Damaged -= OnDamaged;
-            m_character.Health.Damaged += OnDamaged;
-        }
-
         if (m_character != null && m_character.Status != null)
         {
-            m_character.Status.OnShieldChanged -= ChangeShield;
-            m_character.Status.OnShieldChanged += ChangeShield;
+            m_character.Status.HpChanged -= OnHpChanged;
+            m_character.Status.HpChanged += OnHpChanged;
+            
+            m_character.Status.ShieldChanged -= OnShieldChanged;
+            m_character.Status.ShieldChanged += OnShieldChanged;
         }
     }
 
     private void UnregisterActorEvents()
     {
-        if (m_character != null && m_character.Health != null)
-        {
-            m_character.Health.Damaged -= OnDamaged;
-        }
-
         if (m_character != null && m_character.Status != null)
         {
-            m_character.Status.OnShieldChanged -= ShieldChanged;
+            m_character.Status.HpChanged -= OnHpChanged;
+            m_character.Status.ShieldChanged -= OnShieldChanged;
         }
     }
 
-    private void OnDamaged(object sender, DamageInfo e)
+    private void OnHpChanged(object sender, int e)
     {
-        HpChanged?.Invoke(this, Character.Health.CurrentHp);
+        HpChanged?.Invoke(this, e);
+    }
+    
+    private void OnShieldChanged(object sender, EventArgs e)
+    {
+        ShieldChanged?.Invoke(this, e);
     }
 
     /// <summary>
@@ -258,11 +254,6 @@ public partial class CharacterController : MonoBehaviour
         m_cameraHolder = m_character.FirstPersonCameraPivot.transform;
         
         HpChanged?.Invoke(this, Character.Health.CurrentHp);
-        ShieldChanged?.Invoke(this, null);
-    }
-
-    private void ChangeShield(object sender, EventArgs e)
-    {
-        ShieldChanged?.Invoke(this, null);
+        ShieldChanged?.Invoke(this, EventArgs.Empty);
     }
 }
