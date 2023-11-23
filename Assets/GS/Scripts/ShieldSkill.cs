@@ -53,15 +53,11 @@ public class ShieldSkill : Weapon
 
 public class Shield
 {
-    public event EventHandler OnShieldChanged;
-
-
     // 쉴드 생성한 시간
-    private float startTime;
+    private float m_startTime;
 
     private float m_shieldPoint;
-
-
+    
     // 쉴드 지속 시간
     public float ShieldDuration { get; private set; }
 
@@ -76,18 +72,10 @@ public class Shield
     }
 
     public float MaxShieldPoint { get; private set; }
+    
+    public bool IsValid => Time.time - m_startTime < ShieldDuration && ShieldPoint > 0;
 
-
-    public bool IsVaild
-    {
-        get 
-        {
-            if (Time.time - startTime < ShieldDuration && ShieldPoint > 0)
-                return true;
-            else
-                return false;
-        }
-    }
+    public event EventHandler ShieldChanged;
 
     public Shield(float shieldPoint, float shieldDuration, GameObject shieldObject = null)
     {
@@ -98,12 +86,12 @@ public class Shield
         if (shieldObject != null) 
             ShieldObject = shieldObject;
 
-        startTime = Time.time;
+        m_startTime = Time.time;
     }
 
     public void TakeDamage(float damage)
     {
         ShieldPoint -= damage;
-        OnShieldChanged.Invoke(this, null);
+        ShieldChanged?.Invoke(this, null);
     }
 }

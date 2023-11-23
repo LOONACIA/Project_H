@@ -8,9 +8,6 @@ using UnityEngine.Serialization;
 
 public class ActorStatus : MonoBehaviour
 {
-    public event EventHandler OnShieldChanged;
-
-
     [SerializeField]
     [ReadOnly]
     [Tooltip("Hp는 " + nameof(ActorHealth) + "에서 관리됨")]
@@ -37,7 +34,14 @@ public class ActorStatus : MonoBehaviour
     public int Hp
     {
         get => m_hp;
-        set => m_hp = value;
+        set
+        {
+            if (m_hp != value)
+            {
+                m_hp = value;
+                HpChanged?.Invoke(this, m_hp);
+            }
+        }
     }
 
     public int Damage
@@ -62,14 +66,14 @@ public class ActorStatus : MonoBehaviour
                 Destroy(m_shield.ShieldObject);
 
             if (m_shield != null)
-                m_shield.OnShieldChanged -= ChangeShield;
+                m_shield.ShieldChanged -= OnShieldChanged;
 
             m_shield = value;
 
             if (m_shield != null) 
-                m_shield.OnShieldChanged += ChangeShield;
+                m_shield.ShieldChanged += OnShieldChanged;
 
-            OnShieldChanged?.Invoke(this, null);
+            ShieldChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 
@@ -82,14 +86,14 @@ public class ActorStatus : MonoBehaviour
     }
 
     public float KnockDownTime
-
     {
         get => m_knockDownTime;
-        private set
-        {
-            m_knockDownTime = value;
-        }
+        private set => m_knockDownTime = value;
     }
+    
+    public event EventHandler<int> HpChanged;
+    
+    public event EventHandler ShieldChanged;
 
     public void SetKnockDown(float duration)
     {
@@ -129,7 +133,7 @@ public class ActorStatus : MonoBehaviour
         if (Shield == null) return;
 
         // 쉴드가 더이상 유효하지 않으면 제거
-        if (!Shield.IsVaild)
+        if (!Shield.IsValid)
         {
             if (Shield.ShieldObject != null)
                 Destroy(Shield.ShieldObject);
@@ -138,8 +142,8 @@ public class ActorStatus : MonoBehaviour
         }
     }
 
-    private void ChangeShield(object sender, EventArgs e)
+    private void OnShieldChanged(object sender, EventArgs e)
     {
-        OnShieldChanged?.Invoke(this, null);
+        ShieldChanged?.Invoke(this, EventArgs.Empty);
     }
 }
