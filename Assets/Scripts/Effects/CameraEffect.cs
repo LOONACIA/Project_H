@@ -5,9 +5,15 @@ using UnityEngine;
 public class CameraEffect : MonoBehaviour
 {
     #region PublicVariables
+    public Vector3 cameraRotation;
     #endregion
 
     #region PrivateVariables
+    private void Update()
+    {
+        GameManager.Camera.CurrentCamera.transform.localRotation = Quaternion.Euler(cameraRotation);
+        Debug.Log(GameManager.Camera.CurrentCamera.transform.localRotation.eulerAngles.y);
+    }
     #endregion
 
     #region PublicMethod
