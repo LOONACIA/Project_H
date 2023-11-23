@@ -16,6 +16,10 @@ public static class ConstVariables
     public const string CAMERASHAKE_GOBLINNORMALATTACKSTOP_ANIMATION_NAME = "CameraGoblinAttackStop";
     public const string CAMERASHAKE_GOBLINNORMALSKILLSTART_ANIMATION_NAME = "CameraGoblinSkillStart";
 
+    public const string CAMERA_ANIMATORPARAMETER_COMBO1READY = "Combo1Ready";
+    public const string CAMERA_ANIMATORPARAMETER_COMBO1PLAY = "Combo1Play";
+    public const string CAMERA_ANIMATORPARAMETER_COMBO1RECOVERY = "Combo1Recovery";
+
     [Header("Shuriken")]
     public const string SHURIKEN_PATH = "Prefabs/Possession/Shuriken";
 
