@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 
-public class WaveManager : MonoBehaviour
+public class Spawner: MonoBehaviour
 {
     public GameObject spawnEnemy;
     public int enemyCount;
