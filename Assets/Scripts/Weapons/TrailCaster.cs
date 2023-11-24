@@ -116,7 +116,7 @@ public class TrailCaster : MonoBehaviour
             for (int j = 0; j < m_trailCountY; j++)
             {
                 Gizmos.color = Color.red;
-                Matrix4x4 parentMat = Matrix4x4.TRS(transform.position, transform.rotation, transform.localScale);
+                Matrix4x4 parentMat = Matrix4x4.TRS(transform.position, transform.rotation, transform.lossyScale);
                 Gizmos.matrix = parentMat;
                 Gizmos.DrawWireSphere(m_trailRotation*localTrailPos[i, j], m_gizmoRadius);
             }
