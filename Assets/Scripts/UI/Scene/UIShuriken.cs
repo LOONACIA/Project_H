@@ -15,6 +15,23 @@ public class UIShuriken : UIScene
     
     private PossessionProcessor m_processor;
 
+    private void OnEnable()
+    {
+        RegisterEvents();
+    }
+
+    private void OnDisable()
+    {
+        UnregisterEvents();
+    }
+
+    public void SetPossessionProcessor(PossessionProcessor processor)
+    {
+        UnregisterEvents();
+        m_processor = processor;
+        RegisterEvents();
+    }
+    
     protected override void Init()
     {
         base.Init();
@@ -22,7 +39,17 @@ public class UIShuriken : UIScene
         Bind<Image, Images>();
     }
 
-    public void SetPossessionProcessor(PossessionProcessor processor)
+    private void RegisterEvents()
+    {
+        if (m_processor != null)
+        {
+            m_processor.Possessable += OnPossessable;
+            m_processor.TargetHit += OnTargetHit;
+            m_processor.Possessed += OnPossessed;
+        }
+    }
+    
+    private void UnregisterEvents()
     {
         if (m_processor != null)
         {
@@ -30,11 +57,6 @@ public class UIShuriken : UIScene
             m_processor.TargetHit -= OnTargetHit;
             m_processor.Possessed -= OnPossessed;
         }
-
-        m_processor = processor;
-        m_processor.Possessable += OnPossessable;
-        m_processor.TargetHit += OnTargetHit;
-        m_processor.Possessed += OnPossessed;
     }
 
     private void OnTargetHit(object sender, EventArgs e)
