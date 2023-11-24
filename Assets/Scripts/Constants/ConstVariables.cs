@@ -39,4 +39,9 @@ public static class ConstVariables
     public const string ANIMATOR_PARAMETER_BLOCK_IMPACK_INDEX = "BlockImpactIndex";
     public const string ANIMATOR_PARAMETER_HIT_DIRECTION_X = "HitDirectionX";
     public const string ANIMATOR_PARAMETER_HIT_DIRECTION_Z = "HitDirectionZ";
+
+    [Header("Visual Effects")]
+    public const string VFX_GRAPH_PARAMETER_PARTICLE_COUNT = "ParticleCount";
+    public const string VFX_GRAPH_PARAMETER_DIRECTION = "Direction";
+    public const string VFX_GRAPH_EVENT_ON_PLAY = "OnPlay";
 }
