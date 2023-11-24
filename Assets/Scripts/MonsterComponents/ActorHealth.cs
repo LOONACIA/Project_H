@@ -2,12 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.VFX;
 
 [RequireComponent(typeof(ActorStatus))]
 public class ActorHealth : MonoBehaviour, IHealth
 {
     [SerializeField]
     private MonsterHealthData m_data;
+
+    [SerializeField]
+    private VisualEffect hitVfx;
+    [SerializeField]
+    private int particleCoef = 7;
 
     private Monster m_actor;
 
@@ -93,6 +99,7 @@ public class ActorHealth : MonoBehaviour, IHealth
     {
         Damaged?.Invoke(this, info);
 
+        PlayVfx(info);
         if (IsDead)
         {
             Dying?.Invoke(this, info);
@@ -101,6 +108,9 @@ public class ActorHealth : MonoBehaviour, IHealth
             {
                 m_actor.Animator.SetTrigger(ConstVariables.ANIMATOR_PARAMETER_DEAD);
             }
+        }
+        else
+        {
         }
     }
 
@@ -148,5 +158,17 @@ public class ActorHealth : MonoBehaviour, IHealth
     {
         m_actor.Animator.SetTrigger(ConstVariables.ANIMATOR_PARAMETER_HIT);
         m_actor.Animator.SetFloat(ConstVariables.ANIMATOR_PARAMETER_BLOCK_IMPACK_INDEX, UnityEngine.Random.Range(0, 3));
+    }
+
+    private void PlayVfx(DamageInfo damage)
+    {
+        if (hitVfx!=null)
+        {
+            hitVfx.SetInt("ParticleCount", damage.Damage*particleCoef);
+            hitVfx.SetVector3("Direction", damage.AttackDirection);
+            hitVfx.transform.position = damage.HitPosition;
+            hitVfx.SendEvent("OnPlay");
+        }
+        
     }
 }
