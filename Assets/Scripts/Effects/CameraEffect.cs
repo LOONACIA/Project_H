@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,9 +6,21 @@ using UnityEngine;
 public class CameraEffect : MonoBehaviour
 {
     #region PublicVariables
+    public Vector3 cameraRotation;
     #endregion
 
     #region PrivateVariables
+    private CinemachineBasicMultiChannelPerlin vcam;
+
+    private void Start()
+    {
+        vcam = GameManager.Camera.CurrentCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+    }
+
+    private void Update()
+    {
+        GameManager.Camera.CurrentCamera.transform.localRotation = Quaternion.Euler(cameraRotation);
+    }
     #endregion
 
     #region PublicMethod
@@ -24,6 +37,16 @@ public class CameraEffect : MonoBehaviour
     public void OnCombo1Recovery()
     {
         GameManager.Camera.Animator.SetTrigger(ConstVariables.CAMERA_ANIMATORPARAMETER_COMBO1RECOVERY);
+    }
+
+    public void OnCameraShake()
+    {
+        vcam.m_AmplitudeGain = 0.3f;
+    }
+
+    public void OffCameraShake()
+    {
+        vcam.m_AmplitudeGain = 0f;
     }
     #endregion
 

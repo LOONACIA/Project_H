@@ -2413,6 +2413,7 @@ GameObject:
   - component: {fileID: 837805312130279616}
   - component: {fileID: 3070019673241585413}
   - component: {fileID: 6393382539805843736}
+  - component: {fileID: 5161603511965874497}
   m_Layer: 0
   m_Name: Arm
   m_TagString: Untagged
@@ -2539,7 +2540,20 @@ MonoBehaviour:
     m_gizmoColor: {r: 1, g: 0.9964251, b: 0, a: 1}
     m_showGizmo: 1
   attackDirectionBaseTransform: {fileID: 7643066571342321627}
-  attackDirection: {x: 0, y: -1, z: 0.5}
+  attackDirection: {x: 0, y: -1, z: 2}
+--- !u!114 &5161603511965874497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6594267234909460467}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46fef0547dae57a4c9d2b24a2e388ea4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraRotation: {x: 0, y: 0, z: 0}
 --- !u!1 &6614377243960094522
 GameObject:
   m_ObjectHideFlags: 0
@@ -3358,8 +3372,8 @@ MonoBehaviour:
         byteData: 
         byteDataArray: 
       Version: 1.7.3
-  gizmoViewMode: 2
-  showBehaviorDesignerGizmo: 1
+  gizmoViewMode: 0
+  showBehaviorDesignerGizmo: 0
 --- !u!1 &8768591785449539037
 GameObject:
   m_ObjectHideFlags: 0
@@ -4110,6 +4124,29 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 23c65171aeeeb094c818f3a3b1deff91, type: 3}
+--- !u!1 &4656227649702610984 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4059800723499714277, guid: 23c65171aeeeb094c818f3a3b1deff91,
+    type: 3}
+  m_PrefabInstance: {fileID: 8703612408292396749}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6780656380978465291
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4656227649702610984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_NoiseProfile: {fileID: 11400000, guid: 69ce8388f6785dd4c8c39915efece2f4, type: 2}
+  m_PivotOffset: {x: 0, y: 0, z: 0}
+  m_AmplitudeGain: 0
+  m_FrequencyGain: 1
+  mNoiseOffsets: {x: 71.87021, y: 518.92065, z: -949.6853}
 --- !u!4 &7643066571342321627 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1358065989294938390, guid: 23c65171aeeeb094c818f3a3b1deff91,
