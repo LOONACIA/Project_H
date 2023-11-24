@@ -164,10 +164,10 @@ public class ActorHealth : MonoBehaviour, IHealth
     {
         if (hitVfx!=null)
         {
-            hitVfx.SetInt("ParticleCount", damage.Damage*particleCoef);
-            hitVfx.SetVector3("Direction", damage.AttackDirection);
+            hitVfx.SetInt(ConstVariables.VFX_GRAPH_PARAMETER_PARTICLE_COUNT, damage.Damage*particleCoef);
+            hitVfx.SetVector3(ConstVariables.VFX_GRAPH_PARAMETER_DIRECTION, damage.AttackDirection);
             hitVfx.transform.position = damage.HitPosition;
-            hitVfx.SendEvent("OnPlay");
+            hitVfx.SendEvent(ConstVariables.VFX_GRAPH_EVENT_ON_PLAY);
         }
         
     }
