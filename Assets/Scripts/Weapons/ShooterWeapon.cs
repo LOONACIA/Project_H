@@ -68,11 +68,11 @@ public class ShooterWeapon : Weapon
 
     private void Fire()
     {
-        // if (m_isSnipingMode)
-        // {
-        //     Snipe();
-        // }
-        // else
+        if (m_isSnipingMode)
+        {
+            Snipe();
+        }
+        else
         {
             ShootProjectile();
         }
