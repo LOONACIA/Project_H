@@ -38,6 +38,7 @@ public class PossessionShuriken : MonoBehaviour
 
     private Action<Actor> m_onTargetHit;
 
+    private int m_surikenStopLayer;
     #endregion
 
     #region PublicMethod
@@ -46,6 +47,7 @@ public class PossessionShuriken : MonoBehaviour
     {
         TryGetComponent<Rigidbody>(out m_rb);
         m_targetLayer = LayerMask.GetMask("Monster");
+        m_surikenStopLayer = LayerMask.GetMask("Wall", "Ground", "Monster");
     }
 
     public void InitSetting(Actor actor, Actor sender, Action<Actor> onTargetHit)
@@ -121,11 +123,19 @@ public class PossessionShuriken : MonoBehaviour
             targetActor = other.gameObject.GetComponent<Actor>();
             HitTarget();
         }
-        else
+        else if((m_surikenStopLayer & (1 << other.gameObject.layer)) != 0)
         {
-            Debug.Log("부서진다.." + other.gameObject.layer);
-            Destroy(gameObject);
+            m_isStop = true;
+            m_rb.isKinematic = true;
+
+            GetComponent<Collider>().enabled = false;
+            Invoke(nameof(DestroySelf), 5f);
         }
+    }
+
+    private void DestroySelf()
+    {
+        Destroy(gameObject);
     }
 
     private void OnTargetHit(Actor actor)
