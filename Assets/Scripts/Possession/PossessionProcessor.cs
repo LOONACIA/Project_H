@@ -157,7 +157,7 @@ public class PossessionProcessor : MonoBehaviour
     #region 표창 날리기
     public void ThrowShuriken()
     {
-        var cameraPivot = m_sender.FirstPersonCameraPivot;
+        var cameraPivot = GameManager.Camera.CurrentCamera;
 
         bool isHit = Physics.Raycast(cameraPivot.transform.position, cameraPivot.transform.forward, out var hit, 300f);
 
