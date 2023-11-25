@@ -37,7 +37,7 @@ public class PossessionProcessor : MonoBehaviour
     /// <summary>
     /// 빙의 타겟에게 표창이 적중할 경우 발생하는 이벤트.
     /// </summary>
-    public event EventHandler TargetHit;
+    public event EventHandler<float> TargetHit;
 
     /// <summary>
     /// 빙의 가능한 상태일 경우 발생하는 이벤트.
@@ -157,11 +157,11 @@ public class PossessionProcessor : MonoBehaviour
     #region 표창 날리기
     public void ThrowShuriken()
     {
-        var cameraPivot = m_sender.FirstPersonCameraPivot;
+        var cameraPivot = GameManager.Camera.CurrentCamera;
 
         bool isHit = Physics.Raycast(cameraPivot.transform.position, cameraPivot.transform.forward, out var hit, 300f);
 
-        m_shuriken = Instantiate(Resources.Load<GameObject>(ConstVariables.SHURIKEN_PATH), cameraPivot.transform.position + cameraPivot.transform.forward, Quaternion.identity).GetComponent<PossessionShuriken>();
+        m_shuriken = Instantiate(m_sender.Data.ShurikenObj, cameraPivot.transform.position + cameraPivot.transform.forward, Quaternion.identity).GetComponent<PossessionShuriken>();
 
         // Ray를 쏜 곳에 몬스터가 있을 시,
         if (isHit && 1 << hit.transform.gameObject.layer == m_targetLayers)
@@ -177,7 +177,7 @@ public class PossessionProcessor : MonoBehaviour
     private void OnTargetHit(Actor actor)
     {
         m_isHitTarget = true;
-        TargetHit?.Invoke(this, EventArgs.Empty);
+        TargetHit?.Invoke(this, actor.Data.PossessionRequiredTime);
         TryHacking(actor);
     }
 
