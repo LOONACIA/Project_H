@@ -84,60 +84,80 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             return WithinSight(transform, positionOffset, fieldOfViewAngle, viewDistance, targetObject, targetOffset, true, angleOffset2D, out angle, ignoreLayerMask, useTargetBone, targetBone, drawDebugRay);
         }
 
-        // Determines if the targetObject is within sight of the transform. It will set the angle regardless of whether or not the object is within sight
+        //Determines if the targetObject is within sight of the transform.It will set the angle regardless of whether or not the object is within sight
         public static GameObject WithinSight(Transform transform, Vector3 positionOffset, float fieldOfViewAngle, float viewDistance, GameObject targetObject, Vector3 targetOffset, bool usePhysics2D, float angleOffset2D, out float angle, int ignoreLayerMask, bool useTargetBone, HumanBodyBones targetBone, bool drawDebugRay)
         {
-            if (targetObject == null) {
+            if (targetObject == null)
+            {
                 angle = 0;
                 return null;
             }
-            if (useTargetBone) {
+            if (useTargetBone)
+            {
                 Animator animator;
-                if ((animator = GetParentComponentForType<Animator>(targetObject)) != null) {
+                if ((animator = GetParentComponentForType<Animator>(targetObject)) != null)
+                {
                     var bone = animator.GetBoneTransform(targetBone);
-                    if (bone != null) {
+                    if (bone != null)
+                    {
                         targetObject = bone.gameObject;
                     }
                 }
             }
             // The target object needs to be within the field of view of the current object
             var direction = targetObject.transform.TransformPoint(targetOffset) - transform.TransformPoint(positionOffset);
-            if (usePhysics2D) {
+            if (usePhysics2D)
+            {
                 var eulerAngles = transform.eulerAngles;
                 eulerAngles.z -= angleOffset2D;
                 angle = Vector3.Angle(direction, Quaternion.Euler(eulerAngles) * Vector3.up);
                 direction.z = 0;
-            } else {
+            }
+            else
+            {
                 angle = Vector3.Angle(direction, transform.forward);
                 direction.y = 0;
             }
-            if (direction.magnitude < viewDistance && angle < fieldOfViewAngle * 0.5f) {
+            if (direction.magnitude < viewDistance && angle < fieldOfViewAngle * 0.5f)
+            {
                 // The hit agent needs to be within view of the current agent
                 var hitTransform = LineOfSight(transform, positionOffset, targetObject, targetOffset, usePhysics2D, ignoreLayerMask, drawDebugRay);
-                if (hitTransform != null) {
-                    if (IsAncestor(targetObject.transform, hitTransform)) {
+                if (hitTransform != null)
+                {
+                    if (IsAncestor(targetObject.transform, hitTransform))
+                    {
 #if UNITY_EDITOR
-                        if (drawDebugRay) {
+                        if (drawDebugRay)
+                        {
                             Debug.DrawLine(transform.TransformPoint(positionOffset), targetObject.transform.TransformPoint(targetOffset), Color.green);
                         }
 #endif
                         return targetObject; // return the target object meaning it is within sight
 #if UNITY_EDITOR
-                    } else {
-                        if (drawDebugRay) {
+                    }
+                    else
+                    {
+                        if (drawDebugRay)
+                        {
                             Debug.DrawLine(transform.TransformPoint(positionOffset), targetObject.transform.TransformPoint(targetOffset), Color.yellow);
                         }
 #endif
                     }
-                } else if (GetComponentForType<Collider>(targetObject) == null && GetComponentForType<Collider2D>(targetObject) == null) {
+                }
+                else if (GetComponentForType<Collider>(targetObject) == null && GetComponentForType<Collider2D>(targetObject) == null)
+                {
                     // If the linecast doesn't hit anything then that the target object doesn't have a collider and there is nothing in the way
-                    if (targetObject.gameObject.activeSelf) {
+                    if (targetObject.gameObject.activeSelf)
+                    {
                         return targetObject;
                     }
                 }
-            } else {
+            }
+            else
+            {
 #if UNITY_EDITOR
-                if (drawDebugRay) {
+                if (drawDebugRay)
+                {
                     Debug.DrawLine(transform.TransformPoint(positionOffset), targetObject.transform.TransformPoint(targetOffset), angle >= fieldOfViewAngle * 0.5f ? Color.red : Color.magenta);
                 }
 #endif
@@ -146,8 +166,10 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             return null;
         }
 
+        
         public static Transform LineOfSight(Transform transform, Vector3 positionOffset, GameObject targetObject, Vector3 targetOffset, bool usePhysics2D, int ignoreLayerMask, bool drawDebugRay)
         {
+            
             Transform hitTransform = null;
             if (usePhysics2D) {
                 RaycastHit2D hit;
@@ -257,8 +279,8 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             return null;
         }
 
-        // Draws the line of sight representation
-        public static void DrawLineOfSight(Transform transform, Vector3 positionOffset, float fieldOfViewAngle, float angleOffset, float viewDistance, bool usePhysics2D)
+        //Draws the line of sight representation
+                public static void DrawLineOfSight(Transform transform, Vector3 positionOffset, float fieldOfViewAngle, float angleOffset, float viewDistance, bool usePhysics2D)
         {
 #if UNITY_EDITOR
             var oldColor = UnityEditor.Handles.color;
@@ -273,6 +295,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             UnityEditor.Handles.color = oldColor;
 #endif
         }
+
 
         public static T GetComponentForType<T>(GameObject target) where T : Component
         {
