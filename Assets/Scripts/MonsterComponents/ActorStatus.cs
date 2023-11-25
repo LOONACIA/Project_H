@@ -92,7 +92,7 @@ public class ActorStatus : MonoBehaviour
     }
     
     public event EventHandler<int> HpChanged;
-    
+
     public event EventHandler ShieldChanged;
 
     public void SetKnockDown(float duration)
