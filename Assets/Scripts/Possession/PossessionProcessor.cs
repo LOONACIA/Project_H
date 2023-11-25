@@ -37,7 +37,7 @@ public class PossessionProcessor : MonoBehaviour
     /// <summary>
     /// 빙의 타겟에게 표창이 적중할 경우 발생하는 이벤트.
     /// </summary>
-    public event EventHandler TargetHit;
+    public event EventHandler<float> TargetHit;
 
     /// <summary>
     /// 빙의 가능한 상태일 경우 발생하는 이벤트.
@@ -177,7 +177,7 @@ public class PossessionProcessor : MonoBehaviour
     private void OnTargetHit(Actor actor)
     {
         m_isHitTarget = true;
-        TargetHit?.Invoke(this, EventArgs.Empty);
+        TargetHit?.Invoke(this, actor.Data.PossessionRequiredTime);
         TryHacking(actor);
     }
 
