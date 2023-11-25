@@ -64,6 +64,11 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
     // 리지드바디 속도가 이것보다 낮아지면 넉백 종료
     private float m_knockBackEndSpeedThreshold = 0.1f;
 
+    private bool m_isDashing = false;
+    [SerializeField]private float m_dashAmount = 5f;
+    [SerializeField]private float m_dashTime = 0.05f;
+    private float m_dashStartTime;
+
     public MonsterMovementData Data => m_data;
 
     public bool IsOnGround
@@ -91,8 +96,13 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
 
     private void FixedUpdate()
     {
-        ApplyGravity();
-        ApplyFriction();
+        if (!m_isDashing)
+        {
+            ApplyGravity();
+            ApplyFriction();
+        }
+        
+        CheckDashEnd();
         CheckGround();
         CheckKnockBackEnd();
     }
@@ -178,6 +188,20 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         m_isJumped = true;
     }
 
+    public void TryDash(Vector3 direction)
+    {
+        //1. 방향성 체크, 2. 해당 위치 갈 수 있는지 체크, 3. 이동
+        //1인칭인 경우 방향성은 카메라가 보고 있는 방향
+        //3인칭인 경우 방향성은 AI에서 지정해준다.(아마도)
+
+        CapsuleCollider col = GetComponent<CapsuleCollider>();
+
+        m_rigidbody.velocity = (direction.normalized* m_dashAmount / m_dashTime);
+        m_dashStartTime = Time.time;
+        m_isDashing = true;
+
+    }
+
     public void TryKnockBack(Vector3 direction, float power, bool overwrite = true)
     {
         //넉백값 변경
@@ -244,6 +268,18 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         float radius = m_collider.radius;
         IsOnGround = Physics.SphereCast(transform.position + m_collider.center, radius, Vector3.down, out _,
             radius + 0.2f, m_data.WhatIsGround);
+    }
+
+    private void CheckDashEnd()
+    {
+        if (m_isDashing)
+        {
+            if (m_dashStartTime + m_dashTime <= Time.time)
+            {
+                m_isDashing = false;
+                m_rigidbody.velocity = Vector3.zero;
+            }
+        }
     }
 
     private void CheckKnockBackEnd()
