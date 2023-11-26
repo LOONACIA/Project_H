@@ -13,7 +13,6 @@ public class EffectManager
 	// TODO: Data로 분리
 	private GameObject m_bloodEffect;
 	// TODO END //
-	
 	private Volume m_volume;
 	
 	private GameObject m_possessionTargetObj;
@@ -103,4 +102,30 @@ public class EffectManager
 	{
 		m_colorAdjustments.saturation.Override(0f);
 	}
+
+    #region Camera
+    /// <summary>
+    /// 공격 시작에 따른 카메라 쉐이크 이펙트를 실행합니다.
+    /// </summary>
+    public void CameraShakeAttackStart()
+    {
+        //GameManager.Camera.Animator.Play(ConstVariables.CAMERASHAKE_GOBLINNORMALATTACKSTART_ANIMATION_NAME);
+    }
+
+    /// <summary>
+    /// 공격 적중에 따른 카메라 쉐이크 이펙트를 실행합니다.
+    /// </summary>
+    public void CameraShakeAttackStop()
+    {
+        GameManager.Camera.Animator.SetTrigger("AttackHit");
+    }
+
+    /// <summary>
+    /// 스킬 시작에 따른 카메라 쉐이크 이펙트를 실행합니다.
+    /// </summary>
+    public void CameraShakeSkillStart()
+    {
+        GameManager.Camera.Animator.Play(ConstVariables.CAMERASHAKE_GOBLINNORMALSKILLSTART_ANIMATION_NAME);
+    }
+    #endregion
 }

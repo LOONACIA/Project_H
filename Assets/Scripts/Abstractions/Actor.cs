@@ -1,3 +1,4 @@
+using BehaviorDesigner.Runtime;
 using LOONACIA.Unity.Managers;
 using System;
 using System.Collections;
@@ -17,6 +18,11 @@ public abstract class Actor : MonoBehaviour
     protected Rigidbody m_rigidbody;
 
     protected Collider m_collider;
+    
+    [SerializeField]
+    private ActorData m_data;
+
+    protected BehaviorTree m_behaviorTree;
 
     [SerializeField]
     private GameObject m_firstPersonCameraPivot;
@@ -27,15 +33,19 @@ public abstract class Actor : MonoBehaviour
     [SerializeField]
     private Animator m_thirdPersonAnimator;
     
+    public ActorData Data => m_data;
+    
     public ActorHealth Health { get; private set; }
     
     public ActorStatus Status { get; private set; }
-
-    public StateMachine<Actor> StateMachine { get; } = new();
     
     public bool IsPossessed { get; private set; }
 
     public Animator Animator => IsPossessed ? m_firstPersonAnimator : m_thirdPersonAnimator;
+    
+    public Animator FirstPersonAnimator => m_firstPersonAnimator;
+    
+    public Animator ThirdPersonAnimator => m_thirdPersonAnimator;
 
     public GameObject FirstPersonCameraPivot => m_firstPersonCameraPivot;
 
@@ -46,16 +56,10 @@ public abstract class Actor : MonoBehaviour
         m_agent = GetComponent<NavMeshAgent>();
         m_collider = GetComponent<Collider>();
         m_rigidbody = GetComponent<Rigidbody>();
+        m_behaviorTree = GetComponent<BehaviorTree>();
         Health = GetComponent<ActorHealth>();
         Status = GetComponent<ActorStatus>();
         EnableAIComponents();
-    }
-    
-    protected virtual void Start()
-    {
-        InitStateMachine();
-		
-        StateMachine.ChangeState(State.Idle);
     }
     
     protected virtual void OnEnable()
@@ -83,18 +87,10 @@ public abstract class Actor : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (!IsPossessed)
-        {
-            StateMachine.Execute();
-        }
     }
 
     protected virtual void FixedUpdate()
     {
-        if (!IsPossessed)
-        {
-            StateMachine.FixedExecute();
-        }
     }
 
     public abstract void Move(Vector3 direction);
@@ -124,11 +120,6 @@ public abstract class Actor : MonoBehaviour
         Animator.gameObject.SetActive(true);
         EnableAIComponents();
     }
-    
-    protected virtual void InitStateMachine()
-    {
-        StateMachine.AddState(new IdleState<Actor>(this));
-    }
 
     protected void EnableAIComponents()
     {
@@ -142,6 +133,11 @@ public abstract class Actor : MonoBehaviour
             m_rigidbody.isKinematic = true;
         }
 
+        if (m_behaviorTree != null)
+        {
+            m_behaviorTree.enabled = true;
+        }
+
         if (Animator != null)
         {
             m_firstPersonAnimator.gameObject.SetActive(false);
@@ -150,6 +146,11 @@ public abstract class Actor : MonoBehaviour
     
     protected void DisableAIComponents()
     {
+        if (m_behaviorTree != null)
+        {
+            m_behaviorTree.enabled = false;
+        }
+
         if (m_agent != null)
         {
             m_agent.enabled = false;
@@ -180,7 +181,7 @@ public abstract class Actor : MonoBehaviour
         StartCoroutine(CoDie(ConstVariables.MONSTER_DESTROY_WAIT_TIME));
     }
     
-    private void OnDying(object sender, EventArgs e)
+    private void OnDying(object sender, DamageInfo info)
     {
         OnDying();
     }
@@ -194,5 +195,13 @@ public abstract class Actor : MonoBehaviour
     {
         yield return new WaitForSeconds(seconds);
         ManagerRoot.Resource.Release(gameObject);
+    }
+    
+    private void OnValidate()
+    {
+        if (m_data == null && GetType() != typeof(Ghost))
+        {
+            Debug.LogWarning($"{name}: {nameof(m_data)} is null");
+        }
     }
 }

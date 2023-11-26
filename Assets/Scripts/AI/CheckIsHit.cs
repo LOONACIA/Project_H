@@ -34,7 +34,7 @@ public class CheckIsHit : Conditional
 
     }
 
-    private void OnDamaged(object sender, Actor e)
+    private void OnDamaged(object sender, DamageInfo e)
     {
         // 대미지를 입으면 Attacker에 대입
         IsHit.Value = true;

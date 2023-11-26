@@ -32,6 +32,8 @@ public partial class CharacterController : MonoBehaviour
 
     public event EventHandler<int> HpChanged;
 
+    public event EventHandler ShieldChanged;
+
     private void Awake()
     {
         if (m_data == null)
@@ -42,8 +44,11 @@ public partial class CharacterController : MonoBehaviour
         m_possession = GetComponent<PossessionProcessor>();
         m_possession.Possessing += OnPossessing;
         m_possession.Possessed += OnPossessed;
-        
+
+        GameManager.UI.ShowCrosshair();
         GameManager.UI.ShowHpIndicator(this);
+        GameManager.UI.GenerateShieldIndicator(this);
+        GameManager.UI.ShowShurikenIndicator(m_possession);
     }
 
     private void Start()
@@ -58,19 +63,26 @@ public partial class CharacterController : MonoBehaviour
 
     private void OnEnable()
     {
+        RegisterActorEvents();
     }
 
     private void OnDisable()
     {
+        UnregisterActorEvents();
     }
 
     private void Update()
     {
+#if UNITY_EDITOR
         Look();
+#endif
     }
 
     private void FixedUpdate()
     {
+#if !UNITY_EDITOR
+        Look();
+#endif
         Move();
     }
 
@@ -121,8 +133,6 @@ public partial class CharacterController : MonoBehaviour
             return;
         }
 
-        //m_isOnPossessing = true;
-
         m_possession.TryPossess(m_character);
     }
 
@@ -136,8 +146,8 @@ public partial class CharacterController : MonoBehaviour
 
     private void Look()
     {
-        float xDelta = m_lookDelta.x * m_data.CameraHorizontalSensitivity * Time.unscaledDeltaTime;
-        float yDelta = m_lookDelta.y * m_data.CameraVerticalSensitivity * Time.unscaledDeltaTime;
+        float xDelta = m_lookDelta.x * m_data.CameraHorizontalSensitivity * Time.fixedUnscaledDeltaTime;
+        float yDelta = m_lookDelta.y * m_data.CameraVerticalSensitivity * Time.fixedUnscaledDeltaTime;
 
         float z = m_cameraHolder.eulerAngles.z;
 
@@ -170,23 +180,33 @@ public partial class CharacterController : MonoBehaviour
 
     private void RegisterActorEvents()
     {
-        if (m_character != null)
+        if (m_character != null && m_character.Status != null)
         {
-            m_character.Health.Damaged += OnDamaged;
-        }
-    }
-    
-    private void UnregisterActorEvents()
-    {
-        if (m_character != null)
-        {
-            m_character.Health.Damaged -= OnDamaged;
+            m_character.Status.HpChanged -= OnHpChanged;
+            m_character.Status.HpChanged += OnHpChanged;
+            
+            m_character.Status.ShieldChanged -= OnShieldChanged;
+            m_character.Status.ShieldChanged += OnShieldChanged;
         }
     }
 
-    private void OnDamaged(object sender, Actor e)
+    private void UnregisterActorEvents()
     {
-        HpChanged?.Invoke(this, Character.Health.CurrentHp);
+        if (m_character != null && m_character.Status != null)
+        {
+            m_character.Status.HpChanged -= OnHpChanged;
+            m_character.Status.ShieldChanged -= OnShieldChanged;
+        }
+    }
+
+    private void OnHpChanged(object sender, int e)
+    {
+        HpChanged?.Invoke(this, e);
+    }
+    
+    private void OnShieldChanged(object sender, EventArgs e)
+    {
+        ShieldChanged?.Invoke(this, e);
     }
 
     /// <summary>
@@ -222,15 +242,18 @@ public partial class CharacterController : MonoBehaviour
         }
 
         m_cameraRotationX = 0f;
+        UnregisterActorEvents();
         if (oldActor != null)
         {
             oldActor.Unpossessed();
         }
 
         m_character = newActor;
+        RegisterActorEvents();
         m_character.Possessed();
         m_cameraHolder = m_character.FirstPersonCameraPivot.transform;
         
         HpChanged?.Invoke(this, Character.Health.CurrentHp);
+        ShieldChanged?.Invoke(this, EventArgs.Empty);
     }
 }

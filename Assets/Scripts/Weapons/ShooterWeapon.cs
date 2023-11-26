@@ -1,7 +1,9 @@
 using Cinemachine;
+using LOONACIA.Unity;
 using LOONACIA.Unity.Managers;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ShooterWeapon : Weapon
@@ -21,29 +23,58 @@ public class ShooterWeapon : Weapon
     private LayerMask m_aimLayers;
 
     [SerializeField]
+    [Layer]
+    private int m_damageLayer;
+
+    [SerializeField]
     private float m_maxDistance = 100f;
 
     private CinemachineVirtualCamera m_vcam;
 
     private Ray m_ray;
 
-    private RaycastHit m_hit;
+    private bool m_isSnipingMode = true;
 
-    private bool m_isHitDetected;
-
-    private bool m_isAiming;
+    // TODO: Remove test code
+    private LineRenderer m_renderer;
 
     private void Awake()
     {
         m_vcam = transform.root.GetComponentInChildren<CinemachineVirtualCamera>();
+        m_renderer = GetComponent<LineRenderer>();
     }
 
-    private void FixedUpdate()
+    public void ChangeMode()
     {
-        // 별도 조준 기능을 넣으려는 경우 버튼 입력에 따라 m_isAiming 변수의 값을 바꾸면 됨
-        //if (m_isAiming)
+        m_isSnipingMode = !m_isSnipingMode;
+    }
+
+    protected override void Attack()
+    {
+    }
+
+    protected override void OnLeadInMotion()
+    {
+    }
+
+    protected override void OnHitMotion()
+    {
+        Fire();
+    }
+
+    protected override void OnFollowThroughMotion()
+    {
+    }
+
+    private void Fire()
+    {
+        if (m_isSnipingMode)
         {
-            Aim();
+            Snipe();
+        }
+        else
+        {
+            ShootProjectile();
         }
     }
 
@@ -54,45 +85,61 @@ public class ShooterWeapon : Weapon
         Vector3 dir = cameraTransform.forward;
 
         m_ray = new(cameraPosition, dir);
-        m_isHitDetected = Physics.Raycast(m_ray, out m_hit, m_maxDistance, m_aimLayers);
     }
 
-    private void Fire()
+    private void Snipe()
     {
-        var spawnPosition = m_spawnPosition.position;
-        Vector3 target = m_isHitDetected ? m_hit.point : m_ray.GetPoint(300f);
+        Aim();
+
+        var hits = Physics.RaycastAll(m_ray, m_maxDistance, m_aimLayers)
+            .OrderBy(hit => hit.distance)
+            .TakeWhile(hit => hit.transform.gameObject.layer == m_damageLayer)
+            .ToArray();
+
+        InvokeHitEvent(ProcessHit(hits));
+
+        // TODO: Remove test code
+        Vector3 target = hits.Length > 0 ? hits.Last().point : m_ray.GetPoint(m_maxDistance);
+        DrawLine(target);
+    }
+
+    private void ShootProjectile()
+    {
+        Aim();
+
+        bool isHit = Physics.Raycast(m_ray, out var hit, m_maxDistance, m_aimLayers);
+        Vector3 target = isHit ? hit.point : m_ray.GetPoint(m_maxDistance);
+
+        Vector3 spawnPosition = m_spawnPosition.position;
         Vector3 direction = (target - spawnPosition).normalized;
 
-        Debug.DrawRay(m_spawnPosition.position, direction * m_maxDistance, Color.red, 0.1f);
-        return;
         var projectile =
             ManagerRoot.Resource.Instantiate(m_projectilePrefab, spawnPosition, m_spawnPosition.rotation)
                 .GetComponent<Projectile>();
-        projectile.Init(Owner.gameObject, info => InvokeHitEvent(new AttackInfo[1]{info}));
-        if (projectile.TryGetComponent<Rigidbody>(out var projectileRigidbody))
+        
+        projectile.Init(transform.root.gameObject, info => InvokeHitEvent(Enumerable.Repeat(info, 1)));
+        projectile.Rigidbody.AddForce(direction * m_shootForce, ForceMode.VelocityChange);
+    }
+
+    private IEnumerable<WeaponAttackInfo> ProcessHit(IEnumerable<RaycastHit> hits)
+    {
+        foreach (var hit in hits)
         {
-            projectileRigidbody.AddForce(direction * m_shootForce, ForceMode.VelocityChange);
+            if (hit.transform.TryGetComponent(out Actor actor))
+            {
+                // TODO: AttackInfo 변경 시 수정 필요
+                yield return new(actor, hit.normal, hit.point);
+            }
         }
     }
 
-    protected override void Attack()
+    // TODO: Remove test code
+    private void DrawLine(Vector3 target)
     {
-        Animator.SetTrigger(MonsterAttack.s_attackAnimationKey);
-    }
+        m_renderer.positionCount = 2;
+        m_renderer.SetPosition(0, m_spawnPosition.position);
+        m_renderer.SetPosition(1, target);
 
-    protected override void OnLeadInMotion()
-    {
-        Debug.Log($"사격 모션 시작(선딜), State: {State}");
-    }
-
-    protected override void OnHitMotion()
-    {
-        Debug.Log($"사격, State: {State}");
-        Fire();
-    }
-
-    protected override void OnFollowThroughMotion()
-    {
-        Debug.Log($"사격 모션 종료(후딜), State: {State}");
+        Utility.Lerp(0.1f, 0f, 0.5f, value => m_renderer.startWidth = m_renderer.endWidth = value);
     }
 }

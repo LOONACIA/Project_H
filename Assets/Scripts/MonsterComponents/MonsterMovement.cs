@@ -12,6 +12,8 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
 {
+    private static readonly int s_animatorKnockBack = Animator.StringToHash("KnockBack");
+
     public bool isDashing;
 
     private bool m_isMoving;
@@ -52,6 +54,15 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
 
     // 이동 애니메이션 보간 변화량
     private float m_moveAnimationChangeRatio = 0.01f;
+    
+    // 넉백의 최소 지속시간
+    private float m_minKnockBackTime = 1f;
+    
+    // 마지막 넉백 시간
+    private float m_lastKnockBackTime = 0f;
+
+    // 리지드바디 속도가 이것보다 낮아지면 넉백 종료
+    private float m_knockBackEndSpeedThreshold = 0.1f;
 
     public MonsterMovementData Data => m_data;
 
@@ -83,12 +94,13 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         ApplyGravity();
         ApplyFriction();
         CheckGround();
+        CheckKnockBackEnd();
     }
 
     public void Move(Vector3 directionInput)
     {
         // Awake에서 호출되는 경우
-        if (m_rigidbody is null || m_data is null)
+        if (m_rigidbody is null || m_data is null || m_actor.Status.IsKnockedDown)
         {
             // 아무 것도 하지 않음
             return;
@@ -131,8 +143,19 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
     {
         if (m_agent.enabled)
         {
+            m_agent.isStopped = false;
             m_agent.SetDestination(destination);
-            m_agent.speed = m_data.MoveSpeed;
+
+            if (!IsOnGround)
+            {
+                // 몬스터가 떨어지는 경우 중력 영향을 받음
+                m_agent.speed += Physics.gravity.y * Time.deltaTime * -1;
+                m_agent.speed = Mathf.Clamp(m_agent.speed, 0, 30);
+            }
+            else
+            { 
+                m_agent.speed = m_data.MoveSpeed;
+            }
         }
     }
 
@@ -153,6 +176,24 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
 
         //점프 애니메이션 체크용 변수 true
         m_isJumped = true;
+    }
+
+    public void TryKnockBack(Vector3 direction, float power, bool overwrite = true)
+    {
+        //넉백값 변경
+        m_actor.Status.IsKnockBack = true;
+        m_lastKnockBackTime = Time.time;
+        m_actor.Animator.SetBool(s_animatorKnockBack, true);
+        
+        m_agent.enabled = false;
+        m_rigidbody.isKinematic = false;
+
+        if (overwrite)
+        {
+            m_rigidbody.velocity = new Vector3();
+        }
+        m_rigidbody.AddForce(direction* power, ForceMode.Impulse);
+
     }
     
     protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -203,6 +244,27 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         float radius = m_collider.radius;
         IsOnGround = Physics.SphereCast(transform.position + m_collider.center, radius, Vector3.down, out _,
             radius + 0.2f, m_data.WhatIsGround);
+    }
+
+    private void CheckKnockBackEnd()
+    {
+        if (!m_actor.Status.IsKnockBack) return;
+        
+        //최소 넉백시간이 지나지 않았다면 return;
+        if (m_lastKnockBackTime + m_minKnockBackTime > Time.time) return;
+
+        float sqrThreshold = m_knockBackEndSpeedThreshold * m_knockBackEndSpeedThreshold;
+        if (m_rigidbody.velocity.sqrMagnitude <= sqrThreshold)
+        {
+            //속도가 최소보다 작아졌으므로 KnockBack 종료, 관련 변수 초기화
+            //AI라면 Agent를 켜줍니다.
+            //TODO: AI 점프 적용 시 점프까지 같이 체크해주어야함.
+            m_agent.enabled = !m_actor.IsPossessed;
+            m_rigidbody.isKinematic = true;
+            
+            m_actor.Status.IsKnockBack = false;
+            m_actor.Animator.SetBool(s_animatorKnockBack, true);
+        }
     }
     
     private void ApplyFriction()
@@ -328,3 +390,4 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         }
     }
 }
+

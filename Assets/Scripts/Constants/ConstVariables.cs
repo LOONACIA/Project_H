@@ -16,6 +16,32 @@ public static class ConstVariables
     public const string CAMERASHAKE_GOBLINNORMALATTACKSTOP_ANIMATION_NAME = "CameraGoblinAttackStop";
     public const string CAMERASHAKE_GOBLINNORMALSKILLSTART_ANIMATION_NAME = "CameraGoblinSkillStart";
 
+    public const string CAMERA_ANIMATORPARAMETER_COMBO1READY = "Combo1Ready";
+    public const string CAMERA_ANIMATORPARAMETER_COMBO1PLAY = "Combo1Play";
+    public const string CAMERA_ANIMATORPARAMETER_COMBO1RECOVERY = "Combo1Recovery";
+
     [Header("Shuriken")]
     public const string SHURIKEN_PATH = "Prefabs/Possession/Shuriken";
+
+
+    [Header("Wall")]
+    public const string WALL_NORMALMATERIAL_PATH = "Materials/Wall/WallMaterial";
+    public const string WALL_NORMALOUTLINEMATERIAL_PATH = "Materials/Wall/WallOutline";
+    public const string WALL_POSSESSIONLOADINGMATERIAL_PATH = "Materials/Wall/WallLoadingMaterial";
+
+    [Header("Animator Parameter")]
+    public const string ANIMATOR_PARAMETER_ATTACK = "Attack";
+    public const string ANIMATOR_PARAMETER_SKILL = "Skill";
+    public const string ANIMATOR_PARAMETER_POSSESS = "Possess";
+    public const string ANIMATOR_PARAMETER_DEAD = "Dead";
+    public const string ANIMATOR_PARAMETER_HIT = "Hit";
+    public const string ANIMATOR_PARAMETER_TARGET_CHECK = "TargetCheck";
+    public const string ANIMATOR_PARAMETER_BLOCK_IMPACK_INDEX = "BlockImpactIndex";
+    public const string ANIMATOR_PARAMETER_HIT_DIRECTION_X = "HitDirectionX";
+    public const string ANIMATOR_PARAMETER_HIT_DIRECTION_Z = "HitDirectionZ";
+
+    [Header("Visual Effects")]
+    public const string VFX_GRAPH_PARAMETER_PARTICLE_COUNT = "ParticleCount";
+    public const string VFX_GRAPH_PARAMETER_DIRECTION = "Direction";
+    public const string VFX_GRAPH_EVENT_ON_PLAY = "OnPlay";
 }

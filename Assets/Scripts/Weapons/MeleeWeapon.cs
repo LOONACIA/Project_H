@@ -10,24 +10,16 @@ using UnityEngine.Serialization;
  */
 public class MeleeWeapon : Weapon
 {
-    public int ComboCount => Animator.GetInteger(ComboAnimBehaviour.s_attackCountAnimationHash);
+    [SerializeField]
+    private TrailCaster m_trailCaster;
 
-    [SerializeField] private TrailCaster m_trailCaster;
-
-    #region PrivateVariables
-    
-    private List<AttackInfo> m_attackInfoBuffer = new List<AttackInfo>();
-    
-
-    #endregion
+    private List<WeaponAttackInfo> m_attackInfoBuffer = new();
 
     protected override void Attack()
     {
         //TODO: 이번 공격의 End보다 다음 공격의 Start가 먼저 호출될 수 있음.
         //공격 중인데 다음 공격 딜레이가 오지 않았다면 return;
         //if (IsAttacking && !m_canNextAttack) return;
-
-        Animator.SetTrigger(MonsterAttack.s_attackAnimationKey);
     }
 
     #region AnimationEvent
@@ -35,17 +27,11 @@ public class MeleeWeapon : Weapon
     protected override void OnHitMotion()
     {
         //TODO: 1인칭일 경우 카메라 쉐이킹
-
-        //공격 관련 변수 초기화
-        IsAttacking = true;
-
-        Animator.SetBool(MonsterAttack.s_targetCheckAnimationKey, false);
         m_trailCaster.StartCheck();
     }
 
     protected override void OnFollowThroughMotion()
     {
-        IsAttacking = false;
         m_trailCaster.EndCheck();
     }
 
@@ -58,20 +44,20 @@ public class MeleeWeapon : Weapon
         if (State == AttackState.HIT)
         {
             //검의 TrailCaster로 충돌체크
-            IEnumerable<RaycastHit> detectedRayCast = m_trailCaster.PopBuffer();
+            IEnumerable<TrailCaster.HitInfo> detectedRayCast = m_trailCaster.PopBuffer();
 
             //공격한 오브젝트 버퍼 초기화
             m_attackInfoBuffer.Clear();
-            
+
             //AttackInfo 제작해줌
-            foreach (var hit in detectedRayCast)
+            foreach (var hitInfo in detectedRayCast)
             {
-                IHealth health = hit.transform.GetComponent<IHealth>();
+                Actor hitObject = hitInfo.Hit.transform.GetComponent<Actor>();
 
                 //체력이 없는 오브젝트거나, 본인이 타겟된 경우는 체크하지 않음.
-                if (health != null && hit.transform.gameObject != Owner.gameObject)
+                if (hitObject != null)
                 {
-                    m_attackInfoBuffer.Add(new AttackInfo(WeaponData.Damage, hit.normal, Owner, health));
+                    m_attackInfoBuffer.Add(new WeaponAttackInfo(hitObject, hitInfo.AttackDirection,hitInfo.Hit.point));
                 }
             }
 
@@ -81,8 +67,6 @@ public class MeleeWeapon : Weapon
             if (m_attackInfoBuffer.Any())
             {
                 InvokeHitEvent(m_attackInfoBuffer);
-                Animator.SetBool(MonsterAttack.s_targetCheckAnimationKey, true);
-
             }
         }
     }

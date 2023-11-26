@@ -1,28 +1,27 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.VFX;
 
 [RequireComponent(typeof(ActorStatus))]
 public class ActorHealth : MonoBehaviour, IHealth
 {
-    private static readonly int s_deadAnimationKey = Animator.StringToHash("Dead");
-
-    private static readonly int s_hitAnimationKey = Animator.StringToHash("Hit");
-
-    private static readonly int s_blockImpactIndexAnimationKey = Animator.StringToHash("BlockImpactIndex");
-    
     [SerializeField]
     private MonsterHealthData m_data;
+
+    [SerializeField]
+    private VisualEffect hitVfx;
+    [SerializeField]
+    private int particleCoef = 7;
 
     private Monster m_actor;
 
     private ActorStatus m_status;
 
-    public event EventHandler<Actor> Damaged;
+    public event EventHandler<DamageInfo> Damaged;
 
-    public event EventHandler Dying;
+    public event EventHandler<DamageInfo> Dying;
 
     public event EventHandler Died;
 
@@ -33,17 +32,10 @@ public class ActorHealth : MonoBehaviour, IHealth
     public bool IsDead => CurrentHp <= 0;
     
     
-    //데미지 리스트 테스트용입니다.
-    private List<Vector3> m_damagedDirectionList = new();
-
     protected void Awake()
     {
         m_actor = GetComponent<Monster>();
         m_status = GetComponent<ActorStatus>();
-    }
-
-    protected virtual void Start()
-    {
         m_status.Hp = m_data.MaxHp;
     }
 
@@ -65,15 +57,12 @@ public class ActorHealth : MonoBehaviour, IHealth
         }
     }
 
-    public void TakeDamage(AttackInfo attackInfo, Actor attacker)
+    public void TakeDamage(DamageInfo info)
     {
         if (IsDead)
         {
             return;
         }
-
-        //공격 방향 테스트용 코드, Gizmo에서 사용합니다.
-        m_damagedDirectionList.Add(attackInfo.attackDirection);
 
         // 방어 모션 중에 공격 받을 시 데미지 무효, 충격 받는 모션 실행
         if (m_status.IsBlocking)
@@ -82,34 +71,46 @@ public class ActorHealth : MonoBehaviour, IHealth
             return;
         }
 
+        // 쉴드를 가지고 있는 경우에 데미지 무효
+        if (m_status.Shield != null)
+        {
+            m_status.Shield.TakeDamage(info.Damage);
+            return;
+        }
+
         // 피격 모션 실행 
         if (!m_actor.IsPossessed)
         {
-            PlayHitAnimation(attackInfo, attacker);
+            PlayHitAnimation(info.AttackDirection, info.Attacker);
         }
 
-        m_status.Hp -= attackInfo.damage;
-        OnDamaged(attacker);
+        m_status.Hp -= info.Damage;
+        OnDamaged(info);
     }
 
     public void Kill()
     {
+        //강제 사망처리 코드
         m_status.Hp = 0;
-        OnDamaged(null);
+        OnDamaged(new DamageInfo(0,Vector3.zero,Vector3.zero,null));
     }
     
-    private void OnDamaged(Actor attacker)
+    private void OnDamaged(DamageInfo info)
     {
-        Damaged?.Invoke(this, attacker);
+        Damaged?.Invoke(this, info);
 
+        PlayVfx(info);
         if (IsDead)
         {
-            Dying?.Invoke(this, EventArgs.Empty);
+            Dying?.Invoke(this, info);
             bool hasAnimation = m_actor.Animator.parameters.Any(param => param.name == "Dead");
             if (hasAnimation)
             {
-                m_actor.Animator.SetTrigger(s_deadAnimationKey);
+                m_actor.Animator.SetTrigger(ConstVariables.ANIMATOR_PARAMETER_DEAD);
             }
+        }
+        else
+        {
         }
     }
 
@@ -131,34 +132,22 @@ public class ActorHealth : MonoBehaviour, IHealth
         }
     }
 
-
-    private void OnDrawGizmos()
+    private void PlayHitAnimation(Vector3 attackDirection = new Vector3(), Actor attacker = null)
     {
-        Gizmos.matrix = Matrix4x4.identity;
-        
-        foreach (var t in m_damagedDirectionList)
-        {  
-            Gizmos.color = Color.cyan;
-            Gizmos.DrawLine(transform.position -t + Vector3.up ,transform.position + (t) + Vector3.up);
-        }
-    }
-
-    private void PlayHitAnimation(AttackInfo attackInfo = null, Actor attacker = null)
-    {
-        if (attackInfo != null && attacker != null)
+        if (attacker != null)
         {
-            var hitDirectionX = m_actor.transform.InverseTransformDirection(attackInfo.attackDirection);
+            var hitDirectionX = m_actor.transform.InverseTransformDirection(attackDirection);
             var hitDirectionZ = m_actor.transform.InverseTransformDirection((m_actor.transform.position - attacker.transform.position).normalized);
 
             if (hitDirectionZ.z > 0)
             {
-                m_actor.Animator.SetFloat("HitDirectionX", 0);
-                m_actor.Animator.SetFloat("HitDirectionZ", hitDirectionZ.z);
+                m_actor.Animator.SetFloat(ConstVariables.ANIMATOR_PARAMETER_HIT_DIRECTION_X, 0);
+                m_actor.Animator.SetFloat(ConstVariables.ANIMATOR_PARAMETER_HIT_DIRECTION_Z, hitDirectionZ.z);
             }
             else
             { 
-                m_actor.Animator.SetFloat("HitDirectionX", hitDirectionX.x >= 0 ? 1 : -1);
-                m_actor.Animator.SetFloat("HitDirectionZ", 0);
+                m_actor.Animator.SetFloat(ConstVariables.ANIMATOR_PARAMETER_HIT_DIRECTION_X, hitDirectionX.x >= 0 ? 1 : -1);
+                m_actor.Animator.SetFloat(ConstVariables.ANIMATOR_PARAMETER_HIT_DIRECTION_Z, 0);
             }
         }
 
@@ -167,7 +156,19 @@ public class ActorHealth : MonoBehaviour, IHealth
 
     private void PlayBlockAnimation()
     {
-        m_actor.Animator.SetTrigger(s_hitAnimationKey);
-        m_actor.Animator.SetFloat(s_blockImpactIndexAnimationKey, UnityEngine.Random.Range(0, 3));
+        m_actor.Animator.SetTrigger(ConstVariables.ANIMATOR_PARAMETER_HIT);
+        m_actor.Animator.SetFloat(ConstVariables.ANIMATOR_PARAMETER_BLOCK_IMPACK_INDEX, UnityEngine.Random.Range(0, 3));
+    }
+
+    private void PlayVfx(DamageInfo damage)
+    {
+        if (hitVfx!=null)
+        {
+            hitVfx.SetInt(ConstVariables.VFX_GRAPH_PARAMETER_PARTICLE_COUNT, damage.Damage*particleCoef);
+            hitVfx.SetVector3(ConstVariables.VFX_GRAPH_PARAMETER_DIRECTION, damage.AttackDirection);
+            hitVfx.transform.position = damage.HitPosition;
+            hitVfx.SendEvent(ConstVariables.VFX_GRAPH_EVENT_ON_PLAY);
+        }
+        
     }
 }

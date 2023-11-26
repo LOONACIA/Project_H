@@ -16,16 +16,14 @@ public class RocketLauncherSkill: Weapon
     {
         //TODO: 애니메이션 Key 수정하기
         //애니메이션 실행
-        Animator.SetTrigger(MonsterAttack.s_attackAnimationKey);
+        //Animator.SetTrigger(MonsterAttack.s_attackAnimationKey);
     }
     
     protected override void OnHitMotion()
     {
-        RocketProjectile rp = Instantiate(rocketProjectile, transform.position, transform.rotation);
-        rp.direction = Owner.FirstPersonCameraPivot.transform.forward;
-        rp.owner = Owner.gameObject;
+        RocketProjectile rp = Instantiate(rocketProjectile, transform.TransformPoint(spawnPosition), transform.rotation);
+        rp.direction = transform.forward;
         rp.shooter = this;
-        rp.weaponData = WeaponData;
     }
 
     private void OnDrawGizmos()

@@ -10,7 +10,16 @@ public class ThirdPersonDefaultAnimBehaviour : StateMachineBehaviour
         animator.ResetTrigger("Attack");
         animator.ResetTrigger("Hit");
         animator.ResetTrigger("Dead");
-        animator.ResetTrigger("KnockDown");
+        //animator.ResetTrigger("KnockDown");
         animator.ResetTrigger("KnockBack");
+        
+        //공격 무기에 IDLE 시그널 보냄
+        AttackAnimationEventReceiver receiver = animator.GetComponent<AttackAnimationEventReceiver>();
+        if (receiver != null)
+        {
+            receiver.OnAttackIdle();
+            receiver.OnBlockPushIdle();
+            receiver.OnSkillIdle();
+        }
     }
 }

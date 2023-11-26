@@ -11,14 +11,17 @@ public class UpdateStatus : Action
     
     public SharedTransform Target;
 
+    public SharedGameObject TargetObject;
+
     public SharedBool IsTargetPossessed;
 
     public SharedInt Hp;
 
     public SharedFloat AttackDistance;
 
+    public SharedBool isAttacking;
+
     private Monster m_owner;
-    
     public override void OnAwake()
     {
         m_owner = GetComponent<Monster>();
@@ -32,9 +35,20 @@ public class UpdateStatus : Action
             .OrderBy(target => Vector3.Distance(transform.position, target.transform.position))
             .FirstOrDefault();
 
-        IsTargetPossessed.Value = closestTarget != null && closestTarget.IsPossessed;
-        Target.Value = closestTarget != null ? closestTarget.transform : null;
+        if (closestTarget != null)
+        {
+            IsTargetPossessed.Value = closestTarget.IsPossessed;
+            Target.Value = closestTarget.transform;
+            TargetObject.Value = closestTarget.gameObject;
+        }
+        else
+        {
+            IsTargetPossessed.Value = false;
+            Target.Value = null;
+            TargetObject.Value = null;
+        }
 
         Hp.Value = m_owner.Status.Hp;
+        isAttacking.Value = m_owner.Attack.IsAttacking;
     }
 }
