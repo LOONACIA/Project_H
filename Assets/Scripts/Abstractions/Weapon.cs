@@ -10,6 +10,8 @@ using UnityEngine;
 public abstract class Weapon : MonoBehaviour
 {
     #region Properties
+    
+    public GameObject Target { get; set; }
 
     [field: SerializeField]
     public WeaponType Type { get; private set; }
