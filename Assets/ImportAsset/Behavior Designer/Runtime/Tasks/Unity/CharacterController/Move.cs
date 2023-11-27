@@ -11,14 +11,14 @@ namespace BehaviorDesigner.Runtime.Tasks.Unity.UnityCharacterController
         [Tooltip("The amount to move")]
         public SharedVector3 motion;
 
-        private UnityEngine.CharacterController characterController;
+        private CharacterController characterController;
         private GameObject prevGameObject;
 
         public override void OnStart()
         {
             var currentGameObject = GetDefaultGameObject(targetGameObject.Value);
             if (currentGameObject != prevGameObject) {
-                characterController = currentGameObject.GetComponent<UnityEngine.CharacterController>();
+                characterController = currentGameObject.GetComponent<CharacterController>();
                 prevGameObject = currentGameObject;
             }
         }

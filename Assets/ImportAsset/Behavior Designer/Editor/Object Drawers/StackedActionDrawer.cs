@@ -97,7 +97,7 @@ namespace BehaviorDesigner.Editor.ObjectDrawers
                 return;
             }
             EditorGUI.LabelField(rect, stackedAction.actions[index].GetType().Name);
-            if (stackedAction.actions[index].NodeData == null || !Application.isPlaying) {
+            if (stackedAction.actions[index].NodeData == null || stackedAction.NodeData == null || !Application.isPlaying) {
                 return;
             }
 

@@ -4,7 +4,7 @@ using LOONACIA.Unity.Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public partial class CharacterController
+public partial class PlayerController
 {
     private CharacterInputActions m_inputActions;
 
@@ -31,9 +31,9 @@ public partial class CharacterController
 
     private class CharacterInputActionContext : CharacterInputActions.ICharacterActions
     {
-        private readonly CharacterController m_controller;
+        private readonly PlayerController m_controller;
         
-        public CharacterInputActionContext(CharacterController controller)
+        public CharacterInputActionContext(PlayerController controller)
         {
             m_controller = controller;
         }
