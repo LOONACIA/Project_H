@@ -6,6 +6,12 @@ namespace LOONACIA.Unity.Console
 {
 	public static class ArgumentParserBag
 	{
+        public static bool TryGetString(ReadOnlySpan<char> input, out string value)
+        {
+            value = input.ToString();
+            return true;
+        }
+
 		public static bool TryGetVector3(ReadOnlySpan<char> parameter, out Vector3 vector)
 		{
 			bool isHandled = false;
