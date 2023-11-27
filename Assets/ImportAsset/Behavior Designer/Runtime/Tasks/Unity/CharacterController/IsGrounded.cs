@@ -9,14 +9,14 @@ namespace BehaviorDesigner.Runtime.Tasks.Unity.UnityCharacterController
         [Tooltip("The GameObject that the task operates on. If null the task GameObject is used.")]
         public SharedGameObject targetGameObject;
 
-        private CharacterController characterController;
+        private UnityEngine.CharacterController characterController;
         private GameObject prevGameObject;
 
         public override void OnStart()
         {
             var currentGameObject = GetDefaultGameObject(targetGameObject.Value);
             if (currentGameObject != prevGameObject) {
-                characterController = currentGameObject.GetComponent<CharacterController>();
+                characterController = currentGameObject.GetComponent<UnityEngine.CharacterController >();
                 prevGameObject = currentGameObject;
             }
         }

@@ -50,7 +50,9 @@ namespace BehaviorDesigner.Runtime.Tasks.Unity.UnityPhysics2D
                 storeHitObject.Value = hit.collider.gameObject;
                 storeHitPoint.Value = hit.point;
                 storeHitNormal.Value = hit.normal;
+#if !UNITY_4_3
                 storeHitDistance.Value = hit.distance;
+#endif
                 return TaskStatus.Success;
             }
             return TaskStatus.Failure;

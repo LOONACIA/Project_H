@@ -5,7 +5,7 @@ using LOONACIA.Unity.Managers;
 using UnityEngine;
 
 [RequireComponent(typeof(PossessionProcessor))]
-public partial class PlayerController : MonoBehaviour
+public partial class CharacterController : MonoBehaviour
 {
     [SerializeField]
     private CharacterControlData m_data;

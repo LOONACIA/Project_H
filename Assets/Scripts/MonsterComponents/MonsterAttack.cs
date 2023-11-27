@@ -44,8 +44,6 @@ public class MonsterAttack : MonoBehaviour
 
     public bool CanAttack { get; set; } = true;
 
-    public GameObject Target { get; set; }
-
     public bool IsAttacking 
     {
         get
@@ -95,7 +93,6 @@ public class MonsterAttack : MonoBehaviour
         }
 
         m_actor.Animator.SetTrigger(s_attackAnimationKey);
-        AttackWeapon.Target = Target;
         AttackWeapon.StartAttack();
     }
 

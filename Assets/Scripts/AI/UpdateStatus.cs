@@ -22,7 +22,6 @@ public class UpdateStatus : Action
     public SharedBool isAttacking;
 
     private Monster m_owner;
-    
     public override void OnAwake()
     {
         m_owner = GetComponent<Monster>();
@@ -35,8 +34,6 @@ public class UpdateStatus : Action
         Actor closestTarget = m_owner.Targets
             .OrderBy(target => Vector3.Distance(transform.position, target.transform.position))
             .FirstOrDefault();
-
-        m_owner.Attack.Target = TargetObject.Value;
 
         if (closestTarget != null)
         {

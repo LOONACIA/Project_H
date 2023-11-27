@@ -9,14 +9,14 @@ namespace BehaviorDesigner.Runtime.Tasks.Unity.UnityQuaternion
         [Tooltip("The forward vector")]
         public SharedVector3 forwardVector;
         [Tooltip("The second Vector3")]
-        public SharedVector3 secondVector3 = Vector3.up;
+        public SharedVector3 secondVector3;
         [Tooltip("The stored quaternion")]
         [RequiredField]
         public SharedQuaternion storeResult;
 
         public override TaskStatus OnUpdate()
         {
-            storeResult.Value = Quaternion.LookRotation(forwardVector.Value, secondVector3.Value);
+            storeResult.Value = Quaternion.LookRotation(forwardVector.Value);
             return TaskStatus.Success;
         }
 

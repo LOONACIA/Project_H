@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class UIShieldIndicator : UIScene
 {
-    private PlayerController m_player;
+    private CharacterController m_player;
 
     private Canvas m_canvas;
 
@@ -22,7 +22,7 @@ public class UIShieldIndicator : UIScene
         ShieldText
     }
 
-    public void SetPlayer(PlayerController player)
+    public void SetPlayer(CharacterController player)
     {
         if (m_player != null)
         {

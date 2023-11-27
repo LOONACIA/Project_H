@@ -16,13 +16,13 @@ public class GameUIManager
     {
     }
 
-    public void ShowHpIndicator(PlayerController player)
+    public void ShowHpIndicator(CharacterController player)
     {
         var ui = ManagerRoot.UI.ShowSceneUI<UIHpIndicator>();
         ui.SetPlayer(player);
     }
 
-    public void GenerateShieldIndicator(PlayerController player)
+    public void GenerateShieldIndicator(CharacterController player)
     {
         m_shieldIndicator = ManagerRoot.UI.ShowSceneUI<UIShieldIndicator>();
         m_shieldIndicator.SetPlayer(player);

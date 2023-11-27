@@ -9,13 +9,13 @@ public class SetTargetToPlayer : Action
     [SerializeField]
     private SharedTransform m_target;
     
-    private PlayerController m_controller;
+    private CharacterController m_controller;
 
     private Monster m_monster;
     
     public override void OnAwake()
     {
-        m_controller = Object.FindObjectOfType<PlayerController>();
+        m_controller = Object.FindObjectOfType<CharacterController>();
         m_monster = GetComponent<Monster>();
     }
 

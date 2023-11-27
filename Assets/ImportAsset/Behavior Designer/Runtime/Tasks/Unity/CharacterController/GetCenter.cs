@@ -12,14 +12,14 @@ namespace BehaviorDesigner.Runtime.Tasks.Unity.UnityCharacterController
         [RequiredField]
         public SharedVector3 storeValue;
 
-        private CharacterController characterController;
+        private UnityEngine.CharacterController characterController;
         private GameObject prevGameObject;
 
         public override void OnStart()
         {
             var currentGameObject = GetDefaultGameObject(targetGameObject.Value);
             if (currentGameObject != prevGameObject) {
-                characterController = currentGameObject.GetComponent<CharacterController>();
+                characterController = currentGameObject.GetComponent<UnityEngine.CharacterController>();
                 prevGameObject = currentGameObject;
             }
         }

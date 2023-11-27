@@ -12,7 +12,6 @@ public class ActorHealth : MonoBehaviour, IHealth
 
     [SerializeField]
     private VisualEffect hitVfx;
-
     [SerializeField]
     private int particleCoef = 7;
 
@@ -31,8 +30,8 @@ public class ActorHealth : MonoBehaviour, IHealth
     public int MaxHp => m_data.MaxHp;
 
     public bool IsDead => CurrentHp <= 0;
-
-
+    
+    
     protected void Awake()
     {
         m_actor = GetComponent<Monster>();
@@ -93,9 +92,9 @@ public class ActorHealth : MonoBehaviour, IHealth
     {
         //강제 사망처리 코드
         m_status.Hp = 0;
-        OnDamaged(new DamageInfo(0, Vector3.zero, Vector3.zero, null));
+        OnDamaged(new DamageInfo(0,Vector3.zero,Vector3.zero,null));
     }
-
+    
     private void OnDamaged(DamageInfo info)
     {
         Damaged?.Invoke(this, info);
@@ -138,9 +137,7 @@ public class ActorHealth : MonoBehaviour, IHealth
         if (attacker != null)
         {
             var hitDirectionX = m_actor.transform.InverseTransformDirection(attackDirection);
-            var hitDirectionZ =
-                m_actor.transform.InverseTransformDirection((m_actor.transform.position - attacker.transform.position)
-                    .normalized);
+            var hitDirectionZ = m_actor.transform.InverseTransformDirection((m_actor.transform.position - attacker.transform.position).normalized);
 
             if (hitDirectionZ.z > 0)
             {
@@ -148,9 +145,8 @@ public class ActorHealth : MonoBehaviour, IHealth
                 m_actor.Animator.SetFloat(ConstVariables.ANIMATOR_PARAMETER_HIT_DIRECTION_Z, hitDirectionZ.z);
             }
             else
-            {
-                m_actor.Animator.SetFloat(ConstVariables.ANIMATOR_PARAMETER_HIT_DIRECTION_X,
-                    hitDirectionX.x >= 0 ? 1 : -1);
+            { 
+                m_actor.Animator.SetFloat(ConstVariables.ANIMATOR_PARAMETER_HIT_DIRECTION_X, hitDirectionX.x >= 0 ? 1 : -1);
                 m_actor.Animator.SetFloat(ConstVariables.ANIMATOR_PARAMETER_HIT_DIRECTION_Z, 0);
             }
         }
@@ -166,12 +162,13 @@ public class ActorHealth : MonoBehaviour, IHealth
 
     private void PlayVfx(DamageInfo damage)
     {
-        if (hitVfx != null)
+        if (hitVfx!=null)
         {
-            hitVfx.SetInt(ConstVariables.VFX_GRAPH_PARAMETER_PARTICLE_COUNT, damage.Damage * particleCoef);
+            hitVfx.SetInt(ConstVariables.VFX_GRAPH_PARAMETER_PARTICLE_COUNT, damage.Damage*particleCoef);
             hitVfx.SetVector3(ConstVariables.VFX_GRAPH_PARAMETER_DIRECTION, damage.AttackDirection);
             hitVfx.transform.position = damage.HitPosition;
             hitVfx.SendEvent(ConstVariables.VFX_GRAPH_EVENT_ON_PLAY);
         }
+        
     }
 }

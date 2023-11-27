@@ -11,14 +11,14 @@ namespace BehaviorDesigner.Runtime.Tasks.Unity.UnityCharacterController
         [Tooltip("The slope limit of the CharacterController")]
         public SharedFloat slopeLimit;
 
-        private CharacterController characterController;
+        private UnityEngine.CharacterController characterController;
         private GameObject prevGameObject;
 
         public override void OnStart()
         {
             var currentGameObject = GetDefaultGameObject(targetGameObject.Value);
             if (currentGameObject != prevGameObject) {
-                characterController = currentGameObject.GetComponent<CharacterController>();
+                characterController = currentGameObject.GetComponent<UnityEngine.CharacterController>();
                 prevGameObject = currentGameObject;
             }
         }
