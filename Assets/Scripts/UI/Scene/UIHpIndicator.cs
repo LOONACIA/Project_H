@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class UIHpIndicator : UIScene
 {
-    private CharacterController m_player;
+    private PlayerController m_player;
     
     private enum Sliders
     {
@@ -19,7 +19,7 @@ public class UIHpIndicator : UIScene
         HpText
     }
     
-    public void SetPlayer(CharacterController player)
+    public void SetPlayer(PlayerController player)
     {
         if (m_player != null)
         {

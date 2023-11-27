@@ -1,5 +1,4 @@
 using UnityEngine;
-using CharacterController = UnityEngine.CharacterController;
 
 namespace BehaviorDesigner.Runtime.Tasks.Unity.UnityCharacterController
 {
@@ -13,14 +12,14 @@ namespace BehaviorDesigner.Runtime.Tasks.Unity.UnityCharacterController
         [RequiredField]
         public SharedFloat storeValue;
 
-        private UnityEngine.CharacterController characterController;
+        private CharacterController characterController;
         private GameObject prevGameObject;
 
         public override void OnStart()
         {
             var currentGameObject = GetDefaultGameObject(targetGameObject.Value);
             if (currentGameObject != prevGameObject) {
-                characterController = currentGameObject.GetComponent<UnityEngine.CharacterController>();
+                characterController = currentGameObject.GetComponent<CharacterController>();
                 prevGameObject = currentGameObject;
             }
         }
