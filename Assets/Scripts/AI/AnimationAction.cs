@@ -7,9 +7,10 @@ using BehaviorDesigner.Runtime;
 
 public class AnimationAction : Action
 {
+    public SharedBool isAttacking;
+    
     private Monster m_monster;
     
-    public SharedBool isAttacking;
     public override void OnAwake()
     {
         m_monster = GetComponent<Monster>();
