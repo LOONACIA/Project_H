@@ -53,7 +53,7 @@ public class ActorStatus : MonoBehaviour
 
     [field: SerializeField]
     [ReadOnly]
-    public bool IsStunned { get; private set; }
+    public bool IsStunned { get; set; }
 
     public bool IsBlocking
     {
@@ -83,6 +83,7 @@ public class ActorStatus : MonoBehaviour
     }
 
     public bool IsKnockedDown => m_knockDownTime > 0f;
+    
     //주의: IsKnockBack값의 수정은 Monster류, Actor류 클래스에서만 일어나야함.
     public bool IsKnockBack
     {
@@ -102,11 +103,12 @@ public class ActorStatus : MonoBehaviour
 
     public void SetKnockDown(float duration)
     {
-        if (KnockDownTime > duration) return;
-        else
+        if (KnockDownTime > duration)
         {
-            KnockDownTime = duration;
+            return;
         }
+        
+        KnockDownTime = duration;
     }
     
     private void Update()
@@ -135,7 +137,10 @@ public class ActorStatus : MonoBehaviour
 
     private void UpdateShield()
     {
-        if (Shield == null) return;
+        if (Shield == null)
+        {
+            return;
+        }
 
         // 쉴드가 더이상 유효하지 않으면 제거
         if (!Shield.IsValid)

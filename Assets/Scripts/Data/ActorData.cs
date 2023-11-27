@@ -1,25 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = nameof(ActorData), menuName = "Data/" + nameof(ActorData))]
 public class ActorData : ScriptableObject
-{   
-    [SerializeField]
-    [Tooltip("Actor 타입")]
-    private ActorType m_type;
-    
-    [SerializeField]
-    [Tooltip("빙의에 걸리는 시간")]
-    private float m_possessionRequiredTime;
+{
+    [field: SerializeField]
+    [field: Tooltip("Actor 타입")]
+    public ActorType Type { get; private set; }
 
-    [SerializeField]
+    [field: SerializeField]
+    [field: Tooltip("빙의에 걸리는 시간")]
+    public float PossessionRequiredTime { get; private set; }
+
+    [field: SerializeField]
+    [Tooltip("표창 적중 시 스턴 시간")]
+    public float ShurikenStunTime { get; private set; }
+
+    [field: SerializeField]
+    [field: Tooltip("빙의 해제 시 스턴 시간")]
+    public float UnpossessionStunTime { get; private set; }
+
+    [field: SerializeField]
     [Tooltip("빙의표창 게임오브젝트")]
-    private GameObject m_shurikenObj;
-
-    public ActorType Type => m_type;
-
-    public float PossessionRequiredTime => m_possessionRequiredTime;
-
-    public GameObject ShurikenObj => m_shurikenObj;
+    public GameObject ShurikenObj { get; private set; }
 }
