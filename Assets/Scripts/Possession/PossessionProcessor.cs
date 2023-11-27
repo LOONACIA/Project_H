@@ -15,6 +15,9 @@ public class PossessionProcessor : MonoBehaviour
     [SerializeField]
     private LayerMask m_targetLayers;
 
+    [SerializeField]
+    private LayerMask m_obstacleLayers;
+
     private Actor m_sender;
 
     // 빙의가 가능한지 여부 체크, 표창을 던질 지, 빙의를 할지를 판단함.
