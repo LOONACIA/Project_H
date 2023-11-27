@@ -190,6 +190,8 @@ public class PossessionProcessor : MonoBehaviour
 
     private void TryHacking(Actor actor)
     {
+        actor.Health.TakeDamage(new(0, default, default, m_sender));
+        actor.PlayHackAnimation();
         StartCoroutine(CoWaitForPossession(actor.Data.PossessionRequiredTime));
     }
     

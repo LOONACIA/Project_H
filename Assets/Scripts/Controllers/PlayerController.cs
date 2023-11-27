@@ -245,12 +245,12 @@ public partial class PlayerController : MonoBehaviour
         UnregisterActorEvents();
         if (oldActor != null)
         {
-            oldActor.Unpossessed();
+            oldActor.IsPossessed = false;
         }
 
         m_character = newActor;
         RegisterActorEvents();
-        m_character.Possessed();
+        m_character.IsPossessed = true;
         m_cameraHolder = m_character.FirstPersonCameraPivot.transform;
         
         HpChanged?.Invoke(this, Character.Health.CurrentHp);
