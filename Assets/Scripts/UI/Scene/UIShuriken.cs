@@ -64,14 +64,13 @@ public class UIShuriken : UIScene
     private void OnTargetHit(object sender, float _time)
     {
         Get<Image, Images>(Images.ShurikenImage).gameObject.SetActive(false);
-
+        
         var possessionImage = Get<Image, Images>(Images.PossessionImage);
         possessionImage.gameObject.SetActive(true);
 
         Color color = possessionImage.color;
         color.a = 0.5f; // 타겟에 표창 적중 시의 알파 값
         possessionImage.color = color;
-
         StartCoroutine(nameof(IE_PossessableGauge), _time);
     }
 

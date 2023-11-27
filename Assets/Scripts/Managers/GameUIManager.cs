@@ -12,6 +12,8 @@ public class GameUIManager
 
     private UIShuriken m_shuriken;
 
+    private UIDamageIndicator m_damageIndicator;
+
     public void Init()
     {
     }
@@ -40,6 +42,17 @@ public class GameUIManager
 
         m_shuriken = ManagerRoot.UI.ShowSceneUI<UIShuriken>();
         m_shuriken.SetPossessionProcessor(processor);
+    }
+
+    public void ShowDamageIndicator()
+    {
+        if (m_damageIndicator is not null)
+        {
+            // Do nothing
+            return;
+        }
+
+        m_damageIndicator = ManagerRoot.UI.ShowSceneUI<UIDamageIndicator>();
     }
 
     public void ShowCrosshair()
