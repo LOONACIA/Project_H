@@ -1,3 +1,4 @@
+using LOONACIA.Unity;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,10 +12,12 @@ public class WaveTrigger : MonoBehaviour
     private int m_leftMonster;
     [SerializeField]
     private GameObject[] m_gameObjects;
+    private CharacterController playerCharacter;
 
     private void Awake()
     {
         Monsters.CollectionChanged += OnMonsterCollectionChanged;
+        playerCharacter = GetComponent<CharacterController>();
     }
 
     private void OnMonsterCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -42,10 +45,7 @@ public class WaveTrigger : MonoBehaviour
         var count = Monsters.Count(monster => !monster.IsPossessed);
         if (count <= m_leftMonster)
         {
-            for(int i = 0; i < m_gameObjects.Length; i++)
-            {
-                m_gameObjects[i].SetActive(false);
-            }
+
         }
 
         if (sender is not Monster monster)
@@ -54,5 +54,19 @@ public class WaveTrigger : MonoBehaviour
         }
 
         Monsters.Remove(monster);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        var character = FindObjectsOfType<Monster>()
+            .SingleOrDefault(monster => monster.IsPossessed);
+        if (other.name == character.name)
+        {
+            foreach (var go in m_gameObjects)
+            {
+                go.SetActive(true);
+            }
+            Destroy(this);
+        }
     }
 }
