@@ -188,7 +188,7 @@ public abstract class Actor : MonoBehaviour
     /// </summary>
     protected virtual void OnDying()
     {
-        StopAllCoroutines();
+        //StopAllCoroutines();
         
         // Actor 제거 시 별도 처리가 필요한 경우 이곳에 작성합니다.
         Dying?.Invoke(this, EventArgs.Empty);
