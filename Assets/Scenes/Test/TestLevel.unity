@@ -5429,10 +5429,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 749494631}
     m_Modifications:
-    - target: {fileID: 523145165, guid: 5d4b230dfd37f3a409d3f677b520b90f, type: 3}
-      propertyPath: mBehaviorSource.mTaskData.JSONSerialization
-      value: '{"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsHit","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockDown","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockBack","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsAttacking","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"TargetTransform","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"TargetObject","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsTargetPossessed","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"AttackDistance","IsShared":true,"SinglemValue":100},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"Self","IsShared":true,"TransformmValue":0},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"HP","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"Body","IsShared":true,"GameObjectmValue":1},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"SelfGameObject","IsShared":true,"GameObjectmValue":2},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"KnockDownTime","IsShared":true,"SinglemValue":0},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"TargetDistance","IsShared":true,"SinglemValue":50}]}'
-      objectReference: {fileID: 0}
     - target: {fileID: 6118068614016348069, guid: 5d4b230dfd37f3a409d3f677b520b90f,
         type: 3}
       propertyPath: m_RootOrder
@@ -9081,18 +9077,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5d4b230dfd37f3a409d3f677b520b90f, type: 3}
---- !u!114 &585464508 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5430721398783349178, guid: 8c5d468e29b59f34e8ebd842b7b885b1,
-    type: 3}
-  m_PrefabInstance: {fileID: 1422875501}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 063b3b13758ebd240bd661240502062c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &590334270
 GameObject:
   m_ObjectHideFlags: 0
@@ -23559,7 +23543,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_data: {fileID: 11400000, guid: f1ce459edc5d60641aa8263ae0f15ce9, type: 2}
-  m_character: {fileID: 585464508}
+  m_character: {fileID: 1703954271}
 --- !u!114 &1481789191
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27623,6 +27607,18 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
+--- !u!114 &1703954271 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 833611920941566643, guid: 03633e1d6064feb4a9223b746f5bec0a,
+    type: 3}
+  m_PrefabInstance: {fileID: 6586319983603124643}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 063b3b13758ebd240bd661240502062c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1705833070
 GameObject:
   m_ObjectHideFlags: 0
@@ -36598,8 +36594,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2008451376}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 124.25004, y: 15.399, z: 22.475992}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 94.09028, y: 12.713844, z: 14.023716}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -39662,21 +39658,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: 'Shooter '
-      objectReference: {fileID: 0}
-    - target: {fileID: 4669205830080428269, guid: 03633e1d6064feb4a9223b746f5bec0a,
-        type: 3}
-      propertyPath: gizmoViewMode
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4669205830080428269, guid: 03633e1d6064feb4a9223b746f5bec0a,
-        type: 3}
-      propertyPath: showBehaviorDesignerGizmo
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4669205830080428269, guid: 03633e1d6064feb4a9223b746f5bec0a,
-        type: 3}
-      propertyPath: mBehaviorSource.mTaskData.JSONSerialization
-      value: '{"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsHit","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockDown","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockBack","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsAttacking","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"TargetTransform","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"TargetObject","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsTargetPossessed","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"AttackDistance","IsShared":true,"SinglemValue":150},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"ViewDistance","IsShared":true,"SinglemValue":150},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"Self","IsShared":true,"TransformmValue":0},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"HP","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"Body","IsShared":true,"GameObjectmValue":1},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"SelfGameObject","IsShared":true,"GameObjectmValue":2},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"KnockDownTime","IsShared":true,"SinglemValue":0},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"TargetDistance","IsShared":true,"SinglemValue":20}]}'
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03633e1d6064feb4a9223b746f5bec0a, type: 3}
