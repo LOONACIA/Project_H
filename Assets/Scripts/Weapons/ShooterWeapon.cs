@@ -40,7 +40,7 @@ public class ShooterWeapon : Weapon
 
     private void Awake()
     {
-        m_vcam = GetComponentInParent<Actor>().GetComponent<CinemachineVirtualCamera>();
+        m_vcam = GetComponentInParent<Actor>().GetComponentInChildren<CinemachineVirtualCamera>();
         m_renderer = GetComponent<LineRenderer>();
     }
 
