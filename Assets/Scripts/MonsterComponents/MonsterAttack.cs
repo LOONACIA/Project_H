@@ -94,6 +94,11 @@ public class MonsterAttack : MonoBehaviour
             return;
         }
 
+        if (m_actor.IsPossessed)
+        {
+            Target = null;
+        }
+
         m_actor.Animator.SetTrigger(s_attackAnimationKey);
         AttackWeapon.Target = Target;
         AttackWeapon.StartAttack();
