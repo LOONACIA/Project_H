@@ -12,12 +12,10 @@ public class WaveTrigger : MonoBehaviour
     private int m_leftMonster;
     [SerializeField]
     private GameObject[] m_gameObjects;
-    private CharacterController playerCharacter;
 
     private void Awake()
     {
         Monsters.CollectionChanged += OnMonsterCollectionChanged;
-        playerCharacter = GetComponent<CharacterController>();
     }
 
     private void OnMonsterCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
