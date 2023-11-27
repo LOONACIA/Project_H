@@ -51,6 +51,10 @@ public class ActorStatus : MonoBehaviour
         set => m_damage = value;
     }
 
+    [field: SerializeField]
+    [ReadOnly]
+    public bool IsStunned { get; private set; }
+
     public bool IsBlocking
     {
         get => m_isBlocking;
