@@ -30,6 +30,8 @@ public partial class PlayerController : MonoBehaviour
     
     public Actor Character => m_character;
 
+    public event EventHandler<DamageInfo> Damaged;
+
     public event EventHandler<int> HpChanged;
 
     public event EventHandler ShieldChanged;
@@ -49,6 +51,7 @@ public partial class PlayerController : MonoBehaviour
         GameManager.UI.ShowHpIndicator(this);
         GameManager.UI.GenerateShieldIndicator(this);
         GameManager.UI.ShowShurikenIndicator(m_possession);
+        GameManager.UI.ShowDamageIndicator();
     }
 
     private void Start()
@@ -184,6 +187,9 @@ public partial class PlayerController : MonoBehaviour
         {
             m_character.Status.HpChanged -= OnHpChanged;
             m_character.Status.HpChanged += OnHpChanged;
+
+            m_character.Health.Damaged -= OnDamaged;
+            m_character.Health.Damaged += OnDamaged;
             
             m_character.Status.ShieldChanged -= OnShieldChanged;
             m_character.Status.ShieldChanged += OnShieldChanged;
@@ -196,7 +202,14 @@ public partial class PlayerController : MonoBehaviour
         {
             m_character.Status.HpChanged -= OnHpChanged;
             m_character.Status.ShieldChanged -= OnShieldChanged;
+
+            m_character.Health.Damaged -= OnDamaged;
         }
+    }
+
+    private void OnDamaged(object sender, DamageInfo e)
+    {
+        Damaged?.Invoke(this, e);
     }
 
     private void OnHpChanged(object sender, int e)
