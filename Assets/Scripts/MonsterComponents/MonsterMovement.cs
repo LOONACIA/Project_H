@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Serialization;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(CapsuleCollider))]
@@ -64,6 +65,18 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
     // 리지드바디 속도가 이것보다 낮아지면 넉백 종료
     private float m_knockBackEndSpeedThreshold = 0.1f;
 
+    //대쉬 중인가?
+    private bool m_isDashing = false;
+    
+    [Header("대쉬 거리")][SerializeField]private float m_dashAmount = 5f;
+    
+    [Header("대쉬 시간")][SerializeField]private float m_dashDuration = 0.05f;
+
+    [Header("대쉬 딜레이")] [SerializeField] private float m_dashDelay = 0.3f;
+    
+    //대쉬 시작 시간을 저장하기 위한 값
+    private float m_lastDashTime;
+
     public MonsterMovementData Data => m_data;
 
     public bool IsOnGround
@@ -71,6 +84,8 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         get => m_isOnGround;
         set => SetField(ref m_isOnGround, value);
     }
+
+    public bool IsDashing => m_isDashing;
     
     public event PropertyChangedEventHandler PropertyChanged;
     
@@ -91,8 +106,13 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
 
     private void FixedUpdate()
     {
-        ApplyGravity();
-        ApplyFriction();
+        if (!m_isDashing)
+        {
+            ApplyGravity();
+            ApplyFriction();
+        }
+        
+        CheckDashEnd();
         CheckGround();
         CheckKnockBackEnd();
     }
@@ -178,6 +198,29 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         m_isJumped = true;
     }
 
+    public void TryDash(Vector3 direction)
+    {
+        //1. 방향성 체크, 2. 해당 위치 갈 수 있는지 체크, 3. 이동
+        //1인칭인 경우 방향성은 카메라가 보고 있는 방향
+        //3인칭인 경우 방향성은 AI에서 지정해준다.(아마도)
+        
+        //딜레이가 끝났는지 체크한다.
+        if (m_lastDashTime + m_dashDelay > Time.time)
+        {
+            return;
+        }
+        
+        //대쉬를 시도함.
+        //isDashing 중일 경우, 이동, 점프, 중력을 무시하고 해당 방향으로 이동한다.
+        //TODO: 적 통과 로직 생각해보기
+        //TODO: 슬로프에서 대쉬 시 거리에 대해 생각해보기
+        //TODO: 하늘 위로 대쉬 가능하게 할 것인지 생각해보기
+        m_rigidbody.velocity = (direction.normalized * m_dashAmount / m_dashDuration);
+        m_lastDashTime = Time.time;
+        m_isDashing = true;
+
+    }
+
     public void TryKnockBack(Vector3 direction, float power, bool overwrite = true)
     {
         //넉백값 변경
@@ -244,6 +287,18 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         float radius = m_collider.radius;
         IsOnGround = Physics.SphereCast(transform.position + m_collider.center, radius, Vector3.down, out _,
             radius + 0.2f, m_data.WhatIsGround);
+    }
+
+    private void CheckDashEnd()
+    {
+        if (m_isDashing)
+        {
+            if (m_lastDashTime + m_dashDuration <= Time.time)
+            {
+                m_isDashing = false;
+                m_rigidbody.velocity = Vector3.zero;
+            }
+        }
     }
 
     private void CheckKnockBackEnd()

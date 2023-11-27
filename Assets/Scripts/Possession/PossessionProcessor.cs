@@ -54,7 +54,7 @@ public class PossessionProcessor : MonoBehaviour
         }
 
         //표창이 박혀있는지 체크
-        // TODO: 풀링 시 suriken null check 로직 수정 필요
+        // TODO: 풀링 시 shuriken null check 로직 수정 필요
         if (!m_isHitTarget || m_shuriken == null)
         {
             m_sender.Animator.SetTrigger(s_possess);

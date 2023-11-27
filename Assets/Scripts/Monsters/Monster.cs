@@ -66,7 +66,11 @@ public class Monster : Actor
 
     public override void Dash()
     {
-        Movement.isDashing = !Movement.isDashing;
+        //Movement.isDashing = !Movement.isDashing;
+        if (IsPossessed)
+        {
+            Movement.TryDash(FirstPersonCameraPivot.transform.forward);
+        }
     }
 
     public override void Possessed()
