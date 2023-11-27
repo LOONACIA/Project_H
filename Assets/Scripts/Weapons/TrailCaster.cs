@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.VFX;
 
 public class TrailCaster : MonoBehaviour
 {
@@ -43,6 +44,9 @@ public class TrailCaster : MonoBehaviour
     [SerializeField] private bool m_showGizmo = true;
     [SerializeField] private float m_gizmoRadius = 0.05f;
 
+    [Header("파티클")]
+    [SerializeField] private VisualEffect m_attackParticle;
+
     #endregion
 
     #region PublicMethods
@@ -54,6 +58,13 @@ public class TrailCaster : MonoBehaviour
     /// </summary>
     public void StartCheck()
     {
+        //파티클 테스트용 코드, 추후 동훈이형이 무기 구조 변경 시 삭제해도 되는 코드입니다.
+        if (m_attackParticle!=null)
+        {
+            m_attackParticle.SendEvent("OnPlay");
+            m_attackParticle.SetBool("IsAttacking", true);
+        }
+        
         //점들의 값 초기화
         for (int i = 0; i < m_thicknessX; i++)
         {
@@ -67,6 +78,12 @@ public class TrailCaster : MonoBehaviour
 
     public void EndCheck()
     {
+        //파티클 테스트용 코드, 추후 동훈이형이 무기 구조 변경 시 삭제해도 됩니다.
+        if (m_attackParticle!=null)
+        {
+            m_attackParticle.SendEvent("OnEnd");
+            m_attackParticle.SetBool("IsAttacking", false);
+        }
         IsChecking = false;
         attackedList.Clear();
     }
