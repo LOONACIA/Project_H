@@ -92,6 +92,13 @@ namespace LOONACIA.Unity.Console
         {
             _commands = new()
             {
+                new DebugCommand<string>(
+                    id: "kill",
+                    description: "Kill the specified GameObject",
+                    format: "kill <name>",
+                    execute: input => GameObject.Find(input).GetComponent<ActorHealth>().TakeDamage(new(9999, Vector3.zero, Vector3.zero, FindObjectOfType<PlayerController>().Character)),
+                    parser: ArgumentParserBag.TryGetString),
+
                 new TransformObjectCommand(
                     id: "move",
                     description: "Move the position of specified GameObject",
