@@ -44,6 +44,8 @@ public class MonsterAttack : MonoBehaviour
 
     public bool CanAttack { get; set; } = true;
 
+    public GameObject Target { get; set; }
+
     public bool IsAttacking 
     {
         get
@@ -92,7 +94,13 @@ public class MonsterAttack : MonoBehaviour
             return;
         }
 
+        if (m_actor.IsPossessed)
+        {
+            Target = null;
+        }
+
         m_actor.Animator.SetTrigger(s_attackAnimationKey);
+        AttackWeapon.Target = Target;
         AttackWeapon.StartAttack();
     }
 

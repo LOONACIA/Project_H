@@ -12,13 +12,13 @@ public class UIDamageIndicator : UIScene
     #endregion
 
     #region PrivateVariables
-    private CharacterController m_characterController;
+    private PlayerController m_characterController;
     #endregion
 
     #region PublicMethod
     private void Start()
     {
-        m_characterController = GameObject.Find("@Character").GetComponent<CharacterController>();
+        m_characterController = GameObject.Find("@Character").GetComponent<PlayerController>();
         RegisterEvents();
     }
     #endregion
@@ -31,7 +31,7 @@ public class UIDamageIndicator : UIScene
 
     private void OnCharacterDamaged(object sender, DamageInfo e)
     {
-      DamageIndicator indi = Instantiate(damageIndicator, indicatorParent.transform).GetComponent<DamageIndicator>();
+        DamageIndicator indi = Instantiate(damageIndicator, indicatorParent.transform).GetComponent<DamageIndicator>();
 
         indi.Init(e, m_characterController.Character);
     }

@@ -15,6 +15,9 @@ public class PossessionProcessor : MonoBehaviour
     [SerializeField]
     private LayerMask m_targetLayers;
 
+    [SerializeField]
+    private LayerMask m_obstacleLayers;
+
     private Actor m_sender;
 
     // 빙의가 가능한지 여부 체크, 표창을 던질 지, 빙의를 할지를 판단함.
@@ -54,7 +57,7 @@ public class PossessionProcessor : MonoBehaviour
         }
 
         //표창이 박혀있는지 체크
-        // TODO: 풀링 시 suriken null check 로직 수정 필요
+        // TODO: 풀링 시 shuriken null check 로직 수정 필요
         if (!m_isHitTarget || m_shuriken == null)
         {
             m_sender.Animator.SetTrigger(s_possess);
@@ -164,7 +167,11 @@ public class PossessionProcessor : MonoBehaviour
         m_shuriken = Instantiate(m_sender.Data.ShurikenObj, cameraPivot.transform.position + cameraPivot.transform.forward, Quaternion.identity).GetComponent<PossessionShuriken>();
 
         // Ray를 쏜 곳에 몬스터가 있을 시,
-        if (isHit && 1 << hit.transform.gameObject.layer == m_targetLayers)
+        if (isHit && 1 << hit.transform.gameObject.layer == m_obstacleLayers)
+        { 
+            m_shuriken.InitSetting(cameraPivot.transform.forward, m_sender, OnTargetHit);
+        }
+        else if (isHit && 1 << hit.transform.gameObject.layer == m_targetLayers)
         {
             m_shuriken.InitSetting(hit.transform.GetComponent<Actor>(), m_sender, OnTargetHit);
         }
@@ -183,6 +190,8 @@ public class PossessionProcessor : MonoBehaviour
 
     private void TryHacking(Actor actor)
     {
+        actor.Health.TakeDamage(new(0, default, default, m_sender));
+        actor.PlayHackAnimation();
         StartCoroutine(CoWaitForPossession(actor.Data.PossessionRequiredTime));
     }
     

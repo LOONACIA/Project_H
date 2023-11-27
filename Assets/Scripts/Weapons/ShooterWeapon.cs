@@ -40,7 +40,7 @@ public class ShooterWeapon : Weapon
 
     private void Awake()
     {
-        m_vcam = transform.root.GetComponentInChildren<CinemachineVirtualCamera>();
+        m_vcam = GetComponentInParent<Actor>().GetComponentInChildren<CinemachineVirtualCamera>();
         m_renderer = GetComponent<LineRenderer>();
     }
 
@@ -82,7 +82,7 @@ public class ShooterWeapon : Weapon
     {
         Transform cameraTransform = m_vcam.transform;
         Vector3 cameraPosition = cameraTransform.position;
-        Vector3 dir = cameraTransform.forward;
+        Vector3 dir = Target == null ? cameraTransform.forward : (Target.transform.position - cameraTransform.position).normalized;
 
         m_ray = new(cameraPosition, dir);
     }
