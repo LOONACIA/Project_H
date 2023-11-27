@@ -47,7 +47,7 @@ public class PossessionShuriken : MonoBehaviour
     {
         TryGetComponent<Rigidbody>(out m_rb);
         m_targetLayer = LayerMask.GetMask("Monster");
-        m_surikenStopLayer = LayerMask.GetMask("Wall", "Ground", "Monster");
+        m_surikenStopLayer = LayerMask.GetMask("Wall", "Ground", "Monster", "Shield");
     }
 
     public void InitSetting(Actor actor, Actor sender, Action<Actor> onTargetHit)

@@ -44,12 +44,14 @@ public class MonsterAttack : MonoBehaviour
 
     public bool CanAttack { get; set; } = true;
 
+    public GameObject Target { get; set; }
+
     public bool IsAttacking 
     {
         get
         {
             if (AttackWeapon == null) return false;
-            return AttackWeapon.State is Weapon.AttackState.IDLE or Weapon.AttackState.FOLLOW_THROUGH;
+            return AttackWeapon.State is not Weapon.AttackState.IDLE;
         }
     }
 
@@ -92,7 +94,13 @@ public class MonsterAttack : MonoBehaviour
             return;
         }
 
+        if (m_actor.IsPossessed)
+        {
+            Target = null;
+        }
+
         m_actor.Animator.SetTrigger(s_attackAnimationKey);
+        AttackWeapon.Target = Target;
         AttackWeapon.StartAttack();
     }
 

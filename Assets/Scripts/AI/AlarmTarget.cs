@@ -13,8 +13,28 @@ public class AlarmTarget : Action
 
     public SharedLayerMask Recipient;
 
+    private Monster m_actor;
+
+    public override void OnAwake()
+    {
+        base.OnAwake();
+
+        m_actor = GetComponent<Monster>();
+    }
+
     public override TaskStatus OnUpdate()
     {
+        if (Target.Value == null)
+        {
+            if (m_actor.Targets.Count == 0)
+            {
+                return TaskStatus.Failure;
+            }
+            else
+            {
+                return TaskStatus.Running;
+            }
+        }
         Actor actor = Target.Value.GetComponent<Actor>();
         SendMessageToOtherMonsters(actor);
         return TaskStatus.Success;

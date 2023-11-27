@@ -8,6 +8,10 @@ using UnityEngine;
 public class UpdateStatus : Action
 {
     public SharedTransform Self;
+
+    public SharedGameObject SelfObject;
+
+    public SharedGameObject Body;
     
     public SharedTransform Target;
 
@@ -22,15 +26,19 @@ public class UpdateStatus : Action
     public SharedBool isAttacking;
 
     private Monster m_owner;
+    
     public override void OnAwake()
     {
         m_owner = GetComponent<Monster>();
         
         Self.Value = transform;
+        SelfObject.Value = gameObject;
     }
 
     public override void OnStart()
     {
+        Body.Value = m_owner.Animator.gameObject;
+
         Actor closestTarget = m_owner.Targets
             .OrderBy(target => Vector3.Distance(transform.position, target.transform.position))
             .FirstOrDefault();
@@ -47,6 +55,8 @@ public class UpdateStatus : Action
             Target.Value = null;
             TargetObject.Value = null;
         }
+
+        m_owner.Attack.Target = TargetObject.Value;
 
         Hp.Value = m_owner.Status.Hp;
         isAttacking.Value = m_owner.Attack.IsAttacking;

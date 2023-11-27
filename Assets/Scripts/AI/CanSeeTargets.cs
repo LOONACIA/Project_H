@@ -1,8 +1,5 @@
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
-using System.Collections;
-using System.Collections.Generic;
-using System.Net;
 using UnityEngine;
 
 public class CanSeeTargets : Conditional
@@ -11,29 +8,27 @@ public class CanSeeTargets : Conditional
     public SharedGameObject target;
     public SharedGameObject self;
     public LayerMask targetLayer;
-    public float detectRange;
     public float fovAngle;
-    public float viewDistance;
-
+    public SharedFloat viewDistance;
 
     public override TaskStatus OnUpdate()
     {
         Vector3 selfPosition = self.Value.transform.position;
         Vector3 targetPosition = target.Value.transform.position;
 
-        Ray ray = new Ray(selfPosition, targetPosition-selfPosition);
+        Ray ray = new Ray(selfPosition, targetPosition - selfPosition);
         RaycastHit hit;
 
         Vector2 selfVector = new Vector2(selfPosition.x, selfPosition.z);
         Vector2 targetVector = new Vector2(targetPosition.x, targetPosition.z);
 
-
+        float distance = Vector3.Distance(selfPosition, targetPosition);
         float angle = Vector2.Angle(selfVector, targetVector);
         float dotProduct = Vector2.Dot(selfVector.normalized, targetVector.normalized);
 
         if (angle < fovAngle && dotProduct > 0.9f)
         {
-            if(Physics.Raycast(ray, out hit, Vector3.Distance(selfPosition, targetPosition), targetLayer))
+            if (Physics.Raycast(ray, out hit, distance, targetLayer) && distance <= viewDistance.Value)
             {
                 return TaskStatus.Failure;
             }

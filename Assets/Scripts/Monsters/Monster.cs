@@ -73,21 +73,6 @@ public class Monster : Actor
             Movement.TryDash(direction);
         }
     }
-
-    public override void Possessed()
-    {
-        base.Possessed();
-
-        // TODO: 빙의 게이지 관련 처리
-        Status.Damage = Attack.Data.PossessedAttack.Damage;
-    }
-
-    public override void Unpossessed()
-    {
-        base.Unpossessed();
-
-        Status.Damage = Attack.Data.Attack.Damage;
-    }
     
     public override void Block(bool value)
     {
@@ -96,6 +81,21 @@ public class Monster : Actor
             Status.IsBlocking = value;
             Animator.SetBool(s_blockAnimationKey, value);
         }
+    }
+    
+    protected override void OnPossessed()
+    {
+        base.OnPossessed();
+
+        // TODO: 빙의 게이지 관련 처리
+        Status.Damage = Attack.Data.PossessedAttack.Damage;
+    }
+
+    protected override void OnUnPossessed()
+    {
+        base.OnUnPossessed();
+
+        Status.Damage = Attack.Data.Attack.Damage;
     }
     
     private void OnTargetCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

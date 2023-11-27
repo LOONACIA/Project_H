@@ -18,11 +18,11 @@ public abstract class Actor : MonoBehaviour
     protected Rigidbody m_rigidbody;
 
     protected Collider m_collider;
+
+    protected BehaviorTree m_behaviorTree;
     
     [SerializeField]
     private ActorData m_data;
-
-    protected BehaviorTree m_behaviorTree;
 
     [SerializeField]
     private GameObject m_firstPersonCameraPivot;
@@ -32,14 +32,31 @@ public abstract class Actor : MonoBehaviour
     
     [SerializeField]
     private Animator m_thirdPersonAnimator;
+
+    private bool m_isPossessed;
     
     public ActorData Data => m_data;
     
     public ActorHealth Health { get; private set; }
     
     public ActorStatus Status { get; private set; }
-    
-    public bool IsPossessed { get; private set; }
+
+    public bool IsPossessed
+    {
+        get => m_isPossessed;
+        set
+        {
+            if (m_isPossessed == value)
+            {
+                return;
+            }
+
+            Animator.gameObject.SetActive(false);
+            m_isPossessed = value;
+            Animator.gameObject.SetActive(true);
+            OnIsPossessedChanged(value);
+        }
+    }
 
     public Animator Animator => IsPossessed ? m_firstPersonAnimator : m_thirdPersonAnimator;
     
@@ -85,14 +102,6 @@ public abstract class Actor : MonoBehaviour
         }
     }
 
-    protected virtual void Update()
-    {
-    }
-
-    protected virtual void FixedUpdate()
-    {
-    }
-
     public abstract void Move(Vector3 direction);
 
     public abstract void TryJump();
@@ -105,20 +114,32 @@ public abstract class Actor : MonoBehaviour
 
     public abstract void Block(bool value);
 
-    public virtual void Possessed()
+    public void PlayHackAnimation()
     {
-        Animator.gameObject.SetActive(false);
-        IsPossessed = true;
-        Animator.gameObject.SetActive(true);
+        Stun(m_data.ShurikenStunTime);
+    }
+    
+    protected virtual void OnPossessed()
+    {
         DisableAIComponents();
     }
     
-    public virtual void Unpossessed()
+    protected virtual void OnUnPossessed()
     {
-        Animator.gameObject.SetActive(false);
-        IsPossessed = false;
-        Animator.gameObject.SetActive(true);
+        Stun(m_data.UnpossessionStunTime);
         EnableAIComponents();
+    }
+    
+    protected virtual void OnIsPossessedChanged(bool value)
+    {
+        if (value)
+        {
+            OnPossessed();
+        }
+        else
+        {
+            OnUnPossessed();
+        }
     }
 
     protected void EnableAIComponents()
@@ -167,6 +188,8 @@ public abstract class Actor : MonoBehaviour
     /// </summary>
     protected virtual void OnDying()
     {
+        //StopAllCoroutines();
+        
         // Actor 제거 시 별도 처리가 필요한 경우 이곳에 작성합니다.
         Dying?.Invoke(this, EventArgs.Empty);
         
@@ -203,5 +226,22 @@ public abstract class Actor : MonoBehaviour
         {
             Debug.LogWarning($"{name}: {nameof(m_data)} is null");
         }
+    }
+
+    private void Stun(float seconds)
+    {
+        if (seconds <= 0f)
+        {
+            return;
+        }
+        
+        StartCoroutine(CoStun(seconds));
+    }
+    
+    private IEnumerator CoStun(float seconds)
+    {
+        Status.IsStunned = true;
+        yield return new WaitForSeconds(seconds);
+        Status.IsStunned = false;
     }
 }

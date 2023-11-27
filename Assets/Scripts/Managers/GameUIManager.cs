@@ -12,17 +12,19 @@ public class GameUIManager
 
     private UIShuriken m_shuriken;
 
+    private UIDamageIndicator m_damageIndicator;
+
     public void Init()
     {
     }
 
-    public void ShowHpIndicator(CharacterController player)
+    public void ShowHpIndicator(PlayerController player)
     {
         var ui = ManagerRoot.UI.ShowSceneUI<UIHpIndicator>();
         ui.SetPlayer(player);
     }
 
-    public void GenerateShieldIndicator(CharacterController player)
+    public void GenerateShieldIndicator(PlayerController player)
     {
         m_shieldIndicator = ManagerRoot.UI.ShowSceneUI<UIShieldIndicator>();
         m_shieldIndicator.SetPlayer(player);
@@ -40,6 +42,17 @@ public class GameUIManager
 
         m_shuriken = ManagerRoot.UI.ShowSceneUI<UIShuriken>();
         m_shuriken.SetPossessionProcessor(processor);
+    }
+
+    public void ShowDamageIndicator()
+    {
+        if (m_damageIndicator is not null)
+        {
+            // Do nothing
+            return;
+        }
+
+        m_damageIndicator = ManagerRoot.UI.ShowSceneUI<UIDamageIndicator>();
     }
 
     public void ShowCrosshair()

@@ -32,7 +32,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Unity.UnityLight
                 return TaskStatus.Failure;
             }
 
-            storeValue = light.intensity;
+            storeValue.Value = light.intensity;
             return TaskStatus.Success;
         }
 

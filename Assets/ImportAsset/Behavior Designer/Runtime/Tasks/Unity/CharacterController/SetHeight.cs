@@ -11,14 +11,14 @@ namespace BehaviorDesigner.Runtime.Tasks.Unity.UnityCharacterController
         [Tooltip("The height of the CharacterController")]
         public SharedFloat height;
 
-        private UnityEngine.CharacterController characterController;
+        private CharacterController characterController;
         private GameObject prevGameObject;
 
         public override void OnStart()
         {
             var currentGameObject = GetDefaultGameObject(targetGameObject.Value);
             if (currentGameObject != prevGameObject) {
-                characterController = currentGameObject.GetComponent<UnityEngine.CharacterController>();
+                characterController = currentGameObject.GetComponent<CharacterController>();
                 prevGameObject = currentGameObject;
             }
         }
