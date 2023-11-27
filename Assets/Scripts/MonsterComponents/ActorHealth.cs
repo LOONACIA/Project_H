@@ -72,20 +72,22 @@ public class ActorHealth : MonoBehaviour, IHealth
             return;
         }
 
-        // 쉴드를 가지고 있는 경우에 데미지 무효
+        // 쉴드를 가지고 있는 경우에 체력 대신 쉴드량 감소
         if (m_status.Shield != null)
         {
             m_status.Shield.TakeDamage(info.Damage);
-            return;
+        }
+        else
+        { 
+            // 몬스터가 피격시 애니메이션 실행 
+            if (!m_actor.IsPossessed)
+            {
+                PlayHitAnimation(info.AttackDirection, info.Attacker);
+            }
+
+            m_status.Hp -= info.Damage;
         }
 
-        // 피격 모션 실행 
-        if (!m_actor.IsPossessed)
-        {
-            PlayHitAnimation(info.AttackDirection, info.Attacker);
-        }
-
-        m_status.Hp -= info.Damage;
         OnDamaged(info);
     }
 

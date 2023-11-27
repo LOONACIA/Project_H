@@ -28,7 +28,8 @@ public class ActorStatus : MonoBehaviour
     [SerializeField]
     [ReadOnly]
     private bool m_isKnockBack;
-    
+
+    [SerializeField]
     private Shield m_shield;
 
     public int Hp
@@ -135,8 +136,7 @@ public class ActorStatus : MonoBehaviour
         // 쉴드가 더이상 유효하지 않으면 제거
         if (!Shield.IsValid)
         {
-            if (Shield.ShieldObject != null)
-                Destroy(Shield.ShieldObject);
+            Destroy(Shield.ShieldObject);
 
             Shield = null;
         }
