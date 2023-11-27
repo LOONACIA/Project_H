@@ -64,12 +64,13 @@ public class Monster : Actor
         Attack.Skill();
     }
 
-    public override void Dash()
+    public override void Dash(Vector3 direction)
     {
         //Movement.isDashing = !Movement.isDashing;
         if (IsPossessed)
         {
-            Movement.TryDash(FirstPersonCameraPivot.transform.forward);
+            //Movement.TryDash(FirstPersonCameraPivot.transform.forward);
+            Movement.TryDash(direction);
         }
     }
 
