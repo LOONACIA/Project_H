@@ -20,7 +20,6 @@ using UnityEditor.Callbacks;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
-using Object = UnityEngine.Object;
 
 namespace RenownedGames.AITreeEditor
 {

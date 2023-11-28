@@ -1,12 +1,6 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using LOONACIA.Unity;
 using UnityEngine;
-using UnityEngine.Android;
-using UnityEngine.EventSystems;
-using UnityEngine.UIElements;
 
 /*
  * 1인칭, 3인칭 공격을 시전, 데미지 처리

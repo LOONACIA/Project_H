@@ -2,7 +2,6 @@ using BehaviorDesigner.Runtime;
 using LOONACIA.Unity.Managers;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 

@@ -1,8 +1,4 @@
-using LOONACIA.Unity;
 using LOONACIA.Unity.Managers;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 public class GameUIManager
 {

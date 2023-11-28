@@ -1,7 +1,6 @@
 using Cinemachine;
 using LOONACIA.Unity;
 using LOONACIA.Unity.Managers;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -93,13 +92,16 @@ public class ShooterWeapon : Weapon
 
         var hits = Physics.RaycastAll(m_ray, m_maxDistance, m_aimLayers)
             .OrderBy(hit => hit.distance)
-            .TakeWhile(hit => hit.transform.gameObject.layer == m_damageLayer)
             .ToArray();
 
-        InvokeHitEvent(ProcessHit(hits));
+        RaycastHit end = hits.FirstOrDefault(hit => hit.transform.gameObject.layer != m_damageLayer);
+
+        var targets = hits.TakeWhile(hit => hit.transform.gameObject.layer == m_damageLayer);
+
+        InvokeHitEvent(ProcessHit(targets));
 
         // TODO: Remove test code
-        Vector3 target = hits.Length > 0 ? hits.Last().point : m_ray.GetPoint(m_maxDistance);
+        Vector3 target = hits.Length > 0 ? end.point : m_ray.GetPoint(m_maxDistance);
         DrawLine(target);
     }
 
