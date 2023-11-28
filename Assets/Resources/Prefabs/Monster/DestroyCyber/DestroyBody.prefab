@@ -2990,7 +2990,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ad36176aa803c44fbdede2bc7050bba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <WeaponData>k__BackingField: {fileID: 0}
+  <Type>k__BackingField: 0
   m_trailCaster: {fileID: 8710755369517487374}
 --- !u!114 &4397906429914967778
 MonoBehaviour:
@@ -5736,17 +5736,17 @@ PrefabInstance:
     - target: {fileID: 5007105180809570564, guid: be6ca77ef9c7808459cba8e94e9262b1,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.213
+      value: 0.16
       objectReference: {fileID: 0}
     - target: {fileID: 5007105180809570564, guid: be6ca77ef9c7808459cba8e94e9262b1,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.059
+      value: -0.039
       objectReference: {fileID: 0}
     - target: {fileID: 5007105180809570564, guid: be6ca77ef9c7808459cba8e94e9262b1,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.205
+      value: 0.217
       objectReference: {fileID: 0}
     - target: {fileID: 5007105180809570564, guid: be6ca77ef9c7808459cba8e94e9262b1,
         type: 3}
@@ -5756,7 +5756,7 @@ PrefabInstance:
     - target: {fileID: 5007105180809570564, guid: be6ca77ef9c7808459cba8e94e9262b1,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.54004586
+      value: -0.5400459
       objectReference: {fileID: 0}
     - target: {fileID: 5007105180809570564, guid: be6ca77ef9c7808459cba8e94e9262b1,
         type: 3}
@@ -5766,7 +5766,7 @@ PrefabInstance:
     - target: {fileID: 5007105180809570564, guid: be6ca77ef9c7808459cba8e94e9262b1,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.42344543
+      value: 0.42344546
       objectReference: {fileID: 0}
     - target: {fileID: 5007105180809570564, guid: be6ca77ef9c7808459cba8e94e9262b1,
         type: 3}
@@ -5787,6 +5787,36 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Sword Two-Hander Blue
+      objectReference: {fileID: 0}
+    - target: {fileID: 6258047005897676381, guid: be6ca77ef9c7808459cba8e94e9262b1,
+        type: 3}
+      propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[0].m_Value.x
+      value: 7.147266
+      objectReference: {fileID: 0}
+    - target: {fileID: 6258047005897676381, guid: be6ca77ef9c7808459cba8e94e9262b1,
+        type: 3}
+      propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[0].m_Value.y
+      value: 1.564926
+      objectReference: {fileID: 0}
+    - target: {fileID: 6258047005897676381, guid: be6ca77ef9c7808459cba8e94e9262b1,
+        type: 3}
+      propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[0].m_Value.z
+      value: -12.759896
+      objectReference: {fileID: 0}
+    - target: {fileID: 6258047005897676381, guid: be6ca77ef9c7808459cba8e94e9262b1,
+        type: 3}
+      propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[1].m_Value.x
+      value: 7.0307617
+      objectReference: {fileID: 0}
+    - target: {fileID: 6258047005897676381, guid: be6ca77ef9c7808459cba8e94e9262b1,
+        type: 3}
+      propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[1].m_Value.y
+      value: 1.7380933
+      objectReference: {fileID: 0}
+    - target: {fileID: 6258047005897676381, guid: be6ca77ef9c7808459cba8e94e9262b1,
+        type: 3}
+      propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[1].m_Value.z
+      value: -11.253155
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: be6ca77ef9c7808459cba8e94e9262b1, type: 3}
@@ -5828,6 +5858,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   useFixedUpdate: 0
-  m_trailStartPoint: {x: 0, y: 0.01, z: 0}
-  m_trailEndPoint: {x: 0, y: 1.39, z: 0}
-  m_trailCount: 4
+  m_trailStart: 0
+  m_trailEnd: 0
+  m_trailRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_trailCountY: 6
+  m_thicknessX: 1
+  m_thicknessInterval: 0.2
+  m_showGizmo: 1
+  m_gizmoRadius: 0.05
+  m_attackParticle: {fileID: 0}

@@ -69,6 +69,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
     [Header("대쉬 시간")][SerializeField]private float m_dashDuration = 0.05f;
 
     [Header("대쉬 딜레이")] [SerializeField] private float m_dashDelay = 0.3f;
+    [Header("대쉬 쿨타임")] [SerializeField] private float m_dashCoolTime = 1f;
     
     //대쉬 시작 시간을 저장하기 위한 값
     private float m_lastDashTime;
@@ -206,12 +207,18 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
             return;
         }
         
+        //쿨타임이 끝났는지 체크한다.
+        if (m_lastDashTime + m_dashCoolTime > Time.time)
+        {
+            return;
+        }
+        
         //대쉬를 시도함.
         //isDashing 중일 경우, 이동, 점프, 중력을 무시하고 해당 방향으로 이동한다.
         //TODO: 적 통과 로직 생각해보기
         //TODO: 슬로프에서 대쉬 시 거리에 대해 생각해보기
         //TODO: 하늘 위로 대쉬 가능하게 할 것인지 생각해보기
-        m_rigidbody.velocity = (direction.normalized * m_dashAmount / m_dashDuration);
+        m_rigidbody.velocity = (transform.TransformDirection(direction.normalized) * m_dashAmount / m_dashDuration);
         m_lastDashTime = Time.time;
         m_isDashing = true;
 

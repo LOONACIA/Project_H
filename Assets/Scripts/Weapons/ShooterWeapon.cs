@@ -1,6 +1,8 @@
 using Cinemachine;
 using LOONACIA.Unity;
+using LOONACIA.Unity.Coroutines;
 using LOONACIA.Unity.Managers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -36,11 +38,23 @@ public class ShooterWeapon : Weapon
 
     // TODO: Remove test code
     private LineRenderer m_renderer;
+    
+    private CoroutineEx m_drawLineCoroutine;
 
     private void Awake()
     {
         m_vcam = GetComponentInParent<Actor>().GetComponentInChildren<CinemachineVirtualCamera>();
         m_renderer = GetComponent<LineRenderer>();
+    }
+
+    private void OnDisable()
+    {
+        m_drawLineCoroutine?.Abort();
+    }
+
+    private void OnDestroy()
+    {
+        m_drawLineCoroutine?.Abort();
     }
 
     public void ChangeMode()
@@ -92,13 +106,16 @@ public class ShooterWeapon : Weapon
 
         var hits = Physics.RaycastAll(m_ray, m_maxDistance, m_aimLayers)
             .OrderBy(hit => hit.distance)
-            .TakeWhile(hit => hit.transform.gameObject.layer == m_damageLayer)
             .ToArray();
 
-        InvokeHitEvent(ProcessHit(hits));
+        RaycastHit end = hits.FirstOrDefault(hit => hit.transform.gameObject.layer != m_damageLayer);
+
+        var targets = hits.TakeWhile(hit => hit.transform.gameObject.layer == m_damageLayer);
+
+        InvokeHitEvent(ProcessHit(targets));
 
         // TODO: Remove test code
-        Vector3 target = hits.Length > 0 ? hits.Last().point : m_ray.GetPoint(m_maxDistance);
+        Vector3 target = hits.Length > 0 ? end.point : m_ray.GetPoint(m_maxDistance);
         DrawLine(target);
     }
 
@@ -139,6 +156,6 @@ public class ShooterWeapon : Weapon
         m_renderer.SetPosition(0, m_spawnPosition.position);
         m_renderer.SetPosition(1, target);
 
-        Utility.Lerp(0.1f, 0f, 0.5f, value => m_renderer.startWidth = m_renderer.endWidth = value);
+        m_drawLineCoroutine = Utility.Lerp(0.1f, 0f, 0.5f, value => m_renderer.startWidth = m_renderer.endWidth = value);
     }
 }

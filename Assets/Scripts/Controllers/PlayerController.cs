@@ -27,10 +27,20 @@ public partial class PlayerController : MonoBehaviour
     private Transform m_cameraHolder;
 
     private float m_cameraRotationX;
+
+    private bool m_isGameOver;
     
     public Actor Character => m_character;
 
+    /// <summary>
+    /// 데미지를 입었을 시, Indicator에 보내주는 이벤트
+    /// </summary>
     public event EventHandler<DamageInfo> Damaged;
+
+    /// <summary>
+    /// Block 했을 시, Indicator에 보내주는 이벤트
+    /// </summary>
+    public event EventHandler<DamageInfo> Blocked;
 
     public event EventHandler<int> HpChanged;
 
@@ -76,6 +86,11 @@ public partial class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (m_isGameOver)
+        {
+            return;
+        }
+        
 #if UNITY_EDITOR
         Look();
 #endif
@@ -83,6 +98,11 @@ public partial class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (m_isGameOver)
+        {
+            return;
+        }
+        
 #if !UNITY_EDITOR
         Look();
 #endif
@@ -117,7 +137,7 @@ public partial class PlayerController : MonoBehaviour
     {
         if (m_character != null)
         {
-            m_character.Dash();
+            m_character.Dash(m_directionInput);
         }
     }
 
@@ -183,33 +203,61 @@ public partial class PlayerController : MonoBehaviour
 
     private void RegisterActorEvents()
     {
-        if (m_character != null && m_character.Status != null)
+        if (m_character == null)
         {
-            m_character.Status.HpChanged -= OnHpChanged;
+            return;
+        }
+        
+        m_character.Dying += OnPlayerCharacterDying;
+        
+        if (m_character.Status != null)
+        {
             m_character.Status.HpChanged += OnHpChanged;
-
-            m_character.Health.Damaged -= OnDamaged;
             m_character.Health.Damaged += OnDamaged;
-            
-            m_character.Status.ShieldChanged -= OnShieldChanged;
+            m_character.Health.Blocked += OnBlocked;
             m_character.Status.ShieldChanged += OnShieldChanged;
         }
     }
 
     private void UnregisterActorEvents()
     {
-        if (m_character != null && m_character.Status != null)
+        if (m_character == null)
+        {
+            return;
+        }
+        
+        m_character.Dying -= OnPlayerCharacterDying;
+        
+        if (m_character.Status != null)
         {
             m_character.Status.HpChanged -= OnHpChanged;
             m_character.Status.ShieldChanged -= OnShieldChanged;
 
             m_character.Health.Damaged -= OnDamaged;
+            m_character.Health.Blocked -= OnBlocked;
         }
+    }
+    
+    private void OnPlayerCharacterDying(object sender, EventArgs e)
+    {
+        // TODO: 빙의 중 죽은 경우 어떻게 할 것인지 논의 필요
+        if (m_isOnPossessing)
+        {
+            return;
+        }
+        
+        GameManager.Instance.SetGameOver();
+        m_isGameOver = GameManager.Instance.IsGameOver;
     }
 
     private void OnDamaged(object sender, DamageInfo e)
     {
         Damaged?.Invoke(this, e);
+    }
+
+    private void OnBlocked(object sender, DamageInfo e)
+    {
+        Blocked?.Invoke(this, e);
     }
 
     private void OnHpChanged(object sender, int e)
