@@ -1,8 +1,3 @@
-using BehaviorDesigner.Runtime.Tasks.Unity.UnityInput;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Rendering;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 public class PossessionWallLoadingEffect : MonoBehaviour
