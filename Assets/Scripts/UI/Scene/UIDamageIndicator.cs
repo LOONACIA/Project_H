@@ -24,6 +24,7 @@ public class UIDamageIndicator : UIScene
     private void RegisterEvents()
     {
         m_characterController.Damaged += OnCharacterDamaged;
+        m_characterController.Blocked += OnCharacterBlocked;
     }
 
     private void OnCharacterDamaged(object sender, DamageInfo e)
@@ -31,6 +32,14 @@ public class UIDamageIndicator : UIScene
         DamageIndicator indi = Instantiate(damageIndicator, indicatorParent.transform).GetComponent<DamageIndicator>();
 
         indi.Init(e, m_characterController.Character);
+    }
+
+    private void OnCharacterBlocked(object sender, DamageInfo e)
+    {
+        DamageIndicator indi = Instantiate(damageIndicator, indicatorParent.transform).GetComponent<DamageIndicator>();
+        Color color = new Color(192f / 255f, 192f / 255f, 192f / 255f);
+
+        indi.Init(e, m_characterController.Character, color);
     }
     #endregion
 }
