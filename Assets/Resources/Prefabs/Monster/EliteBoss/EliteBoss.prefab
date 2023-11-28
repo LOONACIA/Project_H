@@ -113,6 +113,7 @@ MonoBehaviour:
   m_dashAmount: 5
   m_dashDuration: 0.05
   m_dashDelay: 0.3
+  m_dashCoolTime: 1
 --- !u!114 &6534118151209346356
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,6 +129,7 @@ MonoBehaviour:
   m_data: {fileID: 11400000, guid: 582d22e2c41073248985492f4c95d645, type: 2}
   hitVfx: {fileID: 80834651353081766}
   particleCoef: 7
+  m_blockAngle: 180
 --- !u!114 &8559379134317808564
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -348,6 +350,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6810067533769003944, guid: 5592ecc189db449439352ab1cc9439eb,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5592ecc189db449439352ab1cc9439eb, type: 3}
 --- !u!2083052967 &80834651353081766 stripped
@@ -489,12 +496,12 @@ PrefabInstance:
     - target: {fileID: 1358065989294938390, guid: 23c65171aeeeb094c818f3a3b1deff91,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.644
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 1358065989294938390, guid: 23c65171aeeeb094c818f3a3b1deff91,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.531
+      value: -0.1
       objectReference: {fileID: 0}
     - target: {fileID: 1358065989294938390, guid: 23c65171aeeeb094c818f3a3b1deff91,
         type: 3}
@@ -843,6 +850,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: TP_Body
+      objectReference: {fileID: 0}
+    - target: {fileID: 3388031222607467699, guid: afa057bc0540ac741bb5b6dfda58c025,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3600598477035364587, guid: afa057bc0540ac741bb5b6dfda58c025,
         type: 3}
@@ -1238,3 +1250,4 @@ MonoBehaviour:
   m_thicknessInterval: 0.1
   m_showGizmo: 1
   m_gizmoRadius: 0.05
+  m_attackParticle: {fileID: 0}
