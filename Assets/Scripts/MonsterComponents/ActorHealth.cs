@@ -21,6 +21,8 @@ public class ActorHealth : MonoBehaviour, IHealth
 
     public event EventHandler<DamageInfo> Damaged;
 
+    public event EventHandler<DamageInfo> Blocked;
+
     public event EventHandler<DamageInfo> Dying;
 
     public event EventHandler Died;
@@ -67,6 +69,7 @@ public class ActorHealth : MonoBehaviour, IHealth
         if (m_status.IsBlocking)
         {
             PlayBlockAnimation();
+            Blocked?.Invoke(this, info);
             return;
         }
 
