@@ -76,6 +76,11 @@ public partial class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.Instance.IsGameOver)
+        {
+            return;
+        }
+        
 #if UNITY_EDITOR
         Look();
 #endif
@@ -83,6 +88,11 @@ public partial class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (GameManager.Instance.IsGameOver)
+        {
+            return;
+        }
+        
 #if !UNITY_EDITOR
         Look();
 #endif

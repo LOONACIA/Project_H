@@ -1,4 +1,5 @@
 using LOONACIA.Unity.Managers;
+using System;
 
 public class GameUIManager
 {
@@ -12,6 +13,12 @@ public class GameUIManager
 
     public void Init()
     {
+    }
+    
+    public void ShowGameOverUI(Action onRestart, Action onExit)
+    {
+        var ui = ManagerRoot.UI.ShowPopupUI<UIGameOver>();
+        ui.SetButtonAction(onRestart, onExit);
     }
 
     public void ShowHpIndicator(PlayerController player)
