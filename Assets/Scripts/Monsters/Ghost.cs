@@ -48,7 +48,7 @@ public class Ghost : Actor
     {
     }
 
-    public override void Dash()
+    public override void Dash(Vector3 direction)
     {
     }
 
