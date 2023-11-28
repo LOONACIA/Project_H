@@ -27,6 +27,8 @@ public partial class PlayerController : MonoBehaviour
     private Transform m_cameraHolder;
 
     private float m_cameraRotationX;
+
+    private bool m_isGameOver;
     
     public Actor Character => m_character;
 
@@ -76,7 +78,7 @@ public partial class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.IsGameOver)
+        if (m_isGameOver)
         {
             return;
         }
@@ -88,7 +90,7 @@ public partial class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (GameManager.Instance.IsGameOver)
+        if (m_isGameOver)
         {
             return;
         }
@@ -193,28 +195,49 @@ public partial class PlayerController : MonoBehaviour
 
     private void RegisterActorEvents()
     {
-        if (m_character != null && m_character.Status != null)
+        if (m_character == null)
         {
-            m_character.Status.HpChanged -= OnHpChanged;
+            return;
+        }
+        
+        m_character.Dying += OnPlayerCharacterDying;
+        
+        if (m_character.Status != null)
+        {
             m_character.Status.HpChanged += OnHpChanged;
-
-            m_character.Health.Damaged -= OnDamaged;
             m_character.Health.Damaged += OnDamaged;
-            
-            m_character.Status.ShieldChanged -= OnShieldChanged;
             m_character.Status.ShieldChanged += OnShieldChanged;
         }
     }
 
     private void UnregisterActorEvents()
     {
-        if (m_character != null && m_character.Status != null)
+        if (m_character == null)
+        {
+            return;
+        }
+        
+        m_character.Dying -= OnPlayerCharacterDying;
+        
+        if (m_character.Status != null)
         {
             m_character.Status.HpChanged -= OnHpChanged;
             m_character.Status.ShieldChanged -= OnShieldChanged;
 
             m_character.Health.Damaged -= OnDamaged;
         }
+    }
+    
+    private void OnPlayerCharacterDying(object sender, EventArgs e)
+    {
+        // TODO: 빙의 중 죽은 경우 어떻게 할 것인지 논의 필요
+        if (m_isOnPossessing)
+        {
+            return;
+        }
+        
+        GameManager.Instance.SetGameOver();
+        m_isGameOver = GameManager.Instance.IsGameOver;
     }
 
     private void OnDamaged(object sender, DamageInfo e)

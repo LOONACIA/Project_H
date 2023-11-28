@@ -28,8 +28,6 @@ public class GameManager : MonoBehaviour
     private EffectManager m_effect = new();
 
     private GameUIManager m_ui = new();
-
-    private TargetManager m_target = new();
     
     public static CameraManager Camera => Instance.m_camera;
     
@@ -38,8 +36,6 @@ public class GameManager : MonoBehaviour
     public static GameSettings Settings => Instance.m_settings; 
     
     public static GameUIManager UI => Instance.m_ui;
-
-    public static TargetManager Target => Instance.m_target;
 
     public bool IsGameOver { get; private set; }
 
@@ -118,7 +114,7 @@ public class GameManager : MonoBehaviour
     private void OnSceneChanging(Scene obj)
     {
         // 씬이 변경될 때 별도 처리가 필요한 경우 여기에 작성
-        m_target.Init();
+        m_ui.Clear();
 
         IsGameOver = false;
         Time.timeScale = 1f;
