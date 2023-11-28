@@ -117,7 +117,7 @@ public partial class PlayerController : MonoBehaviour
     {
         if (m_character != null)
         {
-            m_character.Dash();
+            m_character.Dash(m_directionInput);
         }
     }
 

@@ -1,3 +1,4 @@
+using LOONACIA.Unity.Coroutines;
 using System;
 using LOONACIA.Unity.Managers;
 using System.Collections;
@@ -19,11 +20,13 @@ public class PossessionProcessor : MonoBehaviour
     private Actor m_sender;
 
     // 빙의가 가능한지 여부 체크, 표창을 던질 지, 빙의를 할지를 판단함.
-    public bool m_isAblePossession = false;
+    private bool m_isAblePossession;
     
-    public bool m_isHitTarget = false;
+    private bool m_isHitTarget;
 
-    public PossessionShuriken m_shuriken;
+    private PossessionShuriken m_shuriken;
+    
+    private CoroutineEx m_possessionCoroutine;
 
     /// <summary>
     /// 빙의 타겟 선정에 성공할 경우, 빙의 시작 시 발생하는 이벤트.
@@ -58,6 +61,7 @@ public class PossessionProcessor : MonoBehaviour
         // TODO: 풀링 시 shuriken null check 로직 수정 필요
         if (!m_isHitTarget || m_shuriken == null)
         {
+            m_isAblePossession = false;
             m_sender.Animator.SetTrigger(s_possess);
             return;
         }
@@ -67,7 +71,6 @@ public class PossessionProcessor : MonoBehaviour
             return;
 
         //표창이 박혔을 시, 빙의 시작
-        m_isAblePossession = false;
         m_isHitTarget = false;
         
         PossessTarget();
@@ -179,23 +182,38 @@ public class PossessionProcessor : MonoBehaviour
         }
     }
 
-    private void OnTargetHit(Actor actor)
+    private void OnTargetHit(Actor target)
     {
+        target.Dying += OnTargetDying;
         m_isHitTarget = true;
-        TargetHit?.Invoke(this, actor.Data.PossessionRequiredTime);
-        TryHacking(actor);
+        TargetHit?.Invoke(this, target.Data.PossessionRequiredTime);
+        TryHacking(target);
     }
 
-    private void TryHacking(Actor actor)
+    private void OnTargetDying(object sender, EventArgs e)
     {
-        actor.Health.TakeDamage(new(0, default, default, m_sender));
-        actor.PlayHackAnimation();
-        StartCoroutine(CoWaitForPossession(actor.Data.PossessionRequiredTime));
+        m_possessionCoroutine?.Abort();
+        
+        var target = (Actor)sender;
+        target.Dying -= OnTargetDying;
+        
+        m_isAblePossession = false;
+        m_isHitTarget = false;
+        m_shuriken = null;
+        OnPossessed(null);
+    }
+
+    private void TryHacking(Actor target)
+    {
+        target.Health.TakeDamage(new(0, default, default, m_sender));
+        target.PlayHackAnimation();
+        m_possessionCoroutine = CoroutineEx.Create(this, CoWaitForPossession(target.Data.PossessionRequiredTime));
     }
     
     private IEnumerator CoWaitForPossession(float seconds)
     {
         yield return new WaitForSeconds(seconds);
+        
         m_isAblePossession = true;
         Possessable?.Invoke(this, EventArgs.Empty);
     }

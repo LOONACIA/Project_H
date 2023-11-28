@@ -109,7 +109,7 @@ public abstract class Actor : MonoBehaviour
 
     public abstract void Skill();
 
-    public abstract void Dash();
+    public abstract void Dash(Vector3 direction);
 
     public abstract void Block(bool value);
 

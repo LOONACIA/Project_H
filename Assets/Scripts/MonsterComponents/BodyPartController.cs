@@ -34,14 +34,6 @@ public class BodyPartController : MonoBehaviour
         }
     }
 
-    private void OnEnable()
-    {
-        foreach (var renderer in GetComponentsInChildren<MeshRenderer>())
-        {
-            renderer.enabled = true;
-        }
-    }
-
     private void ReplaceBody(object sender, DamageInfo info)
     {
         foreach (var bodyPartScript in m_bodyPartScripts)
@@ -52,11 +44,6 @@ public class BodyPartController : MonoBehaviour
             bodyPartScript.transform.SetParent(m_bodyPartCollector.transform);
         }
 
-        foreach (var renderer in GetComponentsInChildren<MeshRenderer>())
-        {
-            renderer.enabled = false;
-        }
-
-        //gameObject.SetActive(false);
+        gameObject.SetActive(false);
     }
 }

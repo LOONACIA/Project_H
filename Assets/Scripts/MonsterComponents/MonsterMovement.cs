@@ -211,7 +211,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         //TODO: 적 통과 로직 생각해보기
         //TODO: 슬로프에서 대쉬 시 거리에 대해 생각해보기
         //TODO: 하늘 위로 대쉬 가능하게 할 것인지 생각해보기
-        m_rigidbody.velocity = (direction.normalized * m_dashAmount / m_dashDuration);
+        m_rigidbody.velocity = (transform.TransformDirection(direction.normalized) * m_dashAmount / m_dashDuration);
         m_lastDashTime = Time.time;
         m_isDashing = true;
 
