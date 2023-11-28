@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace BehaviorDesigner.Runtime.Tasks
 {
     [TaskDescription("Start a new behavior tree and return success after it has been started.")]

@@ -1,7 +1,4 @@
-using BehaviorDesigner.Runtime.Tasks.Unity.UnityQuaternion;
-using Cinemachine.Utility;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -43,11 +40,17 @@ public class DamageIndicator : MonoBehaviour
     #region PrivateMethod
     private void TraceTarget()
     {
-        transform.rotation = Quaternion.Euler(0, 0, CaculateAngle());
+        transform.rotation = Quaternion.Euler(0, 0, CalculateAngle());
     }
 
-    private float CaculateAngle()
+    private float CalculateAngle()
     {
+        if (m_attacker == null)
+        {
+            Destroy(gameObject);
+            return default;
+        }
+        
         Vector3 posA = m_victim.transform.position;
         Vector3 posB = m_attacker.transform.position;
 

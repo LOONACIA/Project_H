@@ -1,10 +1,4 @@
-using BehaviorDesigner.Runtime.Tasks.Unity.UnityCharacterController;
-using BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject;
-using BehaviorDesigner.Runtime.Tasks.Unity.UnityTransform;
-using LOONACIA.Unity;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PossessionShuriken : MonoBehaviour

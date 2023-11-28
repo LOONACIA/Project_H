@@ -8,7 +8,6 @@
    ================================================================ */
 
 using System;
-using UnityEngine;
 
 namespace RenownedGames.Apex
 {

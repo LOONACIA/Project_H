@@ -1,10 +1,6 @@
-using BehaviorDesigner.Runtime;
-using System.Collections;
-using System.Collections.Generic;
 using LOONACIA.Unity;
 using System;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class ActorStatus : MonoBehaviour
 {
