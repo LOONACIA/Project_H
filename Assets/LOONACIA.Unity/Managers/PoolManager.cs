@@ -55,7 +55,7 @@ namespace LOONACIA.Unity.Managers
 
 		public void Clear(bool destroyAssociatedObject)
 		{
-			foreach (Transform child in _root)
+			foreach (Transform child in Root)
 			{
 				Object.Destroy(child.gameObject);
 			}
