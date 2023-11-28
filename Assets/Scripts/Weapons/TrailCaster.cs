@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.VFX;
 
+
 public class TrailCaster : MonoBehaviour
 {
 

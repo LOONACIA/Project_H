@@ -32,7 +32,15 @@ public partial class PlayerController : MonoBehaviour
     
     public Actor Character => m_character;
 
+    /// <summary>
+    /// 데미지를 입었을 시, Indicator에 보내주는 이벤트
+    /// </summary>
     public event EventHandler<DamageInfo> Damaged;
+
+    /// <summary>
+    /// Block 했을 시, Indicator에 보내주는 이벤트
+    /// </summary>
+    public event EventHandler<DamageInfo> Blocked;
 
     public event EventHandler<int> HpChanged;
 
@@ -206,6 +214,7 @@ public partial class PlayerController : MonoBehaviour
         {
             m_character.Status.HpChanged += OnHpChanged;
             m_character.Health.Damaged += OnDamaged;
+            m_character.Health.Blocked += OnBlocked;
             m_character.Status.ShieldChanged += OnShieldChanged;
         }
     }
@@ -225,6 +234,7 @@ public partial class PlayerController : MonoBehaviour
             m_character.Status.ShieldChanged -= OnShieldChanged;
 
             m_character.Health.Damaged -= OnDamaged;
+            m_character.Health.Blocked -= OnBlocked;
         }
     }
     
@@ -243,6 +253,11 @@ public partial class PlayerController : MonoBehaviour
     private void OnDamaged(object sender, DamageInfo e)
     {
         Damaged?.Invoke(this, e);
+    }
+
+    private void OnBlocked(object sender, DamageInfo e)
+    {
+        Blocked?.Invoke(this, e);
     }
 
     private void OnHpChanged(object sender, int e)

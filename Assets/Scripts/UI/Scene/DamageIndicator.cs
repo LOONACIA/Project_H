@@ -31,6 +31,17 @@ public class DamageIndicator : MonoBehaviour
         StartCoroutine(nameof(IE_FadeOut));
     }
 
+    public void Init(DamageInfo _info, Actor _sender, Color color)
+    {
+        m_attacker = _info.Attacker;
+        m_victim = _sender;
+
+        indicatorImage.color = color;
+        TraceTarget();
+
+        StartCoroutine(nameof(IE_FadeOut));
+    }
+
     private void Update()
     {
         TraceTarget();
