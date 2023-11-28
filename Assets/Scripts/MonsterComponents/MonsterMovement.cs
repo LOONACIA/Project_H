@@ -69,6 +69,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
     [Header("대쉬 시간")][SerializeField]private float m_dashDuration = 0.05f;
 
     [Header("대쉬 딜레이")] [SerializeField] private float m_dashDelay = 0.3f;
+    [Header("대쉬 쿨타임")] [SerializeField] private float m_dashCoolTime = 1f;
     
     //대쉬 시작 시간을 저장하기 위한 값
     private float m_lastDashTime;
@@ -202,6 +203,12 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         
         //딜레이가 끝났는지 체크한다.
         if (m_lastDashTime + m_dashDelay > Time.time)
+        {
+            return;
+        }
+        
+        //쿨타임이 끝났는지 체크한다.
+        if (m_lastDashTime + m_dashCoolTime > Time.time)
         {
             return;
         }
