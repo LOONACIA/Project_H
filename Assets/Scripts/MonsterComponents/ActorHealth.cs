@@ -19,6 +19,10 @@ public class ActorHealth : MonoBehaviour, IHealth
 
     private ActorStatus m_status;
 
+    [Header("Block이 가능한 범위를 나타냅니다. x-z평면 기준")]
+    [SerializeField]
+    private float m_blockAngle = 180f;
+
     public event EventHandler<DamageInfo> Damaged;
 
     public event EventHandler<DamageInfo> Blocked;
@@ -66,7 +70,8 @@ public class ActorHealth : MonoBehaviour, IHealth
         }
 
         // 방어 모션 중에 공격 받을 시 데미지 무효, 충격 받는 모션 실행
-        if (m_status.IsBlocking)
+        // 공격의 방향성도 체크
+        if (m_status.IsBlocking&&CheckBlockDirection(info))
         {
             PlayBlockAnimation();
             Blocked?.Invoke(this, info);
@@ -171,6 +176,28 @@ public class ActorHealth : MonoBehaviour, IHealth
             hitVfx.SetVector3(ConstVariables.VFX_GRAPH_PARAMETER_DIRECTION, damage.AttackDirection);
             hitVfx.transform.position = damage.HitPosition;
             hitVfx.SendEvent(ConstVariables.VFX_GRAPH_EVENT_ON_PLAY);
+        }
+    }
+
+    private bool CheckBlockDirection(DamageInfo info)
+    {
+        //대상과 나의 x-z 2차원 좌표를 기준으로 체크합니다.
+        //내가 보고있는 방향을 기준으로 각도를 체크합니다.
+        //LOL의 판테온과 거의 같은 로직
+        Vector3 dir = info.Attacker.transform.position - transform.position;
+        dir.y = 0f;
+
+        Vector3 front = transform.forward;
+        front.y = 0f;
+
+        //front 벡터와 공격받은 벡터가 지정한 각도값 내에 있을경우 Block
+        if (Vector3.Angle(front, dir) < m_blockAngle * 0.5f)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 }
