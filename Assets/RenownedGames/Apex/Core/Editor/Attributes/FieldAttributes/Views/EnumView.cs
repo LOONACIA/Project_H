@@ -8,15 +8,9 @@
    ================================================================ */
 
 using RenownedGames.Apex;
-using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
 using UnityEditor;
 using UnityEngine;
-using Vexe.Runtime.Extensions;
 
 namespace RenownedGames.ApexEditor
 {

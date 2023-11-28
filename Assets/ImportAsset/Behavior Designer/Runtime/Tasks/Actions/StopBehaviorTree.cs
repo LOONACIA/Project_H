@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace BehaviorDesigner.Runtime.Tasks
 {
     [TaskDescription("Pause or disable a behavior tree and return success after it has been stopped.")]

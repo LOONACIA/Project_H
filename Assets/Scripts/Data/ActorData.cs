@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = nameof(ActorData), menuName = "Data/" + nameof(ActorData))]
 public class ActorData : ScriptableObject
