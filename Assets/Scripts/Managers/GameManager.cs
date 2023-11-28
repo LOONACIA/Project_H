@@ -63,15 +63,20 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void OnEnable()
-    {
-        IsGameOver = false;
-    }
-
     public void SetGameOver()
     {
         // TODO: 게임 오버 처리
+        Time.timeScale = 0;
         IsGameOver = true;
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        UI.ShowGameOverUI(onRestart: () => SceneManagerEx.LoadScene(SceneManager.GetActiveScene().name),
+#if UNITY_EDITOR
+            onExit: () => UnityEditor.EditorApplication.isPlaying = false
+#else
+            onExit: Application.Quit
+#endif
+        );
     }
 
     private static void CreateInstance()
@@ -114,6 +119,11 @@ public class GameManager : MonoBehaviour
     {
         // 씬이 변경될 때 별도 처리가 필요한 경우 여기에 작성
         m_target.Init();
+
+        IsGameOver = false;
+        Time.timeScale = 1f;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
     
     private static void InitializeLog()

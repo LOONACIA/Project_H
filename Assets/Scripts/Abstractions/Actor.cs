@@ -200,6 +200,11 @@ public abstract class Actor : MonoBehaviour
 
     protected virtual void OnDied()
     {
+        if (IsPossessed)
+        {
+            GameManager.Instance.SetGameOver();
+        }
+        
         StartCoroutine(CoDie(ConstVariables.MONSTER_DESTROY_WAIT_TIME));
     }
     

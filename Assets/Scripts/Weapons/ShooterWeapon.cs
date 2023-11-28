@@ -1,6 +1,8 @@
 using Cinemachine;
 using LOONACIA.Unity;
+using LOONACIA.Unity.Coroutines;
 using LOONACIA.Unity.Managers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -36,11 +38,23 @@ public class ShooterWeapon : Weapon
 
     // TODO: Remove test code
     private LineRenderer m_renderer;
+    
+    private CoroutineEx m_drawLineCoroutine;
 
     private void Awake()
     {
         m_vcam = GetComponentInParent<Actor>().GetComponentInChildren<CinemachineVirtualCamera>();
         m_renderer = GetComponent<LineRenderer>();
+    }
+
+    private void OnDisable()
+    {
+        m_drawLineCoroutine?.Abort();
+    }
+
+    private void OnDestroy()
+    {
+        m_drawLineCoroutine?.Abort();
     }
 
     public void ChangeMode()
@@ -142,6 +156,6 @@ public class ShooterWeapon : Weapon
         m_renderer.SetPosition(0, m_spawnPosition.position);
         m_renderer.SetPosition(1, target);
 
-        Utility.Lerp(0.1f, 0f, 0.5f, value => m_renderer.startWidth = m_renderer.endWidth = value);
+        m_drawLineCoroutine = Utility.Lerp(0.1f, 0f, 0.5f, value => m_renderer.startWidth = m_renderer.endWidth = value);
     }
 }
