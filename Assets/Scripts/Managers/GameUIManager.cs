@@ -14,6 +14,14 @@ public class GameUIManager
     public void Init()
     {
     }
+
+    public void Clear()
+    {
+        m_crosshair = null;
+        m_shieldIndicator = null;
+        m_shuriken = null;
+        m_damageIndicator = null;
+    }
     
     public void ShowGameOverUI(Action onRestart, Action onExit)
     {
@@ -37,24 +45,12 @@ public class GameUIManager
 
     public void ShowShurikenIndicator(PossessionProcessor processor)
     {
-        if (m_shuriken is not null)
-        {
-            // Do nothing
-            return;
-        }
-
         m_shuriken = ManagerRoot.UI.ShowSceneUI<UIShuriken>();
         m_shuriken.SetPossessionProcessor(processor);
     }
 
     public void ShowDamageIndicator()
     {
-        if (m_damageIndicator is not null)
-        {
-            // Do nothing
-            return;
-        }
-
         m_damageIndicator = ManagerRoot.UI.ShowSceneUI<UIDamageIndicator>();
     }
 
