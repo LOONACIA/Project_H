@@ -1,5 +1,6 @@
 using LOONACIA.Unity.Managers;
 using System;
+using UnityEngine;
 
 public class GameUIManager
 {
@@ -44,6 +45,7 @@ public class GameUIManager
         }
 
         m_shuriken = ManagerRoot.UI.ShowSceneUI<UIShuriken>();
+        m_shuriken.GetComponent<Canvas>().sortingOrder = -2;
         m_shuriken.SetPossessionProcessor(processor);
     }
 
