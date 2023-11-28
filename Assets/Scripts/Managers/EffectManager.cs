@@ -1,12 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using Cinemachine;
 using LOONACIA.Unity;
 using LOONACIA.Unity.Managers;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
-using UnityEngine.VFX;
 
 public class EffectManager
 {

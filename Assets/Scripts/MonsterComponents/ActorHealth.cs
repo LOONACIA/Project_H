@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.VFX;
@@ -31,8 +30,7 @@ public class ActorHealth : MonoBehaviour, IHealth
     public int MaxHp => m_data.MaxHp;
 
     public bool IsDead => CurrentHp <= 0;
-
-
+    
     protected void Awake()
     {
         m_actor = GetComponent<Monster>();
@@ -42,20 +40,20 @@ public class ActorHealth : MonoBehaviour, IHealth
 
     private void OnEnable()
     {
-        var receiver = GetComponentInChildren<DeathAnimationEventReceiver>();
-        if (receiver != null)
-        {
-            receiver.DeathAnimationEnd += OnDied;
-        }
+        // var receiver = GetComponentInChildren<DeathAnimationEventReceiver>();
+        // if (receiver != null)
+        // {
+        //     receiver.DeathAnimationEnd += OnDied;
+        // }
     }
 
     private void OnDisable()
     {
-        var receiver = GetComponentInChildren<DeathAnimationEventReceiver>();
-        if (receiver != null)
-        {
-            receiver.DeathAnimationEnd -= OnDied;
-        }
+        // var receiver = GetComponentInChildren<DeathAnimationEventReceiver>();
+        // if (receiver != null)
+        // {
+        //     receiver.DeathAnimationEnd -= OnDied;
+        // }
     }
 
     public void TakeDamage(DamageInfo info)
@@ -78,7 +76,7 @@ public class ActorHealth : MonoBehaviour, IHealth
             m_status.Shield.TakeDamage(info.Damage);
         }
         else
-        { 
+        {
             // 몬스터가 피격시 애니메이션 실행 
             if (!m_actor.IsPossessed)
             {
@@ -105,24 +103,22 @@ public class ActorHealth : MonoBehaviour, IHealth
         PlayVfx(info);
         if (IsDead)
         {
-            Dying?.Invoke(this, info);
             bool hasAnimation = m_actor.Animator.parameters.Any(param => param.name == "Dead");
             if (hasAnimation)
             {
                 m_actor.Animator.SetTrigger(ConstVariables.ANIMATOR_PARAMETER_DEAD);
             }
-        }
-        else
-        {
+            OnDying(info);
+            OnDied();
         }
     }
 
-    private void OnDied(object sender, EventArgs e)
+    private void OnDying(DamageInfo info)
     {
-        Death();
+        Dying?.Invoke(this, info);
     }
 
-    private void Death()
+    private void OnDied()
     {
         Died?.Invoke(this, EventArgs.Empty);
     }
@@ -156,8 +152,6 @@ public class ActorHealth : MonoBehaviour, IHealth
                 m_actor.Animator.SetFloat(ConstVariables.ANIMATOR_PARAMETER_HIT_DIRECTION_Z, 0);
             }
         }
-
-        //m_actor.Animator.SetTrigger("Hit");
     }
 
     private void PlayBlockAnimation()
