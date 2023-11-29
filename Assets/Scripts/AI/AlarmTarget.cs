@@ -48,7 +48,7 @@ public class AlarmTarget : Action
     /// <param name="target">타겟으로 지정할 대상입니다.</param>
     /// <param name="radius">주변 몬스터를 찾는데 사용할 거리입니다.</param>
     /// <param name="clearExistingTargets">기존 타겟을 제거할지 여부를 나타내는 값입니다.</param>
-    private void SendMessageToOtherMonsters(Actor target, float radius = Mathf.Infinity, bool clearExistingTargets = true)
+    private void SendMessageToOtherMonsters(Actor target, float radius = Mathf.Infinity, bool clearExistingTargets = false)
     {
         var monstersInRadius = Physics.OverlapSphere(transform.position, radius, Recipient.Value)
             .Select(col => col.GetComponent<Monster>())

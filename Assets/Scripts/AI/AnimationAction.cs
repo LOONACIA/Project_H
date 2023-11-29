@@ -12,10 +12,16 @@ public class AnimationAction : Action
         m_monster = GetComponent<Monster>();
     }
 
+    public override void OnStart()
+    {
+        m_monster.TryAttack();
+        isAttacking.Value = m_monster.Attack.IsAttacking;
+    }
+
     // Start is called before the first frame update
     public override TaskStatus OnUpdate()
     {
-        m_monster.TryAttack();
+        //m_monster.TryAttack();
         isAttacking.Value = m_monster.Attack.IsAttacking;
         if (isAttacking.Value)
         {

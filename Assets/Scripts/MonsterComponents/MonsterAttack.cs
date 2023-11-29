@@ -45,7 +45,7 @@ public class MonsterAttack : MonoBehaviour
         get
         {
             if (AttackWeapon == null) return false;
-            return AttackWeapon.State is not Weapon.AttackState.IDLE;
+            return AttackWeapon.IsAttacking;
         }
     }
 
@@ -211,7 +211,7 @@ public class MonsterAttack : MonoBehaviour
         {
             switch (weapon.Type)
             {
-                case Weapon.WeaponType.ATTACK_WEAPON:
+                case Weapon.WeaponType.AttackWeapon:
                     if (attackWeapon != null)
                     {
                         Debug.LogError("AttackWeapon 중복 등록됨");
@@ -219,7 +219,7 @@ public class MonsterAttack : MonoBehaviour
 
                     attackWeapon = weapon;
                     break;
-                case Weapon.WeaponType.SKILL_WEAPON:
+                case Weapon.WeaponType.SkillWeapon:
                     if (skillWeapon != null)
                     {
                         Debug.LogError("SkillWeapon 중복 등록됨");
@@ -227,7 +227,7 @@ public class MonsterAttack : MonoBehaviour
 
                     skillWeapon = weapon;
                     break;
-                case Weapon.WeaponType.BLOCKPUSH_WEAPON:
+                case Weapon.WeaponType.BlockPushWeapon:
                     if (blockPushWeapon != null)
                     {
                         Debug.LogError("BlockPushWeapon 중복 등록됨");
@@ -249,9 +249,9 @@ public class MonsterAttack : MonoBehaviour
         {
             return type switch
             {
-                Weapon.WeaponType.SKILL_WEAPON => m_data.PossessedSkill,
-                Weapon.WeaponType.ATTACK_WEAPON => m_data.PossessedAttack,
-                Weapon.WeaponType.BLOCKPUSH_WEAPON => m_data.PossessedBlockPush,
+                Weapon.WeaponType.SkillWeapon => m_data.PossessedSkill,
+                Weapon.WeaponType.AttackWeapon => m_data.PossessedAttack,
+                Weapon.WeaponType.BlockPushWeapon => m_data.PossessedBlockPush,
                 _ => null
             };
         }
@@ -259,9 +259,9 @@ public class MonsterAttack : MonoBehaviour
         {
             return type switch
             {
-                Weapon.WeaponType.SKILL_WEAPON => m_data.Skill,
-                Weapon.WeaponType.ATTACK_WEAPON => m_data.Attack,
-                Weapon.WeaponType.BLOCKPUSH_WEAPON => m_data.BlockPush,
+                Weapon.WeaponType.SkillWeapon => m_data.Skill,
+                Weapon.WeaponType.AttackWeapon => m_data.Attack,
+                Weapon.WeaponType.BlockPushWeapon => m_data.BlockPush,
                 _ => null
             };
         }

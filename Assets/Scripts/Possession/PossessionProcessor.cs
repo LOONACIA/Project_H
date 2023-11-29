@@ -8,6 +8,11 @@ public class PossessionProcessor : MonoBehaviour
 {
     private static readonly int s_possess = Animator.StringToHash("Possess");
 
+    /// <summary>
+    /// 해킹
+    /// </summary>
+    public float shurikenSphereRadius = 0.5f;
+
     [SerializeField]
     private GameObject m_ghostPrefab;
 
@@ -21,8 +26,8 @@ public class PossessionProcessor : MonoBehaviour
 
     // 빙의가 가능한지 여부 체크, 표창을 던질 지, 빙의를 할지를 판단함.
     private bool m_isAblePossession;
-    
     private bool m_isHitTarget;
+    private float m_curCoolTime = ConstVariables.SHURIKEN_COOLTIME;
 
     private PossessionShuriken m_shuriken;
     
@@ -60,7 +65,11 @@ public class PossessionProcessor : MonoBehaviour
         //표창이 박혀있는지 체크
         // TODO: 풀링 시 shuriken null check 로직 수정 필요
         if (!m_isHitTarget || m_shuriken == null)
-        {
+        {   
+            if(m_curCoolTime < ConstVariables.SHURIKEN_COOLTIME)        
+                return;
+
+            m_curCoolTime = 0f;
             m_isAblePossession = false;
             m_sender.Animator.SetTrigger(s_possess);
             return;
@@ -158,12 +167,18 @@ public class PossessionProcessor : MonoBehaviour
         StartTime();
     }
 
+    private void Update()
+    {
+        m_curCoolTime += Time.deltaTime;
+    }
+
     #region 표창 날리기
     public void ThrowShuriken()
     {
         var cameraPivot = GameManager.Camera.CurrentCamera;
 
-        bool isHit = Physics.Raycast(cameraPivot.transform.position, cameraPivot.transform.forward, out var hit, 300f);
+        //bool isHit = Physics.Raycast(cameraPivot.transform.position, cameraPivot.transform.forward, out var hit, 300f);
+        bool isHit = Physics.SphereCast(cameraPivot.transform.position, shurikenSphereRadius, cameraPivot.transform.forward, out var hit, 300f);
 
         m_shuriken = Instantiate(m_sender.Data.ShurikenObj, cameraPivot.transform.position + cameraPivot.transform.forward, Quaternion.identity).GetComponent<PossessionShuriken>();
 

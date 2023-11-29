@@ -8,7 +8,15 @@ using UnityEngine;
 [RequireComponent(typeof(AttackAnimationEventReceiver))]
 public abstract class Weapon : MonoBehaviour
 {
+    #region
+
+    private bool m_isAttackTriggered = false;
+    
+    #endregion
+    
     #region Properties
+
+    public bool IsAttacking => State != AttackState.Idle ? true : m_isAttackTriggered;
     
     public GameObject Target { get; set; }
 
@@ -26,6 +34,7 @@ public abstract class Weapon : MonoBehaviour
     /// </summary>
     public void StartAttack()
     {
+        m_isAttackTriggered = true;
         Attack();
     }
 
@@ -52,22 +61,26 @@ public abstract class Weapon : MonoBehaviour
 
     public void EnterIdleState(object sender, EventArgs e)
     {
-        if (State == AttackState.IDLE) return;
-        State = AttackState.IDLE;
+        //Idle 상태로 들어가면 모든 공격 트리거가 초기화됨. (Animator 참조)
+        //Weapon이 Idle이더라도, Attack 애니메이션으로 들어가기 전에 Idle 이벤트가 실행되었다면 Animator의 Attack Trigger가 초기화 되므로 공격 트리거 정보역시 소멸해야함
+        m_isAttackTriggered = false;
+        
+        if (State == AttackState.Idle) return;
+        State = AttackState.Idle;
         OnIdleMotion();
     }
 
     public void EnterLeadInState(object sender, EventArgs e)
     {
-        if (State == AttackState.LEAD_IN) return;
-        State = AttackState.LEAD_IN;
+        if (State == AttackState.LeadIn) return;
+        State = AttackState.LeadIn;
         OnLeadInMotion();
     }
 
     public void EnterHitState(object sender, EventArgs e)
     {
-        if (State == AttackState.HIT) return;
-        State = AttackState.HIT;
+        if (State == AttackState.Hit) return;
+        State = AttackState.Hit;
         OnHitMotion();
     }
 
@@ -76,8 +89,8 @@ public abstract class Weapon : MonoBehaviour
         //Follow Through: Attack이 끝나고 후딜 시작되는 상황
         //공격 종료 판정
 
-        if (State == AttackState.FOLLOW_THROUGH) return;
-        State = AttackState.FOLLOW_THROUGH;
+        if (State == AttackState.FollowThrough) return;
+        State = AttackState.FollowThrough;
         OnFollowThroughMotion();
     }
 
@@ -85,9 +98,9 @@ public abstract class Weapon : MonoBehaviour
 
     public enum WeaponType
     {
-        ATTACK_WEAPON,
-        SKILL_WEAPON,
-        BLOCKPUSH_WEAPON,
+        AttackWeapon,
+        SkillWeapon,
+        BlockPushWeapon,
     }
 
 
@@ -96,9 +109,9 @@ public abstract class Weapon : MonoBehaviour
     /// </summary>
     public enum AttackState
     {
-        IDLE,
-        LEAD_IN, //선딜
-        HIT, //실제 공격
-        FOLLOW_THROUGH, //후딜
+        Idle,
+        LeadIn, //선딜
+        Hit, //실제 공격
+        FollowThrough, //후딜
     }
 }
