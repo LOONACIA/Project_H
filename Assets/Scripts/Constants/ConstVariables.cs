@@ -20,6 +20,7 @@ public static class ConstVariables
 
     [Header("Shuriken")]
     public const string SHURIKEN_PATH = "Prefabs/Possession/Shuriken";
+    public const float SHURIKEN_COOLTIME = 3f;
 
 
     [Header("Wall")]

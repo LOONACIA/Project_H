@@ -21,8 +21,8 @@ public class PossessionProcessor : MonoBehaviour
 
     // 빙의가 가능한지 여부 체크, 표창을 던질 지, 빙의를 할지를 판단함.
     private bool m_isAblePossession;
-    
     private bool m_isHitTarget;
+    private float m_curCoolTime = ConstVariables.SHURIKEN_COOLTIME;
 
     private PossessionShuriken m_shuriken;
     
@@ -60,7 +60,11 @@ public class PossessionProcessor : MonoBehaviour
         //표창이 박혀있는지 체크
         // TODO: 풀링 시 shuriken null check 로직 수정 필요
         if (!m_isHitTarget || m_shuriken == null)
-        {
+        {   
+            if(m_curCoolTime < ConstVariables.SHURIKEN_COOLTIME)        
+                return;
+
+            m_curCoolTime = 0f;
             m_isAblePossession = false;
             m_sender.Animator.SetTrigger(s_possess);
             return;
@@ -156,6 +160,11 @@ public class PossessionProcessor : MonoBehaviour
     {
         Possessed?.Invoke(this, actor);
         StartTime();
+    }
+
+    private void Update()
+    {
+        m_curCoolTime += Time.deltaTime;
     }
 
     #region 표창 날리기
