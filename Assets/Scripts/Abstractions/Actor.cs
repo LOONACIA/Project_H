@@ -98,8 +98,6 @@ public abstract class Actor : MonoBehaviour
         RaycastHit[] buffer = ArrayPool<RaycastHit>.Shared.Rent(m_interactableObjects.Count);
         int length = Physics.RaycastNonAlloc(m_vcam.transform.position, m_vcam.transform.forward, buffer, 10f);
         
-        Debug.DrawRay(m_vcam.transform.position, m_vcam.transform.forward * 10, Color.red, 1);
-        
         var ret = buffer.Take(length)
             .Select(hit => hit.transform.TryGetComponent<IInteractableObject>(out var obj) ? obj : null)
             .Where(interactableObject => interactableObject != null)
