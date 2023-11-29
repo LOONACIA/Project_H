@@ -8,6 +8,11 @@ public class PossessionProcessor : MonoBehaviour
 {
     private static readonly int s_possess = Animator.StringToHash("Possess");
 
+    /// <summary>
+    /// 해킹
+    /// </summary>
+    public float shurikenSphereRadius = 0.5f;
+
     [SerializeField]
     private GameObject m_ghostPrefab;
 
@@ -172,7 +177,8 @@ public class PossessionProcessor : MonoBehaviour
     {
         var cameraPivot = GameManager.Camera.CurrentCamera;
 
-        bool isHit = Physics.Raycast(cameraPivot.transform.position, cameraPivot.transform.forward, out var hit, 300f);
+        //bool isHit = Physics.Raycast(cameraPivot.transform.position, cameraPivot.transform.forward, out var hit, 300f);
+        bool isHit = Physics.SphereCast(cameraPivot.transform.position, shurikenSphereRadius, cameraPivot.transform.forward, out var hit, 300f);
 
         m_shuriken = Instantiate(m_sender.Data.ShurikenObj, cameraPivot.transform.position + cameraPivot.transform.forward, Quaternion.identity).GetComponent<PossessionShuriken>();
 
