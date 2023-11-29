@@ -25,11 +25,15 @@ public class GameManager : MonoBehaviour
     // 매니저 클래스에는 SerializedField를 사용할 수 없으므로 ScriptableObject를 상속받는 클래스를 만들어서 사용
     private CameraManager m_camera = new();
     
+    private CharacterManager m_character = new();
+    
     private EffectManager m_effect = new();
 
     private GameUIManager m_ui = new();
     
     public static CameraManager Camera => Instance.m_camera;
+    
+    public static CharacterManager Character => Instance.m_character;
     
     public static EffectManager Effect => Instance.m_effect;
 
@@ -93,6 +97,7 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(s_instance);
             
             // 매니저 클래스 초기화
+            s_instance.m_character.Init(s_instance.m_settings);
             s_instance.m_effect.Init();
             s_instance.m_ui.Init();
             

@@ -3,9 +3,11 @@ using UnityEngine;
 [CreateAssetMenu(fileName = nameof(GameSettings), menuName = "Settings/" + nameof(GameSettings))]
 public class GameSettings : ScriptableObject
 {
-    [Header("Effect")]
-    [SerializeField]
-    private GameObject m_bloodEffect;
-    
-    public GameObject BloodEffect => m_bloodEffect;
+    [field: Header("Effect")]
+    [field: SerializeField]
+    public GameObject BloodEffect { get; private set; }
+
+    [field: Header("Actor Prefabs")]
+    [field: SerializeField]
+    public ActorPrefabMap[] ActorPrefabs { get; private set; }
 }

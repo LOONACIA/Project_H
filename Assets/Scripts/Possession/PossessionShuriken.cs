@@ -118,6 +118,9 @@ public class PossessionShuriken : MonoBehaviour
         }
         else if((m_surikenStopLayer & (1 << other.gameObject.layer)) != 0)
         {
+            if (m_isTrace)
+                return;
+
             m_isStop = true;
             m_rb.isKinematic = true;
 

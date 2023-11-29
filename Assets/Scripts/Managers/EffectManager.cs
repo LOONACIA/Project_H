@@ -81,12 +81,12 @@ public class EffectManager
     /// 출혈 이펙트를 실행합니다.
     /// </summary>
     /// <param name="monster">이펙트 실행 위치</param>
-    /// <param name="rotaion">이펙트 방향</param>
+    /// <param name="rotation">이펙트 방향</param>
     /// <param name="duration">이펙트 재생 시간</param>
-    public void PlayBloodEffect(GameObject monster, Quaternion rotaion, float duration = 0)
+    public void PlayBloodEffect(GameObject monster, Quaternion rotation, float duration = 0)
     {
         // 출혈 이펙트 오브젝트 생성
-        GameObject go = ManagerRoot.Resource.Instantiate(m_bloodEffect, monster.transform.position + Vector3.up, rotaion);
+        GameObject go = ManagerRoot.Resource.Instantiate(m_bloodEffect, monster.transform.position + Vector3.up, rotation);
 
         // 이펙트 설정
         go.transform.SetParent(monster.transform);
