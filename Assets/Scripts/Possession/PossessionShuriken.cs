@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class PossessionShuriken : MonoBehaviour
@@ -42,6 +43,8 @@ public class PossessionShuriken : MonoBehaviour
         TryGetComponent<Rigidbody>(out m_rb);
         m_targetLayer = LayerMask.GetMask("Monster");
         m_surikenStopLayer = LayerMask.GetMask("Wall", "Ground", "Monster", "Shield");
+
+        StartCoroutine(nameof(IE_Destory));
     }
 
     public void InitSetting(Actor actor, Actor sender, Action<Actor> onTargetHit)
@@ -57,11 +60,6 @@ public class PossessionShuriken : MonoBehaviour
         m_targetDir = dir;
         throwActor = sender;
         m_onTargetHit = onTargetHit;
-    }
-
-    public void DestroyShuriken()
-    {
-        Destroy(gameObject);
     }
 
     private void FixedUpdate()
@@ -96,6 +94,7 @@ public class PossessionShuriken : MonoBehaviour
 
     private void HitTarget()
     {
+        StopCoroutine(nameof(IE_Destory));
         m_isStop = true;
         m_rb.isKinematic = true;
 
@@ -137,5 +136,11 @@ public class PossessionShuriken : MonoBehaviour
         m_onTargetHit?.Invoke(actor);
     }
 
+    private IEnumerator IE_Destory()
+    {
+        yield return new WaitForSeconds(ConstVariables.SHURIKEN_COOLTIME);
+
+        DestroySelf();
+    }
     #endregion
 }

@@ -103,21 +103,21 @@ public class AttackAnimationEventReceiver : MonoBehaviour
         {
             switch (weapon.Type)
             {
-                case Weapon.WeaponType.ATTACK_WEAPON:
+                case Weapon.WeaponType.AttackWeapon:
                     if (attackWeapon != null)
                     {
                         Debug.LogError("AttackWeapon 중복 등록됨");
                     }
                     attackWeapon = weapon;
                     break;
-                case Weapon.WeaponType.SKILL_WEAPON:
+                case Weapon.WeaponType.SkillWeapon:
                     if (skillWeapon != null)
                     {
                         Debug.LogError("SkillWeapon 중복 등록됨");
                     }
                     skillWeapon = weapon;
                     break;
-                case Weapon.WeaponType.BLOCKPUSH_WEAPON:
+                case Weapon.WeaponType.BlockPushWeapon:
                     if (blockPushWeapon != null)
                     {
                         Debug.LogError("BlockPushWeapon 중복 등록됨");
