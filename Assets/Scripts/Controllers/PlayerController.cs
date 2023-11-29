@@ -167,6 +167,14 @@ public partial class PlayerController : MonoBehaviour
         }
     }
 
+    private void Interact()
+    {
+        if (m_character != null)
+        {
+            m_character.Interact();
+        }
+    }
+
     private void Look()
     {
         float xDelta = m_lookDelta.x * m_data.CameraHorizontalSensitivity * Time.fixedUnscaledDeltaTime;

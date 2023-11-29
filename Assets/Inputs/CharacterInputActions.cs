@@ -91,9 +91,18 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Block"",
+                    ""name"": ""Ability"",
                     ""type"": ""Button"",
                     ""id"": ""25506341-561b-429e-9ad4-cf2be971b5c3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""34524c13-31ae-450d-9930-da5874a37ce8"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -203,7 +212,7 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
                 {
                     ""name"": """",
                     ""id"": ""46d8ab7f-d4e5-45ed-921a-5ea64a298b79"",
-                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
@@ -247,7 +256,7 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
                 {
                     ""name"": """",
                     ""id"": ""318a67b1-4025-4c22-b2ad-0a450c0b3270"",
-                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
@@ -291,7 +300,7 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
                 {
                     ""name"": """",
                     ""id"": ""77488632-af37-4afe-9b7b-995a24f6a1cd"",
-                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
@@ -306,7 +315,40 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
-                    ""action"": ""Block"",
+                    ""action"": ""Ability"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""29d46702-1e5b-4890-a6c2-7f6bdad2e4b7"",
+                    ""path"": ""<Gamepad>/rightStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Ability"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""87bf689f-c7ab-4a09-998a-9002726b4b34"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d6c1881a-39f8-4845-81a7-f217bccd19f4"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -352,7 +394,8 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
         m_Character_Possess = m_Character.FindAction("Possess", throwIfNotFound: true);
         m_Character_Look = m_Character.FindAction("Look", throwIfNotFound: true);
         m_Character_Skill = m_Character.FindAction("Skill", throwIfNotFound: true);
-        m_Character_Block = m_Character.FindAction("Block", throwIfNotFound: true);
+        m_Character_Ability = m_Character.FindAction("Ability", throwIfNotFound: true);
+        m_Character_Interact = m_Character.FindAction("Interact", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -421,7 +464,8 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
     private readonly InputAction m_Character_Possess;
     private readonly InputAction m_Character_Look;
     private readonly InputAction m_Character_Skill;
-    private readonly InputAction m_Character_Block;
+    private readonly InputAction m_Character_Ability;
+    private readonly InputAction m_Character_Interact;
     public struct CharacterActions
     {
         private @CharacterInputActions m_Wrapper;
@@ -433,7 +477,8 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
         public InputAction @Possess => m_Wrapper.m_Character_Possess;
         public InputAction @Look => m_Wrapper.m_Character_Look;
         public InputAction @Skill => m_Wrapper.m_Character_Skill;
-        public InputAction @Block => m_Wrapper.m_Character_Block;
+        public InputAction @Ability => m_Wrapper.m_Character_Ability;
+        public InputAction @Interact => m_Wrapper.m_Character_Interact;
         public InputActionMap Get() { return m_Wrapper.m_Character; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -464,9 +509,12 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
             @Skill.started += instance.OnSkill;
             @Skill.performed += instance.OnSkill;
             @Skill.canceled += instance.OnSkill;
-            @Block.started += instance.OnBlock;
-            @Block.performed += instance.OnBlock;
-            @Block.canceled += instance.OnBlock;
+            @Ability.started += instance.OnAbility;
+            @Ability.performed += instance.OnAbility;
+            @Ability.canceled += instance.OnAbility;
+            @Interact.started += instance.OnInteract;
+            @Interact.performed += instance.OnInteract;
+            @Interact.canceled += instance.OnInteract;
         }
 
         private void UnregisterCallbacks(ICharacterActions instance)
@@ -492,9 +540,12 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
             @Skill.started -= instance.OnSkill;
             @Skill.performed -= instance.OnSkill;
             @Skill.canceled -= instance.OnSkill;
-            @Block.started -= instance.OnBlock;
-            @Block.performed -= instance.OnBlock;
-            @Block.canceled -= instance.OnBlock;
+            @Ability.started -= instance.OnAbility;
+            @Ability.performed -= instance.OnAbility;
+            @Ability.canceled -= instance.OnAbility;
+            @Interact.started -= instance.OnInteract;
+            @Interact.performed -= instance.OnInteract;
+            @Interact.canceled -= instance.OnInteract;
         }
 
         public void RemoveCallbacks(ICharacterActions instance)
@@ -539,6 +590,7 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
         void OnPossess(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
         void OnSkill(InputAction.CallbackContext context);
-        void OnBlock(InputAction.CallbackContext context);
+        void OnAbility(InputAction.CallbackContext context);
+        void OnInteract(InputAction.CallbackContext context);
     }
 }
