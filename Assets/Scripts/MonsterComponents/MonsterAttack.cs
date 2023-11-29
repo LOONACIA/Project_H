@@ -45,7 +45,7 @@ public class MonsterAttack : MonoBehaviour
         get
         {
             if (AttackWeapon == null) return false;
-            return AttackWeapon.State is not Weapon.AttackState.Idle;
+            return AttackWeapon.IsAttacking;
         }
     }
 

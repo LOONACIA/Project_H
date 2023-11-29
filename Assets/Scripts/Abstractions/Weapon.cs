@@ -8,7 +8,15 @@ using UnityEngine;
 [RequireComponent(typeof(AttackAnimationEventReceiver))]
 public abstract class Weapon : MonoBehaviour
 {
+    #region
+
+    private bool m_isAttackTriggered = false;
+    
+    #endregion
+    
     #region Properties
+
+    public bool IsAttacking => State != AttackState.Idle ? true : m_isAttackTriggered;
     
     public GameObject Target { get; set; }
 
@@ -26,6 +34,7 @@ public abstract class Weapon : MonoBehaviour
     /// </summary>
     public void StartAttack()
     {
+        m_isAttackTriggered = true;
         Attack();
     }
 
@@ -54,6 +63,7 @@ public abstract class Weapon : MonoBehaviour
     {
         if (State == AttackState.Idle) return;
         State = AttackState.Idle;
+        m_isAttackTriggered = false;    //Idle 상태로 들어가면 모든 공격 트리거가 초기화됨. (Animator 참조)
         OnIdleMotion();
     }
 
