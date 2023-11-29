@@ -30,6 +30,8 @@ public partial class PlayerController : MonoBehaviour
 
     private bool m_isGameOver;
     
+    private IInteractableObject m_interactableObject;
+
     public Actor Character => m_character;
 
     /// <summary>
@@ -103,11 +105,15 @@ public partial class PlayerController : MonoBehaviour
             return;
         }
         
+        m_interactableObject = m_character.GetClosestInteractableObject();
+        
 #if !UNITY_EDITOR
         Look();
 #endif
         Move();
     }
+    
+    public void ChangeActor(Actor newActor) => ChangeActor(m_character, newActor);
 
     private void Move()
     {
@@ -169,9 +175,27 @@ public partial class PlayerController : MonoBehaviour
 
     private void Interact()
     {
+        if (m_character == null)
+        {
+            return;
+        }
+
+        if (m_interactableObject == null)
+        {
+            return;
+        }
+        
+        string text = m_inputActions.Character.Interact.activeControl.displayName;
+        var progress = GameManager.UI.ShowProgressRing(UIProgressRing.TextDisplayMode.Text, text);
+        m_interactableObject.Interact(m_character, progress, AbortInteract);
+    }
+    
+    private void AbortInteract()
+    {
         if (m_character != null)
         {
-            m_character.Interact();
+            m_interactableObject?.Abort();
+            GameManager.UI.HideProgressRing();
         }
     }
 
@@ -300,8 +324,6 @@ public partial class PlayerController : MonoBehaviour
 
         GameManager.Camera.CurrentCamera = m_character.GetComponentInChildren<CinemachineVirtualCamera>();
     }
-
-    private void ChangeActor(Actor newActor) => ChangeActor(m_character, newActor);
 
     private void ChangeActor(Actor oldActor, Actor newActor)
     {

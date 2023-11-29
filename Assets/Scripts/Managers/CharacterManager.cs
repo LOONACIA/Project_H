@@ -33,7 +33,6 @@ public class CharacterManager
         m_actorType = actor.Data.Type;
         m_respawnPosition = respawnPosition.position;
         m_respawnRotation = respawnPosition.rotation;
-        Debug.Log($"Save at: {respawnPosition.position}");
     }
 
     private void Respawn()
@@ -45,12 +44,13 @@ public class CharacterManager
         
         var prefab = m_settings.ActorPrefabs.Single(x => x.Type == m_actorType);
         
-        var character = ManagerRoot.Resource.Instantiate(prefab.Prefab, m_respawnPosition, m_respawnRotation);
-        Debug.Log($"Respawn at: {m_respawnPosition}");
+        var character = Object.Instantiate(prefab.Prefab, m_respawnPosition, m_respawnRotation);
+        m_controller.ChangeActor(character.GetComponent<Actor>());
     }
     
     private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
     {
+        FindController();
         Respawn();
     }
 }

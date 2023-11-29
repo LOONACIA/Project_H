@@ -91,9 +91,14 @@ public partial class PlayerController
 
         public void OnInteract(InputAction.CallbackContext context)
         {
-            if (context.phase is InputActionPhase.Started or InputActionPhase.Canceled)
+            switch (context.phase)
             {
-                m_controller.Interact();
+                case InputActionPhase.Started:
+                    m_controller.Interact();
+                    break;
+                case InputActionPhase.Canceled:
+                    m_controller.AbortInteract();
+                    break;
             }
         }
 

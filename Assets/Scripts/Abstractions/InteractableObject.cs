@@ -8,7 +8,7 @@ public abstract class InteractableObject : MonoBehaviour, IInteractableObject
     public bool IsInteractable { get; protected set; }
     
     [SerializeField]
-    protected int m_requiredTime;
+    protected float m_requiredTime;
     
     private CoroutineEx m_interactCoroutine;
     
@@ -19,10 +19,12 @@ public abstract class InteractableObject : MonoBehaviour, IInteractableObject
 
     public void Abort()
     {
-        m_interactCoroutine?.Abort();
+        if (m_interactCoroutine?.IsRunning is true)
+        {
+            m_interactCoroutine.Abort();
+        }
     }
-
-
+    
     protected abstract void OnInteract(Actor actor);
 
     protected virtual IEnumerator CoWaitTime(Actor actor, IProgress<float> progress, Action onComplete)

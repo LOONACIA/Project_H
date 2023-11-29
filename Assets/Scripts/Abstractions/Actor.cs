@@ -37,8 +37,6 @@ public abstract class Actor : MonoBehaviour
     
     [SerializeField]
     private Animator m_thirdPersonAnimator;
-    
-    private IInteractableObject m_interactableObject;
 
     private CinemachineVirtualCamera m_vcam;
 
@@ -90,26 +88,27 @@ public abstract class Actor : MonoBehaviour
         EnableAIComponents();
     }
 
-    protected virtual void FixedUpdate()
+    public IInteractableObject GetClosestInteractableObject()
     {
-        if (m_interactableObjects.Count > 0)
+        if (m_interactableObjects.Count == 0)
         {
-            m_interactableObject = GetClosestInteractableObject();
+            return null;
         }
-    }
-
-    private IInteractableObject GetClosestInteractableObject()
-    {
+        
         RaycastHit[] buffer = ArrayPool<RaycastHit>.Shared.Rent(m_interactableObjects.Count);
         int length = Physics.RaycastNonAlloc(m_vcam.transform.position, m_vcam.transform.forward, buffer, 10f);
         
         Debug.DrawRay(m_vcam.transform.position, m_vcam.transform.forward * 10, Color.red, 1);
         
-        return buffer.Take(length)
+        var ret = buffer.Take(length)
             .Select(hit => hit.transform.TryGetComponent<IInteractableObject>(out var obj) ? obj : null)
             .Where(interactableObject => interactableObject != null)
             .OrderBy(obj => Vector3.Distance(obj.transform.position, transform.position))
             .FirstOrDefault();
+        
+        ArrayPool<RaycastHit>.Shared.Return(buffer);
+
+        return ret;
     }
 
     protected virtual void OnEnable()
@@ -162,15 +161,7 @@ public abstract class Actor : MonoBehaviour
     public abstract void Dash(Vector3 direction);
 
     public abstract void Block(bool value);
-
-    public void Interact()
-    {
-        if (m_interactableObject != null)
-        {
-            m_interactableObject.Interact(this, null, null);
-        }
-    }
-
+    
     public void PlayHackAnimation()
     {
         Stun(m_data.ShurikenStunTime);
