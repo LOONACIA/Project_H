@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 
 namespace LOONACIA.Unity.Coroutines
@@ -25,7 +25,7 @@ namespace LOONACIA.Unity.Coroutines
 
         public void Abort()
         {
-            if (_handler == null)
+            if (_handler == null || _root == null)
             {
                 return;
             }
