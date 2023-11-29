@@ -38,7 +38,7 @@ public class MeleeWeapon : Weapon
 
     private void Update()
     {
-        if (State == AttackState.HIT)
+        if (State == AttackState.Hit)
         {
             //검의 TrailCaster로 충돌체크
             IEnumerable<TrailCaster.HitInfo> detectedRayCast = m_trailCaster.PopBuffer();

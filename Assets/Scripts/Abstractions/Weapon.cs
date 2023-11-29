@@ -52,22 +52,22 @@ public abstract class Weapon : MonoBehaviour
 
     public void EnterIdleState(object sender, EventArgs e)
     {
-        if (State == AttackState.IDLE) return;
-        State = AttackState.IDLE;
+        if (State == AttackState.Idle) return;
+        State = AttackState.Idle;
         OnIdleMotion();
     }
 
     public void EnterLeadInState(object sender, EventArgs e)
     {
-        if (State == AttackState.LEAD_IN) return;
-        State = AttackState.LEAD_IN;
+        if (State == AttackState.LeadIn) return;
+        State = AttackState.LeadIn;
         OnLeadInMotion();
     }
 
     public void EnterHitState(object sender, EventArgs e)
     {
-        if (State == AttackState.HIT) return;
-        State = AttackState.HIT;
+        if (State == AttackState.Hit) return;
+        State = AttackState.Hit;
         OnHitMotion();
     }
 
@@ -76,8 +76,8 @@ public abstract class Weapon : MonoBehaviour
         //Follow Through: Attack이 끝나고 후딜 시작되는 상황
         //공격 종료 판정
 
-        if (State == AttackState.FOLLOW_THROUGH) return;
-        State = AttackState.FOLLOW_THROUGH;
+        if (State == AttackState.FollowThrough) return;
+        State = AttackState.FollowThrough;
         OnFollowThroughMotion();
     }
 
@@ -85,9 +85,9 @@ public abstract class Weapon : MonoBehaviour
 
     public enum WeaponType
     {
-        ATTACK_WEAPON,
-        SKILL_WEAPON,
-        BLOCKPUSH_WEAPON,
+        AttackWeapon,
+        SkillWeapon,
+        BlockPushWeapon,
     }
 
 
@@ -96,9 +96,9 @@ public abstract class Weapon : MonoBehaviour
     /// </summary>
     public enum AttackState
     {
-        IDLE,
-        LEAD_IN, //선딜
-        HIT, //실제 공격
-        FOLLOW_THROUGH, //후딜
+        Idle,
+        LeadIn, //선딜
+        Hit, //실제 공격
+        FollowThrough, //후딜
     }
 }
