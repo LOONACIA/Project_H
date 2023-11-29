@@ -5,12 +5,12 @@ using UnityEngine;
 
 public abstract class InteractableObject : MonoBehaviour, IInteractableObject
 {
-    public bool IsInteractable { get; protected set; }
-    
     [SerializeField]
     protected float m_requiredTime;
     
     private CoroutineEx m_interactCoroutine;
+    
+    public bool IsInteractable { get; protected set; } = true;
     
     public void Interact(Actor actor, IProgress<float> progress, Action onComplete)
     {
