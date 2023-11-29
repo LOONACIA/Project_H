@@ -1,7 +1,11 @@
 using BehaviorDesigner.Runtime;
+using Cinemachine;
 using LOONACIA.Unity.Managers;
 using System;
+using System.Buffers;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -20,6 +24,8 @@ public abstract class Actor : MonoBehaviour
 
     protected BehaviorTree m_behaviorTree;
     
+    private readonly List<IInteractableObject> m_interactableObjects = new();
+    
     [SerializeField]
     private ActorData m_data;
 
@@ -31,6 +37,8 @@ public abstract class Actor : MonoBehaviour
     
     [SerializeField]
     private Animator m_thirdPersonAnimator;
+
+    private CinemachineVirtualCamera m_vcam;
 
     private bool m_isPossessed;
     
@@ -73,11 +81,36 @@ public abstract class Actor : MonoBehaviour
         m_collider = GetComponent<Collider>();
         m_rigidbody = GetComponent<Rigidbody>();
         m_behaviorTree = GetComponent<BehaviorTree>();
+        m_vcam = GetComponentInChildren<CinemachineVirtualCamera>();
         Health = GetComponent<ActorHealth>();
         Status = GetComponent<ActorStatus>();
+        
         EnableAIComponents();
     }
-    
+
+    public IInteractableObject GetClosestInteractableObject()
+    {
+        if (m_interactableObjects.Count == 0)
+        {
+            return null;
+        }
+        
+        RaycastHit[] buffer = ArrayPool<RaycastHit>.Shared.Rent(m_interactableObjects.Count);
+        int length = Physics.RaycastNonAlloc(m_vcam.transform.position, m_vcam.transform.forward, buffer, 10f);
+        
+        Debug.DrawRay(m_vcam.transform.position, m_vcam.transform.forward * 10, Color.red, 1);
+        
+        var ret = buffer.Take(length)
+            .Select(hit => hit.transform.TryGetComponent<IInteractableObject>(out var obj) ? obj : null)
+            .Where(interactableObject => interactableObject != null)
+            .OrderBy(obj => Vector3.Distance(obj.transform.position, transform.position))
+            .FirstOrDefault();
+        
+        ArrayPool<RaycastHit>.Shared.Return(buffer);
+
+        return ret;
+    }
+
     protected virtual void OnEnable()
     {
         if (TryGetComponent<IHealth>(out var health))
@@ -101,6 +134,22 @@ public abstract class Actor : MonoBehaviour
         }
     }
 
+    protected virtual void OnTriggerEnter(Collider other)
+    {
+        if (other.TryGetComponent<IInteractableObject>(out var obj))
+        {
+            m_interactableObjects.Add(obj);
+        }
+    }
+
+    protected virtual void OnTriggerExit(Collider other)
+    {
+        if (other.TryGetComponent<IInteractableObject>(out var obj))
+        {
+            m_interactableObjects.Remove(obj);
+        }
+    }
+
     public abstract void Move(Vector3 direction);
 
     public abstract void TryJump();
@@ -112,7 +161,7 @@ public abstract class Actor : MonoBehaviour
     public abstract void Dash(Vector3 direction);
 
     public abstract void Block(bool value);
-
+    
     public void PlayHackAnimation()
     {
         Stun(m_data.ShurikenStunTime);
