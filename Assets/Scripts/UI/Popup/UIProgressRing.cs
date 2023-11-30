@@ -1,4 +1,5 @@
 using LOONACIA.Unity.UI;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -60,7 +61,17 @@ public class UIProgressRing : UIPopup
         get => m_text.color;
         set => m_text.color = value;
     }
-    
+
+    private void OnEnable()
+    {
+        UpdateProgress(default);
+    }
+
+    private void OnDisable()
+    {
+        UpdateProgress(default);
+    }
+
     public void SetText(string text)
     {
         if (string.IsNullOrEmpty(text))
