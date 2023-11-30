@@ -6,7 +6,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
     [TaskCategory("Movement")]
     [HelpURL("https://www.opsive.com/support/documentation/behavior-designer-movement-pack/")]
     [TaskIcon("Assets/Behavior Designer Movement/Editor/Icons/{SkinColor}PatrolIcon.png")]
-    public class Patrol: NavMeshMovement
+    public class PatrolLeader: NavMeshMovement
     {
         [Tooltip("Should the agent patrol the waypoints randomly?")]
         public SharedBool randomPatrol = false;
