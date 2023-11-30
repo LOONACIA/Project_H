@@ -30,6 +30,8 @@ public partial class PlayerController : MonoBehaviour
 
     private bool m_isGameOver;
     
+    private IProgress<float> m_interactProgress;
+    
     private IInteractableObject m_interactableObject;
 
     public Actor Character => m_character;
@@ -106,6 +108,15 @@ public partial class PlayerController : MonoBehaviour
         }
         
         m_interactableObject = m_character.GetClosestInteractableObject();
+        if (m_interactableObject != null && m_interactableObject.IsInteractable)
+        {
+            string text = m_inputActions.Character.Interact.activeControl?.displayName ?? string.Empty;
+            m_interactProgress ??= GameManager.UI.ShowProgressRing(UIProgressRing.TextDisplayMode.Text, text);
+        }
+        else
+        {
+            AbortInteract();
+        }
         
 #if !UNITY_EDITOR
         Look();
@@ -185,18 +196,14 @@ public partial class PlayerController : MonoBehaviour
             return;
         }
         
-        string text = m_inputActions.Character.Interact.activeControl.displayName;
-        var progress = GameManager.UI.ShowProgressRing(UIProgressRing.TextDisplayMode.Text, text);
-        m_interactableObject.Interact(m_character, progress, AbortInteract);
+        m_interactableObject.Interact(m_character, m_interactProgress, AbortInteract);
     }
     
     private void AbortInteract()
     {
-        if (m_character != null)
-        {
-            m_interactableObject?.Abort();
-            GameManager.UI.HideProgressRing();
-        }
+        m_interactableObject?.Abort();
+        m_interactProgress = null;
+        GameManager.UI.HideProgressRing();
     }
 
     private void Look()

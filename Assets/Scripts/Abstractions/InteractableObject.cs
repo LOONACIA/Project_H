@@ -17,6 +17,9 @@ public abstract class InteractableObject : MonoBehaviour, IInteractableObject
         m_interactCoroutine = CoroutineEx.Create(this, CoWaitTime(actor, progress, onComplete));
     }
 
+    /// <summary>
+    /// 상호작용을 중단합니다.
+    /// </summary>
     public void Abort()
     {
         if (m_interactCoroutine?.IsRunning is true)
@@ -25,9 +28,13 @@ public abstract class InteractableObject : MonoBehaviour, IInteractableObject
         }
     }
     
+    /// <summary>
+    /// 상호작용
+    /// </summary>
+    /// <param name="actor">상호작용을 시도한 Actor</param>
     protected abstract void OnInteract(Actor actor);
 
-    protected virtual IEnumerator CoWaitTime(Actor actor, IProgress<float> progress, Action onComplete)
+    private IEnumerator CoWaitTime(Actor actor, IProgress<float> progress, Action onComplete)
     {
         float time = 0f;
         float seconds = m_requiredTime;
