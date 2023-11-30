@@ -53,6 +53,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         {
             // The behind position is the normalized inverse of the leader's velocity multiplied by the leaderBehindDistance
             return leaderTransform.position + (-leaderAgent.velocity).normalized * leaderBehindDistance.Value;
+
         }
 
         // Determine the separation between the current agent and all of the other agents also following the leader
