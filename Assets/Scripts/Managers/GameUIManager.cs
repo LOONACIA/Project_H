@@ -14,6 +14,8 @@ public class GameUIManager
     
     private UIProgressRing m_progressRing;
 
+    private UIObjects m_objects;
+
     public void Init()
     {
     }
@@ -36,6 +38,16 @@ public class GameUIManager
     {
         var ui = ManagerRoot.UI.ShowSceneUI<UIHpIndicator>();
         ui.SetPlayer(player);
+    }
+
+    public void ShowObjects()
+    {
+        m_objects = ManagerRoot.UI.ShowSceneUI<UIObjects>();
+    }
+    
+    public void UpdateObject(string _text)
+    {
+        m_objects.UpdateObjectText(_text);
     }
 
     public void GenerateShieldIndicator(PlayerController player)
