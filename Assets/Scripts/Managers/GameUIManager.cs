@@ -11,6 +11,8 @@ public class GameUIManager
     private UIShuriken m_shuriken;
 
     private UIDamageIndicator m_damageIndicator;
+    
+    private UIProgressRing m_progressRing;
 
     public void Init()
     {
@@ -79,5 +81,26 @@ public class GameUIManager
         
         ManagerRoot.Resource.Release(m_crosshair.gameObject);
         m_crosshair = null;
+    }
+    
+    public IProgress<float> ShowProgressRing(UIProgressRing.TextDisplayMode mode = UIProgressRing.TextDisplayMode.None, string text = null)
+    {
+        // If progress ring is already shown, hide it
+        HideProgressRing();
+        
+        m_progressRing = ManagerRoot.UI.ShowPopupUI<UIProgressRing>();
+        m_progressRing.DisplayMode = mode;
+        m_progressRing.SetText(text);
+        Progress<float> progress = new(value => m_progressRing.UpdateProgress(value));
+
+        return progress;
+    }
+
+    public void HideProgressRing()
+    {
+        if (m_progressRing != null)
+        {
+            ManagerRoot.UI.ClosePopupUI(m_progressRing);
+        }
     }
 }
