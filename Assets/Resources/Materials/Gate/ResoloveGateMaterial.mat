@@ -7,11 +7,12 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Doors
-  m_Shader: {fileID: -6465566751694194690, guid: 67413bb6795546245a1044af547f240d,
+  m_Name: ResoloveGateMaterial
+  m_Shader: {fileID: -6465566751694194690, guid: 336be5cf5773e064da455e92a2ca1378,
     type: 3}
   m_ValidKeywords:
   - _ALPHATEST_ON
+  - _SURFACE_TYPE_TRANSPARENT
   - _USE_BACK_COLOR
   - _USE_DISSOLVE
   m_InvalidKeywords:
@@ -19,19 +20,20 @@ Material:
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2450
+  m_CustomRenderQueue: 3000
   stringTagMap:
-    RenderType: TransparentCutout
-  disabledShaderPasses: []
+    RenderType: Transparent
+  disabledShaderPasses:
+  - DepthOnly
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: e1bb1322fe6dc7f4a80f68ad4df42fea, type: 3}
+        m_Texture: {fileID: 2800000, guid: 9f1c11a6b15bf394b9226cb31afd09f4, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
-        m_Texture: {fileID: 2800000, guid: 7f5009b5597cece4db05d6766563b4b6, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -47,7 +49,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
-        m_Texture: {fileID: 2800000, guid: 93f64a3a615d52145b368437f708fe31, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _FlowMap_Texture:
@@ -55,7 +57,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _GuideTexture:
-        m_Texture: {fileID: 2800000, guid: c92d6869e8098b645a082ad809e819be, type: 3}
+        m_Texture: {fileID: 2800000, guid: 3dad75559e522984cbf24fe2adb944d2, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Guide_Texture:
@@ -67,7 +69,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
-        m_Texture: {fileID: 2800000, guid: 0438137b9af670044b80183081291e8f, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
@@ -112,40 +114,40 @@ Material:
     - _CastShadows: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
-    - _Cull: 0
-    - _Cutoff: 0
+    - _Cull: 2
+    - _Cutoff: 0.618
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
-    - _DissolveAmount: 0
-    - _DstBlend: 0
+    - _DissolveAmount: 0.376
+    - _DstBlend: 10
     - _DstBlendAlpha: 0
     - _EdgeWidth: 0
     - _EnvironmentReflections: 1
-    - _Flow_Speed: 1
+    - _Flow_Speed: 0.95
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _GuideAdjuster: 1
-    - _GuideTilling: 1
-    - _GuideTilling_1: 1
+    - _GuideTilling: 0.74
+    - _GuideTilling_1: 0.78
     - _Guide_Tilling: 1
     - _Hardness: 0
     - _Metallic: 0
     - _Mode: 0
     - _Mult: 1
-    - _OcclusionStrength: 1
+    - _OcclusionStrength: 0
     - _Parallax: 0.02
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _Smoothing: -0.3
-    - _Smoothness: 1
+    - _Smoothness: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
-    - _SrcBlend: 1
+    - _SrcBlend: 5
     - _SrcBlendAlpha: 1
     - _Strength: 0
-    - _Surface: 0
+    - _Surface: 1
     - _TRIPLANAR_SPACE: 0
     - _Tilling: 1
     - _USE_BACK_COLOR: 1
@@ -154,18 +156,19 @@ Material:
     - _USE_VERTEX_DISPLACEMENT: 0
     - _UVSec: 0
     - _UV_CHANNEL: 1
-    - _Use_Metallic_Texture: 1
+    - _Use_Metallic_Texture: 0
     - _Width: 0
     - _WorkflowMode: 1
     - _ZTest: 4
-    - _ZWrite: 1
+    - _ZWrite: 0
     - _ZWriteControl: 0
     m_Colors:
-    - _Back_Color: {r: 26.101961, g: 383.49805, b: 383.49805, a: 1}
-    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _Back_Color: {r: 10.447848, g: 45.202934, b: 45.202934, a: 1}
+    - _BaseColor: {r: 0.9982313, g: 2.7483773, b: 2.0512705, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _DissolveColor: {r: 3.4969234, g: 51.377876, b: 51.377876, a: 1}
-    - _EmissionColor: {r: 1351.1758, g: 1351.1758, b: 1351.1758, a: 1}
+    - _DissolveColor: {r: 0.76106226, g: 11.181761, b: 11.181761, a: 0.6392157}
+    - _EmissionColor: {r: 1, g: 1, b: 1, a: 0}
+    - _Emission_Back_Color: {r: 4.634989, g: 2.3407311, b: 1.2899262, a: 0}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &9204450787205776015

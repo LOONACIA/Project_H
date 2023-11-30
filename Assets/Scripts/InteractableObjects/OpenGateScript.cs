@@ -1,8 +1,9 @@
+using INab.Dissolve;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GateScript : MonoBehaviour
+public class OpenGateScript : MonoBehaviour, IGate
 {
     [SerializeField]
     private GameObject m_rightGate;
@@ -48,10 +49,10 @@ public class GateScript : MonoBehaviour
         Vector3 leftGatePos = m_leftGate.transform.position + transform.TransformDirection(Vector3.left * m_moveDegree);
         Vector3 leftGateSize = m_leftGate.transform.localScale;
 
-        Gizmos.matrix = Matrix4x4.TRS(m_rightGate.transform.position, transform.rotation, Vector3.one);
+        Gizmos.matrix = Matrix4x4.TRS(m_rightGate.transform.position, transform.rotation, transform.localScale);
         Gizmos.DrawWireCube(Vector3.right * m_moveDegree, rightGateSize);
 
-        Gizmos.matrix = Matrix4x4.TRS(m_leftGate.transform.position, transform.rotation, Vector3.one);
+        Gizmos.matrix = Matrix4x4.TRS(m_leftGate.transform.position, transform.rotation, transform.localScale);
         Gizmos.DrawWireCube(Vector3.left * m_moveDegree, leftGateSize);
     }
 }

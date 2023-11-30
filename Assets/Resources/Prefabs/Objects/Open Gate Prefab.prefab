@@ -111,7 +111,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_requiredTime: 0.5
-  m_gateScript: {fileID: 5559460464346311098}
+  m_gate: {fileID: 5559460464346311103}
 --- !u!1 &5559460463727037364
 GameObject:
   m_ObjectHideFlags: 0
@@ -218,7 +218,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5559460464346311100}
-  - component: {fileID: 5559460464346311098}
+  - component: {fileID: 7989590787356003388}
   m_Layer: 0
   m_Name: Gate
   m_TagString: Untagged
@@ -243,7 +243,7 @@ Transform:
   m_Father: {fileID: 5559460464461879536}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5559460464346311098
+--- !u!114 &7989590787356003388
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -252,13 +252,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 5559460464346311103}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55cef8a4e9ee8cf47a0ae731c6942cb7, type: 3}
+  m_Script: {fileID: 11500000, guid: b9426f4479cfcd64e9f704e99c3ebbd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_rightGate: {fileID: 5559460463727037364}
   m_leftGate: {fileID: 5559460464909173545}
   m_moveDegree: 2
-  m_progressTime: 1
+  m_progressTime: 2
 --- !u!1 &5559460464461879539
 GameObject:
   m_ObjectHideFlags: 0
@@ -269,7 +269,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5559460464461879536}
   m_Layer: 0
-  m_Name: Gate Prefab
+  m_Name: Open Gate Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
