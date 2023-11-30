@@ -44,4 +44,7 @@ public static class ConstVariables
     public const string VFX_GRAPH_PARAMETER_PARTICLE_COUNT = "ParticleCount";
     public const string VFX_GRAPH_PARAMETER_DIRECTION = "Direction";
     public const string VFX_GRAPH_EVENT_ON_PLAY = "OnPlay";
+    
+    [Header("UI")]
+    public const float UI_DIALOG_TEXT_TYPE_INTERVAL = 0.15f;
 }
