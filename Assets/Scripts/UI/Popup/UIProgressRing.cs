@@ -1,3 +1,4 @@
+using LOONACIA.Unity;
 using LOONACIA.Unity.UI;
 using System;
 using TMPro;
@@ -84,7 +85,7 @@ public class UIProgressRing : UIPopup
     }
 
     public void UpdateProgress(float progress)
-    {
+    {  
         if (DisplayMode == TextDisplayMode.Progress)
         {
             m_text.text = $"{progress * 100f:F0}%";
