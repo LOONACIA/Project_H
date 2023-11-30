@@ -29,7 +29,7 @@ public abstract class InteractableObject : MonoBehaviour, IInteractableObject
     }
     
     /// <summary>
-    /// 상호작용
+    /// 상호작용 완료 시의 동작을 정의합니다.
     /// </summary>
     /// <param name="actor">상호작용을 시도한 Actor</param>
     protected abstract void OnInteract(Actor actor);
