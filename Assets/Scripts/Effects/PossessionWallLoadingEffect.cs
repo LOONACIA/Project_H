@@ -31,7 +31,7 @@ public class PossessionWallLoadingEffect : MonoBehaviour
         }
     }
     #endregion
-
+    
     #region PrivateMethod
     private void ShowPossessionEffect()
     {

@@ -91,16 +91,21 @@ public class GameUIManager
         m_progressRing = ManagerRoot.UI.ShowPopupUI<UIProgressRing>();
         m_progressRing.DisplayMode = mode;
         m_progressRing.SetText(text);
-        Progress<float> progress = new(value => m_progressRing.UpdateProgress(value));
+        Progress<float> progress = new(value =>
+        {
+            if (m_progressRing is not null)
+                m_progressRing.UpdateProgress(value);
+        });
 
         return progress;
     }
 
     public void HideProgressRing()
     {
-        if (m_progressRing != null)
+        if (m_progressRing is not null)
         {
             ManagerRoot.UI.ClosePopupUI(m_progressRing);
+            m_progressRing = null;
         }
     }
 }
