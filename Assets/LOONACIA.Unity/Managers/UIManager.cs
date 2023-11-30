@@ -83,7 +83,6 @@ namespace LOONACIA.Unity.Managers
 
             if (_popupStack.Peek() != popup)
             {
-                Debug.Log($"Can't close popup: {popup.name}");
                 return;
             }
 

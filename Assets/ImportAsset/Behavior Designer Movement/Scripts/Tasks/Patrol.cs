@@ -6,7 +6,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
     [TaskCategory("Movement")]
     [HelpURL("https://www.opsive.com/support/documentation/behavior-designer-movement-pack/")]
     [TaskIcon("Assets/Behavior Designer Movement/Editor/Icons/{SkinColor}PatrolIcon.png")]
-    public class Patrol : NavMeshMovement
+    public class Patrol: NavMeshMovement
     {
         [Tooltip("Should the agent patrol the waypoints randomly?")]
         public SharedBool randomPatrol = false;
@@ -26,8 +26,10 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             // initially move towards the closest waypoint
             float distance = Mathf.Infinity;
             float localDistance;
-            for (int i = 0; i < waypoints.Value.Count; ++i) {
-                if ((localDistance = Vector3.Magnitude(transform.position - waypoints.Value[i].transform.position)) < distance) {
+            for (int i = 0; i < waypoints.Value.Count; ++i)
+            {
+                if ((localDistance = Vector3.Magnitude(transform.position - waypoints.Value[i].transform.position)) < distance)
+                {
                     distance = localDistance;
                     waypointIndex = i;
                 }
@@ -39,27 +41,38 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         // Patrol around the different waypoints specified in the waypoint array. Always return a task status of running. 
         public override TaskStatus OnUpdate()
         {
-            if (waypoints.Value.Count == 0) {
+            if (waypoints.Value.Count == 0)
+            {
                 return TaskStatus.Failure;
             }
-            if (HasArrived()) {
-                if (waypointReachedTime == -1) {
+            if (HasArrived())
+            {
+                if (waypointReachedTime == -1)
+                {
                     waypointReachedTime = Time.time;
                 }
                 // wait the required duration before switching waypoints.
-                if (waypointReachedTime + waypointPauseDuration.Value <= Time.time) {
-                    if (randomPatrol.Value) {
-                        if (waypoints.Value.Count == 1) {
+                if (waypointReachedTime + waypointPauseDuration.Value <= Time.time)
+                {
+                    if (randomPatrol.Value)
+                    {
+                        if (waypoints.Value.Count == 1)
+                        {
                             waypointIndex = 0;
-                        } else {
+                        }
+                        else
+                        {
                             // prevent the same waypoint from being selected
                             var newWaypointIndex = waypointIndex;
-                            while (newWaypointIndex == waypointIndex) {
+                            while (newWaypointIndex == waypointIndex)
+                            {
                                 newWaypointIndex = Random.Range(0, waypoints.Value.Count);
                             }
                             waypointIndex = newWaypointIndex;
                         }
-                    } else {
+                    }
+                    else
+                    {
                         waypointIndex = (waypointIndex + 1) % waypoints.Value.Count;
                     }
                     SetDestination(Target());
@@ -73,7 +86,8 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         // Return the current waypoint index position
         private Vector3 Target()
         {
-            if (waypointIndex >= waypoints.Value.Count) {
+            if (waypointIndex >= waypoints.Value.Count)
+            {
                 return transform.position;
             }
             return waypoints.Value[waypointIndex].transform.position;
@@ -93,13 +107,16 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         public override void OnDrawGizmos()
         {
 #if UNITY_EDITOR
-            if (waypoints == null || waypoints.Value == null) {
+            if (waypoints == null || waypoints.Value == null)
+            {
                 return;
             }
             var oldColor = UnityEditor.Handles.color;
             UnityEditor.Handles.color = Color.yellow;
-            for (int i = 0; i < waypoints.Value.Count; ++i) {
-                if (waypoints.Value[i] != null) {
+            for (int i = 0; i < waypoints.Value.Count; ++i)
+            {
+                if (waypoints.Value[i] != null)
+                {
                     UnityEditor.Handles.SphereHandleCap(0, waypoints.Value[i].transform.position, waypoints.Value[i].transform.rotation, 1, EventType.Repaint);
                 }
             }
