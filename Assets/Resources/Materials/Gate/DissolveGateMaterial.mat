@@ -7,21 +7,21 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: TestMaterial
+  m_Name: DissolveGateMaterial
   m_Shader: {fileID: -6465566751694194690, guid: dde22e75922de794d965a502c2434ec5,
     type: 3}
   m_ValidKeywords:
-  - _ALPHATEST_ON
-  - _USE_BACK_COLOR
+  - _SURFACE_TYPE_TRANSPARENT
   - _USE_DISSOLVE
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2450
+  m_CustomRenderQueue: 3000
   stringTagMap:
-    RenderType: TransparentCutout
-  disabledShaderPasses: []
+    RenderType: Transparent
+  disabledShaderPasses:
+  - DepthOnly
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -115,9 +115,9 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AlphaClip: 1
+    - _AlphaClip: 0
     - _AlphaCutoff: 0.5
-    - _Blend: 0
+    - _Blend: 2
     - _BumpScale: 1
     - _CastShadows: 1
     - _ClearCoatMask: 0
@@ -126,9 +126,11 @@ Material:
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
-    - _DissolveAmount: 0.68
+    - _DissolveAmount: -0.04
     - _DissolvePower: 0.01
-    - _DstBlend: 0
+    - _DotsNoiseScale: 30
+    - _DotsSize: 0.8
+    - _DstBlend: 1
     - _EdgeWidth: 0
     - _EnvironmentReflections: 1
     - _Flow_Speed: 1
@@ -138,8 +140,10 @@ Material:
     - _GuideTilling: 1
     - _GuideTilling_1: 1
     - _Guide_Tilling: 1
+    - _MaskPower: 0
     - _Metallic: 0
     - _NoisePower: 0
+    - _NoiseScale: 10
     - _OcclusionStrength: 1
     - _OpacityPower: 0.01
     - _Parallax: 0.005
@@ -147,25 +151,28 @@ Material:
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _ShaderDissolve: 0
-    - _Smoothness: 0.5
+    - _Smoothness: 0.656
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
-    - _SrcBlend: 1
-    - _Surface: 0
-    - _USE_BACK_COLOR: 1
+    - _SrcBlend: 5
+    - _Surface: 1
+    - _USE_BACK_COLOR: 0
     - _USE_DISSOLVE: 1
     - _Use_Metallic_Texture: 0
     - _WorkflowMode: 1
     - _ZTest: 4
-    - _ZWrite: 1
+    - _ZWrite: 0
     - _ZWriteControl: 0
     - __dirty: 1
     m_Colors:
-    - _Back_Color: {r: 5.3403134, g: 1.6775854, b: 0, a: 1}
-    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _Back_Color: {r: 7.129739, g: 0, b: 0.64954114, a: 1}
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _DissolveColor: {r: 0.34768504, g: 8.189918, b: 3.673448, a: 1}
-    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _DotsColor: {r: 0.8509804, g: 0.45519525, b: 0.19607843, a: 0}
+    - _DotsTiling: {r: 25, g: 20, b: 0, a: 0}
+    - _EmissionColor: {r: 0.7490196, g: 0.7490196, b: 0.7490196, a: 1}
+    - _NoiseSpeed: {r: 0, g: 0.2, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &8554458960423776492
