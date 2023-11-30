@@ -51,6 +51,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
                 {
                     waypointReachedTime = Time.time;
                 }
+
                 // wait the required duration before switching waypoints.
                 if (waypointReachedTime + waypointPauseDuration.Value <= Time.time)
                 {
@@ -75,6 +76,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
                     {
                         waypointIndex = (waypointIndex + 1) % waypoints.Value.Count;
                     }
+
                     SetDestination(Target());
                     waypointReachedTime = -1;
                 }
