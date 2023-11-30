@@ -1,8 +1,11 @@
 using LOONACIA.Unity;
 using LOONACIA.Unity.Managers;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using URPGlitch.Runtime.AnalogGlitch;
+using URPGlitch.Runtime.DigitalGlitch;
 
 public class EffectManager
 {
@@ -18,6 +21,12 @@ public class EffectManager
 	private ColorAdjustments m_colorAdjustments;
 	
 	private Vignette m_vignette;
+
+    private AnalogGlitchVolume m_analogGlitchVolume;
+
+    private DigitalGlitchVolume m_digitalGlithVolume;
+
+    private ChromaticAberration m_chromaticAberration;
 	
 	public void Init()
 	{
@@ -26,7 +35,10 @@ public class EffectManager
 		m_volume = GameObject.Find("Global Volume").GetComponent<Volume>();
 		m_volume.profile.TryGet(out m_colorAdjustments);
 		m_volume.profile.TryGet(out m_vignette);
-	}
+        m_volume.profile.TryGet(out m_analogGlitchVolume);
+        m_volume.profile.TryGet(out m_digitalGlithVolume);
+        m_volume.profile.TryGet(out m_chromaticAberration);
+    }
 	
     /// <summary>
     /// 빙의 준비 시작 이펙트를 실행합니다.
@@ -94,7 +106,27 @@ public class EffectManager
         effect.Show(monster.transform.position, duration);
     }
 	
-	private void ClearColorAdjustments()
+    public void PlayBrokenBodyViewEffect()
+    {
+        m_analogGlitchVolume.scanLineJitter.value = 0.1f;
+        m_analogGlitchVolume.verticalJump.value = 0.01f;
+
+        m_digitalGlithVolume.intensity.value = 0.1f;
+
+        m_chromaticAberration.intensity.value = 1f;
+    }
+
+    public void StopBrokenBodyViewEffect()
+    {
+        m_analogGlitchVolume.scanLineJitter.value = 0f;
+        m_analogGlitchVolume.verticalJump.value = 0f;
+
+        m_digitalGlithVolume.intensity.value = 0f;
+
+        m_chromaticAberration.intensity.value = 0f;
+    }
+
+    private void ClearColorAdjustments()
 	{
 		m_colorAdjustments.saturation.Override(0f);
 	}
