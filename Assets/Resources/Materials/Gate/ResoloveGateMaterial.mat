@@ -12,6 +12,7 @@ Material:
     type: 3}
   m_ValidKeywords:
   - _ALPHATEST_ON
+  - _SURFACE_TYPE_TRANSPARENT
   - _USE_BACK_COLOR
   - _USE_DISSOLVE
   m_InvalidKeywords:
@@ -19,10 +20,11 @@ Material:
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2450
+  m_CustomRenderQueue: 3000
   stringTagMap:
-    RenderType: TransparentCutout
-  disabledShaderPasses: []
+    RenderType: Transparent
+  disabledShaderPasses:
+  - DepthOnly
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -112,12 +114,12 @@ Material:
     - _CastShadows: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
-    - _Cull: 0
+    - _Cull: 2
     - _Cutoff: 0.618
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DissolveAmount: 0.376
-    - _DstBlend: 0
+    - _DstBlend: 10
     - _DstBlendAlpha: 0
     - _EdgeWidth: 0
     - _EnvironmentReflections: 1
@@ -142,10 +144,10 @@ Material:
     - _Smoothness: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
-    - _SrcBlend: 1
+    - _SrcBlend: 5
     - _SrcBlendAlpha: 1
     - _Strength: 0
-    - _Surface: 0
+    - _Surface: 1
     - _TRIPLANAR_SPACE: 0
     - _Tilling: 1
     - _USE_BACK_COLOR: 1
@@ -158,11 +160,11 @@ Material:
     - _Width: 0
     - _WorkflowMode: 1
     - _ZTest: 4
-    - _ZWrite: 1
+    - _ZWrite: 0
     - _ZWriteControl: 0
     m_Colors:
     - _Back_Color: {r: 10.447848, g: 45.202934, b: 45.202934, a: 1}
-    - _BaseColor: {r: 1.7019608, g: 0.9098039, b: 0.39215687, a: 0}
+    - _BaseColor: {r: 0.9982313, g: 2.7483773, b: 2.0512705, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _DissolveColor: {r: 0.76106226, g: 11.181761, b: 11.181761, a: 0.6392157}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 0}
