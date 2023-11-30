@@ -3214,7 +3214,7 @@ GameObject:
   - component: {fileID: 6848251869324873253}
   - component: {fileID: 301507556}
   m_Layer: 7
-  m_Name: CyberNormal
+  m_Name: CyberNormal Patrol
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3391,7 +3391,7 @@ MonoBehaviour:
   logTaskChanges: 0
   group: 0
   resetValuesOnRestart: 0
-  externalBehavior: {fileID: 11400000, guid: 40ac9c7ba1838ec48bd9b766dbdde6fa, type: 2}
+  externalBehavior: {fileID: 11400000, guid: 9e9e7fea813756a44a6b603bf9c99c1b, type: 2}
   mBehaviorSource:
     behaviorName: Behavior
     behaviorDescription: 
@@ -3400,16 +3400,13 @@ MonoBehaviour:
       parentIndex: 
       startIndex: 
       variableStartIndex: 
-      JSONSerialization: '{"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsHit","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockDown","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockBack","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsAttacking","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"TargetTransform","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"TargetObject","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsTargetPossessed","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"AttackDistance","IsShared":true,"SinglemValue":3},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"Self","IsShared":true,"TransformmValue":0},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"HP","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"Body","IsShared":true,"GameObjectmValue":1},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"SelfGameObject","IsShared":true,"GameObjectmValue":2},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"KnockDownTime","IsShared":true,"SinglemValue":0},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"TargetDistance","IsShared":true,"SinglemValue":10}]}'
+      JSONSerialization: '{"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsHit","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockDown","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockBack","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsAttacking","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"TargetTransform","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"TargetObject","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsTargetPossessed","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"AttackDistance","IsShared":true,"SinglemValue":5},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"Self","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"HP","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"Body","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"SelfGameObject","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"KnockDownTime","IsShared":true,"SinglemValue":0},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"TargetDistance","IsShared":true,"SinglemValue":5},{"Type":"BehaviorDesigner.Runtime.SharedGameObjectList","Name":"PatrolList","IsShared":true,"List`1mValue":[]}]}'
       fieldSerializationData:
         typeName: []
         fieldNameHash: 
         startIndex: 
         dataPosition: 
-        unityObjects:
-        - {fileID: 8703612408200316702}
-        - {fileID: 3180573980528633972}
-        - {fileID: 8703612408200316695}
+        unityObjects: []
         byteData: 
         byteDataArray: 
       Version: 1.7.7
@@ -3774,32 +3771,32 @@ PrefabInstance:
     - target: {fileID: 6258047005897676381, guid: be6ca77ef9c7808459cba8e94e9262b1,
         type: 3}
       propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[0].m_Value.x
-      value: -13.297051
+      value: 0.7029489
       objectReference: {fileID: 0}
     - target: {fileID: 6258047005897676381, guid: be6ca77ef9c7808459cba8e94e9262b1,
         type: 3}
       propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[0].m_Value.y
-      value: 26.98833
+      value: 0.98833114
       objectReference: {fileID: 0}
     - target: {fileID: 6258047005897676381, guid: be6ca77ef9c7808459cba8e94e9262b1,
         type: 3}
       propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[0].m_Value.z
-      value: -0.43565375
+      value: 0.56434625
       objectReference: {fileID: 0}
     - target: {fileID: 6258047005897676381, guid: be6ca77ef9c7808459cba8e94e9262b1,
         type: 3}
       propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[1].m_Value.x
-      value: -12.963832
+      value: 1.0361685
       objectReference: {fileID: 0}
     - target: {fileID: 6258047005897676381, guid: be6ca77ef9c7808459cba8e94e9262b1,
         type: 3}
       propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[1].m_Value.y
-      value: 26.728191
+      value: 0.72819066
       objectReference: {fileID: 0}
     - target: {fileID: 6258047005897676381, guid: be6ca77ef9c7808459cba8e94e9262b1,
         type: 3}
       propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[1].m_Value.z
-      value: 1.025552
+      value: 2.025552
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: be6ca77ef9c7808459cba8e94e9262b1, type: 3}
@@ -4095,32 +4092,32 @@ PrefabInstance:
     - target: {fileID: 3602398305053861342, guid: 9b7536b24a4e48845b3235888a3218c3,
         type: 3}
       propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[0].m_Value.x
-      value: -13.431531
+      value: 0.568469
       objectReference: {fileID: 0}
     - target: {fileID: 3602398305053861342, guid: 9b7536b24a4e48845b3235888a3218c3,
         type: 3}
       propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[0].m_Value.y
-      value: 27.04266
+      value: 1.0426604
       objectReference: {fileID: 0}
     - target: {fileID: 3602398305053861342, guid: 9b7536b24a4e48845b3235888a3218c3,
         type: 3}
       propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[0].m_Value.z
-      value: -0.7412255
+      value: 0.25877452
       objectReference: {fileID: 0}
     - target: {fileID: 3602398305053861342, guid: 9b7536b24a4e48845b3235888a3218c3,
         type: 3}
       propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[1].m_Value.x
-      value: -13.548036
+      value: 0.45196426
       objectReference: {fileID: 0}
     - target: {fileID: 3602398305053861342, guid: 9b7536b24a4e48845b3235888a3218c3,
         type: 3}
       propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[1].m_Value.y
-      value: 27.215828
+      value: 1.2158276
       objectReference: {fileID: 0}
     - target: {fileID: 3602398305053861342, guid: 9b7536b24a4e48845b3235888a3218c3,
         type: 3}
       propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[1].m_Value.z
-      value: 0.7655159
+      value: 1.7655159
       objectReference: {fileID: 0}
     - target: {fileID: 6174002598956168650, guid: 9b7536b24a4e48845b3235888a3218c3,
         type: 3}

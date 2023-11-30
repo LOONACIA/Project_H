@@ -6,7 +6,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
     [TaskCategory("Movement")]
     [HelpURL("https://www.opsive.com/support/documentation/behavior-designer-movement-pack/")]
     [TaskIcon("Assets/Behavior Designer Movement/Editor/Icons/{SkinColor}PatrolIcon.png")]
-    public class Patrol: NavMeshMovement
+    public class PatrolLeader: NavMeshMovement
     {
         [Tooltip("Should the agent patrol the waypoints randomly?")]
         public SharedBool randomPatrol = false;
@@ -51,6 +51,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
                 {
                     waypointReachedTime = Time.time;
                 }
+
                 // wait the required duration before switching waypoints.
                 if (waypointReachedTime + waypointPauseDuration.Value <= Time.time)
                 {
@@ -75,6 +76,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
                     {
                         waypointIndex = (waypointIndex + 1) % waypoints.Value.Count;
                     }
+
                     SetDestination(Target());
                     waypointReachedTime = -1;
                 }
