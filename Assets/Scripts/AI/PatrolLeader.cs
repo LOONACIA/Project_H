@@ -21,11 +21,13 @@ public class PatrolLeader : NavMeshMovement
     public SharedGameObjectList waypoints;
 
     // The current index that we are heading towards within the waypoints array
-    private int waypointIndex;
+    private int m_waypointIndex;
 
-    private float waypointReachedTime;
+    private float m_waypointReachedTime;
 
     private Vector3 m_targetPosition;
+    
+    private bool m_isTargetSet;
 
     public override void OnStart()
     {
@@ -40,16 +42,14 @@ public class PatrolLeader : NavMeshMovement
                 distance)
             {
                 distance = localDistance;
-                waypointIndex = i;
+                m_waypointIndex = i;
             }
         }
 
-        waypointReachedTime = -1;
+        m_waypointReachedTime = -1;
         m_targetPosition = Target();
         SetDestination(m_targetPosition);
     }
-    
-    private bool m_isTargetSet;
 
     // Patrol around the different waypoints specified in the waypoint array. Always return a task status of running. 
     public override TaskStatus OnUpdate()
@@ -77,18 +77,18 @@ public class PatrolLeader : NavMeshMovement
 
         if (HasArrived())
         {
-            if (waypointReachedTime < 0)
+            if (m_waypointReachedTime < 0)
             {
-                waypointReachedTime = Time.time;
+                m_waypointReachedTime = Time.time;
                 SetNextTarget();
                 m_targetPosition = Target();
             }
 
             // wait the required duration before switching waypoints.
-            if (waypointReachedTime + waypointPauseDuration.Value <= Time.time)
+            if (m_waypointReachedTime + waypointPauseDuration.Value <= Time.time)
             {
                 SetDestination(m_targetPosition);
-                waypointReachedTime = -1;
+                m_waypointReachedTime = -1;
                 m_isTargetSet = true;
             }
         }
@@ -102,35 +102,35 @@ public class PatrolLeader : NavMeshMovement
         {
             if (waypoints.Value.Count == 1)
             {
-                waypointIndex = 0;
+                m_waypointIndex = 0;
             }
             else
             {
                 // prevent the same waypoint from being selected
-                var newWaypointIndex = waypointIndex;
-                while (newWaypointIndex == waypointIndex)
+                var newWaypointIndex = m_waypointIndex;
+                while (newWaypointIndex == m_waypointIndex)
                 {
                     newWaypointIndex = Random.Range(0, waypoints.Value.Count);
                 }
 
-                waypointIndex = newWaypointIndex;
+                m_waypointIndex = newWaypointIndex;
             }
         }
         else
         {
-            waypointIndex = (waypointIndex + 1) % waypoints.Value.Count;
+            m_waypointIndex = (m_waypointIndex + 1) % waypoints.Value.Count;
         }
     }
 
     // Return the current waypoint index position
     private Vector3 Target()
     {
-        if (waypointIndex >= waypoints.Value.Count)
+        if (m_waypointIndex >= waypoints.Value.Count)
         {
             return transform.position;
         }
 
-        return waypoints.Value[waypointIndex].transform.position;
+        return waypoints.Value[m_waypointIndex].transform.position;
     }
 
     // Reset the public variables
@@ -139,6 +139,7 @@ public class PatrolLeader : NavMeshMovement
         base.OnReset();
 
         randomPatrol = false;
+        waitAngle = 10;
         waypointPauseDuration = 0;
         waypoints = null;
     }
