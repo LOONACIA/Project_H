@@ -27,4 +27,18 @@ public class BrokenBody : Monster
     public override void Block(bool value)
     {
     }
+
+    protected override void OnPossessed()
+    {
+        base.OnPossessed();
+        
+        GameManager.Effect.PlayBrokenBodyViewEffect();
+    }
+
+    protected override void OnUnPossessed()
+    {
+        base.OnUnPossessed();
+        
+        GameManager.Effect.StopBrokenBodyViewEffect();
+    }
 }
