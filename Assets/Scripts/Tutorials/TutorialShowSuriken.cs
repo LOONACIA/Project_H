@@ -27,6 +27,11 @@ public class TutorialShowSuriken : MonoBehaviour
 
     public void ShowShuriken()
     {
+        if (!isActiveAndEnabled)
+        {
+            return;
+        }
+        
         StartCoroutine(nameof(IE_ShowShuriken));
     }
 
