@@ -1,9 +1,10 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using BehaviorDesigner.Runtime.Tasks;
 using Tooltip = BehaviorDesigner.Runtime.Tasks.TooltipAttribute;
 using HelpURL = BehaviorDesigner.Runtime.Tasks.HelpURLAttribute;
+using System.Linq;
 #if DEATHMATCH_AI_KIT_PRESENT
 using Opsive.DeathmatchAIKit;
 #endif
@@ -277,6 +278,10 @@ namespace BehaviorDesigner.Runtime.Formations.Tasks
             }
 
             if (leader.Value == null) {
+                if (moveStatus.Count <= index)
+                {
+                    Debug.Log(moveStatus.Count);
+                }
                 moveStatus[index] = status;
             } else {
                 leaderMoveStatus = status;

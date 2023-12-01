@@ -28,7 +28,7 @@ public class CanSeeTargets : Conditional
 
         if (angle < fovAngle && dotProduct > 0.9f)
         {
-            if (Physics.Raycast(ray, out hit, distance, targetLayer) && distance <= viewDistance.Value)
+            if (Physics.Raycast(ray, out hit, distance, targetLayer) || distance > viewDistance.Value)
             {
                 return TaskStatus.Failure;
             }

@@ -7,19 +7,19 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
     [TaskCategory("Movement")]
     [HelpURL("https://www.opsive.com/support/documentation/behavior-designer-movement-pack/")]
     [TaskIcon("Assets/Behavior Designer Movement/Editor/Icons/{SkinColor}LeaderFollowIcon.png")]
-    public class LeaderFollow : NavMeshGroupMovement
+    public class LeaderFollowing : NavMeshGroupMovement
     {
-        [Tooltip("Agents less than this distance apart are neighbors")]
+        [Tooltip("followingAgents less than this distance apart are neighbors")]
         public SharedFloat neighborDistance = 10;
-        [Tooltip("How far behind the leader the agents should follow the leader")]
+        [Tooltip("How far behind the leader the followingAgents should follow the leader")]
         public SharedFloat leaderBehindDistance = 2;
-        [Tooltip("The distance that the agents should be separated")]
+        [Tooltip("The distance that the followingAgents should be separated")]
         public SharedFloat separationDistance = 2;
         [Tooltip("The agent is getting too close to the front of the leader if they are within the aheadDistance")]
         public SharedFloat aheadDistance = 2;
         [Tooltip("The leader to follow")]
         public SharedGameObject leader = null;
-
+        public SharedGameObject[] followingAgents = null;
         // component cache
         private Transform leaderTransform;
         private NavMeshAgent leaderAgent;
@@ -32,16 +32,20 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             base.OnStart();
         }
 
-        // The agents will always be following the leader so always return running
+        // The followingAgents will always be following the leader so always return running
         public override TaskStatus OnUpdate()
         {
             var behindPosition = LeaderBehindPosition();
             // Determine a destination for each agent
-            for (int i = 0; i < agents.Length; ++i) {
+            for (int i = 0; i < followingAgents.Length; ++i)
+            {
                 // Get out of the way of the leader if the leader is currently looking at the agent and is getting close
-                if (LeaderLookingAtAgent(i) && Vector3.Magnitude(leaderTransform.position - transforms[i].position) < aheadDistance.Value) {
+                if (LeaderLookingAtAgent(i) && Vector3.Magnitude(leaderTransform.position - transforms[i].position) < aheadDistance.Value)
+                {
                     SetDestination(i, transforms[i].position + (transforms[i].position - leaderTransform.position).normalized * aheadDistance.Value);
-                } else {
+                }
+                else
+                {
                     // The destination is the behind position added to the separation vector
                     SetDestination(i, behindPosition + DetermineSeparation(i));
                 }
@@ -53,21 +57,23 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         {
             // The behind position is the normalized inverse of the leader's velocity multiplied by the leaderBehindDistance
             return leaderTransform.position + (-leaderAgent.velocity).normalized * leaderBehindDistance.Value;
-
         }
 
-        // Determine the separation between the current agent and all of the other agents also following the leader
+        // Determine the separation between the current agent and all of the other followingAgents also following the leader
         private Vector3 DetermineSeparation(int agentIndex)
         {
             var separation = Vector3.zero;
             int neighborCount = 0;
             var agentTransform = transforms[agentIndex];
             // Loop through each agent to determine the separation
-            for (int i = 0; i < agents.Length; ++i) {
+            for (int i = 0; i < followingAgents.Length; ++i)
+            {
                 // The agent can't compare against itself
-                if (agentIndex != i) {
+                if (agentIndex != i)
+                {
                     // Only determine the parameters if the other agent is its neighbor
-                    if (Vector3.SqrMagnitude(transforms[i].position - agentTransform.position) < neighborDistance.Value) {
+                    if (Vector3.SqrMagnitude(transforms[i].position - agentTransform.position) < neighborDistance.Value)
+                    {
                         // This agent is the neighbor of the original agent so add the separation
                         separation += transforms[i].position - agentTransform.position;
                         neighborCount++;
@@ -76,7 +82,8 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             }
 
             // Don't move if there are no neighbors
-            if (neighborCount == 0) {
+            if (neighborCount == 0)
+            {
                 return Vector3.zero;
             }
             // Normalize the value

@@ -30,7 +30,7 @@ public class SetTargetIfDamaged : Conditional
                 m_owner.Targets.Add(m_attacker);
             }
 
-            //Target.Value = m_attacker.transform;
+            Target.Value = null;
             m_attacker = null;
             return TaskStatus.Success;
         }
