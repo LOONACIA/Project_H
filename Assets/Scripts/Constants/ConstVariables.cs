@@ -47,4 +47,8 @@ public static class ConstVariables
     
     [Header("UI")]
     public const float UI_DIALOG_TEXT_TYPE_INTERVAL = 0.15f;
+
+    [Header("Tutorial")]
+    public const string TUTORIAL_BROKENSHURIKEN_MATERIAL_PATH = "Materials/Monster/Shooter/BlackBody";
+    public const string TUTORIAL_BROKENSHURIKEN_OUTLINEMATERIAL_PATH = "Materials/Monster/BrokenBody/BrokenBodyOutline Material";
 }
