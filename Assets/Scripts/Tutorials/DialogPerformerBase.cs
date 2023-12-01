@@ -7,6 +7,8 @@ using UnityEngine.Events;
 
 public abstract class DialogPerformerBase : MonoBehaviour
 {
+    protected int m_dialogVersion;
+    
     [SerializeField]
     [Tooltip("다이얼로그 메시지")]
 	private MessageDialogInfo[] m_dialogTexts;
@@ -23,7 +25,7 @@ public abstract class DialogPerformerBase : MonoBehaviour
     
     protected void ShowDialog()
     {
-        GameManager.UI.ShowDialog(m_dialogTexts, m_interval);
+        m_dialogVersion = GameManager.UI.ShowDialog(m_dialogTexts, m_interval);
         if (m_dialogDuration > 0f)
         {
             CoroutineEx.Create(this, CoWaitForSeconds(m_dialogDuration, HideDialog));
@@ -32,7 +34,7 @@ public abstract class DialogPerformerBase : MonoBehaviour
     
     protected void HideDialog()
     {
-        GameManager.UI.HideDialog();
+        GameManager.UI.HideDialog(m_dialogVersion);
     }
     
     protected IEnumerator CoWaitForSeconds(float seconds, Action action)
