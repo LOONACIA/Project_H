@@ -137,7 +137,7 @@ public class GameUIManager
         m_dialog.gameObject.SetActive(true);
     }
 
-    public void ShowDialog(string[] texts, float interval = 1f)
+    public void ShowDialog(MessageDialogInfo[] texts, float interval = 1f)
     {
         if (m_dialog == null)
         {
@@ -145,14 +145,15 @@ public class GameUIManager
         }
 
         int index = 0;
-        m_dialog.SetText(texts[index++]);
+        MessageDialogInfo dialogInfo = texts[index++];
+        m_dialog.SetText(dialogInfo.Message, () => dialogInfo.Callback?.Invoke());
         m_dialog.gameObject.SetActive(true);
         CoroutineEx.Create(m_dialog, CoShowDialog(texts, interval, index));
         return;
 
-        IEnumerator CoShowDialog(IReadOnlyList<string> innerTexts, float innerInterval, int innerIndex)
+        IEnumerator CoShowDialog(IReadOnlyList<MessageDialogInfo> infoList, float innerInterval, int innerIndex)
         {
-            while (innerIndex < innerTexts.Count)
+            while (innerIndex < infoList.Count)
             {
                 while (m_dialog.IsTyping)
                 {
@@ -160,7 +161,8 @@ public class GameUIManager
                 }
                 yield return new WaitForSeconds(innerInterval);
 
-                m_dialog.SetText(innerTexts[innerIndex++]);
+                var info = infoList[innerIndex++];
+                m_dialog.SetText(info.Message, () => info.Callback?.Invoke());
             }
         }
     }
