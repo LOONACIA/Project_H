@@ -74,9 +74,9 @@ public class PossessionShuriken : MonoBehaviour
         {
             m_targetDir = (targetActor.transform.position + Vector3.up - transform.position).normalized;
         }
-
-        Move();
         CheckFront();
+        Move();
+        
     }
 
     #endregion
@@ -138,27 +138,27 @@ public class PossessionShuriken : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        //if (1 << other.gameObject.layer == m_targetLayer)
-        //{
-        //    if (other.gameObject == throwActor.gameObject)
-        //    {
-        //        return;
-        //    }
-            
-        //    targetActor = other.gameObject.GetComponent<Actor>();
-        //    HitTarget();
-        //}
-        //else if((m_surikenStopLayer & (1 << other.gameObject.layer)) != 0)
-        //{
-        //    if (m_isTrace)
-        //        return;
+        if (1 << other.gameObject.layer == m_targetLayer)
+        {
+            if (other.gameObject == throwActor.gameObject)
+            {
+                return;
+            }
 
-        //    m_isStop = true;
-        //    m_rb.isKinematic = true;
+            targetActor = other.gameObject.GetComponent<Actor>();
+            HitTarget();
+        }
+        else if ((m_surikenStopLayer & (1 << other.gameObject.layer)) != 0)
+        {
+            if (m_isTrace)
+                return;
 
-        //    GetComponent<Collider>().enabled = false;
-        //    Invoke(nameof(DestroySelf), 5f);
-        //}
+            m_isStop = true;
+            m_rb.isKinematic = true;
+
+            GetComponent<Collider>().enabled = false;
+            Invoke(nameof(DestroySelf), 5f);
+        }
     }
 
     private void DestroySelf()
