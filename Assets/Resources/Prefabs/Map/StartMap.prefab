@@ -6753,6 +6753,7 @@ Transform:
   - {fileID: 7859809053046154924}
   - {fileID: 2433274650795369452}
   - {fileID: 2433274651430428845}
+  - {fileID: 7806156431249723006}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -10256,12 +10257,12 @@ PrefabInstance:
     - target: {fileID: 2992298189981585389, guid: f572cd7e6bc382346ae89fbb07f7ab4f,
         type: 3}
       propertyPath: m_dialogTexts.Array.data[1].<Callback>k__BackingField.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2992298189981585389, guid: f572cd7e6bc382346ae89fbb07f7ab4f,
         type: 3}
       propertyPath: m_dialogTexts.Array.data[2].<Callback>k__BackingField.m_PersistentCalls.m_Calls.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2992298189981585389, guid: f572cd7e6bc382346ae89fbb07f7ab4f,
         type: 3}
@@ -10756,6 +10757,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8629181271584045266}
     m_Modifications:
+    - target: {fileID: 3372291900262138481, guid: 9ba19b9af80d4874eb559018b0fd847a,
+        type: 3}
+      propertyPath: mBehaviorSource.mTaskData.JSONSerialization
+      value: '{"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsHit","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockDown","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockBack","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsAttacking","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"TargetTransform","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"TargetObject","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsTargetPossessed","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"AttackDistance","IsShared":true,"SinglemValue":5},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"Self","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"HP","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"Body","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"SelfGameObject","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"KnockDownTime","IsShared":true,"SinglemValue":0}]}'
+      objectReference: {fileID: 0}
     - target: {fileID: 6198563608570603138, guid: 9ba19b9af80d4874eb559018b0fd847a,
         type: 3}
       propertyPath: m_Name
@@ -10823,6 +10829,124 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6198563608570603147, guid: 9ba19b9af80d4874eb559018b0fd847a,
     type: 3}
   m_PrefabInstance: {fileID: 8629181271246718311}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &8629181271380557719
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 8629181271584045266}
+    m_Modifications:
+    - target: {fileID: 855445968329230982, guid: 43f6d532e78309f48a1145cf1a3fddc1,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: af46d439fa081a14084e14dd809cfac8, type: 2}
+    - target: {fileID: 1215932193967336275, guid: 43f6d532e78309f48a1145cf1a3fddc1,
+        type: 3}
+      propertyPath: m_Name
+      value: SavePoint
+      objectReference: {fileID: 0}
+    - target: {fileID: 1987225772843217385, guid: 43f6d532e78309f48a1145cf1a3fddc1,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 31
+      objectReference: {fileID: 0}
+    - target: {fileID: 1987225772843217385, guid: 43f6d532e78309f48a1145cf1a3fddc1,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -182.663
+      objectReference: {fileID: 0}
+    - target: {fileID: 1987225772843217385, guid: 43f6d532e78309f48a1145cf1a3fddc1,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 30.198
+      objectReference: {fileID: 0}
+    - target: {fileID: 1987225772843217385, guid: 43f6d532e78309f48a1145cf1a3fddc1,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 5.842
+      objectReference: {fileID: 0}
+    - target: {fileID: 1987225772843217385, guid: 43f6d532e78309f48a1145cf1a3fddc1,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 1987225772843217385, guid: 43f6d532e78309f48a1145cf1a3fddc1,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1987225772843217385, guid: 43f6d532e78309f48a1145cf1a3fddc1,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 1987225772843217385, guid: 43f6d532e78309f48a1145cf1a3fddc1,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1987225772843217385, guid: 43f6d532e78309f48a1145cf1a3fddc1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1987225772843217385, guid: 43f6d532e78309f48a1145cf1a3fddc1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 1987225772843217385, guid: 43f6d532e78309f48a1145cf1a3fddc1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 43f6d532e78309f48a1145cf1a3fddc1, type: 3}
+--- !u!1 &621170621960662156 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9178289612618519323, guid: 43f6d532e78309f48a1145cf1a3fddc1,
+    type: 3}
+  m_PrefabInstance: {fileID: 8629181271380557719}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &864217997
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 621170621960662156}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.3428177, y: 2.373464, z: 0.99377733}
+  m_Center: {x: 0.5741221, y: 0.13497472, z: 0.48852715}
+--- !u!1 &7430615333158065348 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1215932193967336275, guid: 43f6d532e78309f48a1145cf1a3fddc1,
+    type: 3}
+  m_PrefabInstance: {fileID: 8629181271380557719}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &489343198
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7430615333158065348}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.1968299, y: 2.376126, z: 1.8159173}
+  m_Center: {x: -0.7383571, y: 1.188063, z: 0.008705616}
+--- !u!4 &7806156431249723006 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1987225772843217385, guid: 43f6d532e78309f48a1145cf1a3fddc1,
+    type: 3}
+  m_PrefabInstance: {fileID: 8629181271380557719}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8629181271414792049
 PrefabInstance:
@@ -10924,7 +11048,7 @@ PrefabInstance:
     - target: {fileID: 2992298189981585389, guid: f572cd7e6bc382346ae89fbb07f7ab4f,
         type: 3}
       propertyPath: m_dialogTexts.Array.size
-      value: 5
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 2992298189981585389, guid: f572cd7e6bc382346ae89fbb07f7ab4f,
         type: 3}
@@ -10935,26 +11059,39 @@ PrefabInstance:
     - target: {fileID: 2992298189981585389, guid: f572cd7e6bc382346ae89fbb07f7ab4f,
         type: 3}
       propertyPath: m_dialogTexts.Array.data[1].<Message>k__BackingField
-      value: "\uB2E4\uCE5C \uBAB8\uC5D0\uC11C \uD53C \uD68C\uBCF5\uB3C4\n\uB418\uC5B4
-        \uC788\uB294\uAC70 \uBCF4\uC774\uC9C0??"
+      value: "\uC774\uC81C \uCD08\uB85D\uACC4\uC5F4\uC758 \uC800\uC7A5 \uD3EC\uC778\uD2B8\uB85C
+        \uAC00\uC11C\n\uD604\uC7AC \uB108\uC758 \uB370\uC774\uD130\uB97C \uC800\uC7A5\uD574\uB46C!"
       objectReference: {fileID: 0}
     - target: {fileID: 2992298189981585389, guid: f572cd7e6bc382346ae89fbb07f7ab4f,
         type: 3}
       propertyPath: m_dialogTexts.Array.data[2].<Message>k__BackingField
-      value: "\uD45C\uCC3D\uC744 \uB300\uC0C1\uC5D0 \uB9DE\uCD98\uB2E4\uBA74\n\uD574\uD0B9
-        \uC9C4\uD589\uB960\uC744 \uC911\uC559\uC5D0 \n\uD45C\uC2DC\uD574\uB450\uAC8C
-        \uD574\uB1A8\uC5B4!\n"
+      value: "\uC798\uD588\uC5B4! \uADF8\uB807\uB2E4\uBA74 \uB108\uAC00 \uC8FD\uB354\uB77C\uB3C4\n\uC800\uC7A5\uB41C
+        \uB370\uC774\uD130\uB97C \uD1B5\uD574\uC11C \uB2E4\uC2DC \uC2DC\uC791\uD560
+        \uC218 \uC788\uC5B4"
       objectReference: {fileID: 0}
     - target: {fileID: 2992298189981585389, guid: f572cd7e6bc382346ae89fbb07f7ab4f,
         type: 3}
       propertyPath: m_dialogTexts.Array.data[3].<Message>k__BackingField
-      value: "\uD574\uD0B9 \uC9C4\uD589\uC774 \uBAA8\uB450 \uC644\uB8CC\uB418\uBA74\n\uADF8
-        \uBAB8\uC73C\uB85C \uC774\uB3D9\uD560 \uC218 \uC788\uC73C\uB2C8 \n\uD14C\uC2A4\uD2B8
-        \uD574\uBD10!\n"
+      value: "\uB2E4\uCE5C \uBAB8\uC5D0\uC11C \uD53C \uD68C\uBCF5\uB3C4\n\uB418\uC5B4
+        \uC788\uB294\uAC70 \uBCF4\uC774\uC9C0??\n"
       objectReference: {fileID: 0}
     - target: {fileID: 2992298189981585389, guid: f572cd7e6bc382346ae89fbb07f7ab4f,
         type: 3}
       propertyPath: m_dialogTexts.Array.data[4].<Message>k__BackingField
+      value: "\uD45C\uCC3D\uC744 \uB300\uC0C1\uC5D0 \uB9DE\uCD98\uB2E4\uBA74\n\uD574\uD0B9
+        \uC9C4\uD589\uB960\uC744 \uC911\uC559\uC5D0 \n\uD45C\uC2DC\uD574\uB450\uAC8C
+        \uD574\uB1A8\uC5B4!"
+      objectReference: {fileID: 0}
+    - target: {fileID: 2992298189981585389, guid: f572cd7e6bc382346ae89fbb07f7ab4f,
+        type: 3}
+      propertyPath: m_dialogTexts.Array.data[5].<Message>k__BackingField
+      value: "\uD574\uD0B9 \uC9C4\uD589\uC774 \uBAA8\uB450 \uC644\uB8CC\uB418\uBA74\n\uADF8
+        \uBAB8\uC73C\uB85C \uC774\uB3D9\uD560 \uC218 \uC788\uC73C\uB2C8 \n\uD14C\uC2A4\uD2B8
+        \uD574\uBD10!"
+      objectReference: {fileID: 0}
+    - target: {fileID: 2992298189981585389, guid: f572cd7e6bc382346ae89fbb07f7ab4f,
+        type: 3}
+      propertyPath: m_dialogTexts.Array.data[6].<Message>k__BackingField
       value: "\uC798\uD588\uC5B4!\n\uBB38\uC744 \uC5F4\uACE0 \uB098\uAC00\uC790!\n\uBC29\uC5D0
         \uC2A4\uC704\uCE58\uAC00 \uC788\uC744\uAEBC\uC57C\n"
       objectReference: {fileID: 0}
@@ -10966,16 +11103,21 @@ PrefabInstance:
     - target: {fileID: 2992298189981585389, guid: f572cd7e6bc382346ae89fbb07f7ab4f,
         type: 3}
       propertyPath: m_dialogTexts.Array.data[2].<Callback>k__BackingField.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2992298189981585389, guid: f572cd7e6bc382346ae89fbb07f7ab4f,
-        type: 3}
-      propertyPath: m_dialogTexts.Array.data[3].<Callback>k__BackingField.m_PersistentCalls.m_Calls.Array.size
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2992298189981585389, guid: f572cd7e6bc382346ae89fbb07f7ab4f,
         type: 3}
+      propertyPath: m_dialogTexts.Array.data[3].<Callback>k__BackingField.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2992298189981585389, guid: f572cd7e6bc382346ae89fbb07f7ab4f,
+        type: 3}
       propertyPath: m_dialogTexts.Array.data[4].<Callback>k__BackingField.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2992298189981585389, guid: f572cd7e6bc382346ae89fbb07f7ab4f,
+        type: 3}
+      propertyPath: m_dialogTexts.Array.data[6].<Callback>k__BackingField.m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2992298189981585389, guid: f572cd7e6bc382346ae89fbb07f7ab4f,
@@ -11000,6 +11142,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2992298189981585389, guid: f572cd7e6bc382346ae89fbb07f7ab4f,
         type: 3}
+      propertyPath: m_dialogTexts.Array.data[6].<Callback>k__BackingField.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2992298189981585389, guid: f572cd7e6bc382346ae89fbb07f7ab4f,
+        type: 3}
       propertyPath: m_dialogTexts.Array.data[1].<Callback>k__BackingField.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 301057183}
@@ -11016,6 +11163,11 @@ PrefabInstance:
     - target: {fileID: 2992298189981585389, guid: f572cd7e6bc382346ae89fbb07f7ab4f,
         type: 3}
       propertyPath: m_dialogTexts.Array.data[4].<Callback>k__BackingField.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 301057183}
+    - target: {fileID: 2992298189981585389, guid: f572cd7e6bc382346ae89fbb07f7ab4f,
+        type: 3}
+      propertyPath: m_dialogTexts.Array.data[6].<Callback>k__BackingField.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 301057183}
     - target: {fileID: 2992298189981585389, guid: f572cd7e6bc382346ae89fbb07f7ab4f,
@@ -11040,8 +11192,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2992298189981585389, guid: f572cd7e6bc382346ae89fbb07f7ab4f,
         type: 3}
+      propertyPath: m_dialogTexts.Array.data[6].<Callback>k__BackingField.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2992298189981585389, guid: f572cd7e6bc382346ae89fbb07f7ab4f,
+        type: 3}
       propertyPath: m_dialogTexts.Array.data[1].<Callback>k__BackingField.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ShowCheckHPObject
+      value: ShowCheckSavePoint
       objectReference: {fileID: 0}
     - target: {fileID: 2992298189981585389, guid: f572cd7e6bc382346ae89fbb07f7ab4f,
         type: 3}
@@ -11051,11 +11208,16 @@ PrefabInstance:
     - target: {fileID: 2992298189981585389, guid: f572cd7e6bc382346ae89fbb07f7ab4f,
         type: 3}
       propertyPath: m_dialogTexts.Array.data[3].<Callback>k__BackingField.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ShowCheckHackingGauge
+      value: ShowCheckHPObject
       objectReference: {fileID: 0}
     - target: {fileID: 2992298189981585389, guid: f572cd7e6bc382346ae89fbb07f7ab4f,
         type: 3}
       propertyPath: m_dialogTexts.Array.data[4].<Callback>k__BackingField.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ShowCheckHackingGauge
+      objectReference: {fileID: 0}
+    - target: {fileID: 2992298189981585389, guid: f572cd7e6bc382346ae89fbb07f7ab4f,
+        type: 3}
+      propertyPath: m_dialogTexts.Array.data[6].<Callback>k__BackingField.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: ShowSwtichGateTrigger
       objectReference: {fileID: 0}
     - target: {fileID: 2992298189981585389, guid: f572cd7e6bc382346ae89fbb07f7ab4f,
@@ -11080,6 +11242,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2992298189981585389, guid: f572cd7e6bc382346ae89fbb07f7ab4f,
         type: 3}
+      propertyPath: m_dialogTexts.Array.data[6].<Callback>k__BackingField.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: TutorialSwitchGateTrigger, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2992298189981585389, guid: f572cd7e6bc382346ae89fbb07f7ab4f,
+        type: 3}
       propertyPath: m_dialogTexts.Array.data[1].<Callback>k__BackingField.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
@@ -11096,6 +11263,11 @@ PrefabInstance:
     - target: {fileID: 2992298189981585389, guid: f572cd7e6bc382346ae89fbb07f7ab4f,
         type: 3}
       propertyPath: m_dialogTexts.Array.data[4].<Callback>k__BackingField.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 2992298189981585389, guid: f572cd7e6bc382346ae89fbb07f7ab4f,
+        type: 3}
+      propertyPath: m_dialogTexts.Array.data[6].<Callback>k__BackingField.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -11882,6 +12054,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8629181271584045266}
     m_Modifications:
+    - target: {fileID: 3372291900262138481, guid: 9ba19b9af80d4874eb559018b0fd847a,
+        type: 3}
+      propertyPath: mBehaviorSource.mTaskData.JSONSerialization
+      value: '{"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsHit","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockDown","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockBack","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsAttacking","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"TargetTransform","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"TargetObject","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsTargetPossessed","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"AttackDistance","IsShared":true,"SinglemValue":5},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"Self","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"HP","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"Body","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"SelfGameObject","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"KnockDownTime","IsShared":true,"SinglemValue":0}]}'
+      objectReference: {fileID: 0}
     - target: {fileID: 6198563608570603138, guid: 9ba19b9af80d4874eb559018b0fd847a,
         type: 3}
       propertyPath: m_Name
@@ -11895,7 +12072,7 @@ PrefabInstance:
     - target: {fileID: 6198563608570603147, guid: 9ba19b9af80d4874eb559018b0fd847a,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -175
+      value: -181.66
       objectReference: {fileID: 0}
     - target: {fileID: 6198563608570603147, guid: 9ba19b9af80d4874eb559018b0fd847a,
         type: 3}
@@ -11905,12 +12082,12 @@ PrefabInstance:
     - target: {fileID: 6198563608570603147, guid: 9ba19b9af80d4874eb559018b0fd847a,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.98
+      value: 0.14
       objectReference: {fileID: 0}
     - target: {fileID: 6198563608570603147, guid: 9ba19b9af80d4874eb559018b0fd847a,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9999484
+      value: 0.6963936
       objectReference: {fileID: 0}
     - target: {fileID: 6198563608570603147, guid: 9ba19b9af80d4874eb559018b0fd847a,
         type: 3}
@@ -11920,7 +12097,7 @@ PrefabInstance:
     - target: {fileID: 6198563608570603147, guid: 9ba19b9af80d4874eb559018b0fd847a,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.010168439
+      value: -0.71766007
       objectReference: {fileID: 0}
     - target: {fileID: 6198563608570603147, guid: 9ba19b9af80d4874eb559018b0fd847a,
         type: 3}
@@ -11935,7 +12112,7 @@ PrefabInstance:
     - target: {fileID: 6198563608570603147, guid: 9ba19b9af80d4874eb559018b0fd847a,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 1.165
+      value: -91.723
       objectReference: {fileID: 0}
     - target: {fileID: 6198563608570603147, guid: 9ba19b9af80d4874eb559018b0fd847a,
         type: 3}
