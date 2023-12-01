@@ -7,6 +7,7 @@ using UnityEngine;
 public abstract class DialogPerformerBase : MonoBehaviour
 {
     [SerializeField]
+    [TextArea]
     [Tooltip("다이얼로그 텍스트")]
 	private string[] m_dialogTexts;
 
