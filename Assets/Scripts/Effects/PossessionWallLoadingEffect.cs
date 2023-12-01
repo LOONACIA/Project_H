@@ -31,7 +31,7 @@ public class PossessionWallLoadingEffect : MonoBehaviour
         }
     }
     #endregion
-
+    
     #region PrivateMethod
     private void ShowPossessionEffect()
     {
@@ -39,13 +39,20 @@ public class PossessionWallLoadingEffect : MonoBehaviour
 
         //this.GetComponent<Renderer>().material.SetFloat("SciFI_URP/Sci-FiURP", 0f);
 
-        mat[0] = Instantiate<Material>(Resources.Load<Material>(ConstVariables.WALL_POSSESSIONLOADINGMATERIAL_PATH));
+        mat[0] = possessionLoadingMaterial;
         mat[1] = null;
 
-        Shader.SetGlobalFloat("_Time", 0f);
-        Debug.Log(Shader.GetGlobalVector("_Time"));
         mr.materials = mat;
+    }
 
+    private void EndPossessionEffect()
+    {
+        Material[] mat = mr.materials;
+
+        mat[0] = normalMaterial;
+        mat[1] = normalOutlineMaterial;
+
+        mr.materials = mat;
     }
     #endregion
 }

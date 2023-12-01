@@ -1,5 +1,8 @@
+using LOONACIA.Unity.Coroutines;
 using LOONACIA.Unity.Managers;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameUIManager
@@ -13,6 +16,10 @@ public class GameUIManager
     private UIDamageIndicator m_damageIndicator;
     
     private UIProgressRing m_progressRing;
+    
+    private UIMessageDialog m_dialog;
+
+    private UIObjects m_objects;
 
     public void Init()
     {
@@ -36,6 +43,16 @@ public class GameUIManager
     {
         var ui = ManagerRoot.UI.ShowSceneUI<UIHpIndicator>();
         ui.SetPlayer(player);
+    }
+
+    public void ShowObjects()
+    {
+        m_objects = ManagerRoot.UI.ShowSceneUI<UIObjects>();
+    }
+    
+    public void UpdateObject(string _text)
+    {
+        m_objects.UpdateObjectText(_text);
     }
 
     public void GenerateShieldIndicator(PlayerController player)
@@ -107,5 +124,56 @@ public class GameUIManager
             ManagerRoot.UI.ClosePopupUI(m_progressRing);
             m_progressRing = null;
         }
+    }
+    
+    public void ShowDialog(string text)
+    {
+        if (m_dialog == null)
+        {
+            m_dialog = ManagerRoot.UI.ShowPopupUI<UIMessageDialog>();            
+        }
+        
+        m_dialog.SetText(text);
+        m_dialog.gameObject.SetActive(true);
+    }
+
+    public void ShowDialog(MessageDialogInfo[] texts, float interval = 1f)
+    {
+        if (m_dialog == null)
+        {
+            m_dialog = ManagerRoot.UI.ShowPopupUI<UIMessageDialog>();
+        }
+
+        int index = 0;
+        MessageDialogInfo dialogInfo = texts[index++];
+        m_dialog.SetText(dialogInfo.Message, () => dialogInfo.Callback?.Invoke());
+        m_dialog.gameObject.SetActive(true);
+        CoroutineEx.Create(m_dialog, CoShowDialog(texts, interval, index));
+        return;
+
+        IEnumerator CoShowDialog(IReadOnlyList<MessageDialogInfo> infoList, float innerInterval, int innerIndex)
+        {
+            while (innerIndex < infoList.Count)
+            {
+                while (m_dialog.IsTyping)
+                {
+                    yield return null;
+                }
+                yield return new WaitForSeconds(innerInterval);
+
+                var info = infoList[innerIndex++];
+                m_dialog.SetText(info.Message, () => info.Callback?.Invoke());
+            }
+        }
+    }
+
+    public void HideDialog()
+    {
+        if (m_dialog == null)
+        {
+            return;
+        }
+        
+        m_dialog.gameObject.SetActive(false);
     }
 }
