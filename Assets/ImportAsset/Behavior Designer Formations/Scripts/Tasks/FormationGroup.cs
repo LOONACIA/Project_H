@@ -280,7 +280,7 @@ namespace BehaviorDesigner.Runtime.Formations.Tasks
             if (leader.Value == null) {
                 if (moveStatus.Count <= index)
                 {
-                    Debug.Log(moveStatus.Count);
+                    return;
                 }
                 moveStatus[index] = status;
             } else {

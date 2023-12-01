@@ -21,8 +21,13 @@ public class GameUIManager
 
     private UIObjects m_objects;
 
+    private int m_dialogVersion;
+    
+    private CoroutineEx m_showDialogCoroutine;
+
     public void Init()
     {
+        m_dialogVersion = 0;
     }
 
     public void Clear()
@@ -126,7 +131,7 @@ public class GameUIManager
         }
     }
     
-    public void ShowDialog(string text)
+    public int ShowDialog(string text)
     {
         if (m_dialog == null)
         {
@@ -135,21 +140,24 @@ public class GameUIManager
         
         m_dialog.SetText(text);
         m_dialog.gameObject.SetActive(true);
+        return ++m_dialogVersion;
     }
 
-    public void ShowDialog(MessageDialogInfo[] texts, float interval = 1f)
+    public int ShowDialog(MessageDialogInfo[] texts, float interval = 1f)
     {
         if (m_dialog == null)
         {
             m_dialog = ManagerRoot.UI.ShowPopupUI<UIMessageDialog>();
         }
+        m_showDialogCoroutine?.Abort();
+        m_dialog.Abort();
 
         int index = 0;
         MessageDialogInfo dialogInfo = texts[index++];
         m_dialog.SetText(dialogInfo.Message, () => dialogInfo.Callback?.Invoke());
         m_dialog.gameObject.SetActive(true);
-        CoroutineEx.Create(m_dialog, CoShowDialog(texts, interval, index));
-        return;
+        m_showDialogCoroutine = CoroutineEx.Create(m_dialog, CoShowDialog(texts, interval, index));
+        return ++m_dialogVersion;
 
         IEnumerator CoShowDialog(IReadOnlyList<MessageDialogInfo> infoList, float innerInterval, int innerIndex)
         {
@@ -167,9 +175,14 @@ public class GameUIManager
         }
     }
 
-    public void HideDialog()
+    public void HideDialog(int version)
     {
         if (m_dialog == null)
+        {
+            return;
+        }
+
+        if (version != m_dialogVersion)
         {
             return;
         }

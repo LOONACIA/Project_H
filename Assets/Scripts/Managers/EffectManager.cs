@@ -108,7 +108,7 @@ public class EffectManager
 	
     public void PlayBrokenBodyViewEffect()
     {
-        m_analogGlitchVolume.scanLineJitter.value = 0.1f;
+        m_analogGlitchVolume.scanLineJitter.value = 0f;
         m_analogGlitchVolume.verticalJump.value = 0.01f;
 
         m_digitalGlithVolume.intensity.value = 0.1f;
