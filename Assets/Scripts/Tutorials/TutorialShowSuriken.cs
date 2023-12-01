@@ -29,6 +29,11 @@ public class TutorialShowSuriken : MonoBehaviour
     {
         StartCoroutine(nameof(IE_ShowShuriken));
     }
+
+    public void ShowShurikenObject()
+    {
+        GameManager.UI.UpdateObject("R키를 눌러서 표창을 날린 다음, 다시 눌러 이동하세요!");
+    }
     #endregion
 
     #region PrivateMethod
@@ -42,7 +47,7 @@ public class TutorialShowSuriken : MonoBehaviour
             value -= 0.0003f;
             yield return null;
 
-            if (value <= 0.6f)
+            if (value <= 0.7f)
                 break;
         }
 

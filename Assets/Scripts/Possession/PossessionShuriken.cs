@@ -17,7 +17,7 @@ public class PossessionShuriken : MonoBehaviour
     #region PrivateVariables
 
     // 몬스터를 추적하는지, 아니면 그냥 날아가는지
-    private bool m_isTrace;
+    private bool m_isTrace = false;
 
     private bool m_isStop;
 
@@ -76,11 +76,43 @@ public class PossessionShuriken : MonoBehaviour
         }
 
         Move();
+        CheckFront();
     }
 
     #endregion
 
     #region PrivateMethod
+
+    private void CheckFront()
+    {
+        RaycastHit hit;
+        if (Physics.SphereCast(transform.position, 0.3f, m_targetDir.normalized, out hit, 1f, m_surikenStopLayer) == false)
+            return;
+
+        Transform other = hit.transform;
+
+        if (1 << other.gameObject.layer == m_targetLayer)
+        {
+            if (other.gameObject == throwActor.gameObject)
+            {
+                return;
+            }
+
+            targetActor = other.gameObject.GetComponent<Actor>();
+            HitTarget();
+        }
+        else if ((m_surikenStopLayer & (1 << other.gameObject.layer)) != 0)
+        {
+            if (m_isTrace)
+                return;
+
+            m_isStop = true;
+            m_rb.isKinematic = true;
+
+            GetComponent<Collider>().enabled = false;
+            Invoke(nameof(DestroySelf), 5f);
+        }
+    }
 
     private void Move()
     {
@@ -106,27 +138,27 @@ public class PossessionShuriken : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (1 << other.gameObject.layer == m_targetLayer)
-        {
-            if (other.gameObject == throwActor.gameObject)
-            {
-                return;
-            }
+        //if (1 << other.gameObject.layer == m_targetLayer)
+        //{
+        //    if (other.gameObject == throwActor.gameObject)
+        //    {
+        //        return;
+        //    }
             
-            targetActor = other.gameObject.GetComponent<Actor>();
-            HitTarget();
-        }
-        else if((m_surikenStopLayer & (1 << other.gameObject.layer)) != 0)
-        {
-            if (m_isTrace)
-                return;
+        //    targetActor = other.gameObject.GetComponent<Actor>();
+        //    HitTarget();
+        //}
+        //else if((m_surikenStopLayer & (1 << other.gameObject.layer)) != 0)
+        //{
+        //    if (m_isTrace)
+        //        return;
 
-            m_isStop = true;
-            m_rb.isKinematic = true;
+        //    m_isStop = true;
+        //    m_rb.isKinematic = true;
 
-            GetComponent<Collider>().enabled = false;
-            Invoke(nameof(DestroySelf), 5f);
-        }
+        //    GetComponent<Collider>().enabled = false;
+        //    Invoke(nameof(DestroySelf), 5f);
+        //}
     }
 
     private void DestroySelf()
