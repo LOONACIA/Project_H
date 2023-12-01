@@ -21,8 +21,6 @@ public abstract class DialogPerformerBase : MonoBehaviour
     [Tooltip("다이얼로그 유지 시간. 0보다 작거나 같으면 계속 유지")]
     private float m_dialogDuration;
     
-    private int m_dialogIndex = -1;
-    
     protected void ShowDialog()
     {
         m_dialogVersion = GameManager.UI.ShowDialog(m_dialogTexts, m_interval);
