@@ -22,6 +22,8 @@ public class GameUIManager
     private UIObjects m_objects;
 
     private int m_dialogVersion;
+    
+    private CoroutineEx m_showDialogCoroutine;
 
     public void Init()
     {
@@ -147,14 +149,14 @@ public class GameUIManager
         {
             m_dialog = ManagerRoot.UI.ShowPopupUI<UIMessageDialog>();
         }
-        
+        m_showDialogCoroutine?.Abort();
         m_dialog.Abort();
 
         int index = 0;
         MessageDialogInfo dialogInfo = texts[index++];
         m_dialog.SetText(dialogInfo.Message, () => dialogInfo.Callback?.Invoke());
         m_dialog.gameObject.SetActive(true);
-        CoroutineEx.Create(m_dialog, CoShowDialog(texts, interval, index));
+        m_showDialogCoroutine = CoroutineEx.Create(m_dialog, CoShowDialog(texts, interval, index));
         return ++m_dialogVersion;
 
         IEnumerator CoShowDialog(IReadOnlyList<MessageDialogInfo> infoList, float innerInterval, int innerIndex)
