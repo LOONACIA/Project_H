@@ -3,12 +3,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public abstract class DialogPerformerBase : MonoBehaviour
 {
     [SerializeField]
-    [Tooltip("다이얼로그 텍스트")]
-	private string[] m_dialogTexts;
+    [Tooltip("다이얼로그 메시지")]
+	private MessageDialogInfo[] m_dialogTexts;
 
     [SerializeField]
     [Tooltip("다이얼로그 표시 간격")]

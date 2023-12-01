@@ -189,7 +189,11 @@ public class PossessionProcessor : MonoBehaviour
         }
         else if (isHit && 1 << hit.transform.gameObject.layer == m_targetLayers)
         {
-            m_shuriken.InitSetting(hit.transform.GetComponent<Actor>(), m_sender, OnTargetHit);
+            // 몬스터가 쉴드를 가지고 있으면 빙의 불가
+            if (hit.transform.GetComponent<ActorStatus>()?.Shield != null)
+                m_shuriken.InitSetting(cameraPivot.transform.forward, m_sender, OnTargetHit);
+            else
+                m_shuriken.InitSetting(hit.transform.GetComponent<Actor>(), m_sender, OnTargetHit);
         }
         else
         {
