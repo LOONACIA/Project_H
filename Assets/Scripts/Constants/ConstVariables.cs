@@ -28,6 +28,11 @@ public static class ConstVariables
     public const string WALL_NORMALOUTLINEMATERIAL_PATH = "Materials/Wall/WallOutline";
     public const string WALL_POSSESSIONLOADINGMATERIAL_PATH = "Materials/Wall/WallLoadingMaterial";
 
+    [Header("Gate")]
+    public const string GATE_MATERIAL_PATH = "Materials/Gate/GateMaterial";
+    public const string GATE_APPEAR_MATERIAL_PATH = "Materials/Gate/AppearGateMaterial";
+    public const string GATE_DISSOLVE_MATERIAL_PATH = "Materials/Gate/DissolveGateMaterial";
+
     [Header("Animator Parameter")]
     public const string ANIMATOR_PARAMETER_ATTACK = "Attack";
     public const string ANIMATOR_PARAMETER_SKILL = "Skill";

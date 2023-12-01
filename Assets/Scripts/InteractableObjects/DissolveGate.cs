@@ -16,10 +16,8 @@ public class DissolveGate : MonoBehaviour, IGate
     [SerializeField]
     private GameObject m_gate;
 
-    [SerializeField]
-    private Material m_originMaterial;
+    private Material m_appearMaterial;
 
-    [SerializeField]
     private Material m_dissolveMaterial;
 
     [SerializeField]
@@ -64,10 +62,10 @@ public class DissolveGate : MonoBehaviour, IGate
             m_gateCollider.isTrigger = false;
         }
 
-        if (m_gateRenderer != null && m_originMaterial != null)
+        if (m_gateRenderer != null && m_appearMaterial != null)
         {
             m_gateRenderer.enabled = true;
-            m_gateRenderer.material = m_originMaterial;
+            m_gateRenderer.material = m_appearMaterial;
 
             yield return StartCoroutine(Dissolve(false));
         }
@@ -77,6 +75,9 @@ public class DissolveGate : MonoBehaviour, IGate
     {
         m_gateCollider = m_gate.GetComponent<Collider>();
         m_gateRenderer = m_gate.GetComponent<Renderer>();
+
+        m_appearMaterial = Instantiate<Material>(Resources.Load<Material>(ConstVariables.GATE_APPEAR_MATERIAL_PATH));
+        m_dissolveMaterial = Instantiate<Material>(Resources.Load<Material>(ConstVariables.GATE_DISSOLVE_MATERIAL_PATH));
 
         if (m_state == GateState.Open)
         {
