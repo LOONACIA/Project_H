@@ -6,4 +6,6 @@ using UnityEngine;
 public interface IGate
 {
     IEnumerator Open();
+
+    IEnumerator Close();
 }

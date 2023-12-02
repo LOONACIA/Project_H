@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OpenGateScript : MonoBehaviour, IGate
+public class OpenGate : MonoBehaviour, IGate
 {
     [SerializeField]
     private GameObject m_rightGate;
@@ -17,6 +17,10 @@ public class OpenGateScript : MonoBehaviour, IGate
     [SerializeField]
     private float m_progressTime;
 
+    public IEnumerator Close()
+    {
+        yield break;
+    }
 
     public IEnumerator Open()
     {
