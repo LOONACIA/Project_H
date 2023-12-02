@@ -5,8 +5,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Serialization;
 
+[RequireComponent(typeof(Alarm))]
 public class DetectionCone : MonoBehaviour
 {
     private readonly List<Actor> m_targets = new();
@@ -14,21 +14,20 @@ public class DetectionCone : MonoBehaviour
     [SerializeField]
     [Tooltip("수신자 목록을 업데이트하는 간격")]
     private float m_updateInterval = 0.5f;
+
+    private Alarm m_alarm;
     
-    [SerializeField]
-    [Tooltip("수신자를 감지할 수 있는 최대 거리")]
-    private float m_alertRange = 10f;
+    private Light m_light;
     
     private CoroutineEx m_updateCoroutine;
     
     private float m_coneAngle;
-
-    private Light m_light;
     
     private bool m_isEnabled;
     
     private void Awake()
     {
+        m_alarm = GetComponent<Alarm>();
         m_light = GetComponent<Light>();
     }
 
@@ -39,7 +38,7 @@ public class DetectionCone : MonoBehaviour
         m_coneAngle = Mathf.Cos(angle * Mathf.Deg2Rad);
         
         // targets' capacity is maybe recipients' count + 1 (player)
-        m_targets.Capacity = GameManager.Actor.GetMonsterCountInRadius(transform.position, m_alertRange) + 1;
+        m_targets.Capacity = GameManager.Actor.GetMonsterCountInRadius(transform.position, m_alarm.AlertRange) + 1;
         m_updateCoroutine = CoroutineEx.Create(this, CoDetect());
     }
     
@@ -93,41 +92,22 @@ public class DetectionCone : MonoBehaviour
     {
         while (m_isEnabled)
         {
-            // Get recipients in alert range
-            using var recipients = GameManager.Actor.GetMonstersInRadius(transform.position, m_alertRange);
-            
             // If actor is in cone
             foreach (var actor in m_targets.Where(actor => IsInCone(actor.transform.position)))
             {
                 // And if actor is possessed
                 if (actor.IsPossessed)
                 {
+                    // Show detection warning effect
                     GameManager.Effect.ShowDetectionWarningEffect();
-                    // Add actor to recipients' targets
-                    foreach (var recipient in recipients.Where(recipient => !recipient.Targets.Contains(actor)))
-                    {
-                        recipient.Targets.Add(actor);
-                    }
                 }
-                // If actor is not possessed
-                else
-                {
-                    // Remove actor from recipients' targets
-                    foreach (var recipient in recipients)
-                    {
-                        recipient.Targets.Remove(actor);
-                    }
-                }
+                
+                // Trigger alarm
+                m_alarm.Trigger(actor);
             }
             
             yield return new WaitForSeconds(m_updateInterval);
         }
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, m_alertRange);
     }
 
     private void OnValidate()
