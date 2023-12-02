@@ -6,19 +6,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 public class ShooterWeapon : Weapon
 {
-    [SerializeField]
-    [Tooltip("발사체 프리팹")]
-    private GameObject m_projectilePrefab;
-
+    [Header("Common")]
     [SerializeField]
     [Tooltip("발사체의 생성 위치")]
     private Transform m_spawnPosition;
-
-    [SerializeField]
-    private float m_shootForce;
 
     [SerializeField]
     private LayerMask m_aimLayers;
@@ -26,7 +22,29 @@ public class ShooterWeapon : Weapon
     [SerializeField]
     [Layer]
     private int m_damageLayer;
+    
+    [Header("Shotgun")]
+    [SerializeField]
+    [Tooltip("발사체 프리팹")]
+    private GameObject m_projectilePrefab;
+    
+    [SerializeField]
+    private float m_shootForce;
+    
+    [SerializeField]
+    [Tooltip("샷건의 탄 퍼짐 각도")]
+    private float m_shotgunSpreadAngle = 10f;
+    
+    [SerializeField]
+    [Tooltip("한 번에 발사할 탄환의 수")]
+    private int m_shotgunBulletCount = 5;
+    
+    [FormerlySerializedAs("m_shotgunMaxDistance")]
+    [SerializeField]
+    [Tooltip("샷건의 사거리")]
+    private float m_shotgunRange = 10f;
 
+    [Header("Sniper")]
     [SerializeField]
     private float m_maxDistance = 100f;
 
@@ -122,19 +140,31 @@ public class ShooterWeapon : Weapon
     private void ShootProjectile()
     {
         Aim();
-
+        
         bool isHit = Physics.Raycast(m_ray, out var hit, m_maxDistance, m_aimLayers);
         Vector3 target = isHit ? hit.point : m_ray.GetPoint(m_maxDistance);
-
         Vector3 spawnPosition = m_spawnPosition.position;
         Vector3 direction = (target - spawnPosition).normalized;
-
-        var projectile =
-            ManagerRoot.Resource.Instantiate(m_projectilePrefab, spawnPosition, m_spawnPosition.rotation)
-                .GetComponent<Projectile>();
+        for (int index = 0; index < m_shotgunBulletCount; index++)
+        {
+            Vector3 coneDirection = GetRandomConeDirection(direction, m_shotgunSpreadAngle);
         
-        projectile.Init(transform.root.gameObject, info => InvokeHitEvent(Enumerable.Repeat(info, 1)));
-        projectile.Rigidbody.AddForce(direction * m_shootForce, ForceMode.VelocityChange);
+            var projectile =
+                ManagerRoot.Resource.Instantiate(m_projectilePrefab, spawnPosition, m_spawnPosition.rotation)
+                    .GetComponent<Projectile>();
+        
+            projectile.Init(transform.root.gameObject, m_shotgunRange, info => InvokeHitEvent(Enumerable.Repeat(info, 1)));
+            projectile.Rigidbody.AddForce(coneDirection * m_shootForce, ForceMode.VelocityChange);
+        }
+    }
+    
+    private Vector3 GetRandomConeDirection(Vector3 coneDirection, float maxAngle)
+    {
+        Vector3 randomDirection = Random.insideUnitCircle.normalized;
+        randomDirection = new(randomDirection.x, randomDirection.y, Random.Range(-maxAngle, maxAngle));
+
+        Quaternion rotation = Quaternion.Euler(randomDirection);
+        return rotation * coneDirection;
     }
 
     private IEnumerable<WeaponAttackInfo> ProcessHit(IEnumerable<RaycastHit> hits)
