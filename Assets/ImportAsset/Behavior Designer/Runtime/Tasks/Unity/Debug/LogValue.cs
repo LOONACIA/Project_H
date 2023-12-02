@@ -11,7 +11,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Unity.UnityDebug
 
         public override TaskStatus OnUpdate()
         {
-            Debug.Log(variable.Value.value.GetValue());
+            //Debug.Log(variable.Value.value.GetValue());
 
             return TaskStatus.Success;
         }
