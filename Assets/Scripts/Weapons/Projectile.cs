@@ -16,6 +16,8 @@ public class Projectile : MonoBehaviour
     private Vector3 m_initialPosition;
 
     private float m_range;
+    
+    private LayerMask m_aimLayers;
 
     public Rigidbody Rigidbody { get; private set; }
 
@@ -49,6 +51,12 @@ public class Projectile : MonoBehaviour
         {
             return;
         }
+        
+        int bit = 1 << other.gameObject.layer;
+        if ((m_aimLayers.value & bit) == 0)
+        {
+            return;
+        }
 		
         DisableComponents();
         transform.SetParent(other.transform);
@@ -61,11 +69,12 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    public void Init(GameObject owner, float range, Action<WeaponAttackInfo> onHit)
+    public void Init(GameObject owner, float range, LayerMask aimLayers, Action<WeaponAttackInfo> onHit)
     {
         m_owner = owner;
         m_initialPosition = transform.position;
         m_range = range;
+        m_aimLayers = aimLayers;
         m_onHit = onHit;
     }
     
