@@ -77,7 +77,7 @@ public class Monster : Actor
     {
         if (IsPossessed)
         {
-            Status.IsBlocking = value;
+            //Status.IsBlocking = value;
             Animator.SetBool(s_blockAnimationKey, value);
         }
     }
