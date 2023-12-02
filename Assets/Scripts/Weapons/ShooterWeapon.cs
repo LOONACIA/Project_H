@@ -48,6 +48,8 @@ public class ShooterWeapon : Weapon
     [SerializeField]
     private float m_maxDistance = 100f;
 
+    private Actor m_owner;
+
     private CinemachineVirtualCamera m_vcam;
 
     private Ray m_ray;
@@ -61,7 +63,8 @@ public class ShooterWeapon : Weapon
 
     private void Awake()
     {
-        m_vcam = GetComponentInParent<Actor>().GetComponentInChildren<CinemachineVirtualCamera>();
+        m_owner = GetComponentInParent<Actor>();
+        m_vcam = m_owner.GetComponentInChildren<CinemachineVirtualCamera>();
         m_renderer = GetComponent<LineRenderer>();
     }
 
@@ -153,7 +156,7 @@ public class ShooterWeapon : Weapon
                 ManagerRoot.Resource.Instantiate(m_projectilePrefab, spawnPosition, m_spawnPosition.rotation)
                     .GetComponent<Projectile>();
         
-            projectile.Init(transform.root.gameObject, m_shotgunRange, info => InvokeHitEvent(Enumerable.Repeat(info, 1)));
+            projectile.Init(m_owner.gameObject, m_shotgunRange, info => InvokeHitEvent(Enumerable.Repeat(info, 1)));
             projectile.Rigidbody.AddForce(coneDirection * m_shootForce, ForceMode.VelocityChange);
         }
     }
