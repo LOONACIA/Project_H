@@ -36,16 +36,16 @@ public class DetectionCone : MonoBehaviour
         {
             if (actor.IsPossessed)
             {
-                foreach (var recipient in m_recipients)
+                foreach (var recipient in m_recipients.Where(recipient => !recipient.Targets.Contains(actor)))
                 {
-                    recipient.Targets.Remove(actor);
+                    recipient.Targets.Add(actor);
                 }
             }
             else
             {
-                foreach (var recipient in m_recipients.Where(recipient => !recipient.Targets.Contains(actor)))
+                foreach (var recipient in m_recipients)
                 {
-                    recipient.Targets.Add(actor);
+                    recipient.Targets.Remove(actor);
                 }
             }
         }
