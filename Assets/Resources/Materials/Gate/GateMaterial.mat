@@ -10,17 +10,15 @@ Material:
   m_Name: GateMaterial
   m_Shader: {fileID: -6465566751694194690, guid: 1d238f941a08c994eaa10dd05e39e948,
     type: 3}
-  m_ValidKeywords:
-  - _SURFACE_TYPE_TRANSPARENT
+  m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2981
+  m_CustomRenderQueue: 1981
   stringTagMap:
-    RenderType: Transparent
-  disabledShaderPasses:
-  - DepthOnly
+    RenderType: Opaque
+  disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -44,17 +42,17 @@ Material:
     - _Cull: 2
     - _DotsNoiseScale: 30
     - _DotsSize: 0.8
-    - _DstBlend: 1
+    - _DstBlend: 0
     - _MaskPower: 0
     - _NoiseScale: 10
     - _QueueControl: 0
     - _QueueOffset: -19
     - _ReceiveShadows: 1
-    - _SrcBlend: 5
-    - _Surface: 1
+    - _SrcBlend: 1
+    - _Surface: 0
     - _WorkflowMode: 1
     - _ZTest: 4
-    - _ZWrite: 0
+    - _ZWrite: 1
     - _ZWriteControl: 0
     m_Colors:
     - _DotsColor: {r: 0.9339623, g: 0.15418653, b: 0.14538093, a: 0}
