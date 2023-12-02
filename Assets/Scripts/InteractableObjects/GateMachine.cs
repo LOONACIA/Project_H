@@ -38,6 +38,9 @@ public class GateMachine : InteractableObject
         }
     }
 
+    /// <summary>
+    /// 몬스터들에게 플레이어를 공격하라고 알림
+    /// </summary>
     private void Alarm()
     {
         FindMonsters();
