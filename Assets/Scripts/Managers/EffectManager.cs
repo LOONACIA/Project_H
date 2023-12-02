@@ -89,6 +89,11 @@ public class EffectManager
 		Utility.Lerp(1, 0, 1f, value => m_vignette.intensity.Override(value), ignoreTimeScale: true);
 	}
     
+    public void ShowDetectionWarningEffect()
+    {
+        GameManager.UI.ShowWarning(2f, 1f);
+    }
+    
     /// <summary>
     /// 출혈 이펙트를 실행합니다.
     /// </summary>

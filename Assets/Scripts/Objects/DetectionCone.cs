@@ -1,19 +1,31 @@
 using LOONACIA.Unity;
+using LOONACIA.Unity.Coroutines;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class DetectionCone : MonoBehaviour
 {
     private readonly List<Actor> m_targets = new();
     
     [SerializeField]
-    private List<Monster> m_recipients;
+    [Tooltip("수신자 목록을 업데이트하는 간격")]
+    private float m_updateInterval = 0.5f;
+    
+    [SerializeField]
+    [Tooltip("수신자를 감지할 수 있는 최대 거리")]
+    private float m_alertRange = 10f;
+    
+    private CoroutineEx m_updateCoroutine;
     
     private float m_coneAngle;
 
     private Light m_light;
+    
+    private bool m_isEnabled;
     
     private void Awake()
     {
@@ -27,28 +39,19 @@ public class DetectionCone : MonoBehaviour
         m_coneAngle = Mathf.Cos(angle * Mathf.Deg2Rad);
         
         // targets' capacity is maybe recipients' count + 1 (player)
-        m_targets.Capacity = m_recipients.Count + 1;
+        m_targets.Capacity = GameManager.Actor.GetMonsterCountInRadius(transform.position, m_alertRange) + 1;
+        m_updateCoroutine = CoroutineEx.Create(this, CoDetect());
     }
-
-    private void FixedUpdate()
+    
+    private void OnEnable()
     {
-        foreach (var actor in m_targets.Where(actor => IsInCone(actor.transform.position)))
-        {
-            if (actor.IsPossessed)
-            {
-                foreach (var recipient in m_recipients.Where(recipient => !recipient.Targets.Contains(actor)))
-                {
-                    recipient.Targets.Add(actor);
-                }
-            }
-            else
-            {
-                foreach (var recipient in m_recipients)
-                {
-                    recipient.Targets.Remove(actor);
-                }
-            }
-        }
+        m_isEnabled = true;
+    }
+    
+    private void OnDisable()
+    {
+        m_isEnabled = false;
+        m_updateCoroutine?.Abort();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -81,9 +84,50 @@ public class DetectionCone : MonoBehaviour
         float angle = m_light.spotAngle / 2f;
         m_coneAngle = Mathf.Cos(angle * Mathf.Deg2Rad);  
 #endif
-        Transform @transform = this.transform;
-        var direction = (targetPosition - @transform.position).normalized;
-        return Vector3.Dot(@transform.forward, direction) >= m_coneAngle;
+        Transform coneTransform = transform;
+        var direction = (targetPosition - coneTransform.position).normalized;
+        return Vector3.Dot(coneTransform.forward, direction) >= m_coneAngle;
+    }
+    
+    private IEnumerator CoDetect()
+    {
+        while (m_isEnabled)
+        {
+            // Get recipients in alert range
+            using var recipients = GameManager.Actor.GetMonstersInRadius(transform.position, m_alertRange);
+            
+            // If actor is in cone
+            foreach (var actor in m_targets.Where(actor => IsInCone(actor.transform.position)))
+            {
+                // And if actor is possessed
+                if (actor.IsPossessed)
+                {
+                    GameManager.Effect.ShowDetectionWarningEffect();
+                    // Add actor to recipients' targets
+                    foreach (var recipient in recipients.Where(recipient => !recipient.Targets.Contains(actor)))
+                    {
+                        recipient.Targets.Add(actor);
+                    }
+                }
+                // If actor is not possessed
+                else
+                {
+                    // Remove actor from recipients' targets
+                    foreach (var recipient in recipients)
+                    {
+                        recipient.Targets.Remove(actor);
+                    }
+                }
+            }
+            
+            yield return new WaitForSeconds(m_updateInterval);
+        }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, m_alertRange);
     }
 
     private void OnValidate()
