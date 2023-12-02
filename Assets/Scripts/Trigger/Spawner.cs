@@ -6,21 +6,28 @@ using UnityEngine;
 public class Spawner: MonoBehaviour
 {
     public GameObject spawnEnemy;
+
     public int enemyCount;
 
     [SerializeField]
     private Collider m_spawnPos;
+
     [SerializeField]
     private float m_spawnDelay;
 
     private int m_spawnedEnemy = 0;
+
     private CoroutineEx m_enemySpawnCoroutine;
+
+    private WaveTrigger m_waveTrigger;
+
     // Start is called before the first frame update
     private void OnEnable()
     {
         m_spawnPos = this.transform.GetComponent<Collider>();
         Monster monster = GetComponent<Monster>();
         m_enemySpawnCoroutine = CoroutineEx.Create(this, EnemySpawn(m_spawnPos));
+        m_waveTrigger = GetComponentInParent<WaveTrigger>();
         if (m_spawnedEnemy == enemyCount)
         {
             if (m_enemySpawnCoroutine?.IsRunning is true)
@@ -50,6 +57,7 @@ public class Spawner: MonoBehaviour
             if (character != null && go.TryGetComponent<Monster>(out var monster))
             {
                 monster.Targets.Add(character);
+                m_waveTrigger.Monsters.Add(monster);
             }
 
             yield return new WaitForSeconds(0.1f);
