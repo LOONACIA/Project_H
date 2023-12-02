@@ -25,6 +25,8 @@ public class GameUIManager
     
     private CoroutineEx m_showDialogCoroutine;
 
+    private UISensedWarning m_warningUI;
+
     public void Init()
     {
         m_dialogVersion = 0;
@@ -188,5 +190,15 @@ public class GameUIManager
         }
         
         m_dialog.gameObject.SetActive(false);
+    }
+
+    public void ShowWarning(float duration, float interval)
+    {
+        if (m_warningUI == null)
+        {
+            m_warningUI = ManagerRoot.UI.ShowPopupUI<UISensedWarning>();
+        }
+        
+        m_warningUI.Show(duration, interval);
     }
 }
