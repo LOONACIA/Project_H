@@ -3400,7 +3400,7 @@ MonoBehaviour:
       parentIndex: 
       startIndex: 
       variableStartIndex: 
-      JSONSerialization: '{"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsHit","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockDown","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockBack","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsAttacking","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"TargetTransform","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"TargetObject","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsTargetPossessed","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"AttackDistance","IsShared":true,"SinglemValue":3},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"Self","IsShared":true,"TransformmValue":0},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"HP","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"Body","IsShared":true,"GameObjectmValue":1},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"SelfGameObject","IsShared":true,"GameObjectmValue":2},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"KnockDownTime","IsShared":true,"SinglemValue":0},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"TargetDistance","IsShared":true,"SinglemValue":10}]}'
+      JSONSerialization: '{"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsHit","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockDown","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockBack","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsAttacking","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"TargetTransform","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"TargetObject","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsTargetPossessed","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"AttackDistance","IsShared":true,"SinglemValue":3},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"Self","IsShared":true,"TransformmValue":0},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"HP","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"Body","IsShared":true,"GameObjectmValue":1},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"SelfGameObject","IsShared":true,"GameObjectmValue":2},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"KnockDownTime","IsShared":true,"SinglemValue":0},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"TargetDistance","IsShared":true,"SinglemValue":20}]}'
       fieldSerializationData:
         typeName: []
         fieldNameHash: 
@@ -3615,6 +3615,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 9096465263143422005}
     m_Modifications:
+    - target: {fileID: 4273470995672917741, guid: e5ab1a019c38a0c469b2d6e172781e7d,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7450936617756023665, guid: e5ab1a019c38a0c469b2d6e172781e7d,
         type: 3}
       propertyPath: m_Name
@@ -3774,32 +3779,32 @@ PrefabInstance:
     - target: {fileID: 6258047005897676381, guid: be6ca77ef9c7808459cba8e94e9262b1,
         type: 3}
       propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[0].m_Value.x
-      value: -13.297051
+      value: 0.7029489
       objectReference: {fileID: 0}
     - target: {fileID: 6258047005897676381, guid: be6ca77ef9c7808459cba8e94e9262b1,
         type: 3}
       propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[0].m_Value.y
-      value: 26.98833
+      value: 0.98833114
       objectReference: {fileID: 0}
     - target: {fileID: 6258047005897676381, guid: be6ca77ef9c7808459cba8e94e9262b1,
         type: 3}
       propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[0].m_Value.z
-      value: -0.43565375
+      value: 0.56434625
       objectReference: {fileID: 0}
     - target: {fileID: 6258047005897676381, guid: be6ca77ef9c7808459cba8e94e9262b1,
         type: 3}
       propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[1].m_Value.x
-      value: -12.963832
+      value: 1.0361685
       objectReference: {fileID: 0}
     - target: {fileID: 6258047005897676381, guid: be6ca77ef9c7808459cba8e94e9262b1,
         type: 3}
       propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[1].m_Value.y
-      value: 26.728191
+      value: 0.72819066
       objectReference: {fileID: 0}
     - target: {fileID: 6258047005897676381, guid: be6ca77ef9c7808459cba8e94e9262b1,
         type: 3}
       propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[1].m_Value.z
-      value: 1.025552
+      value: 2.025552
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: be6ca77ef9c7808459cba8e94e9262b1, type: 3}
@@ -4092,35 +4097,40 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: 0.42344546
       objectReference: {fileID: 0}
+    - target: {fileID: 3602398305053861341, guid: 9b7536b24a4e48845b3235888a3218c3,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3602398305053861342, guid: 9b7536b24a4e48845b3235888a3218c3,
         type: 3}
       propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[0].m_Value.x
-      value: -13.431531
+      value: 0.568469
       objectReference: {fileID: 0}
     - target: {fileID: 3602398305053861342, guid: 9b7536b24a4e48845b3235888a3218c3,
         type: 3}
       propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[0].m_Value.y
-      value: 27.04266
+      value: 1.0426604
       objectReference: {fileID: 0}
     - target: {fileID: 3602398305053861342, guid: 9b7536b24a4e48845b3235888a3218c3,
         type: 3}
       propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[0].m_Value.z
-      value: -0.7412255
+      value: 0.25877452
       objectReference: {fileID: 0}
     - target: {fileID: 3602398305053861342, guid: 9b7536b24a4e48845b3235888a3218c3,
         type: 3}
       propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[1].m_Value.x
-      value: -13.548036
+      value: 0.45196426
       objectReference: {fileID: 0}
     - target: {fileID: 3602398305053861342, guid: 9b7536b24a4e48845b3235888a3218c3,
         type: 3}
       propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[1].m_Value.y
-      value: 27.215828
+      value: 1.2158276
       objectReference: {fileID: 0}
     - target: {fileID: 3602398305053861342, guid: 9b7536b24a4e48845b3235888a3218c3,
         type: 3}
       propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[1].m_Value.z
-      value: 0.7655159
+      value: 1.7655159
       objectReference: {fileID: 0}
     - target: {fileID: 6174002598956168650, guid: 9b7536b24a4e48845b3235888a3218c3,
         type: 3}
@@ -4136,6 +4146,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: TP_MeleeBody
+      objectReference: {fileID: 0}
+    - target: {fileID: 8104295381562614787, guid: 9b7536b24a4e48845b3235888a3218c3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8877699988924186297, guid: 9b7536b24a4e48845b3235888a3218c3,
         type: 3}

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using BehaviorDesigner.Runtime.Tasks;
 using Tooltip = BehaviorDesigner.Runtime.Tasks.TooltipAttribute;
 using HelpURL = BehaviorDesigner.Runtime.Tasks.HelpURLAttribute;
@@ -15,6 +15,11 @@ namespace BehaviorDesigner.Runtime.Formations.Tasks
         public SharedVector2 separation = new Vector2(2, 2);
         [Tooltip("The number of columns to form")]
         public SharedInt columns = 1;
+
+        public override TaskStatus OnUpdate()
+        {
+            return base.OnUpdate();
+        }
 
         protected override Vector3 TargetPosition(int index, float zLookAhead)
         {

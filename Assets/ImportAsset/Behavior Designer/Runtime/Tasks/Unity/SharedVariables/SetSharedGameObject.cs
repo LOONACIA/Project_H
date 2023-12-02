@@ -6,7 +6,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Unity.SharedVariables
     {
         [Tooltip("The value to set the SharedGameObject to. If null the variable will be set to the current GameObject")]
         public SharedGameObject targetValue;
-        [RequiredField]
+        //[RequiredField]
         [Tooltip("The SharedGameObject to set")]
         public SharedGameObject targetVariable;
         [Tooltip("Can the target value be null?")]
