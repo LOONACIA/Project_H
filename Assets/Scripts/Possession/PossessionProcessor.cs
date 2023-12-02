@@ -180,7 +180,7 @@ public class PossessionProcessor : MonoBehaviour
         //bool isHit = Physics.Raycast(cameraPivot.transform.position, cameraPivot.transform.forward, out var hit, 300f);
         bool isHit = Physics.SphereCast(cameraPivot.transform.position, shurikenSphereRadius, cameraPivot.transform.forward, out var hit, 300f);
 
-        m_shuriken = Instantiate(m_sender.Data.ShurikenObj, cameraPivot.transform.position + cameraPivot.transform.forward, Quaternion.identity).GetComponent<PossessionShuriken>();
+        m_shuriken = Instantiate(m_sender.Data.ShurikenObj, cameraPivot.transform.position + Vector3.down * 1/16f, Quaternion.identity).GetComponent<PossessionShuriken>();
 
         // Ray를 쏜 곳에 몬스터가 있을 시,
         if (isHit && 1 << hit.transform.gameObject.layer == m_obstacleLayers)

@@ -32,32 +32,4 @@ public class DetectionCone : MonoBehaviour
             Debug.Log(IsInCone(actor.transform.position));
         }
     }
-
-    private void OnDrawGizmosSelected()
-    {
-        if (m_light == null)
-        {
-            m_light = GetComponent<Light>();
-        }
-
-        float angle = m_light.spotAngle / 2f;
-        int length = 10;
-        // Draw Cone Gizmos
-        Vector3 direction = transform.forward;
-        Vector3 right = Quaternion.Euler(0, angle, 0) * direction;
-        Vector3 left = Quaternion.Euler(0, -angle, 0) * direction;
-        Vector3 up = Quaternion.Euler(-angle, 0, 0) * direction;
-        Vector3 down = Quaternion.Euler(angle, 0, 0) * direction;
-        
-        Gizmos.color = Color.red;
-        Gizmos.DrawRay(transform.position, right * length);
-        Gizmos.DrawRay(transform.position, left * length);
-        Gizmos.DrawRay(transform.position, up * length);
-        Gizmos.DrawRay(transform.position, down * length);
-        
-        // Draw circle in front of the cone
-        Gizmos.color = Color.green;
-        float radius = Mathf.Tan(angle * Mathf.Deg2Rad) * length;
-        Gizmos.DrawWireSphere(transform.position + direction * length, radius);
-    }
 }
