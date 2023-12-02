@@ -1,3 +1,4 @@
+using RenownedGames.AITree.Demo;
 using UnityEngine;
 
 public class FirstPersonDefaultAnimBehaviour : StateMachineBehaviour
@@ -18,6 +19,16 @@ public class FirstPersonDefaultAnimBehaviour : StateMachineBehaviour
             receiver.OnAttackIdle();
             receiver.OnBlockPushIdle();
             receiver.OnSkillIdle();
+        }
+
+        // 방어가 끝남
+        if (animator.GetBool(ConstVariables.ANIMATOR_PARAMETER_BLOCK) == false)
+        { 
+            var status = animator.gameObject.GetComponentInParent<ActorStatus>();
+            if (status != null)
+            {
+                status.IsBlocking = false;
+            }
         }
     }
 }

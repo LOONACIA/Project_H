@@ -11,8 +11,8 @@ public abstract class InteractableObject : MonoBehaviour, IInteractableObject
     private CoroutineEx m_interactCoroutine;
     
     public bool IsInteractable { get; protected set; } = true;
-    
-    public void Interact(Actor actor, IProgress<float> progress, Action onComplete)
+
+    public virtual void Interact(Actor actor, IProgress<float> progress, Action onComplete)
     {
         m_interactCoroutine = CoroutineEx.Create(this, CoWaitTime(actor, progress, onComplete));
     }
