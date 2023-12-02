@@ -5,16 +5,10 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class FightZoneController : MonoBehaviour
+public class FightZoneGate : MonoBehaviour
 {
     [SerializeField]
-    private GameObject m_gate;
-
-    [SerializeField]
-    private EnterZone m_enterZone;
-
-    [SerializeField]
-    private FightZone  m_fightZone;
+    private WaveTrigger m_waveTrigger;
 
     private DissolveGate[] m_gates;
 
@@ -22,16 +16,10 @@ public class FightZoneController : MonoBehaviour
 
     private void Start()
     {
-        m_gates = m_gate.GetComponentsInChildren<DissolveGate>();
+        m_waveTrigger.WaveStart += Close;
+        m_waveTrigger.WaveEnd += Open;
 
-        if (m_enterZone == null)
-            GetComponentInChildren<EnterZone>();
-
-        if (m_fightZone == null)
-            GetComponentInChildren<FightZone>();
-
-        m_enterZone.OnEnter += Close;
-        m_fightZone.OnClear += Open;
+        m_gates = GetComponentsInChildren<DissolveGate>();
     }
 
     private void Close(object sender, EventArgs e)
@@ -43,8 +31,6 @@ public class FightZoneController : MonoBehaviour
         { 
             StartCoroutine(gate.Close());
         }
-
-        m_fightZone.BeginFight();
     }
 
     private void Open(object sender, EventArgs e)
