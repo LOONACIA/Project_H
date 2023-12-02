@@ -74,7 +74,7 @@ public class PossessionShuriken : MonoBehaviour
         {
             m_targetDir = (targetActor.transform.position + Vector3.up - transform.position).normalized;
         }
-        CheckFront();
+        CheckBack();
         Move();
         
     }
@@ -83,10 +83,10 @@ public class PossessionShuriken : MonoBehaviour
 
     #region PrivateMethod
 
-    private void CheckFront()
+    private void CheckBack()
     {
         RaycastHit hit;
-        if (Physics.SphereCast(transform.position, 0.3f, m_targetDir.normalized, out hit, 1f, m_surikenStopLayer) == false)
+        if (Physics.SphereCast(transform.position - (m_targetDir.normalized * 0.3f), 0.3f, m_targetDir.normalized, out hit, 0.5f, m_surikenStopLayer) == false)
             return;
 
         Transform other = hit.transform;
