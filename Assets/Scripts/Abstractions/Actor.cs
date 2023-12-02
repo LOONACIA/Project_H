@@ -111,6 +111,8 @@ public abstract class Actor : MonoBehaviour
 
     protected virtual void OnEnable()
     {
+        GameManager.Actor.AddActor(this);
+        
         if (TryGetComponent<IHealth>(out var health))
         {
             health.Dying += OnDying;
@@ -125,6 +127,8 @@ public abstract class Actor : MonoBehaviour
 
     protected virtual void OnDisable()
     {
+        GameManager.Actor.RemoveActor(this);
+        
         if (TryGetComponent<IHealth>(out var health))
         {
             health.Dying -= OnDying;

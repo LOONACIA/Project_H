@@ -23,6 +23,8 @@ public class GameManager : MonoBehaviour
 
     // 매니저가 Monobehaviour를 상속받는 경우 CreateInstance 메서드에서 초기화
     // 매니저 클래스에는 SerializedField를 사용할 수 없으므로 ScriptableObject를 상속받는 클래스를 만들어서 사용
+    private ActorManager m_actor = new();
+    
     private CameraManager m_camera = new();
     
     private CharacterManager m_character = new();
@@ -30,6 +32,8 @@ public class GameManager : MonoBehaviour
     private EffectManager m_effect = new();
 
     private GameUIManager m_ui = new();
+    
+    public static ActorManager Actor => Instance.m_actor;
     
     public static CameraManager Camera => Instance.m_camera;
     
@@ -119,6 +123,7 @@ public class GameManager : MonoBehaviour
     private void OnSceneChanging(Scene obj)
     {
         // 씬이 변경될 때 별도 처리가 필요한 경우 여기에 작성
+        m_actor.Clear();
         m_ui.Clear();
 
         IsGameOver = false;
