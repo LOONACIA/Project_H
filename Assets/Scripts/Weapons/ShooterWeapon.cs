@@ -99,6 +99,15 @@ public class ShooterWeapon : Weapon
     protected override void OnFollowThroughMotion()
     {
     }
+    
+    private static Vector3 GetRandomConeDirection(Vector3 coneDirection, float maxAngle)
+    {
+        Vector3 randomDirection = Random.insideUnitCircle.normalized;
+        randomDirection = new(randomDirection.x, randomDirection.y, Random.Range(-maxAngle, maxAngle));
+
+        Quaternion rotation = Quaternion.Euler(randomDirection);
+        return rotation * coneDirection;
+    }
 
     private void Fire()
     {
@@ -159,15 +168,6 @@ public class ShooterWeapon : Weapon
             projectile.Init(m_owner.gameObject, m_shotgunRange, m_aimLayers, info => InvokeHitEvent(Enumerable.Repeat(info, 1)));
             projectile.Rigidbody.AddForce(coneDirection * m_shootForce, ForceMode.VelocityChange);
         }
-    }
-    
-    private Vector3 GetRandomConeDirection(Vector3 coneDirection, float maxAngle)
-    {
-        Vector3 randomDirection = Random.insideUnitCircle.normalized;
-        randomDirection = new(randomDirection.x, randomDirection.y, Random.Range(-maxAngle, maxAngle));
-
-        Quaternion rotation = Quaternion.Euler(randomDirection);
-        return rotation * coneDirection;
     }
 
     private IEnumerable<WeaponAttackInfo> ProcessHit(IEnumerable<RaycastHit> hits)

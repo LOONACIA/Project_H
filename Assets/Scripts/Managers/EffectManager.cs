@@ -74,6 +74,7 @@ public class EffectManager
 
 		// Close Eye Effect
 		Utility.Lerp(0, 1, 1f, value => m_vignette.intensity.Override(value), ignoreTimeScale: true);
+        Time.timeScale = 0f;
 	}
 	
     /// <summary>
@@ -87,7 +88,13 @@ public class EffectManager
 
 		// Open Eye Effect
 		Utility.Lerp(1, 0, 1f, value => m_vignette.intensity.Override(value), ignoreTimeScale: true);
-	}
+        Time.timeScale = 1f;
+    }
+    
+    public void ShowDetectionWarningEffect()
+    {
+        GameManager.UI.ShowWarning(2f, 1f);
+    }
     
     /// <summary>
     /// 출혈 이펙트를 실행합니다.
