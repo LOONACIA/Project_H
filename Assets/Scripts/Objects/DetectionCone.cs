@@ -102,6 +102,7 @@ public class DetectionCone : MonoBehaviour
                 // And if actor is possessed
                 if (actor.IsPossessed)
                 {
+                    GameManager.Effect.ShowDetectionWarningEffect();
                     // Add actor to recipients' targets
                     foreach (var recipient in recipients.Where(recipient => !recipient.Targets.Contains(actor)))
                     {

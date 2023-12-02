@@ -91,6 +91,11 @@ public class EffectManager
         Time.timeScale = 1f;
     }
     
+    public void ShowDetectionWarningEffect()
+    {
+        GameManager.UI.ShowWarning(2f, 1f);
+    }
+    
     /// <summary>
     /// 출혈 이펙트를 실행합니다.
     /// </summary>
