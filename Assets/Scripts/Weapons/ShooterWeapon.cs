@@ -156,7 +156,7 @@ public class ShooterWeapon : Weapon
                 ManagerRoot.Resource.Instantiate(m_projectilePrefab, spawnPosition, m_spawnPosition.rotation)
                     .GetComponent<Projectile>();
         
-            projectile.Init(m_owner.gameObject, m_shotgunRange, info => InvokeHitEvent(Enumerable.Repeat(info, 1)));
+            projectile.Init(m_owner.gameObject, m_shotgunRange, m_aimLayers, info => InvokeHitEvent(Enumerable.Repeat(info, 1)));
             projectile.Rigidbody.AddForce(coneDirection * m_shootForce, ForceMode.VelocityChange);
         }
     }
