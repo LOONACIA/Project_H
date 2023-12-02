@@ -12,7 +12,7 @@ public class UpdatePatrolPosition : NavMeshMovement
     [SerializeField]
     private SharedTransformList m_patrolPoints;
 
-    private int m_currentPatrolPointIndex;
+    private int m_currentPatrolPointIndex = -1;
 
     public override TaskStatus OnUpdate()
     {
