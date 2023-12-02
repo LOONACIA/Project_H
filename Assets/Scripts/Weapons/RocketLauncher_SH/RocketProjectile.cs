@@ -1,6 +1,11 @@
 using System.Linq;
 using UnityEngine;
 
+/*
+ * 23.12.03: 기존 스킬 테스트용으로 제작한 로켓 런쳐 스킬입니다.
+ * 연결된 프리팹이 있을 수 있어 프리프로덕션 제출 이후 확인 후 삭제 예정입니다.
+ */
+
 public class RocketProjectile : MonoBehaviour
 {
 
