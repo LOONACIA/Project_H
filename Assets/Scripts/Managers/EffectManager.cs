@@ -74,6 +74,7 @@ public class EffectManager
 
 		// Close Eye Effect
 		Utility.Lerp(0, 1, 1f, value => m_vignette.intensity.Override(value), ignoreTimeScale: true);
+        Time.timeScale = 0f;
 	}
 	
     /// <summary>
@@ -87,7 +88,8 @@ public class EffectManager
 
 		// Open Eye Effect
 		Utility.Lerp(1, 0, 1f, value => m_vignette.intensity.Override(value), ignoreTimeScale: true);
-	}
+        Time.timeScale = 1f;
+    }
     
     public void ShowDetectionWarningEffect()
     {
