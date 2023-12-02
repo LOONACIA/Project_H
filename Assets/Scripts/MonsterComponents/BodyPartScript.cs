@@ -13,7 +13,6 @@ public class BodyPartScript : MonoBehaviour
 
     // 몬스터 사망 시 파편이 날라감
     private float m_explosionForce = 15;
-    private float m_explosionRadius = 5;
 
     // 몬스터 파편이 사라지는 시간을 관리하는 코루틴
     private Coroutine m_coroutine;

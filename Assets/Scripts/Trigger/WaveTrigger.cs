@@ -1,14 +1,21 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using UnityEngine;
 
 public class WaveTrigger : MonoBehaviour
 {
-    public readonly ObservableCollection<Monster> Monsters = new();
     [SerializeField]
     private int m_leftMonster;
+
     [SerializeField]
     private GameObject[] m_gameObjects;
+
+    public event EventHandler WaveStart;
+
+    public event EventHandler WaveEnd;
+
+    public ObservableCollection<Monster> Monsters { get; } = new();
 
     private void Awake()
     {
@@ -36,11 +43,12 @@ public class WaveTrigger : MonoBehaviour
 
     private void OnMonsterDying(object sender, System.EventArgs e)
     {
-        // 스폰된 몬스터들 전부 죽음(플레이어 빼고)
         var count = Monsters.Count(monster => !monster.IsPossessed);
-        if (count <= m_leftMonster)
+        
+        // 마지막 몬스터가 죽을 때, 이벤트 발생
+        if (count - m_leftMonster <= 1)
         {
-
+            WaveEnd?.Invoke(this, EventArgs.Empty);
         }
 
         if (sender is not Monster monster)
@@ -57,11 +65,19 @@ public class WaveTrigger : MonoBehaviour
             .SingleOrDefault(monster => monster.IsPossessed);
         if (other.name == character.name)
         {
+            WaveStart?.Invoke(this, EventArgs.Empty);
+
             foreach (var go in m_gameObjects)
             {
                 go.SetActive(true);
             }
-            Destroy(this);
+            //Destroy(this);
         }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = UnityEngine.Color.blue;
+        Gizmos.DrawWireCube(transform.position, transform.localScale);
     }
 }
