@@ -314,10 +314,11 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
             //AI라면 Agent를 켜줍니다.
             //TODO: AI 점프 적용 시 점프까지 같이 체크해주어야함.
             m_agent.enabled = !m_actor.IsPossessed;
-            m_rigidbody.isKinematic = true;
+            if(!m_actor.IsPossessed)
+                m_rigidbody.isKinematic = true;
 
             m_actor.Status.IsKnockBack = false;
-            m_actor.Animator.SetBool(s_animatorKnockBack, true);
+            m_actor.Animator.SetBool(s_animatorKnockBack, false);
         }
     }
 
