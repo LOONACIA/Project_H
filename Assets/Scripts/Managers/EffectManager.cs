@@ -7,7 +7,7 @@ using UnityEngine.Rendering.Universal;
 using URPGlitch.Runtime.AnalogGlitch;
 using URPGlitch.Runtime.DigitalGlitch;
 
-public class EffectManager
+public class EffectManager 
 {
 	// TODO: Data로 분리
 	private GameObject m_bloodEffect;
@@ -101,9 +101,6 @@ public class EffectManager
     {
         m_vignette.color.value = new Color(255/255f, 83/255f, 82/255f);
         m_vignette.intensity.value = 0.4f;
-
-        Utility.Lerp(0.3f, 0, 1f, value => m_vignette.intensity.Override(value), ignoreTimeScale: true);
-
     }
 
     /// <summary>
@@ -147,6 +144,11 @@ public class EffectManager
 	{
 		m_colorAdjustments.saturation.Override(0f);
 	}
+
+    private void RecoverVignetteEffect()
+    {
+        Utility.Lerp(0.3f, 0, 1f, value => m_vignette.intensity.Override(value), ignoreTimeScale: true);
+    }
 
     #region Camera
     /// <summary>
