@@ -13,8 +13,6 @@ GameObject:
   - component: {fileID: 5839800964535026000}
   - component: {fileID: 5839800964535026003}
   - component: {fileID: 6533420649990396373}
-  - component: {fileID: 8904111972271945232}
-  - component: {fileID: 698901830181785613}
   - component: {fileID: 1633283853423904852}
   m_Layer: 0
   m_Name: FP_MeleeBody
@@ -99,50 +97,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c936006f1fdd084abb9785133b8ff0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &8904111972271945232
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 759049044563748582}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cec7e6f2fe0ec594e8df7782e64f6bd6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <Type>k__BackingField: 2
-  hitBoxBaseTransform: {fileID: 127085647157673052}
-  hitBox:
-    m_position: {x: 0, y: 1.76, z: 1.03}
-    m_halfExtents: {x: 1, y: 1, z: 1}
-    m_rotation: {x: 0, y: 0, z: 0, w: 1}
-    m_gizmoColor: {r: 0.51523685, g: 0, b: 1, a: 1}
-    m_showGizmo: 0
-  attackDirectionBaseTransform: {fileID: 127085647157673052}
-  attackDirection: {x: 0, y: 0, z: 1}
---- !u!114 &698901830181785613
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 759049044563748582}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cec7e6f2fe0ec594e8df7782e64f6bd6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <Type>k__BackingField: 1
-  hitBoxBaseTransform: {fileID: 4258862101932631758}
-  hitBox:
-    m_position: {x: 0, y: -0.5, z: 3.75}
-    m_halfExtents: {x: 2.5, y: 1.27, z: 4}
-    m_rotation: {x: 0, y: 0, z: 0, w: 1}
-    m_gizmoColor: {r: 1, g: 0.9964251, b: 0, a: 1}
-    m_showGizmo: 1
-  attackDirectionBaseTransform: {fileID: 4258862101932631758}
-  attackDirection: {x: 0, y: -1, z: 2}
 --- !u!114 &1633283853423904852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -263,11 +217,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isDashing: 0
   m_data: {fileID: 11400000, guid: 9b048a93fca380549843738067cc0402, type: 2}
-  m_isOnGround: 0
   m_dashAmount: 5
   m_dashDuration: 0.05
   m_dashDelay: 0.3
   m_dashCoolTime: 1
+  m_isOnGround: 0
 --- !u!114 &4250743214768988705
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -331,6 +285,7 @@ MonoBehaviour:
   m_knockDownTime: 0
   m_isKnockBack: 0
   m_shield: {fileID: 0}
+  m_skillCoolTime: 0
   <IsStunned>k__BackingField: 0
 --- !u!1 &3693211082844648544
 GameObject:
@@ -4812,29 +4767,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 959463053134822754}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &9018615648084203873 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8104295381562614787, guid: 9b7536b24a4e48845b3235888a3218c3,
-    type: 3}
-  m_PrefabInstance: {fileID: 959463053134822754}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &7301429373412770760
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9018615648084203873}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f24b0d15d26df5409c670b025632b32, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <Type>k__BackingField: 1
-  rocketProjectile: {fileID: 5772304690384904770, guid: 069a53e5eab42424aa148d82f0f056d1,
-    type: 3}
-  spawnPosition: {x: 0, y: 0, z: 0}
-  isShowingSpawnPositionGizmo: 0
 --- !u!1001 &3009061328966369240
 PrefabInstance:
   m_ObjectHideFlags: 0

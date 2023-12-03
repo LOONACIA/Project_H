@@ -45,6 +45,7 @@ public static class ConstVariables
     public const string ANIMATOR_PARAMETER_HIT_DIRECTION_X = "HitDirectionX";
     public const string ANIMATOR_PARAMETER_HIT_DIRECTION_Z = "HitDirectionZ";
     public const string ANIMATOR_PARAMETER_ATTACK_INDEX = "AttackIndex";
+    public const string ANIMATOR_PARAMETER_MOVEMENT_RATIO = "MovementRatio";
 
     [Header("Visual Effects")]
     public const string VFX_GRAPH_PARAMETER_PARTICLE_COUNT = "ParticleCount";
