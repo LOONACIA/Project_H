@@ -14,6 +14,7 @@ public abstract class InteractableObject : MonoBehaviour, IInteractableObject
 
     public void Interact(Actor actor, IProgress<float> progress, Action onComplete)
     {
+        OnInteractStart(actor);
         m_interactCoroutine = CoroutineEx.Create(this, CoWaitTime(actor, progress, onComplete));
     }
 
