@@ -9,6 +9,8 @@ using UnityEngine.AI;
 [RequireComponent(typeof(MonsterMovement))]
 public class Monster : Actor
 {
+    private static readonly int s_moveAnimationKey = Animator.StringToHash("MovementRatio");
+    
     private static readonly int s_blockAnimationKey = Animator.StringToHash("Block");
 
     // Movement animation ratio (for lerp)
@@ -102,12 +104,15 @@ public class Monster : Actor
         float movementRatio = 0f;
         if (velocity.magnitude > 0f)
         {
-            movementRatio = Movement.isDashing ? 1 : 0.5f;
+            if (IsPossessed)
+                movementRatio = Movement.isDashing ? 1 : 0.5f;
+            else
+                movementRatio = velocity.magnitude / Movement.Data.MoveSpeed;
         }
         m_movementAnimationRatio = Mathf.Lerp(m_movementAnimationRatio, movementRatio, Time.deltaTime * 5f);
 
         // 애니메이터에 적용
-        Animator.SetFloat("MovementRatio", m_movementAnimationRatio);
+        Animator.SetFloat(s_moveAnimationKey, m_movementAnimationRatio);
     }
     
     protected override void OnPossessed()
