@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -71,6 +72,7 @@ public class MonsterAttack : MonoBehaviour
     private void Start()
     {
         m_status.Damage = m_data.Attack.Damage;
+        m_status.SkillCoolTime = 1f;
 
         RegisterHitEvents();
     }
@@ -78,6 +80,11 @@ public class MonsterAttack : MonoBehaviour
     private void OnDestroy()
     {
         UnregisterHitEvents();
+    }
+
+    private void Update()
+    {
+        UpdateSkillCoolTime();
     }
 
     public void Attack()
@@ -101,13 +108,14 @@ public class MonsterAttack : MonoBehaviour
     public void Skill()
     {
         //TODO: KnockBack, KnockDown 중 스킬 못하게 할 것인가?
-        if (!CanAttack)
+        if (!CanAttack||m_actor.Status.SkillCoolTime < 1f)
         {
             return;
         }
 
         m_actor.Animator.SetTrigger(s_skillAnimationKey);
         SkillWeapon.StartAttack();
+        m_actor.Status.SkillCoolTime = 0f;
     }
 
     private void HandleHitEvent(MonsterAttackData.AttackData data, IEnumerable<WeaponAttackInfo> info)
@@ -147,12 +155,10 @@ public class MonsterAttack : MonoBehaviour
              }
 
             //넉백 적용
-            //TODO: 공격, 스킬, 밀쳐내기 등의 넉백여부 구분 필요
             if (data.KnockBackPower != 0f)
             {
                 MonsterMovement movement = health.gameObject.GetComponent<MonsterMovement>();
 
-                //TODO: 공격 종류별로 넉백 파워 수정 필요
                 movement.TryKnockBack(hit.KnockBackDirection, data.KnockBackPower);
             }
             
@@ -184,6 +190,19 @@ public class MonsterAttack : MonoBehaviour
         if (m_data == null)
         {
             Debug.LogWarning($"{name}: {nameof(m_data)} is null");
+        }
+    }
+    
+    public void UpdateSkillCoolTime()
+    {
+        if (m_actor.Status.SkillCoolTime < 1f)
+        {
+            //TODO: 부동소수점, deltaTime 이슈로 실제 시간과 작은 오차 발생 가능, 해결 필요한지 확인
+            float full = m_data.SkillCoolTime;
+            float cur = m_actor.Status.SkillCoolTime * full + Time.deltaTime;
+            
+            //TODO: 1/full 미리 계산해두기(최적화)
+            m_actor.Status.SkillCoolTime = cur/full;
         }
     }
 

@@ -11,8 +11,10 @@ public class Monster : Actor
 {
     private static readonly int s_blockAnimationKey = Animator.StringToHash("Block");
 
-    // TODO: 빙의 게이지 관련 처리
-    //private float m_stamina = 0f;
+    // Movement animation ratio (for lerp)
+    private float m_movementAnimationRatio;
+
+    private Vector3 m_directionInput;
 
     public MonsterAttack Attack { get; private set; }
     
@@ -43,8 +45,14 @@ public class Monster : Actor
         Targets.CollectionChanged -= OnTargetCollectionChanged;
     }
 
+    protected void Update()
+    {
+        UpdateAnimator();
+    }
+
     public override void Move(Vector3 direction)
     {
+        m_directionInput = direction;
         Movement.Move(direction);
     }
 
@@ -82,12 +90,32 @@ public class Monster : Actor
         }
     }
     
+    protected virtual void UpdateAnimator()
+    {
+        var velocity = IsPossessed ? m_rigidbody.velocity.GetFlatVector() : m_navMeshAgent.velocity.GetFlatVector();
+        if (IsPossessed && m_directionInput.magnitude <= 0f)
+        {
+            velocity = Vector3.zero;
+        }
+        
+        // move blend tree 값 설정 (정지 0, 걷기 0.5, 달리기 1)
+        float movementRatio = 0f;
+        if (velocity.magnitude > 0f)
+        {
+            movementRatio = Movement.isDashing ? 1 : 0.5f;
+        }
+        m_movementAnimationRatio = Mathf.Lerp(m_movementAnimationRatio, movementRatio, Time.deltaTime * 5f);
+
+        // 애니메이터에 적용
+        Animator.SetFloat("MovementRatio", m_movementAnimationRatio);
+    }
+    
     protected override void OnPossessed()
     {
         base.OnPossessed();
-
-        // TODO: 빙의 게이지 관련 처리
+        
         Status.Damage = Attack.Data.PossessedAttack.Damage;
+        m_directionInput = Vector3.zero;
     }
 
     protected override void OnUnPossessed()

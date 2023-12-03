@@ -63,8 +63,9 @@ public partial class PlayerController : MonoBehaviour
         
         GameManager.UI.ShowCrosshair();
         GameManager.UI.ShowHpIndicator(this);
-        GameManager.UI.GenerateShieldIndicator(this);
+        GameManager.UI.ShowShieldIndicator(this);
         GameManager.UI.ShowShurikenIndicator(m_possession);
+        GameManager.UI.ShowSkillIndicator(this, m_possession);
         GameManager.UI.ShowDamageIndicator();
         GameManager.UI.ShowObjects();
     }

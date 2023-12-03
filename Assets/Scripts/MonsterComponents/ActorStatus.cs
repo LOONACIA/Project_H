@@ -28,6 +28,10 @@ public class ActorStatus : MonoBehaviour
     [SerializeField]
     private Shield m_shield;
 
+    [SerializeField]
+    [ReadOnly]
+    private float m_skillCoolTime;
+
     public int Hp
     {
         get => m_hp;
@@ -92,10 +96,30 @@ public class ActorStatus : MonoBehaviour
         get => m_knockDownTime;
         private set => m_knockDownTime = value;
     }
+
+    /// <summary>
+    /// 0~1로 표현되며, 1일때 스킬 사용 가능.
+    /// </summary>
+    public float SkillCoolTime
+    {
+        get => m_skillCoolTime;
+        set
+        {
+            if (value > 1f) value = 1f;
+            if (value < 0f) value = 0f;
+            if (m_skillCoolTime != value)
+            {
+                m_skillCoolTime = value;
+                SkillCoolTimeChanged?.Invoke(this, m_skillCoolTime);
+            }
+        }
+    }
     
     public event EventHandler<int> HpChanged;
 
     public event EventHandler ShieldChanged;
+
+    public event EventHandler<float> SkillCoolTimeChanged;
 
     public void SetKnockDown(float duration)
     {
