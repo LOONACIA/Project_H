@@ -10,7 +10,7 @@ public class WaveTrigger : MonoBehaviour
 
     [SerializeField]
     private GameObject[] m_gameObjects;
-
+    
     public event EventHandler WaveStart;
 
     public event EventHandler WaveEnd;
@@ -80,4 +80,13 @@ public class WaveTrigger : MonoBehaviour
         Gizmos.color = UnityEngine.Color.blue;
         Gizmos.DrawWireCube(transform.position, transform.localScale);
     }
+    
+    public enum SpawnMode
+    {
+        Time,
+        Count,
+    }
+        
+    [field: SerializeField]
+    public SpawnMode Mode { get; private set; }
 }
