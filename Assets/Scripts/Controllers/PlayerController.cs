@@ -34,6 +34,8 @@ public partial class PlayerController : MonoBehaviour
     
     private IInteractableObject m_interactableObject;
 
+    private bool m_isOnInteracting;
+
     public Actor Character => m_character;
 
     /// <summary>
@@ -115,7 +117,7 @@ public partial class PlayerController : MonoBehaviour
             string text = m_inputActions.Character.Interact.activeControl?.displayName ?? string.Empty;
             m_interactProgress ??= GameManager.UI.ShowProgressRing(UIProgressRing.TextDisplayMode.Text, text);
         }
-        else if (m_interactProgress == null)
+        else if (!m_isOnInteracting)
         {
             AbortInteract();
         }
@@ -199,10 +201,12 @@ public partial class PlayerController : MonoBehaviour
         }
         
         m_interactableObject.Interact(m_character, m_interactProgress, AbortInteract);
+        m_isOnInteracting = true;
     }
     
     private void AbortInteract()
     {
+        m_isOnInteracting = false;
         m_interactableObject?.Abort();
         m_interactProgress = null;
         GameManager.UI.HideProgressRing();

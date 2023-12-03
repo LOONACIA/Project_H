@@ -90,6 +90,7 @@ public class MoveMachine : InteractableObject
                 m_speed * Time.fixedDeltaTime);
             sqrDistance = (m_destination - m_target.transform.position).sqrMagnitude;
             yield return new WaitForFixedUpdate();
+            Debug.Log(sqrDistance);
         }
 
         transform.SetParent(m_originalParent);
@@ -101,8 +102,6 @@ public class MoveMachine : InteractableObject
         {
             return;
         }
-
-        m_destination = m_target.transform.position + m_offset;
 
         // Draw line from target to destination for each vertex
         Gizmos.color = Color.yellow;
