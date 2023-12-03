@@ -70,7 +70,7 @@ public class Alarm : MonoBehaviour
     {
         if (m_origin == null)
         {
-            Debug.LogWarning($"{name} has no origin.", gameObject);
+            Debug.LogWarning($"{name} has no alarm origin. Origin will be set to self.", gameObject);
         }
     }
 }
