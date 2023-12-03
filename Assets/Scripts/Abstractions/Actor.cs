@@ -16,7 +16,7 @@ public abstract class Actor : MonoBehaviour
 {
     private static readonly int s_hitAnimationKey = Animator.StringToHash("Hit");
     
-    protected NavMeshAgent m_agent;
+    protected NavMeshAgent m_navMeshAgent;
 
     protected Rigidbody m_rigidbody;
 
@@ -77,7 +77,7 @@ public abstract class Actor : MonoBehaviour
 
     protected virtual void Awake()
     {
-        m_agent = GetComponent<NavMeshAgent>();
+        m_navMeshAgent = GetComponent<NavMeshAgent>();
         m_collider = GetComponent<Collider>();
         m_rigidbody = GetComponent<Rigidbody>();
         m_behaviorTree = GetComponent<BehaviorTree>();
@@ -95,8 +95,9 @@ public abstract class Actor : MonoBehaviour
             return null;
         }
         
-        RaycastHit[] buffer = ArrayPool<RaycastHit>.Shared.Rent(m_interactableObjects.Count);
+        RaycastHit[] buffer = ArrayPool<RaycastHit>.Shared.Rent(m_interactableObjects.Count * 2);
         int length = Physics.RaycastNonAlloc(m_vcam.transform.position, m_vcam.transform.forward, buffer, 10f);
+        Debug.DrawRay(m_vcam.transform.position, m_vcam.transform.forward * 10, Color.yellow, 3f);
         
         var ret = buffer.Take(length)
             .Select(hit => hit.transform.TryGetComponent<IInteractableObject>(out var obj) ? obj : null)
@@ -194,9 +195,9 @@ public abstract class Actor : MonoBehaviour
 
     protected void EnableAIComponents()
     {
-        if (m_agent != null)
+        if (m_navMeshAgent != null)
         {
-            m_agent.enabled = true;
+            m_navMeshAgent.enabled = true;
         }
 
         if (m_rigidbody != null)
@@ -222,9 +223,9 @@ public abstract class Actor : MonoBehaviour
             m_behaviorTree.enabled = false;
         }
 
-        if (m_agent != null)
+        if (m_navMeshAgent != null)
         {
-            m_agent.enabled = false;
+            m_navMeshAgent.enabled = false;
         }
 
         if (m_rigidbody != null)
