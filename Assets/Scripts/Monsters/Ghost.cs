@@ -1,6 +1,8 @@
 using System;
 using Cinemachine;
 using LOONACIA.Unity;
+using LOONACIA.Unity.Managers;
+using System.Collections;
 using UnityEngine;
 
 public class Ghost : Actor
@@ -28,6 +30,9 @@ public class Ghost : Actor
 
         // 대상 몬스터로 스위칭
         m_onPossessed?.Invoke();
+        
+        // Release gameObject
+        StartCoroutine(CoDestroy(ConstVariables.MONSTER_DESTROY_WAIT_TIME));
     }
 
     #region Actor Implementations
@@ -54,6 +59,12 @@ public class Ghost : Actor
 
     public override void Block(bool value)
     {
+    }
+    
+    private IEnumerator CoDestroy(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        ManagerRoot.Resource.Release(gameObject);
     }
 
     #endregion
