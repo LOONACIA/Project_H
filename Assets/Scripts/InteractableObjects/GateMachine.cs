@@ -1,24 +1,33 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
+[RequireComponent(typeof(Alarm))]
 public class GateMachine : InteractableObject
 {
     [SerializeField]
     private GameObject m_gate;
 
-    [SerializeField, Range(0, 100)]
-    private float m_alarmRadius = 20;
-
-    private List<Monster> m_monsters = new();
+    [SerializeField]
+    private bool m_alarmWhenOpen = true;
 
     private IGate m_gateScript;
+    
+    private Alarm m_alarm;
 
-    private void Start()
+    private void Awake()
     {
         m_gateScript = m_gate.GetComponent<IGate>();
+        m_alarm = GetComponentInChildren<Alarm>();
+    }
+
+    public override void Interact(Actor actor, IProgress<float> progress, Action onComplete)
+    {
+        base.Interact(actor, progress, onComplete);
+
+        if (m_alarmWhenOpen)
+        {
+            m_alarm.Trigger(actor);
+        }
     }
 
     protected override void OnInteract(Actor actor)
@@ -29,11 +38,5 @@ public class GateMachine : InteractableObject
         {
             StartCoroutine(m_gateScript.Open());
         }
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, m_alarmRadius);
     }
 }
