@@ -13,6 +13,8 @@ public class GameUIManager
 
     private UIShuriken m_shuriken;
 
+    private UISkill m_skill;
+
     private UIDamageIndicator m_damageIndicator;
     
     private UIProgressRing m_progressRing;
@@ -37,6 +39,7 @@ public class GameUIManager
         m_crosshair = null;
         m_shieldIndicator = null;
         m_shuriken = null;
+        m_skill = null;
         m_damageIndicator = null;
     }
     
@@ -62,7 +65,7 @@ public class GameUIManager
         m_objects.UpdateObjectText(_text);
     }
 
-    public void GenerateShieldIndicator(PlayerController player)
+    public void ShowShieldIndicator(PlayerController player)
     {
         m_shieldIndicator = ManagerRoot.UI.ShowSceneUI<UIShieldIndicator>();
         m_shieldIndicator.SetPlayer(player);
@@ -75,6 +78,13 @@ public class GameUIManager
         m_shuriken = ManagerRoot.UI.ShowSceneUI<UIShuriken>();
         m_shuriken.GetComponent<Canvas>().sortingOrder = -2;
         m_shuriken.SetPossessionProcessor(processor);
+    }
+
+    public void ShowSkillIndicator(PlayerController player, PossessionProcessor processor)
+    { 
+        m_skill = ManagerRoot.UI.ShowSceneUI<UISkill>();
+        m_skill.GetComponent<Canvas>().sortingOrder = -2;
+        m_skill.SetActorStatus(player, processor);
     }
 
     public void ShowDamageIndicator()
