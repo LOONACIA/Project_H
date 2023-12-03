@@ -73,4 +73,10 @@ public class GateMachine : InteractableObject
             }
         }
     }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, m_alarmRadius);
+    }
 }
