@@ -5,7 +5,7 @@ public class BodyPartController : MonoBehaviour
 {
     private IHealth m_health;
 
-    private List<BodyPartScript> m_bodyPartScripts = new();
+    private List<Breakable> m_bodyPartScripts = new();
 
     private GameObject m_bodyPartCollector;
 
@@ -19,7 +19,7 @@ public class BodyPartController : MonoBehaviour
         {
             if (child.gameObject.layer == LayerMask.NameToLayer("Body Parts"))
             { 
-                var bodyPartScript = child.gameObject.AddComponent<BodyPartScript>();
+                var bodyPartScript = child.gameObject.AddComponent<Breakable>();
                 
                 m_bodyPartScripts.Add(bodyPartScript);
 
@@ -40,7 +40,7 @@ public class BodyPartController : MonoBehaviour
         {
             bodyPartScript.gameObject.SetActive(true);
 
-            bodyPartScript.ReplaceBodyPart(info);
+            bodyPartScript.ReplacePart(info);
             bodyPartScript.transform.SetParent(m_bodyPartCollector.transform);
         }
 
