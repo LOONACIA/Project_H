@@ -97,6 +97,8 @@ public class ActorStatus : MonoBehaviour
 
     public event EventHandler ShieldChanged;
 
+    public event EventHandler<float> SkillCoolTimeChanged;
+
     public void SetKnockDown(float duration)
     {
         if (KnockDownTime > duration)
