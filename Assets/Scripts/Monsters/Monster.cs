@@ -14,6 +14,8 @@ public class Monster : Actor
     // Movement animation ratio (for lerp)
     private float m_movementAnimationRatio;
 
+    private Vector3 m_directionInput;
+
     public MonsterAttack Attack { get; private set; }
     
     public MonsterMovement Movement { get; private set; }
@@ -50,6 +52,7 @@ public class Monster : Actor
 
     public override void Move(Vector3 direction)
     {
+        m_directionInput = direction;
         Movement.Move(direction);
     }
 
@@ -90,8 +93,10 @@ public class Monster : Actor
     protected virtual void UpdateAnimator()
     {
         var velocity = IsPossessed ? m_rigidbody.velocity.GetFlatVector() : m_navMeshAgent.velocity.GetFlatVector();
-        
-        float maxSpeed = IsPossessed ? Movement.Data.ThirdMoveSpeedThreshold : Movement.Data.MoveSpeed;
+        if (IsPossessed && m_directionInput.magnitude <= 0f)
+        {
+            velocity = Vector3.zero;
+        }
         
         // move blend tree 값 설정 (정지 0, 걷기 0.5, 달리기 1)
         float movementRatio = 0f;
@@ -108,9 +113,9 @@ public class Monster : Actor
     protected override void OnPossessed()
     {
         base.OnPossessed();
-
-        // TODO: 빙의 게이지 관련 처리
+        
         Status.Damage = Attack.Data.PossessedAttack.Damage;
+        m_directionInput = Vector3.zero;
     }
 
     protected override void OnUnPossessed()

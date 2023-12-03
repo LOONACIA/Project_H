@@ -141,11 +141,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isDashing: 0
   m_data: {fileID: 11400000, guid: c47b618809ed9c047bf461441e1f2e64, type: 2}
-  m_isOnGround: 0
   m_dashAmount: 5
   m_dashDuration: 0.05
   m_dashDelay: 0.3
   m_dashCoolTime: 1
+  m_isOnGround: 0
 --- !u!114 &4988372080317969057
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -209,6 +209,7 @@ MonoBehaviour:
   m_knockDownTime: 0
   m_isKnockBack: 0
   m_shield: {fileID: 0}
+  m_skillCoolTime: 0
   <IsStunned>k__BackingField: 0
 --- !u!114 &3372291900262138481
 MonoBehaviour:
@@ -238,7 +239,7 @@ MonoBehaviour:
       parentIndex: 
       startIndex: 
       variableStartIndex: 
-      JSONSerialization: '{"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsHit","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockDown","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockBack","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsAttacking","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"TargetTransform","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"TargetObject","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsTargetPossessed","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"Self","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"HP","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"Body","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"SelfGameObject","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"KnockDownTime","IsShared":true,"SinglemValue":0},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"TargetDistance","IsShared":true,"SinglemValue":10}]}'
+      JSONSerialization: '{"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsHit","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockDown","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsKnockBack","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsAttacking","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"TargetTransform","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"TargetObject","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsTargetPossessed","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"AttackDistance","IsShared":true,"SinglemValue":5},{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"Self","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"HP","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"Body","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"SelfGameObject","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"KnockDownTime","IsShared":true,"SinglemValue":0}]}'
       fieldSerializationData:
         typeName: []
         fieldNameHash: 
@@ -454,6 +455,8 @@ PrefabInstance:
     - {fileID: 7993118124852737438, guid: 120423084dee8ec46b92b519bdc54033, type: 3}
     - {fileID: 1019578624363913472, guid: 120423084dee8ec46b92b519bdc54033, type: 3}
     - {fileID: 753854012725648087, guid: 120423084dee8ec46b92b519bdc54033, type: 3}
+    - {fileID: 5938176032620007910, guid: 120423084dee8ec46b92b519bdc54033, type: 3}
+    - {fileID: 2327127942058260475, guid: 120423084dee8ec46b92b519bdc54033, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 120423084dee8ec46b92b519bdc54033, type: 3}
 --- !u!95 &2946690033114871462 stripped
 Animator:
@@ -834,7 +837,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: TP_UnArmedBody
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7123162258964269876, guid: 7b785a4d872c37d4286bbb5132c2ea80, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 7b785a4d872c37d4286bbb5132c2ea80, type: 3}
 --- !u!4 &694876085011600219 stripped
 Transform:
