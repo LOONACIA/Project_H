@@ -72,6 +72,7 @@ public class MonsterAttack : MonoBehaviour
     private void Start()
     {
         m_status.Damage = m_data.Attack.Damage;
+        m_status.SkillCoolTime = 1f;
 
         RegisterHitEvents();
     }
