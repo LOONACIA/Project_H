@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -80,6 +81,11 @@ public class MonsterAttack : MonoBehaviour
         UnregisterHitEvents();
     }
 
+    private void Update()
+    {
+        UpdateSkillCoolTime();
+    }
+
     public void Attack()
     {
         //TODO: KnockBack, KnockDown 중 공격 못하게 할 것인가?
@@ -101,13 +107,14 @@ public class MonsterAttack : MonoBehaviour
     public void Skill()
     {
         //TODO: KnockBack, KnockDown 중 스킬 못하게 할 것인가?
-        if (!CanAttack)
+        if (!CanAttack||m_actor.Status.SkillCoolTime < 1f)
         {
             return;
         }
 
         m_actor.Animator.SetTrigger(s_skillAnimationKey);
         SkillWeapon.StartAttack();
+        m_actor.Status.SkillCoolTime = 0f;
     }
 
     private void HandleHitEvent(MonsterAttackData.AttackData data, IEnumerable<WeaponAttackInfo> info)
@@ -184,6 +191,19 @@ public class MonsterAttack : MonoBehaviour
         if (m_data == null)
         {
             Debug.LogWarning($"{name}: {nameof(m_data)} is null");
+        }
+    }
+    
+    public void UpdateSkillCoolTime()
+    {
+        if (m_actor.Status.SkillCoolTime < 1f)
+        {
+            //TODO: 부동소수점, deltaTime 이슈로 실제 시간과 작은 오차 발생 가능, 해결 필요한지 확인
+            float full = m_data.SkillCoolTime;
+            float cur = m_actor.Status.SkillCoolTime * full + Time.deltaTime;
+            
+            //TODO: 1/full 미리 계산해두기(최적화)
+            m_actor.Status.SkillCoolTime = cur/full;
         }
     }
 
