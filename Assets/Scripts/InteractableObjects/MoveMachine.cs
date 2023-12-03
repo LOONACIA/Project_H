@@ -106,7 +106,8 @@ public class MoveMachine : InteractableObject
 
         // Draw line from target to destination for each vertex
         Gizmos.color = Color.yellow;
-        var targetVertices = m_target.GetComponent<MeshFilter>().sharedMesh.vertices;
+        var mesh = m_target.GetComponent<MeshFilter>().sharedMesh;
+        var targetVertices = mesh.vertices;
 
         foreach (var vertex in targetVertices)
         {
@@ -116,8 +117,8 @@ public class MoveMachine : InteractableObject
 
         Gizmos.DrawLine(m_target.transform.position, m_destination);
 
-        // Draw cube at destination
+        // Draw mesh at destination
         Gizmos.color = Color.green;
-        Gizmos.DrawWireCube(m_destination, m_target.transform.lossyScale);
+        Gizmos.DrawWireMesh(mesh, m_destination, Quaternion.identity, m_target.transform.lossyScale);
     }
 }
