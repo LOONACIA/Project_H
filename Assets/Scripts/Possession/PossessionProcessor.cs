@@ -182,7 +182,7 @@ public class PossessionProcessor : MonoBehaviour
 
         m_shuriken = Instantiate(m_sender.Data.ShurikenObj, cameraPivot.transform.position + Vector3.down * 1/16f, Quaternion.identity).GetComponent<PossessionShuriken>();
 
-        // Ray를 쏜 곳에 몬스터가 있을 시,
+        // Ray를 쏜 곳에 벽이 있을 시,
         if (isHit && 1 << hit.transform.gameObject.layer == m_obstacleLayers)
         { 
             m_shuriken.InitSetting(cameraPivot.transform.forward, m_sender, OnTargetHit);

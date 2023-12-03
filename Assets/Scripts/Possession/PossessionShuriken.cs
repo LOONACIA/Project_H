@@ -21,6 +21,8 @@ public class PossessionShuriken : MonoBehaviour
 
     private bool m_isStop;
 
+    private Vector3 m_targetPosition;
+
     private Rigidbody m_rb;
 
     // 움직여야될 목표 위치
@@ -55,9 +57,9 @@ public class PossessionShuriken : MonoBehaviour
         m_onTargetHit = onTargetHit;
     }
 
-    public void InitSetting(Vector3 dir, Actor sender, Action<Actor> onTargetHit)
+    public void InitSetting(Vector3 pos, Actor sender, Action<Actor> onTargetHit)
     {
-        m_targetDir = dir;
+        m_targetDir = pos;
         throwActor = sender;
         m_onTargetHit = onTargetHit;
     }
@@ -74,9 +76,9 @@ public class PossessionShuriken : MonoBehaviour
         {
             m_targetDir = (targetActor.transform.position + Vector3.up - transform.position).normalized;
         }
+
         CheckBack();
         Move();
-        
     }
 
     #endregion
@@ -86,7 +88,7 @@ public class PossessionShuriken : MonoBehaviour
     private void CheckBack()
     {
         RaycastHit hit;
-        if (Physics.SphereCast(transform.position - (m_targetDir.normalized * 0.3f), 0.3f, m_targetDir.normalized, out hit, 0.5f, m_surikenStopLayer) == false)
+        if (!Physics.SphereCast(transform.position - (m_targetDir.normalized), 0.2f, m_targetDir.normalized, out hit, 1.3f, m_surikenStopLayer))
             return;
 
         Transform other = hit.transform;
