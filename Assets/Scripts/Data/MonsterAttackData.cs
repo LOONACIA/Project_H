@@ -23,6 +23,9 @@ public class MonsterAttackData : ScriptableObject
 
     [field: SerializeField]
     public AttackData PossessedBlockPush { get; private set; }
+    
+    [field: SerializeField]
+    public float SkillCoolTime { get; private set; }
 
     [Serializable]
     public class AttackData
