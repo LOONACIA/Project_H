@@ -20,10 +20,8 @@ public class GateMachine : InteractableObject
         m_alarm = GetComponentInChildren<Alarm>();
     }
 
-    public override void Interact(Actor actor, IProgress<float> progress, Action onComplete)
+    protected override void OnInteractStart(Actor actor)
     {
-        base.Interact(actor, progress, onComplete);
-
         if (m_alarmWhenOpen)
         {
             m_alarm.Trigger(actor);
