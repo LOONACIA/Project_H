@@ -155,12 +155,10 @@ public class MonsterAttack : MonoBehaviour
              }
 
             //넉백 적용
-            //TODO: 공격, 스킬, 밀쳐내기 등의 넉백여부 구분 필요
             if (data.KnockBackPower != 0f)
             {
                 MonsterMovement movement = health.gameObject.GetComponent<MonsterMovement>();
 
-                //TODO: 공격 종류별로 넉백 파워 수정 필요
                 movement.TryKnockBack(hit.KnockBackDirection, data.KnockBackPower);
             }
             
