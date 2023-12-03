@@ -110,7 +110,7 @@ public partial class PlayerController : MonoBehaviour
         {
             return;
         }
-        
+
         m_interactableObject = m_character.GetClosestInteractableObject();
         if (m_interactableObject != null && m_interactableObject.IsInteractable)
         {

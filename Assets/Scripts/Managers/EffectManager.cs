@@ -72,7 +72,8 @@ public class EffectManager
 	{
 		GameManager.Camera.CurrentCamera.m_Lens.FieldOfView = 150f;
 
-		// Close Eye Effect
+        // Close Eye Effect
+        m_vignette.color.value = new Color(0f, 0f, 0f);
 		Utility.Lerp(0, 1, 1f, value => m_vignette.intensity.Override(value), ignoreTimeScale: true);
         Time.timeScale = 0f;
 	}
@@ -95,7 +96,16 @@ public class EffectManager
     {
         GameManager.UI.ShowWarning(2f, 1f);
     }
-    
+
+    public void ShowHitVignetteEffect()
+    {
+        m_vignette.color.value = new Color(255/255f, 83/255f, 82/255f);
+        m_vignette.intensity.value = 0.4f;
+
+        Utility.Lerp(0.3f, 0, 1f, value => m_vignette.intensity.Override(value), ignoreTimeScale: true);
+
+    }
+
     /// <summary>
     /// 출혈 이펙트를 실행합니다.
     /// </summary>
