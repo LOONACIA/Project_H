@@ -17211,6 +17211,7 @@ GameObject:
   - component: {fileID: 150696816329133212}
   - component: {fileID: 150696816329133203}
   - component: {fileID: 150696816329133202}
+  - component: {fileID: 2789970902793803701}
   m_Layer: 0
   m_Name: GateDissolveMachine
   m_TagString: Untagged
@@ -17311,7 +17312,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_requiredTime: 3
   m_gate: {fileID: 150696817143835595}
-  m_alarmRadius: 20
+  m_alarmWhenOpen: 1
+--- !u!114 &2789970902793803701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 150696816329133200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a13d5732330cc954cae609a46b563059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_origin: {fileID: 0}
+  <AlertRange>k__BackingField: 10
 --- !u!1 &150696816334279562
 GameObject:
   m_ObjectHideFlags: 0
@@ -19943,6 +19958,7 @@ GameObject:
   - component: {fileID: 150696816493305634}
   - component: {fileID: 150696816493305633}
   - component: {fileID: 150696816493305632}
+  - component: {fileID: 6719649126184270498}
   m_Layer: 0
   m_Name: GateDissolveMachine
   m_TagString: Untagged
@@ -20043,7 +20059,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_requiredTime: 3
   m_gate: {fileID: 150696816145900151}
-  m_alarmRadius: 20
+  m_alarmWhenOpen: 1
+--- !u!114 &6719649126184270498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 150696816493305638}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a13d5732330cc954cae609a46b563059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_origin: {fileID: 0}
+  <AlertRange>k__BackingField: 10
 --- !u!1 &150696816494614529
 GameObject:
   m_ObjectHideFlags: 0
@@ -33912,7 +33942,7 @@ PrefabInstance:
     - target: {fileID: 6614375549776625165, guid: 13eaccaac26881b48a467b7901d7b0bf,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 130
+      value: 120
       objectReference: {fileID: 0}
     - target: {fileID: 6614375549776625165, guid: 13eaccaac26881b48a467b7901d7b0bf,
         type: 3}
