@@ -102,7 +102,10 @@ public class Monster : Actor
         float movementRatio = 0f;
         if (velocity.magnitude > 0f)
         {
-            movementRatio = Movement.isDashing ? 1 : 0.5f;
+            if (IsPossessed)
+                movementRatio = Movement.isDashing ? 1 : 0.5f;
+            else
+                movementRatio = velocity.magnitude / Movement.Data.MoveSpeed;
         }
         m_movementAnimationRatio = Mathf.Lerp(m_movementAnimationRatio, movementRatio, Time.deltaTime * 5f);
 
