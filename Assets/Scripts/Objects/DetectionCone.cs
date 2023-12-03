@@ -65,12 +65,22 @@ public class DetectionCone : MonoBehaviour
         if (!m_targets.Contains(actor))
         {
             m_targets.Add(actor);
+            actor.Dying += OnTargetDying;
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
         if (other.TryGetComponent<Actor>(out var actor))
+        {
+            m_targets.Remove(actor);
+            actor.Dying -= OnTargetDying;
+        }
+    }
+    
+    private void OnTargetDying(object sender, EventArgs e)
+    {
+        if (sender is Actor actor)
         {
             m_targets.Remove(actor);
         }
