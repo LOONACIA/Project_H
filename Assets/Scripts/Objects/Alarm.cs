@@ -29,10 +29,15 @@ public class Alarm : MonoBehaviour
     {
         // Get recipients in alert range
         using var recipients = GameManager.Actor.GetMonstersInRadius(m_origin.position, AlertRange);
-
+        
         // If target is possessed
         if (target.IsPossessed)
         {
+            foreach (var recipient in recipients)
+            {
+                recipient.Targets.Clear();
+            }
+            
             // Add actor to recipients' targets
             foreach (var recipient in recipients.Where(recipient => !recipient.Targets.Contains(target)))
             {
