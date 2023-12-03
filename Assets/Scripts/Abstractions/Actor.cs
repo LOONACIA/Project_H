@@ -96,9 +96,9 @@ public abstract class Actor : MonoBehaviour
         }
 
         return m_interactableObjects
-            .Where(obj => Vector3.Dot(Animator.transform.forward, (obj.transform.position - transform.position).normalized) > 0.75f)
+            .Where(obj => Vector3.Dot(m_vcam.transform.forward, (obj.transform.position - m_vcam.transform.position).normalized) > 0.75f)
             .OrderByDescending(obj =>
-                Vector3.Dot(Animator.transform.forward, (obj.transform.position - transform.position).normalized))
+                Vector3.Dot(m_vcam.transform.forward, (obj.transform.position - m_vcam.transform.position).normalized))
             .FirstOrDefault();
     }
 
