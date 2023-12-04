@@ -71,7 +71,7 @@ public class ActorHealth : MonoBehaviour, IHealth
 
         // 방어 모션 중에 공격 받을 시 데미지 무효, 충격 받는 모션 실행
         // 공격의 방향성도 체크
-        if (m_status.IsBlocking&&CheckBlockDirection(info))
+        if (m_status.IsBlocking && CheckBlockDirection(info))
         {
             PlayBlockAnimation();
             Blocked?.Invoke(this, info);
