@@ -13,7 +13,7 @@ public class CanSeeTargets : Conditional
 
     public override TaskStatus OnUpdate()
     {
-        Vector3 selfPosition = self.Value.transform.position;
+        Vector3 selfPosition = self.Value.transform.position + new Vector3(0f, 0.5f, 0f);
         Vector3 targetPosition = target.Value.transform.position;
 
         Ray ray = new Ray(selfPosition, targetPosition - selfPosition);
