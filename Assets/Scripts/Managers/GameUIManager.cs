@@ -80,11 +80,11 @@ public class GameUIManager
         m_shuriken.SetPossessionProcessor(processor);
     }
 
-    public void ShowSkillIndicator(PlayerController player, PossessionProcessor processor)
+    public void ShowSkillIndicator(PlayerController player)
     { 
         m_skill = ManagerRoot.UI.ShowSceneUI<UISkill>();
         m_skill.GetComponent<Canvas>().sortingOrder = -2;
-        m_skill.SetActorStatus(player, processor);
+        m_skill.SetActorStatus(player);
     }
 
     public void ShowDamageIndicator()

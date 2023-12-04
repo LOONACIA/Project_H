@@ -37,6 +37,8 @@ public partial class PlayerController : MonoBehaviour
     private bool m_isOnInteracting;
 
     public Actor Character => m_character;
+    
+    public event EventHandler<Actor> CharacterChanged; 
 
     /// <summary>
     /// 데미지를 입었을 시, Indicator에 보내주는 이벤트
@@ -62,6 +64,14 @@ public partial class PlayerController : MonoBehaviour
         m_possession = GetComponent<PossessionProcessor>();
         m_possession.Possessing += OnPossessing;
         m_possession.Possessed += OnPossessed;
+        
+        GameManager.UI.ShowCrosshair();
+        GameManager.UI.ShowHpIndicator(this);
+        GameManager.UI.ShowShieldIndicator(this);
+        GameManager.UI.ShowShurikenIndicator(m_possession);
+        GameManager.UI.ShowDamageIndicator();
+        GameManager.UI.ShowObjects();
+        GameManager.UI.ShowSkillIndicator(this);
     }
 
     private void Start()
@@ -72,14 +82,6 @@ public partial class PlayerController : MonoBehaviour
         }
 
         InitInput();
-
-        GameManager.UI.ShowCrosshair();
-        GameManager.UI.ShowHpIndicator(this);
-        GameManager.UI.ShowShieldIndicator(this);
-        GameManager.UI.ShowShurikenIndicator(m_possession);
-        GameManager.UI.ShowSkillIndicator(this, m_possession);
-        GameManager.UI.ShowDamageIndicator();
-        GameManager.UI.ShowObjects();
     }
 
     private void OnEnable()
@@ -359,5 +361,11 @@ public partial class PlayerController : MonoBehaviour
         
         HpChanged?.Invoke(this, Character.Health.CurrentHp);
         ShieldChanged?.Invoke(this, EventArgs.Empty);
+        OnCharacterChanged();
+    }
+    
+    private void OnCharacterChanged()
+    {
+        CharacterChanged?.Invoke(this, m_character);
     }
 }
