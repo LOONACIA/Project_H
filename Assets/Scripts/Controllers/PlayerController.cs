@@ -96,7 +96,7 @@ public partial class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (m_isGameOver)
+        if (GameManager.Instance.IsGameOver)
         {
             return;
         }
@@ -108,7 +108,7 @@ public partial class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (m_isGameOver)
+        if (GameManager.Instance.IsGameOver)
         {
             return;
         }
