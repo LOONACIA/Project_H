@@ -91,6 +91,12 @@ public class ActorHealth : MonoBehaviour, IHealth
                 PlayHitAnimation(info.AttackDirection, info.Attacker);
             }
 
+            // 플레이어 피격시 이펙트 실행
+            if (m_actor.IsPossessed)
+            {
+                GameManager.Effect.ShowHitVignetteEffect();
+            }
+
             m_status.Hp -= info.Damage;
         }
 

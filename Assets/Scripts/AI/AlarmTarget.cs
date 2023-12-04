@@ -79,4 +79,12 @@ public class AlarmTarget : Action
             monster.Targets.Add(target);
         }
     }
+
+    public override void OnDrawGizmos()
+    {
+        base.OnDrawGizmos();
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, Radius.Value);
+    }
 }

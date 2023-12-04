@@ -46,8 +46,6 @@ public class DissolveGate : MonoBehaviour, IGate
 
             yield return StartCoroutine(Dissolve(true));
         }
-
-        Destroy(m_gate);
     }
 
     public IEnumerator Close()

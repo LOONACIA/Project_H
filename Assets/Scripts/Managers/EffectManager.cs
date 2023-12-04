@@ -1,5 +1,6 @@
 using LOONACIA.Unity;
 using LOONACIA.Unity.Managers;
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -7,7 +8,7 @@ using UnityEngine.Rendering.Universal;
 using URPGlitch.Runtime.AnalogGlitch;
 using URPGlitch.Runtime.DigitalGlitch;
 
-public class EffectManager
+public class EffectManager 
 {
 	// TODO: Data로 분리
 	private GameObject m_bloodEffect;
@@ -72,7 +73,8 @@ public class EffectManager
 	{
 		GameManager.Camera.CurrentCamera.m_Lens.FieldOfView = 150f;
 
-		// Close Eye Effect
+        // Close Eye Effect
+        m_vignette.color.value = new Color(0f, 0f, 0f);
 		Utility.Lerp(0, 1, 1f, value => m_vignette.intensity.Override(value), ignoreTimeScale: true);
         Time.timeScale = 0f;
 	}
@@ -95,7 +97,21 @@ public class EffectManager
     {
         GameManager.UI.ShowWarning(2f, 1f);
     }
-    
+
+    public void ShowHitVignetteEffect()
+    {
+        m_vignette.color.value = new Color(255/255f, 83/255f, 82/255f);
+        m_vignette.intensity.value = 0.4f;
+
+        GameManager.Instance.StartCoroutine(Recovery());
+
+        IEnumerator Recovery()
+        {
+            yield return new WaitForSeconds(1f);
+            RecoverVignetteEffect();
+        }
+    }
+
     /// <summary>
     /// 출혈 이펙트를 실행합니다.
     /// </summary>
@@ -137,6 +153,11 @@ public class EffectManager
 	{
 		m_colorAdjustments.saturation.Override(0f);
 	}
+
+    private void RecoverVignetteEffect()
+    {
+        Utility.Lerp(0.3f, 0, 1f, value => m_vignette.intensity.Override(value), ignoreTimeScale: true);
+    }
 
     #region Camera
     /// <summary>
