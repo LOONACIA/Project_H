@@ -4,65 +4,78 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class Spawner: MonoBehaviour
+public class Spawner : MonoBehaviour
 {
     [FormerlySerializedAs("m_waveInfos")]
     [SerializeField]
     private WaveInfoList[] m_waveInfoList;
-    
-    // TODO: Discard below
-    [SerializeField]
-    private GameObject m_spawnEnemy;
 
-    [SerializeField]
-    private int m_enemyCount;
-    // TODO: Discard above
+    //[SerializeField]
+    //private Collider m_spawnPos;
 
-    [SerializeField]
-    private Collider m_spawnPos;
+    //private int m_spawnedEnemy = 0;
 
-    [SerializeField]
-    private float m_spawnDelay;
-
-    private int m_spawnedEnemy = 0;
-
-    private CoroutineEx m_enemySpawnCoroutine;
+    //private CoroutineEx m_enemySpawnCoroutine;
 
     private WaveTrigger m_waveTrigger;
 
     private int m_currentSpawnIndex;
 
+    private Collider m_collider;
+
     // Start is called before the first frame update
-    private void OnEnable()
+    //private void OnEnable()
+    //{
+    //    m_spawnPos = this.transform.GetComponent<Collider>();
+    //    Monster monster = GetComponent<Monster>();
+    //    m_enemySpawnCoroutine = CoroutineEx.Create(this, EnemySpawn(m_spawnPos));
+    //    m_waveTrigger = GetComponentInParent<WaveTrigger>();
+    //    if (m_spawnedEnemy == m_enemyCount)
+    //    {
+    //        if (m_enemySpawnCoroutine?.IsRunning is true)
+    //        {
+    //            m_enemySpawnCoroutine.Abort();
+    //            m_enemySpawnCoroutine = null;
+    //            // this.gameObject.SetActive(false);
+    //        }
+    //    }
+    //}
+
+    private void Start()
     {
-        m_spawnPos = this.transform.GetComponent<Collider>();
-        Monster monster = GetComponent<Monster>();
-        m_enemySpawnCoroutine = CoroutineEx.Create(this, EnemySpawn(m_spawnPos));
         m_waveTrigger = GetComponentInParent<WaveTrigger>();
-        if (m_spawnedEnemy == m_enemyCount)
-        {
-            if (m_enemySpawnCoroutine?.IsRunning is true)
-            {
-                m_enemySpawnCoroutine.Abort();
-                m_enemySpawnCoroutine = null;
-                this.gameObject.SetActive(false);
-            }
-        }
+        m_collider = GetComponent<Collider>();
     }
 
     public void Spawn()
     {
-        if (m_currentSpawnIndex++ >= m_waveInfoList.Length)
+        if (m_currentSpawnIndex >= m_waveInfoList.Length)
         {
             return;
         }
-        
+
         if (m_waveInfoList[m_currentSpawnIndex].WaveInfos is not { Length: > 0 })
         {
             return;
         }
-        
-        // TODO: Spawn logic
+
+        EnemySpawn();
+    }
+
+    private void EnemySpawn()
+    {
+        foreach (var waveInfo in m_waveInfoList[m_currentSpawnIndex].WaveInfos)
+        {
+            int i = 0;
+            while (i++ < waveInfo.Count)
+            {
+                Vector3 spawnPosition = GetRandomSpawnPos(m_collider);
+                var monster = Instantiate(waveInfo.Monster, spawnPosition, transform.rotation);
+                m_waveTrigger.Monsters.Add(monster.GetComponent<Monster>());
+            }
+        }
+
+        m_currentSpawnIndex++;
     }
 
     /// <summary>
@@ -70,26 +83,26 @@ public class Spawner: MonoBehaviour
     /// </summary>
     /// <param name="spawnableAreaCollider"></param>
     /// <returns></returns>
-    IEnumerator EnemySpawn(Collider spawnableAreaCollider)
-    {
-        yield return new WaitForSeconds(m_spawnDelay);
-        var character = FindObjectsOfType<Monster>()
-            .SingleOrDefault(monster => monster.IsPossessed);
+    //IEnumerator EnemySpawn(Collider spawnableAreaCollider)
+    //{
+    //    yield return new WaitForSeconds(m_spawnDelay);
+    //    var character = FindObjectsOfType<Monster>()
+    //        .SingleOrDefault(monster => monster.IsPossessed);
 
-        while (m_spawnedEnemy < m_enemyCount)
-        {
-            Vector3 spawnPosition = GetRandomSpawnPos(spawnableAreaCollider);
-            var go = Instantiate(m_spawnEnemy, spawnPosition, Quaternion.identity);
-            if (character != null && go.TryGetComponent<Monster>(out var monster))
-            {
-                monster.Targets.Add(character);
-                m_waveTrigger.Monsters.Add(monster);
-            }
+    //    while (m_spawnedEnemy < m_enemyCount)
+    //    {
+    //        Vector3 spawnPosition = GetRandomSpawnPos(spawnableAreaCollider);
+    //        var go = Instantiate(m_spawnEnemy, spawnPosition, Quaternion.identity);
+    //        if (character != null && go.TryGetComponent<Monster>(out var monster))
+    //        {
+    //            monster.Targets.Add(character);
+    //            m_waveTrigger.Monsters.Add(monster);
+    //        }
 
-            yield return new WaitForSeconds(0.1f);
-            m_spawnedEnemy++;
-        }
-    }
+    //        yield return new WaitForSeconds(0.1f);
+    //        m_spawnedEnemy++;
+    //    }
+    //}
 
     /// <summary>
     /// GetRandomPointInCollider에서 전달받은 좌표 내 Layer로 충돌 검출 후 좌표 전달
@@ -104,7 +117,7 @@ public class Spawner: MonoBehaviour
         int attemptCount = 0;
         int maxAttempts = 200;
 
-        int layerToNotSpawnOn = LayerMask.GetMask("Obstacle", "Wall","Ground","Monster");
+        int layerToNotSpawnOn = LayerMask.GetMask("Obstacle", "Wall", "Ground", "Monster");
         while (!isSpawnPosValid && attemptCount < maxAttempts)
         {
             float constHeight = 0.5f;
@@ -114,9 +127,9 @@ public class Spawner: MonoBehaviour
             Collider[] colliders = Physics.OverlapCapsule(pos1, pos2, constHeight);
 
             bool isInvalidCollision = false;
-            foreach(Collider collider in colliders)
+            foreach (Collider collider in colliders)
             {
-                if((layerToNotSpawnOn & ( 1<< collider.gameObject.layer)) != 0)
+                if ((layerToNotSpawnOn & (1 << collider.gameObject.layer)) != 0)
                 {
                     isInvalidCollision = true;
                     break;
@@ -168,11 +181,11 @@ public class Spawner: MonoBehaviour
     {
         [field: SerializeField]
         public GameObject Monster { get; private set; }
-        
+
         [field: SerializeField]
         public int Count { get; private set; }
     }
-    
+
     [System.Serializable]
     private class WaveInfoList
     {
