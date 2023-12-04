@@ -12,8 +12,7 @@ public abstract class DialogPerformerBase : MonoBehaviour
     [SerializeField]
     [Tooltip("다이얼로그 메시지")]
 	private MessageDialogInfo[] m_dialogTexts;
-
-
+    
     [SerializeField]
     [Tooltip("다이얼로그 표시 간격")]
     private float m_interval = 1f;
