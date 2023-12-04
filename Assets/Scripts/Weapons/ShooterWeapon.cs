@@ -176,7 +176,7 @@ public class ShooterWeapon : Weapon
             if (hit.transform.TryGetComponent(out Actor actor))
             {
                 // TODO: AttackInfo 변경 시 수정 필요
-                yield return new(actor, hit.normal, hit.point);
+                yield return new(actor, m_ray.direction, hit.point);
             }
         }
     }
