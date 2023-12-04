@@ -166,7 +166,8 @@ public class GameUIManager
 
         int index = 0;
         MessageDialogInfo dialogInfo = texts[index++];
-        m_dialog.SetText(dialogInfo.Message, () => dialogInfo.Callback?.Invoke());
+        m_dialog.SetDialogInfo(dialogInfo, () => dialogInfo.Callback?.Invoke());
+        //m_dialog.SetText(dialogInfo.Message, () => dialogInfo.Callback?.Invoke());
         m_dialog.gameObject.SetActive(true);
         m_showDialogCoroutine = CoroutineEx.Create(m_dialog, CoShowDialog(texts, interval, index));
         return ++m_dialogVersion;
@@ -182,7 +183,8 @@ public class GameUIManager
                 yield return new WaitForSeconds(innerInterval);
 
                 var info = infoList[innerIndex++];
-                m_dialog.SetText(info.Message, () => info.Callback?.Invoke());
+                m_dialog.SetDialogInfo(info, () => info.Callback?.Invoke());
+                //m_dialog.SetText(info.Message, () => info.Callback?.Invoke());
             }
         }
     }
