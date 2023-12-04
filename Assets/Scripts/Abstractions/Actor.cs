@@ -2,7 +2,6 @@ using BehaviorDesigner.Runtime;
 using Cinemachine;
 using LOONACIA.Unity.Managers;
 using System;
-using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -85,8 +84,8 @@ public abstract class Actor : MonoBehaviour
         Health = GetComponent<ActorHealth>();
         Status = GetComponent<ActorStatus>();
 
-        Status.CanKnockBack = Data.CanKnockBack;
-        Status.CanKnockDown = Data.CanKnockDown;
+        // Status.CanKnockBack = Data.CanKnockBack;
+        // Status.CanKnockDown = Data.CanKnockDown;
 
         EnableAIComponents();
     }

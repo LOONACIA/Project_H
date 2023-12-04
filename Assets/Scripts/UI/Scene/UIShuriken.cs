@@ -3,7 +3,6 @@ using UnityEngine;
 using LOONACIA.Unity.UI;
 using System;
 using UnityEngine.UI;
-using System.Drawing;
 using Color = UnityEngine.Color;
 
 public class UIShuriken : UIScene
