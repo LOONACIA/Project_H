@@ -36,6 +36,9 @@ public class UISkill : UIScene
         RegisterEvents();
 
         processor.Possessed += ChangeCharacter;
+
+        // 스킬을 가지고 있는 몬스터의 경우에만 표시
+        m_canvas.enabled = HasSkill(player.Character) ? true : false;
     }
 
     protected override void Init()
@@ -72,29 +75,37 @@ public class UISkill : UIScene
         }
 
         m_skillGague.fillAmount = e;
+        Debug.Log(m_skillGague.fillAmount);
     }
 
-    private void ChangeCharacter(object sender, Actor e)
+    private void ChangeCharacter(object sender, Actor actor)
     {
-        if (e == null) return;
+        if (actor == null) return;
 
         // 기존 캐릭터에서 이벤트 제거 
         UnregisterEvents();
 
         // 새로운 캐릭터에 이벤트 등록
-        m_actorSuatus = e.Status;
+        m_actorSuatus = actor.Status;
         RegisterEvents();
 
         // 게이지 초기화
         m_skillGague.fillAmount = m_actorSuatus.SkillCoolTime;
 
-        if (e.GetComponent<MonsterAttack>().SkillWeapon == null)
+        // 스킬을 가지고 있는 몬스터의 경우에만 표시
+        m_canvas.enabled = HasSkill(actor) ? true : false;
+    }
+
+    private bool HasSkill(Actor actor)
+    {
+        Monster monster = actor as Monster;
+        if (monster != null && monster.Attack.SkillWeapon != null)
         {
-            m_canvas.enabled = false;
+            return true;
         }
         else
-        { 
-            m_canvas.enabled = true;
+        {
+            return false;
         }
     }
 }
