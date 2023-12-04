@@ -3303,11 +3303,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isDashing: 0
   m_data: {fileID: 11400000, guid: 433250fdfdea211409e5d5fb5da175b8, type: 2}
-  m_isOnGround: 0
   m_dashAmount: 5
   m_dashDuration: 0.05
   m_dashDelay: 0.3
   m_dashCoolTime: 1
+  m_isOnGround: 0
 --- !u!114 &7779555384794141492
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3322,7 +3322,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_data: {fileID: 11400000, guid: d0a3a508879ea7b46b3b2b25b1986962, type: 2}
   hitVfx: {fileID: 6612570148086230546}
-  particleCoef: 7
+  particleCoef: 2
   m_blockAngle: 180
 --- !u!114 &5430721398783349178
 MonoBehaviour:
@@ -3368,9 +3368,12 @@ MonoBehaviour:
   m_hp: 0
   m_damage: 0
   m_isBlocking: 0
+  m_canKnockBack: 0
+  m_canKnockDown: 0
   m_knockDownTime: 0
   m_isKnockBack: 0
   m_shield: {fileID: 0}
+  m_skillCoolTime: 0
   <IsStunned>k__BackingField: 0
 --- !u!114 &301507556
 MonoBehaviour:

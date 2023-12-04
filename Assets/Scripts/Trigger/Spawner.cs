@@ -1,6 +1,3 @@
-using LOONACIA.Unity.Coroutines;
-using System.Collections;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
 

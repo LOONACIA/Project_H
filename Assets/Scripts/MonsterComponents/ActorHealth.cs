@@ -13,7 +13,7 @@ public class ActorHealth : MonoBehaviour, IHealth
     private VisualEffect hitVfx;
 
     [SerializeField]
-    private int particleCoef = 7;
+    private int particleCoef = 3;
 
     private Monster m_actor;
 
