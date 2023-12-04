@@ -284,6 +284,7 @@ public abstract class Actor : MonoBehaviour
             return;
         }
 
+        GameManager.Effect.PlaySparkEffect(Animator.gameObject, m_collider.bounds.center, seconds);
         StartCoroutine(CoStun(seconds));
     }
 

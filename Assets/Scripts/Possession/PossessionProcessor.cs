@@ -178,7 +178,7 @@ public class PossessionProcessor : MonoBehaviour
     private void OnPossessed(Actor actor)
     {
         Possessed?.Invoke(this, actor);
-        StartTime();
+        //StartTime();
     }
 
     private void Update()
