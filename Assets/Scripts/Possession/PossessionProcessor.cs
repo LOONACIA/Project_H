@@ -218,7 +218,7 @@ public class PossessionProcessor : MonoBehaviour
             m_shuriken.InitSetting(cameraPivot.transform.forward, m_sender, OnTargetHit);
         }
     }
-
+    
     private void OnTargetHit(Actor target)
     {
         target.Dying += OnTargetDying;
