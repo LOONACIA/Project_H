@@ -85,6 +85,9 @@ public abstract class Actor : MonoBehaviour
         Health = GetComponent<ActorHealth>();
         Status = GetComponent<ActorStatus>();
 
+        Status.CanKnockBack = Data.CanKnockBack;
+        Status.CanKnockDown = Data.CanKnockDown;
+
         EnableAIComponents();
     }
 
