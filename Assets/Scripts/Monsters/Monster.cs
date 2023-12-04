@@ -128,6 +128,7 @@ public class Monster : Actor
         base.OnUnPossessed();
 
         Status.Damage = Attack.Data.Attack.Damage;
+        Status.IsBlocking = false;
     }
     
     private void OnTargetCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

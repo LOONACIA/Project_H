@@ -23,11 +23,6 @@ public class CharacterManager
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    public void FindController()
-    {
-        m_controller = Object.FindObjectOfType<PlayerController>();
-    }
-
     public void SaveInformation(Actor actor, Transform respawnPosition)
     {
         m_actorType = actor.Data.Type;
@@ -35,7 +30,7 @@ public class CharacterManager
         m_respawnRotation = respawnPosition.rotation;
     }
 
-    private void Respawn()
+    private void RespawnPlayerCharacter()
     {
         if (m_respawnPosition == Vector3.zero)
         {
@@ -48,9 +43,14 @@ public class CharacterManager
         m_controller.ChangeActor(character.GetComponent<Actor>());
     }
     
+    private void FindController()
+    {
+        m_controller = Object.FindObjectOfType<PlayerController>();
+    }
+    
     private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
     {
         FindController();
-        Respawn();
+        RespawnPlayerCharacter();
     }
 }
