@@ -3,6 +3,7 @@ using System;
 using LOONACIA.Unity.Managers;
 using System.Collections;
 using UnityEngine;
+using Unity.PlasticSCM.Editor.WebApi;
 
 public class PossessionProcessor : MonoBehaviour
 {
@@ -33,6 +34,14 @@ public class PossessionProcessor : MonoBehaviour
     
     private CoroutineEx m_possessionCoroutine;
 
+    public float CoolTime 
+    {
+        get 
+        {
+            return Mathf.Clamp(m_curCoolTime / ConstVariables.SHURIKEN_COOLTIME, 0, 1) ; 
+        }
+    }
+
     /// <summary>
     /// 빙의 타겟 선정에 성공할 경우, 빙의 시작 시 발생하는 이벤트.
     /// </summary>
@@ -52,6 +61,11 @@ public class PossessionProcessor : MonoBehaviour
     /// 빙의 가능한 상태일 경우 발생하는 이벤트.
     /// </summary>
     public event EventHandler Possessable;
+
+    /// <summary>
+    /// 수리검 쿨타임이 돌고 있을 때 발생하는 이벤트.
+    /// </summary>
+    public event EventHandler CoolTimeChanged;
 
     public void TryPossess(Actor sender)
     {
@@ -169,7 +183,11 @@ public class PossessionProcessor : MonoBehaviour
 
     private void Update()
     {
-        m_curCoolTime += Time.deltaTime;
+        if (m_curCoolTime <= ConstVariables.SHURIKEN_COOLTIME && !m_isHitTarget)
+        { 
+            m_curCoolTime += Time.deltaTime;
+            CoolTimeChanged?.Invoke(this, EventArgs.Empty);
+        }   
     }
 
     #region 표창 날리기
@@ -205,6 +223,7 @@ public class PossessionProcessor : MonoBehaviour
     {
         target.Dying += OnTargetDying;
         m_isHitTarget = true;
+        m_curCoolTime = 0;
         TargetHit?.Invoke(this, target.Data.PossessionRequiredTime);
         TryHacking(target);
     }
