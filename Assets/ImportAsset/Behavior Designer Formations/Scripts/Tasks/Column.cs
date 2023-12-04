@@ -40,7 +40,7 @@ namespace BehaviorDesigner.Runtime.Formations.Tasks
 
             return targetPos;
         }
-        
+
         public override void OnReset()
         {
             base.OnReset();
