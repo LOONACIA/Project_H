@@ -2,12 +2,21 @@ using LOONACIA.Unity.Coroutines;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Spawner: MonoBehaviour
 {
-    public GameObject spawnEnemy;
+    [FormerlySerializedAs("m_waveInfos")]
+    [SerializeField]
+    private WaveInfoList[] m_waveInfoList;
+    
+    // TODO: Discard below
+    [SerializeField]
+    private GameObject m_spawnEnemy;
 
-    public int enemyCount;
+    [SerializeField]
+    private int m_enemyCount;
+    // TODO: Discard above
 
     [SerializeField]
     private Collider m_spawnPos;
@@ -21,6 +30,8 @@ public class Spawner: MonoBehaviour
 
     private WaveTrigger m_waveTrigger;
 
+    private int m_currentSpawnIndex;
+
     // Start is called before the first frame update
     private void OnEnable()
     {
@@ -28,7 +39,7 @@ public class Spawner: MonoBehaviour
         Monster monster = GetComponent<Monster>();
         m_enemySpawnCoroutine = CoroutineEx.Create(this, EnemySpawn(m_spawnPos));
         m_waveTrigger = GetComponentInParent<WaveTrigger>();
-        if (m_spawnedEnemy == enemyCount)
+        if (m_spawnedEnemy == m_enemyCount)
         {
             if (m_enemySpawnCoroutine?.IsRunning is true)
             {
@@ -37,6 +48,21 @@ public class Spawner: MonoBehaviour
                 this.gameObject.SetActive(false);
             }
         }
+    }
+
+    public void Spawn()
+    {
+        if (m_currentSpawnIndex++ >= m_waveInfoList.Length)
+        {
+            return;
+        }
+        
+        if (m_waveInfoList[m_currentSpawnIndex].WaveInfos is not { Length: > 0 })
+        {
+            return;
+        }
+        
+        // TODO: Spawn logic
     }
 
     /// <summary>
@@ -50,10 +76,10 @@ public class Spawner: MonoBehaviour
         var character = FindObjectsOfType<Monster>()
             .SingleOrDefault(monster => monster.IsPossessed);
 
-        while (m_spawnedEnemy < enemyCount)
+        while (m_spawnedEnemy < m_enemyCount)
         {
             Vector3 spawnPosition = GetRandomSpawnPos(spawnableAreaCollider);
-            var go = Instantiate(spawnEnemy, spawnPosition, Quaternion.identity);
+            var go = Instantiate(m_spawnEnemy, spawnPosition, Quaternion.identity);
             if (character != null && go.TryGetComponent<Monster>(out var monster))
             {
                 monster.Targets.Add(character);
@@ -124,13 +150,33 @@ public class Spawner: MonoBehaviour
     {
         Bounds collBounds = collider.bounds;
 
-        Vector3 minBounds = new Vector3(collBounds.min.x + offset, collBounds.min.y + offset, collBounds.min.z + offset);
-        Vector3 maxBounds = new Vector3(collBounds.max.x - offset, collBounds.max.y - offset, collBounds.max.z - offset);
+        Vector3 minBounds =
+            new Vector3(collBounds.min.x + offset, collBounds.min.y + offset, collBounds.min.z + offset);
+        Vector3 maxBounds =
+            new Vector3(collBounds.max.x - offset, collBounds.max.y - offset, collBounds.max.z - offset);
 
         float randomX = Random.Range(minBounds.x, maxBounds.x);
         float randomY = Random.Range(minBounds.y, maxBounds.y);
         float randomZ = Random.Range(minBounds.z, maxBounds.z);
 
         return new Vector3(randomX, randomY, randomZ);
+    }
+
+
+    [System.Serializable]
+    private class WaveInfo
+    {
+        [field: SerializeField]
+        public GameObject Monster { get; private set; }
+        
+        [field: SerializeField]
+        public int Count { get; private set; }
+    }
+    
+    [System.Serializable]
+    private class WaveInfoList
+    {
+        [field: SerializeField]
+        public WaveInfo[] WaveInfos { get; private set; }
     }
 }

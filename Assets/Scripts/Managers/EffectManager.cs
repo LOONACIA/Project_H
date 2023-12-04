@@ -1,5 +1,6 @@
 using LOONACIA.Unity;
 using LOONACIA.Unity.Managers;
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -101,6 +102,14 @@ public class EffectManager
     {
         m_vignette.color.value = new Color(255/255f, 83/255f, 82/255f);
         m_vignette.intensity.value = 0.4f;
+
+        GameManager.Instance.StartCoroutine(Recovery());
+
+        IEnumerator Recovery()
+        {
+            yield return new WaitForSeconds(1f);
+            RecoverVignetteEffect();
+        }
     }
 
     /// <summary>
