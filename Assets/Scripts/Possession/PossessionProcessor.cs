@@ -82,8 +82,6 @@ public class PossessionProcessor : MonoBehaviour
         {   
             if(m_curCoolTime < ConstVariables.SHURIKEN_COOLTIME)        
                 return;
-
-            m_curCoolTime = 0f;
             m_isAblePossession = false;
             m_sender.Animator.SetTrigger(s_possess);
             return;
@@ -193,6 +191,8 @@ public class PossessionProcessor : MonoBehaviour
     #region 표창 날리기
     public void ThrowShuriken()
     {
+
+        m_curCoolTime = 0f;
         var cameraPivot = GameManager.Camera.CurrentCamera;
 
         //bool isHit = Physics.Raycast(cameraPivot.transform.position, cameraPivot.transform.forward, out var hit, 300f);
@@ -218,7 +218,7 @@ public class PossessionProcessor : MonoBehaviour
             m_shuriken.InitSetting(cameraPivot.transform.forward, m_sender, OnTargetHit);
         }
     }
-
+    
     private void OnTargetHit(Actor target)
     {
         target.Dying += OnTargetDying;
