@@ -51,11 +51,13 @@ public class Spawner : MonoBehaviour
     {
         if (m_currentSpawnIndex >= m_waveInfoList.Length)
         {
+            m_currentSpawnIndex++;
             return;
         }
 
         if (m_waveInfoList[m_currentSpawnIndex].WaveInfos is not { Length: > 0 })
         {
+            m_currentSpawnIndex++;
             return;
         }
 
@@ -65,7 +67,7 @@ public class Spawner : MonoBehaviour
     private void EnemySpawn()
     {
         foreach (var waveInfo in m_waveInfoList[m_currentSpawnIndex].WaveInfos)
-        {
+        { 
             int i = 0;
             while (i++ < waveInfo.Count)
             {
@@ -74,7 +76,6 @@ public class Spawner : MonoBehaviour
                 m_waveTrigger.Monsters.Add(monster.GetComponent<Monster>());
             }
         }
-
         m_currentSpawnIndex++;
     }
 

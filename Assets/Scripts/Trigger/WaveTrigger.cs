@@ -200,10 +200,4 @@ public class WaveTrigger : MonoBehaviour
         yield return new WaitForSeconds(m_waitTime);
         StartSpawn();
     }
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = UnityEngine.Color.blue;
-        Gizmos.DrawWireCube(transform.position, transform.localScale);
-    }
 }

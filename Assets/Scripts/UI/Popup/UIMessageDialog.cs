@@ -1,7 +1,9 @@
 using LOONACIA.Unity.Coroutines;
+using LOONACIA.Unity.Managers;
 using LOONACIA.Unity.UI;
 using System;
 using System.Collections;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -25,6 +27,34 @@ public class UIMessageDialog : UIPopup
         m_typeCoroutine?.Abort();
         m_text = text;
         m_typeCoroutine = CoroutineEx.Create(this, Type(text, ConstVariables.UI_DIALOG_TEXT_TYPE_INTERVAL, onFinish));
+    }
+    
+    public void SetDialogInfo(MessageDialogInfo dialogTexts, Action onFinish = null)
+    {
+        m_typeCoroutine?.Abort();
+        m_text = ParseDialogInfo(dialogTexts);
+        m_typeCoroutine = CoroutineEx.Create(this, Type(m_text, ConstVariables.UI_DIALOG_TEXT_TYPE_INTERVAL, onFinish));
+    }
+
+    private string ParseDialogInfo(MessageDialogInfo dialogInfo)
+    {
+        string text = dialogInfo.Message;
+        if (dialogInfo.Message.Contains("{0}") && dialogInfo.Button != null)
+        {
+            var action = dialogInfo.Button.action;
+            // var activeControl = action.activeControl ?? action.controls.FirstOrDefault();
+            // if (activeControl == null)
+            // {
+            //     return text;
+            // }
+
+            string path = action.bindings
+                .SingleOrDefault(binding => binding.groups.Equals(ManagerRoot.Input.CurrentControlScheme))
+                .ToDisplayString();
+            text = string.Format(text, path);
+        }
+
+        return text;
     }
     
     public void Abort()
