@@ -119,6 +119,7 @@ public class WaveTrigger : MonoBehaviour
             return;
         }
 
+        Debug.Log("Spawn");
         foreach (var spawner in m_spawners)
         {
             spawner.Spawn();
@@ -129,7 +130,7 @@ public class WaveTrigger : MonoBehaviour
 
     private void StopSpawn()
     {
-        WaveEnd?.Invoke(this, EventArgs.Empty);
+        m_evaluationCoroutine?.Abort();
     }
 
     private void OnMonsterCollectionChanged(object sender,
@@ -160,6 +161,11 @@ public class WaveTrigger : MonoBehaviour
         }
 
         Evaluate();
+
+        if (!Monsters.Any(monster => !monster.IsPossessed))
+        {
+            WaveEnd?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     private void OnTriggerEnter(Collider other)

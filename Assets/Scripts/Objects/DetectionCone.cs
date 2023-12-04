@@ -88,11 +88,6 @@ public class DetectionCone : MonoBehaviour
 
     private bool IsInCone(Vector3 targetPosition)
     {
-#if UNITY_EDITOR
-        // For debugging
-        float angle = m_light.spotAngle / 2f;
-        m_coneAngle = Mathf.Cos(angle * Mathf.Deg2Rad);  
-#endif
         Transform coneTransform = transform;
         var direction = (targetPosition - coneTransform.position).normalized;
         return Vector3.Dot(coneTransform.forward, direction) >= m_coneAngle;
