@@ -40,8 +40,6 @@ public class WaveTrigger : MonoBehaviour
 
     private CoroutineEx m_evaluationCoroutine;
 
-    private bool m_isOnSpawn;
-
     private bool m_isTriggered;
 
     public event EventHandler WaveStart;
@@ -92,13 +90,6 @@ public class WaveTrigger : MonoBehaviour
 
     private void Evaluate()
     {
-        // If already on spawn
-        if (m_isOnSpawn)
-        {
-            // Ignore
-            return;
-        }
-        
         switch (m_spawnMode)
         {
             case SpawnMode.Time:
@@ -127,8 +118,6 @@ public class WaveTrigger : MonoBehaviour
             StopSpawn();
             return;
         }
-        
-        m_isOnSpawn = true;
 
         foreach (var spawner in m_spawners)
         {
@@ -136,12 +125,11 @@ public class WaveTrigger : MonoBehaviour
         }
 
         m_lastSpawnTime = Time.time;
-        m_isOnSpawn = false;
     }
 
     private void StopSpawn()
     {
-        WaveEnd?.Invoke(this, EventArgs.Empty);
+        m_evaluationCoroutine?.Abort();
     }
 
     private void OnMonsterCollectionChanged(object sender,
@@ -164,7 +152,7 @@ public class WaveTrigger : MonoBehaviour
         }
     }
 
-    private void OnMonsterDying(object sender, System.EventArgs e)
+    private void OnMonsterDying(object sender, EventArgs e)
     {
         if (sender is Monster monster)
         {
@@ -172,6 +160,11 @@ public class WaveTrigger : MonoBehaviour
         }
 
         Evaluate();
+
+        if (!Monsters.Any(monster => !monster.IsPossessed))
+        {
+            WaveEnd?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     private void OnTriggerEnter(Collider other)

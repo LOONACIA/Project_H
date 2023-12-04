@@ -45,8 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e65ba4f7090fb054cb8de86d4f872c81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_state: 0
   m_gate: {fileID: 1932787601869007984}
-  m_dissolveMaterial: {fileID: 2100000, guid: f1846fe179340ba409bbc00a11708cb8, type: 2}
   m_progressTime: 3
 --- !u!1 &1932787601060474886
 GameObject:
@@ -93,6 +93,7 @@ GameObject:
   - component: {fileID: 1932787601869007999}
   - component: {fileID: 1932787601869007996}
   - component: {fileID: 1932787601869007997}
+  - component: {fileID: 8975481928667807272}
   m_Layer: 8
   m_Name: Gate
   m_TagString: Untagged
@@ -178,6 +179,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8975481928667807272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1932787601869007984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0ffd792f7e56c743ace9ede1c8ba5fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1932787602160461016
 GameObject:
   m_ObjectHideFlags: 0
@@ -191,6 +204,7 @@ GameObject:
   - component: {fileID: 1932787602160460996}
   - component: {fileID: 1932787602160460997}
   - component: {fileID: 1932787602160461018}
+  - component: {fileID: 8907718513105711426}
   m_Layer: 0
   m_Name: GateDissolveMachine
   m_TagString: Untagged
@@ -291,6 +305,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_requiredTime: 0.5
   m_gate: {fileID: 1932787600847642945}
+  m_alarmWhenOpen: 1
+--- !u!114 &8907718513105711426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1932787602160461016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a13d5732330cc954cae609a46b563059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_origin: {fileID: 1932787602160461019}
+  <AlertRange>k__BackingField: 10
 --- !u!1001 &5413445461262938672
 PrefabInstance:
   m_ObjectHideFlags: 0
