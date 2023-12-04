@@ -8,10 +8,10 @@ using UnityEngine.Rendering.Universal;
 using URPGlitch.Runtime.AnalogGlitch;
 using URPGlitch.Runtime.DigitalGlitch;
 
-public class EffectManager 
+public class EffectManager
 {
-	// TODO: Data로 분리
-	private GameObject m_bloodEffect;
+    private GameObject m_sparkEffect;
+    
 	// TODO END //
 	private Volume m_volume;
 	
@@ -31,7 +31,7 @@ public class EffectManager
 	
 	public void Init()
 	{
-        m_bloodEffect = GameManager.Settings.BloodEffect;
+        m_sparkEffect = GameManager.Settings.SparkEffect;
         
 		m_volume = GameObject.Find("Global Volume").GetComponent<Volume>();
 		m_volume.profile.TryGet(out m_colorAdjustments);
@@ -90,7 +90,14 @@ public class EffectManager
 
 		// Open Eye Effect
 		Utility.Lerp(1, 0, 1f, value => m_vignette.intensity.Override(value), ignoreTimeScale: true);
-        Time.timeScale = 1f;
+        GameManager.Instance.StartCoroutine(RevertTimeScale());
+        return;
+        
+        IEnumerator RevertTimeScale()
+        {
+            yield return new WaitForSecondsRealtime(1f);
+            Time.timeScale = 1f;
+        }
     }
     
     public void ShowDetectionWarningEffect()
@@ -113,20 +120,26 @@ public class EffectManager
     }
 
     /// <summary>
-    /// 출혈 이펙트를 실행합니다.
+    /// 스파크 이펙트를 실행합니다.
     /// </summary>
-    /// <param name="monster">이펙트 실행 위치</param>
-    /// <param name="rotation">이펙트 방향</param>
+    /// <param name="monster">이펙트 대상</param>
+    /// <param name="position">이펙트 위치</param>
     /// <param name="duration">이펙트 재생 시간</param>
-    public void PlayBloodEffect(GameObject monster, Quaternion rotation, float duration = 0)
+    public void PlaySparkEffect(GameObject monster, Vector3 position, float duration = 0)
     {
-        // 출혈 이펙트 오브젝트 생성
-        GameObject go = ManagerRoot.Resource.Instantiate(m_bloodEffect, monster.transform.position + Vector3.up, rotation);
+        // 스파크 이펙트 오브젝트 생성
+        GameObject go = ManagerRoot.Resource.Instantiate(m_sparkEffect, position, m_sparkEffect.transform.rotation);
 
-        // 이펙트 설정
+        // 이펙트 실행
         go.transform.SetParent(monster.transform);
-        BloodEffect effect = go.GetOrAddComponent<BloodEffect>();
-        effect.Show(monster.transform.position, duration);
+        GameManager.Instance.StartCoroutine(CoWait());
+        return;
+
+        IEnumerator CoWait()
+        {
+            yield return new WaitForSeconds(duration);
+            ManagerRoot.Resource.Release(go);
+        }
     }
 	
     public void PlayBrokenBodyViewEffect()
