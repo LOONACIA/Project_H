@@ -22,4 +22,13 @@ public class ActorData : ScriptableObject
     [field: SerializeField]
     [Tooltip("빙의표창 게임오브젝트")]
     public GameObject ShurikenObj { get; private set; }
+    
+    [field: SerializeField]
+    [Tooltip("넉백이 가능한 오브젝트")]
+    public bool CanKnockBack { get; private set; }
+    
+    
+    [field: SerializeField]
+    [Tooltip("넉다운이 가능한 오브젝트")]
+    public bool CanKnockDown { get; private set; }
 }
