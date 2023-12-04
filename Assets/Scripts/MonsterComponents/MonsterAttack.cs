@@ -150,8 +150,8 @@ public class MonsterAttack : MonoBehaviour
             //넉다운 적용
              if (data.KnockDownTime>0f)
              {
-                 
-                 hit.HitObject.Status.SetKnockDown(data.KnockDownTime);
+                 if(hit.HitObject.Status.CanKnockDown)
+                    hit.HitObject.Status.SetKnockDown(data.KnockDownTime);
              }
 
             //넉백 적용
@@ -159,7 +159,8 @@ public class MonsterAttack : MonoBehaviour
             {
                 MonsterMovement movement = health.gameObject.GetComponent<MonsterMovement>();
 
-                movement.TryKnockBack(hit.KnockBackDirection, data.KnockBackPower);
+                if(hit.HitObject.Status.CanKnockBack)
+                    movement.TryKnockBack(hit.KnockBackDirection, data.KnockBackPower);
             }
             
             //BT의 Hit이벤트가 등록되어있어 CC등 처리 후 마지막에 실행

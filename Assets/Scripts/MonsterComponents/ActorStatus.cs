@@ -19,6 +19,16 @@ public class ActorStatus : MonoBehaviour
 
     [SerializeField]
     [ReadOnly]
+    [Tooltip("CanKnockBack이 false면 넉백되지 않습니다.")]
+    private bool m_canKnockBack = true;
+    
+    [SerializeField]
+    [ReadOnly]
+    [Tooltip("CanKnockDown이 false면 넉다운되지 않습니다.")]
+    private bool m_canKnockDown = true;
+
+    [SerializeField]
+    [ReadOnly]
     private float m_knockDownTime;
     
     [SerializeField]
@@ -59,6 +69,17 @@ public class ActorStatus : MonoBehaviour
     {
         get => m_isBlocking;
         set => m_isBlocking = value;
+    }
+
+    public bool CanKnockBack
+    {
+        get => m_canKnockBack;
+        set => m_canKnockBack = value;
+    }
+    public bool CanKnockDown
+    {
+        get => m_canKnockDown;
+        set => m_canKnockDown = value;
     }
 
     public Shield Shield
