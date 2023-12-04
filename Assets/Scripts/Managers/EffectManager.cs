@@ -107,7 +107,7 @@ public class EffectManager
 
         IEnumerator Recovery()
         {
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.5f);
             RecoverVignetteEffect();
         }
     }
@@ -156,7 +156,7 @@ public class EffectManager
 
     private void RecoverVignetteEffect()
     {
-        Utility.Lerp(0.3f, 0, 1f, value => m_vignette.intensity.Override(value), ignoreTimeScale: true);
+        Utility.Lerp(0.5f, 0, 1.5f, value => m_vignette.intensity.Override(value), ignoreTimeScale: true);
     }
 
     #region Camera
