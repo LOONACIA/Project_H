@@ -1,7 +1,5 @@
 using DG.Tweening;
 using LOONACIA.Unity.UI;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 //using static Unity.VisualScripting.Metadata;

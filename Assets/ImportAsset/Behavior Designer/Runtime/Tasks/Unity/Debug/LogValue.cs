@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace BehaviorDesigner.Runtime.Tasks.Unity.UnityDebug
 {
     [TaskCategory("Unity/Debug")]

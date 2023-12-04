@@ -96,6 +96,7 @@ namespace DigitalRuby.LightningBolt
         private int animationOffsetIndex;
         private int animationPingPongDirection = 1;
         private bool orthographic;
+        private Camera m_camera;
 
         private void GetPerpendicularVector(ref Vector3 directionNormalized, out Vector3 side)
         {
@@ -286,7 +287,8 @@ namespace DigitalRuby.LightningBolt
 
         private void Start()
         {
-            orthographic = (Camera.main != null && Camera.main.orthographic);
+            m_camera = Camera.main;
+            orthographic = m_camera != null && m_camera.orthographic;
             lineRenderer = GetComponent<LineRenderer>();
             lineRenderer.positionCount = 0;
             UpdateFromMaterialChange();
@@ -294,7 +296,7 @@ namespace DigitalRuby.LightningBolt
 
         private void Update()
         {
-            orthographic = (Camera.main != null && Camera.main.orthographic);
+            orthographic = m_camera.orthographic;
             if (timer <= 0.0f)
             {
                 if (ManualMode)
@@ -317,7 +319,7 @@ namespace DigitalRuby.LightningBolt
         {
             Vector3 start, end;
             timer = Duration + Mathf.Min(0.0f, timer);
-            if (StartObject == null)
+            if (StartObject is null)
             {
                 start = StartPosition;
             }
@@ -325,7 +327,7 @@ namespace DigitalRuby.LightningBolt
             {
                 start = StartObject.transform.position + StartPosition;
             }
-            if (EndObject == null)
+            if (EndObject is null)
             {
                 end = EndPosition;
             }

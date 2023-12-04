@@ -2,7 +2,6 @@ using BehaviorDesigner.Runtime;
 using Cinemachine;
 using LOONACIA.Unity.Managers;
 using System;
-using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -84,7 +83,7 @@ public abstract class Actor : MonoBehaviour
         m_vcam = GetComponentInChildren<CinemachineVirtualCamera>();
         Health = GetComponent<ActorHealth>();
         Status = GetComponent<ActorStatus>();
-
+        
         if (Data != null && Status != null)
         {
             Status.CanKnockBack = Data.CanKnockBack;
