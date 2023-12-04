@@ -19,7 +19,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &673567684
 Transform:
   m_ObjectHideFlags: 0
@@ -28,8 +28,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 673567683}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.03931206, y: 0.619597, z: -0.041347347}
-  m_LocalScale: {x: 0.5, y: 2.5, z: 0.6666667}
+  m_LocalPosition: {x: -0.03931206, y: -0.256, z: -0.041347347}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6227119909484811134}
@@ -95,8 +95,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1, y: 5.6235776, z: 1}
+  m_Center: {x: 0, y: 2.3117883, z: 0}
 --- !u!114 &673567685
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -109,11 +109,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9181e998418122c438c61df5f6526988, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnEnemy: {fileID: 5707021574130650157, guid: 6766ca01b6fd8cb44947317260005796,
-    type: 3}
-  enemyCount: 5
-  m_spawnPos: {fileID: 0}
-  m_spawnDelay: 3
+  m_waveInfoList:
+  - <WaveInfos>k__BackingField:
+    - <Monster>k__BackingField: {fileID: 5707021574130650157, guid: 6766ca01b6fd8cb44947317260005796,
+        type: 3}
+      <Count>k__BackingField: 3
+  - <WaveInfos>k__BackingField:
+    - <Monster>k__BackingField: {fileID: 4036677350705765406, guid: 03633e1d6064feb4a9223b746f5bec0a,
+        type: 3}
+      <Count>k__BackingField: 2
+    - <Monster>k__BackingField: {fileID: 0}
+      <Count>k__BackingField: 0
+  - <WaveInfos>k__BackingField:
+    - <Monster>k__BackingField: {fileID: 6516522328200591599, guid: 0306fe21a353df440b54d4dca2885a61,
+        type: 3}
+      <Count>k__BackingField: 1
 --- !u!1 &1921516140613216323
 GameObject:
   m_ObjectHideFlags: 0
@@ -142,8 +152,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1921516140613216323}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
-  m_LocalScale: {x: 10, y: 10, z: 0.01}
+  m_LocalPosition: {x: 0, y: 0, z: -42.74}
+  m_LocalScale: {x: 12, y: 15, z: 0.01}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6163096234342256616}
@@ -251,7 +261,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6163096234342256617}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -260,7 +270,7 @@ Transform:
   - {fileID: 1921516140613216348}
   m_Father: {fileID: 6163096234555088553}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!114 &4740396143495742831
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -335,8 +345,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6163096235372135128}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 10}
-  m_LocalScale: {x: 10, y: 10, z: 0.01}
+  m_LocalPosition: {x: -0, y: 0, z: 42.5}
+  m_LocalScale: {x: 12, y: 15, z: 0.01}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6163096234342256616}
@@ -448,8 +458,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8471150153553137083}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 20, y: 2, z: 15}
+  m_LocalPosition: {x: 0, y: -2.9, z: 0}
+  m_LocalScale: {x: 66.75, y: 7.66, z: 60.87}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 673567684}
@@ -530,7 +540,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b463177173adc804c8242f05d4b554c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_leftMonster: 0
-  m_gameObjects:
-  - {fileID: 673567683}
-  m_waveInfos: []
+  m_spawnMode: 0
+  m_waitTime: 1
+  m_waveInterval: 2
+  m_encounterCount: 0
+  m_waveCount: 1
