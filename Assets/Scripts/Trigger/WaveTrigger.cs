@@ -119,7 +119,6 @@ public class WaveTrigger : MonoBehaviour
             return;
         }
 
-        Debug.Log("Spawn");
         foreach (var spawner in m_spawners)
         {
             spawner.Spawn();

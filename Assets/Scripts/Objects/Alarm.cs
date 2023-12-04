@@ -1,7 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -35,13 +31,14 @@ public class Alarm : MonoBehaviour
         {
             foreach (var recipient in recipients)
             {
+                // Clear existing targets
                 recipient.Targets.Clear();
-            }
-            
-            // Add actor to recipients' targets
-            foreach (var recipient in recipients.Where(recipient => !recipient.Targets.Contains(target)))
-            {
-                recipient.Targets.Add(target);
+
+                // Add actor to recipients' targets
+                if (!recipient.Targets.Contains(target))
+                {
+                    recipient.Targets.Add(target);
+                }
             }
         }
         // Otherwise
