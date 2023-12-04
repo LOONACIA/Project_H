@@ -115,39 +115,22 @@ public class PossessionProcessor : MonoBehaviour
         ghost.PossessToTarget(m_shuriken.targetActor, () => OnPossessed(m_shuriken.targetActor));
     }
 
+    public void ClearTarget()
+    {
+        m_possessionCoroutine?.Abort();
+        m_isAblePossession = false;
+        m_isHitTarget = false;
+        m_shuriken = null;
+        OnPossessed(null);
+    }
+
     public void OnPossessAnimStart()
     {
-        //StopTime();
-        //GameManager.Effect.ShowPreparePossessionEffect();
-
         ThrowShuriken();
     }
 
     public void OnPossessAnimEnd()
     {
-        //OnPossessed(null);
-
-        // 그 전 코드
-
-        //GameManager.Effect.ShowBeginPossessionEffect();
-        //GameObject target = RayToTarget();
-        //if (target == null || !target.TryGetComponent<Actor>(out var actor))
-        //{
-        //    GameManager.Effect.ShowPossessionFailEffect();
-        //    OnPossessed(null);
-        //    return;
-        //}
-
-        //var position = m_sender.FirstPersonCameraPivot.transform.position;
-        //var ghostObj = ManagerRoot.Resource.Instantiate(m_ghostPrefab, position, m_sender.transform.rotation);
-        //if (!ghostObj.TryGetComponent<Ghost>(out var ghost))
-        //{
-        //    throw new InvalidOperationException($"{ghostObj.name} does not have {nameof(Ghost)} component.");
-        //}
-
-        //Possessing?.Invoke(this, EventArgs.Empty);
-
-        //ghost.PossessToTarget(actor, () => OnPossessed(actor));
     }
 
     /// <summary>
@@ -161,16 +144,6 @@ public class PossessionProcessor : MonoBehaviour
         return Physics.Raycast(cameraPivot.transform.position, cameraPivot.transform.forward, out var hit, 300f, m_targetLayers)
             ? hit.transform.gameObject
             : null;
-    }
-
-    private void StartTime()
-    {
-        Time.timeScale = 1f;
-    }
-
-    private void StopTime()
-    {
-        Time.timeScale = 0f;
     }
 
     private void OnPossessed(Actor actor)
@@ -230,15 +203,9 @@ public class PossessionProcessor : MonoBehaviour
 
     private void OnTargetDying(object sender, EventArgs e)
     {
-        m_possessionCoroutine?.Abort();
-        
+        ClearTarget();
         var target = (Actor)sender;
         target.Dying -= OnTargetDying;
-        
-        m_isAblePossession = false;
-        m_isHitTarget = false;
-        m_shuriken = null;
-        OnPossessed(null);
     }
 
     private void TryHacking(Actor target)
