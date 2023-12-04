@@ -7,15 +7,33 @@ using UnityEngine.UI;
 
 public class UIGameOver : UIPopup
 {
+    private enum Texts
+    {
+        TitleLabel
+    }
+    
     private enum Buttons
     {
         RestartButton,
         ExitButton
     }
 
+    private Text m_titleTextBox;
+    
+    private string m_text;
+
     private Action m_onRestart;
     
     private Action m_onExit;
+
+    public void SetText(string text)
+    {
+        m_text = text;
+        if (m_titleTextBox != null)
+        {
+            m_titleTextBox.text = text;
+        }
+    }
 
     public void SetButtonAction(Action restartAction, Action exitAction)
     {
@@ -27,9 +45,17 @@ public class UIGameOver : UIPopup
     {
         base.Init();
         
+        Bind<Text, Texts>();
         Bind<Button, Buttons>();
+        
         Get<Button, Buttons>(Buttons.RestartButton).onClick.AddListener(OnRestart);
         Get<Button, Buttons>(Buttons.ExitButton).onClick.AddListener(OnExit);
+        
+        m_titleTextBox = Get<Text, Texts>(Texts.TitleLabel);
+        if (!string.IsNullOrEmpty(m_text))
+        {
+            m_titleTextBox.text = m_text;
+        }
     }
     
     private void OnRestart()
