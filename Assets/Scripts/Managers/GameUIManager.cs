@@ -34,6 +34,34 @@ public class GameUIManager
         m_dialogVersion = 0;
     }
 
+    public void CloseAll()
+    {
+        ManagerRoot.UI.ClearAllPopup();
+        if (m_crosshair is not null)
+        {
+            ManagerRoot.Resource.Release(m_crosshair.gameObject);
+            m_crosshair = null;
+        }
+        
+        if (m_shuriken is not null)
+        {
+            ManagerRoot.Resource.Release(m_shuriken.gameObject);
+            m_shuriken = null;
+        }
+        
+        if (m_skill is not null)
+        {
+            ManagerRoot.Resource.Release(m_skill.gameObject);
+            m_skill = null;
+        }
+        
+        if (m_damageIndicator is not null)
+        {
+            ManagerRoot.Resource.Release(m_damageIndicator.gameObject);
+            m_damageIndicator = null;
+        }
+    }
+
     public void Clear()
     {
         m_crosshair = null;
@@ -43,10 +71,13 @@ public class GameUIManager
         m_damageIndicator = null;
     }
     
-    public void ShowGameOverUI(Action onRestart, Action onExit)
+    public void ShowGameOverUI(Action onRestart, Action onExit, string text = "Game Over")
     {
+        CloseAll();
+        
         var ui = ManagerRoot.UI.ShowPopupUI<UIGameOver>();
         ui.SetButtonAction(onRestart, onExit);
+        ui.SetText(text);
     }
 
     public void ShowHpIndicator(PlayerController player)

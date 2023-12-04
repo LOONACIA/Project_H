@@ -67,9 +67,24 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void SetGameClear()
+    {
+        Time.timeScale = 0;
+        IsGameOver = true;
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        UI.ShowGameOverUI(text: "Game Clear",
+            onRestart: () => SceneManagerEx.LoadScene(SceneManager.GetActiveScene().name),
+#if UNITY_EDITOR
+            onExit: () => UnityEditor.EditorApplication.isPlaying = false
+#else
+            onExit: Application.Quit
+#endif
+        );
+    }
+
     public void SetGameOver()
     {
-        // TODO: 게임 오버 처리
         Time.timeScale = 0;
         IsGameOver = true;
         Cursor.visible = true;
