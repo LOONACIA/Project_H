@@ -46,6 +46,8 @@ public class DissolveGate : MonoBehaviour, IGate
 
             yield return StartCoroutine(Dissolve(true));
         }
+
+        gameObject.layer = LayerMask.NameToLayer("Default");
     }
 
     public IEnumerator Close()
@@ -67,6 +69,8 @@ public class DissolveGate : MonoBehaviour, IGate
 
             yield return StartCoroutine(Dissolve(false));
         }
+
+        gameObject.layer = LayerMask.NameToLayer("Wall");
     }
 
     private void Start()
@@ -81,11 +85,13 @@ public class DissolveGate : MonoBehaviour, IGate
         {
             m_gateCollider.isTrigger = true;
             m_gateRenderer.enabled = false;
+            gameObject.layer = LayerMask.NameToLayer("Default");
         }
         else
         { 
             m_gateCollider.isTrigger = false;
             m_gateRenderer.enabled = true;
+            gameObject.layer = LayerMask.NameToLayer("Wall");
         }
     }
 
