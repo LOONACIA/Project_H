@@ -15,7 +15,7 @@ using UnityEngine.AI;
 public abstract class Actor : MonoBehaviour
 {
     private static readonly int s_hitAnimationKey = Animator.StringToHash("Hit");
-    
+
     protected NavMeshAgent m_navMeshAgent;
 
     protected Rigidbody m_rigidbody;
@@ -23,29 +23,29 @@ public abstract class Actor : MonoBehaviour
     protected Collider m_collider;
 
     protected BehaviorTree m_behaviorTree;
-    
+
     private readonly List<IInteractableObject> m_interactableObjects = new();
-    
+
     [SerializeField]
     private ActorData m_data;
 
     [SerializeField]
     private GameObject m_firstPersonCameraPivot;
-    
+
     [SerializeField]
     private Animator m_firstPersonAnimator;
-    
+
     [SerializeField]
     private Animator m_thirdPersonAnimator;
 
     private CinemachineVirtualCamera m_vcam;
 
     private bool m_isPossessed;
-    
+
     public ActorData Data => m_data;
-    
+
     public ActorHealth Health { get; private set; }
-    
+
     public ActorStatus Status { get; private set; }
 
     public bool IsPossessed
@@ -66,9 +66,9 @@ public abstract class Actor : MonoBehaviour
     }
 
     public Animator Animator => IsPossessed ? m_firstPersonAnimator : m_thirdPersonAnimator;
-    
+
     public Animator FirstPersonAnimator => m_firstPersonAnimator;
-    
+
     public Animator ThirdPersonAnimator => m_thirdPersonAnimator;
 
     public GameObject FirstPersonCameraPivot => m_firstPersonCameraPivot;
@@ -84,7 +84,7 @@ public abstract class Actor : MonoBehaviour
         m_vcam = GetComponentInChildren<CinemachineVirtualCamera>();
         Health = GetComponent<ActorHealth>();
         Status = GetComponent<ActorStatus>();
-        
+
         EnableAIComponents();
     }
 
@@ -95,21 +95,27 @@ public abstract class Actor : MonoBehaviour
             return null;
         }
 
+        Vector3 origin = m_vcam.transform.position;
+
         return m_interactableObjects
-            .Where(obj => Vector3.Dot(m_vcam.transform.forward, (obj.transform.position - m_vcam.transform.position).normalized) > 0.75f)
-            .OrderByDescending(obj =>
-                Vector3.Dot(m_vcam.transform.forward, (obj.transform.position - m_vcam.transform.position).normalized))
+            .Where(obj => GetDot(obj) > 0.75f)
+            .OrderByDescending(GetDot)
             .FirstOrDefault();
+
+        float GetDot(IInteractableObject obj)
+        {
+            return Vector3.Dot(m_vcam.transform.forward, (obj.transform.position - origin).normalized);
+        }
     }
 
     protected virtual void OnEnable()
     {
         GameManager.Actor.AddActor(this);
-        
+
         if (TryGetComponent<IHealth>(out var health))
         {
             health.Dying += OnDying;
-            health.Died += OnDied;   
+            health.Died += OnDied;
         }
 
         if (m_collider != null)
@@ -121,11 +127,11 @@ public abstract class Actor : MonoBehaviour
     protected virtual void OnDisable()
     {
         GameManager.Actor.RemoveActor(this);
-        
+
         if (TryGetComponent<IHealth>(out var health))
         {
             health.Dying -= OnDying;
-            health.Died -= OnDied;   
+            health.Died -= OnDied;
         }
     }
 
@@ -156,23 +162,23 @@ public abstract class Actor : MonoBehaviour
     public abstract void Dash(Vector3 direction);
 
     public abstract void Block(bool value);
-    
+
     public void PlayHackAnimation()
     {
         Stun(m_data.ShurikenStunTime);
     }
-    
+
     protected virtual void OnPossessed()
     {
         DisableAIComponents();
     }
-    
+
     protected virtual void OnUnPossessed()
     {
         Stun(m_data.UnpossessionStunTime);
         EnableAIComponents();
     }
-    
+
     protected virtual void OnIsPossessedChanged(bool value)
     {
         if (value)
@@ -207,7 +213,7 @@ public abstract class Actor : MonoBehaviour
             m_firstPersonAnimator.gameObject.SetActive(false);
         }
     }
-    
+
     protected void DisableAIComponents()
     {
         if (m_behaviorTree != null)
@@ -232,10 +238,10 @@ public abstract class Actor : MonoBehaviour
     protected virtual void OnDying()
     {
         //StopAllCoroutines();
-        
+
         // Actor 제거 시 별도 처리가 필요한 경우 이곳에 작성합니다.
         Dying?.Invoke(this, EventArgs.Empty);
-        
+
         if (m_collider != null)
         {
             m_collider.enabled = false;
@@ -246,12 +252,12 @@ public abstract class Actor : MonoBehaviour
     {
         StartCoroutine(CoDie(ConstVariables.MONSTER_DESTROY_WAIT_TIME));
     }
-    
+
     private void OnDying(object sender, DamageInfo info)
     {
         OnDying();
     }
-    
+
     private void OnDied(object sender, EventArgs e)
     {
         OnDied();
@@ -262,7 +268,7 @@ public abstract class Actor : MonoBehaviour
         yield return new WaitForSeconds(seconds);
         ManagerRoot.Resource.Release(gameObject);
     }
-    
+
     private void OnValidate()
     {
         if (m_data == null && GetType() != typeof(Ghost))
@@ -277,10 +283,10 @@ public abstract class Actor : MonoBehaviour
         {
             return;
         }
-        
+
         StartCoroutine(CoStun(seconds));
     }
-    
+
     private IEnumerator CoStun(float seconds)
     {
         Status.IsStunned = true;
