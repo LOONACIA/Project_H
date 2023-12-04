@@ -26,6 +26,7 @@ public class ShieldSkill : Weapon
 
     protected override void Attack()
     {
+        Excute();
     }
 
 
@@ -37,13 +38,13 @@ public class ShieldSkill : Weapon
 
     protected override void OnLeadInMotion()
     {
-        Excute(gameObject, EventArgs.Empty);
+        //Excute(gameObject, EventArgs.Empty);
     }
 
     // 쉴드 생성 & MonsterStatus로 전달
-    private void Excute(object sender, EventArgs e)
+    private void Excute()
     {
-        // todo : 쉴드 생성 이펙트 실행
+        // TODO : 쉴드 생성 이펙트 실행
 
         GameObject shieldObject;
         if (m_shieldPrefab != null)
