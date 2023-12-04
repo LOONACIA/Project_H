@@ -24,7 +24,7 @@ namespace LOONACIA.Unity
             while (time < duration)
             {
                 float delta = ignoreTimeScale ? Time.unscaledDeltaTime : Time.deltaTime;
-                time += Time.deltaTime;
+                time += delta;
                 float value = Mathf.Lerp(from, to, time / duration);
                 action?.Invoke(value);
                 yield return null;
