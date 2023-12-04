@@ -17,7 +17,6 @@ public class CanSeeTargets : Conditional
         Vector3 targetPosition = target.Value.transform.position;
 
         Ray ray = new Ray(selfPosition, targetPosition - selfPosition);
-        RaycastHit hit;
 
         Vector2 selfVector = new Vector2(selfPosition.x, selfPosition.z);
         Vector2 targetVector = new Vector2(targetPosition.x, targetPosition.z);
@@ -28,7 +27,7 @@ public class CanSeeTargets : Conditional
 
         if (angle < fovAngle && dotProduct > 0.9f)
         {
-            if (Physics.Raycast(ray, out hit, distance, targetLayer) || distance > viewDistance.Value)
+            if (Physics.Raycast(ray, out RaycastHit _, distance, targetLayer) || distance > viewDistance.Value)
             {
                 return TaskStatus.Failure;
             }

@@ -96,13 +96,18 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
 
     private void Update()
     {
-        CalculateCurrentNormal();
         CheckJumping();
+
         UpdateAnimator();
     }
 
     private void FixedUpdate()
     {
+        if (m_actor.IsPossessed)
+        {
+            CalculateCurrentNormal();
+        }
+        
         if (!IsDashing)
         {
             ApplyGravity();

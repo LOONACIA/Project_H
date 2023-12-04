@@ -1,7 +1,4 @@
-using LOONACIA.Unity;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 // TODO: Migrate to EventProxy
