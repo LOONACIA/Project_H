@@ -162,13 +162,13 @@ public class TrailCaster : MonoBehaviour
             Vector3 xValue = Vector3.right * (startX + (float)i * m_thicknessInterval);
             localTrailPos[i, 0] = Vector3.up * m_trailStart 
                                   +xValue;
-            for (int j = 1; j < m_trailCountY - 1; j++)
+            for (int j = 1; j < m_trailCountY; j++)
             {
                 localTrailPos[i, j]
                     = Vector3.up * (m_trailStart + (m_trailEnd - m_trailStart) * j / (m_trailCountY - 1))
                       + xValue;
             }
-            localTrailPos[i, m_trailCountY - 1] = Vector3.up * m_trailStart + xValue;
+            //localTrailPos[i, m_trailCountY - 1] = Vector3.up * m_trailStart + xValue;
         }
 
     }
