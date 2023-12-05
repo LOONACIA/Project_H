@@ -36,7 +36,14 @@ public class UpdateStatus : Action
     public override void OnStart()
     {
         Body.Value = m_owner.Animator.gameObject;
+        Hp.Value = m_owner.Status.Hp;
+        isAttacking.Value = m_owner.Attack.IsAttacking;
 
+        if (m_owner.Targets.Count == 0)
+        {
+            return;
+        }
+        
         Actor closestTarget = m_owner.Targets
             .OrderBy(target => Vector3.Distance(transform.position, target.transform.position))
             .FirstOrDefault();
@@ -55,8 +62,5 @@ public class UpdateStatus : Action
         }
 
         m_owner.Attack.Target = TargetObject.Value;
-
-        Hp.Value = m_owner.Status.Hp;
-        isAttacking.Value = m_owner.Attack.IsAttacking;
     }
 }

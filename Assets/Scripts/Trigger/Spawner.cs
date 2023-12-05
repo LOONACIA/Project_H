@@ -1,6 +1,3 @@
-using LOONACIA.Unity.Coroutines;
-using System.Collections;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -67,7 +64,10 @@ public class Spawner : MonoBehaviour
     private void EnemySpawn()
     {
         foreach (var waveInfo in m_waveInfoList[m_currentSpawnIndex].WaveInfos)
-        { 
+        {
+            if (waveInfo.Monster == null)
+                continue;
+
             int i = 0;
             while (i++ < waveInfo.Count)
             {

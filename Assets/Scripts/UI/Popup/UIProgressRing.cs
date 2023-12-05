@@ -1,6 +1,4 @@
-using LOONACIA.Unity;
 using LOONACIA.Unity.UI;
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

@@ -1,6 +1,3 @@
-using RenownedGames.AITree.Nodes;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ShooterAniamtionIK : MonoBehaviour

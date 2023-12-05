@@ -1,4 +1,3 @@
-using RenownedGames.AITree.Demo;
 using UnityEngine;
 
 public class FirstPersonDefaultAnimBehaviour : StateMachineBehaviour

@@ -1,3 +1,4 @@
+using LOONACIA.Unity.Diagnostics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -117,6 +118,33 @@ namespace LOONACIA.Unity.Console
                     format: "time_scale <scale>",
                     execute: scale => Time.timeScale = scale,
                     parser: float.TryParse),
+                
+                new DebugCommand(
+                    id: "show_fps",
+                    description: "Show the FPS counter",
+                    format: "show_fps",
+                    execute: () =>
+                    {
+                        var counter = FindObjectOfType<FpsCounter>(true);
+                        if (counter == null)
+                        {
+                            counter = gameObject.GetOrAddComponent<FpsCounter>();
+                        }
+                        counter.gameObject.SetActive(true);
+                    }),
+                
+                new DebugCommand(
+                    id: "hide_fps",
+                    description: "Hide the FPS counter",
+                    format: "hide_fps",
+                    execute: () =>
+                    {
+                        var counter = FindObjectOfType<FpsCounter>();
+                        if (counter != null)
+                        {
+                            counter.gameObject.SetActive(false);
+                        }
+                    }),
 
                 new DebugCommand(
                     id: "reload",
