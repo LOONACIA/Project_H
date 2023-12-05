@@ -4,6 +4,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 using URPGlitch.Runtime.AnalogGlitch;
 using URPGlitch.Runtime.DigitalGlitch;
 
@@ -31,15 +32,32 @@ public class EffectManager
 	public void Init()
 	{
         m_sparkEffect = GameManager.Settings.SparkEffect;
+
+        InitComponents();
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
+    {
+        InitComponents();
+    }
+
+    private void InitComponents()
+    {
+        if (m_volume != null)
+        {
+            return;
+        }
         
-		m_volume = GameObject.Find("Global Volume").GetComponent<Volume>();
-		m_volume.profile.TryGet(out m_colorAdjustments);
-		m_volume.profile.TryGet(out m_vignette);
+        m_volume = GameObject.Find("Global Volume").GetComponent<Volume>();
+        m_volume.profile.TryGet(out m_colorAdjustments);
+        m_volume.profile.TryGet(out m_vignette);
         m_volume.profile.TryGet(out m_analogGlitchVolume);
         m_volume.profile.TryGet(out m_digitalGlithVolume);
         m_volume.profile.TryGet(out m_chromaticAberration);
     }
-	
+
     /// <summary>
     /// 빙의 준비 시작 이펙트를 실행합니다.
     /// </summary>
@@ -101,6 +119,7 @@ public class EffectManager
 
     public void ShowGameOverEffect()
     {
+        GameManager.UI.CloseSceneUI();
         var jitter = m_analogGlitchVolume.scanLineJitter.value;
         var verticalJump = m_analogGlitchVolume.verticalJump.value;
         Utility.Lerp(jitter, 0.5f, 1f, value => m_analogGlitchVolume.scanLineJitter.value = value, ignoreTimeScale: true);
