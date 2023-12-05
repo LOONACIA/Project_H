@@ -12,15 +12,19 @@ public class FightZoneGate : MonoBehaviour
 
     private void Start()
     {
-        m_waveTrigger.WaveStart += Close;
+        m_waveTrigger.Triggered += OnWaveTriggered;
         m_waveTrigger.WaveEnd += Open;
 
         m_gates = GetComponentsInChildren<DissolveGate>();
     }
 
-    private void Close(object sender, EventArgs e)
+    private void OnWaveTriggered(object sender, EventArgs e)
     {
-        if (m_isUsed == true) return;
+        if (m_isUsed)
+        {
+            return;
+        }
+        
         m_isUsed = true;
 
         foreach (var gate in m_gates)
