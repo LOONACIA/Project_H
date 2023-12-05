@@ -60,6 +60,12 @@ public class GameUIManager
             ManagerRoot.Resource.Release(m_damageIndicator.gameObject);
             m_damageIndicator = null;
         }
+
+        if (m_objects != null)
+        {
+            ManagerRoot.Resource.Release(m_objects.gameObject);
+            m_objects = null;
+        }
     }
 
     public void Clear()

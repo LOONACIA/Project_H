@@ -63,7 +63,7 @@ public class Projectile : MonoBehaviour
 
         if (other.gameObject.TryGetComponent<Actor>(out var actor))
         {
-            Vector3 direction = (other.transform.position - transform.position).normalized;
+            Vector3 direction = (transform.position - other.transform.position).normalized;
             WeaponAttackInfo attackInfo = new(actor, direction, other.ClosestPoint(transform.position));
             m_onHit(attackInfo);
         }

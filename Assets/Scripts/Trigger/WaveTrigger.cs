@@ -44,6 +44,8 @@ public class WaveTrigger : MonoBehaviour
 
     private bool m_isTriggered;
 
+    public event EventHandler Triggered;
+
     public event EventHandler WaveStart;
 
     public event EventHandler WaveEnd;
@@ -195,6 +197,7 @@ public class WaveTrigger : MonoBehaviour
 
         // Trigger spawn
         m_isTriggered = true;
+        Triggered?.Invoke(this, EventArgs.Empty);
         StartCoroutine(CoWaitSpawn());
     }
     
