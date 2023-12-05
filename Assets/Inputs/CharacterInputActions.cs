@@ -280,7 +280,7 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
                     ""id"": ""b9e7eee7-58c6-46e5-9d67-d75450252fa4"",
                     ""path"": ""<Gamepad>/rightStick"",
                     ""interactions"": """",
-                    ""processors"": ""ScaleVector2(x=10,y=10)"",
+                    ""processors"": ""ScaleVector2(x=16,y=16)"",
                     ""groups"": ""Gamepad"",
                     ""action"": ""Look"",
                     ""isComposite"": false,
