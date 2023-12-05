@@ -98,6 +98,23 @@ public class EffectManager
             Time.timeScale = 1f;
         }
     }
+
+    public void ShowGameOverEffect()
+    {
+        var jitter = m_analogGlitchVolume.scanLineJitter.value;
+        var verticalJump = m_analogGlitchVolume.verticalJump.value;
+        Utility.Lerp(jitter, 0.5f, 1f, value => m_analogGlitchVolume.scanLineJitter.value = value, ignoreTimeScale: true);
+        Utility.Lerp(verticalJump, 0.5f, 1, value => m_analogGlitchVolume.verticalJump.value = value, ignoreTimeScale: true);
+        Utility.Lerp(verticalJump, 1f, 1f, value => m_digitalGlithVolume.intensity.value = value, HideGameOverEffect, true);
+    }
+
+    public void HideGameOverEffect()
+    {
+        var jitter = m_analogGlitchVolume.scanLineJitter.value;
+        var verticalJump = m_analogGlitchVolume.verticalJump.value;
+        Utility.Lerp(jitter, 0f, 1f, value => m_analogGlitchVolume.scanLineJitter.value = value, ignoreTimeScale: true);
+        Utility.Lerp(verticalJump, 0f, 1f, value => m_analogGlitchVolume.verticalJump.value = value, ignoreTimeScale: true);
+    }
     
     public void ShowDetectionWarningEffect()
     {

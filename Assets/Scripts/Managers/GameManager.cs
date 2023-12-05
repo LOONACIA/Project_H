@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using LOONACIA.Unity.Managers;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -73,6 +74,7 @@ public class GameManager : MonoBehaviour
         IsGameOver = true;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+        
         UI.ShowGameOverUI(text: "Game Clear",
             onRestart: () => SceneManagerEx.LoadScene(SceneManager.GetActiveScene().name),
 #if UNITY_EDITOR
@@ -89,13 +91,21 @@ public class GameManager : MonoBehaviour
         IsGameOver = true;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
-        UI.ShowGameOverUI(onRestart: () => SceneManagerEx.LoadScene(SceneManager.GetActiveScene().name),
+        m_effect.ShowGameOverEffect();
+        StartCoroutine(ShowUI());
+        return;
+
+        IEnumerator ShowUI()
+        {
+            yield return new WaitForSecondsRealtime(2f);
+            UI.ShowGameOverUI(onRestart: () => SceneManagerEx.LoadScene(SceneManager.GetActiveScene().name),
 #if UNITY_EDITOR
-            onExit: () => UnityEditor.EditorApplication.isPlaying = false
+                onExit: () => UnityEditor.EditorApplication.isPlaying = false
 #else
             onExit: Application.Quit
 #endif
-        );
+            );
+        }
     }
 
     private static void CreateInstance()
