@@ -34,6 +34,8 @@ public class DissolveGate : MonoBehaviour, IGate
         if (m_state == GateState.Open) yield break;
             m_state = GateState.Open;
 
+        gameObject.layer = LayerMask.NameToLayer("Default");
+
         if (m_gateCollider != null)
         {
             m_gateCollider.isTrigger = true;
@@ -46,7 +48,6 @@ public class DissolveGate : MonoBehaviour, IGate
             yield return StartCoroutine(Dissolve(true));
         }
 
-        gameObject.layer = LayerMask.NameToLayer("Default");
     }
 
     public IEnumerator Close()
@@ -55,6 +56,8 @@ public class DissolveGate : MonoBehaviour, IGate
 
         if (m_state == GateState.Close) yield break;
             m_state = GateState.Close;
+
+        gameObject.layer = LayerMask.NameToLayer("Wall");
 
         if (m_gateCollider != null)
         {
@@ -69,7 +72,6 @@ public class DissolveGate : MonoBehaviour, IGate
             yield return StartCoroutine(Dissolve(false));
         }
 
-        gameObject.layer = LayerMask.NameToLayer("Wall");
     }
 
     private void Start()
