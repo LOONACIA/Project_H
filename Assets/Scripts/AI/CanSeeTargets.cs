@@ -13,10 +13,10 @@ public class CanSeeTargets : Conditional
 
     public override TaskStatus OnUpdate()
     {
-        Vector3 selfPosition = self.Value.transform.position + new Vector3(0f, 0.5f, 0f);
-        Vector3 targetPosition = target.Value.transform.position;
+        Vector3 selfPosition = self.Value.transform.position + Vector3.up;
+        Vector3 targetPosition = target.Value.transform.position + (Vector3.up / 2f);
 
-        Ray ray = new Ray(selfPosition, targetPosition - selfPosition);
+        Ray ray = new Ray(selfPosition, (targetPosition - selfPosition).normalized);
 
         Vector2 selfVector = new Vector2(selfPosition.x, selfPosition.z);
         Vector2 targetVector = new Vector2(targetPosition.x, targetPosition.z);
@@ -27,7 +27,7 @@ public class CanSeeTargets : Conditional
 
         if (angle < fovAngle && dotProduct > 0.9f)
         {
-            if (Physics.Raycast(ray, out RaycastHit _, distance, targetLayer) || distance > viewDistance.Value)
+            if (Physics.Raycast(ray, out _, distance, targetLayer) || distance > viewDistance.Value)
             {
                 return TaskStatus.Failure;
             }
