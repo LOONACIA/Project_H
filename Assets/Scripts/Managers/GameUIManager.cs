@@ -1,5 +1,6 @@
 using LOONACIA.Unity.Coroutines;
 using LOONACIA.Unity.Managers;
+using LOONACIA.Unity.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,13 +8,9 @@ using UnityEngine;
 
 public class GameUIManager
 {
+    private List<UIScene> m_sceneUIs = new();
+    
     private UICrosshair m_crosshair;
-
-    private UIShieldIndicator m_shieldIndicator;
-
-    private UIShuriken m_shuriken;
-
-    private UISkill m_skill;
 
     private UIDamageIndicator m_damageIndicator;
     
@@ -34,25 +31,21 @@ public class GameUIManager
         m_dialogVersion = 0;
     }
 
-    public void CloseAll()
+    public void CloseSceneUI()
     {
         ManagerRoot.UI.ClearAllPopup();
+        
+        for (int index = m_sceneUIs.Count - 1; index >= 0; --index)
+        {
+            var ui = m_sceneUIs[index];
+            m_sceneUIs.RemoveAt(index);
+            ManagerRoot.Resource.Release(ui.gameObject);
+        }
+        
         if (m_crosshair is not null)
         {
             ManagerRoot.Resource.Release(m_crosshair.gameObject);
             m_crosshair = null;
-        }
-        
-        if (m_shuriken is not null)
-        {
-            ManagerRoot.Resource.Release(m_shuriken.gameObject);
-            m_shuriken = null;
-        }
-        
-        if (m_skill is not null)
-        {
-            ManagerRoot.Resource.Release(m_skill.gameObject);
-            m_skill = null;
         }
         
         if (m_damageIndicator is not null)
@@ -71,15 +64,12 @@ public class GameUIManager
     public void Clear()
     {
         m_crosshair = null;
-        m_shieldIndicator = null;
-        m_shuriken = null;
-        m_skill = null;
         m_damageIndicator = null;
     }
     
     public void ShowGameOverUI(Action onRestart, Action onExit, string text = "Game Over")
     {
-        CloseAll();
+        CloseSceneUI();
         
         var ui = ManagerRoot.UI.ShowPopupUI<UIGameOver>();
         ui.SetButtonAction(onRestart, onExit);
@@ -90,6 +80,7 @@ public class GameUIManager
     {
         var ui = ManagerRoot.UI.ShowSceneUI<UIHpIndicator>();
         ui.SetPlayer(player);
+        m_sceneUIs.Add(ui);
     }
 
     public void ShowObjects()
@@ -104,24 +95,27 @@ public class GameUIManager
 
     public void ShowShieldIndicator(PlayerController player)
     {
-        m_shieldIndicator = ManagerRoot.UI.ShowSceneUI<UIShieldIndicator>();
-        m_shieldIndicator.SetPlayer(player);
+        var ui = ManagerRoot.UI.ShowSceneUI<UIShieldIndicator>();
+        ui.SetPlayer(player);
 
-        m_shieldIndicator.HideIndicator();
+        ui.HideIndicator();
+        m_sceneUIs.Add(ui);
     }
 
     public void ShowShurikenIndicator(PossessionProcessor processor)
     {
-        m_shuriken = ManagerRoot.UI.ShowSceneUI<UIShuriken>();
-        m_shuriken.GetComponent<Canvas>().sortingOrder = -2;
-        m_shuriken.SetPossessionProcessor(processor);
+        var ui = ManagerRoot.UI.ShowSceneUI<UIShuriken>();
+        ui.GetComponent<Canvas>().sortingOrder = -2;
+        ui.SetPossessionProcessor(processor);
+        m_sceneUIs.Add(ui);
     }
 
     public void ShowSkillIndicator(PlayerController player)
     { 
-        m_skill = ManagerRoot.UI.ShowSceneUI<UISkill>();
-        m_skill.GetComponent<Canvas>().sortingOrder = -2;
-        m_skill.SetActorStatus(player);
+        var ui = ManagerRoot.UI.ShowSceneUI<UISkill>();
+        ui.GetComponent<Canvas>().sortingOrder = -2;
+        ui.SetActorStatus(player);
+        m_sceneUIs.Add(ui);
     }
 
     public void ShowDamageIndicator()
