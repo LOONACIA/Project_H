@@ -1,3 +1,4 @@
+using System.Buffers;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -32,6 +33,8 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
 
     [SerializeField]
     private bool m_isOnGround;
+
+    private GameObject m_standingGround;
 
     private float m_jumpVelocity;
 
@@ -273,8 +276,16 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
     private void CheckGround()
     {
         float radius = m_collider.radius;
-        IsOnGround = Physics.SphereCast(transform.position + m_collider.center, radius, Vector3.down, out _,
+        IsOnGround = Physics.SphereCast(transform.position + m_collider.center, radius, Vector3.down, out var ground,
             radius + 0.2f, m_data.WhatIsGround);
+        if (IsOnGround)
+        {
+            m_standingGround = ground.collider.gameObject;
+        }
+        else
+        {
+            m_standingGround = null;
+        }
     }
 
     private void ApplyDash()
@@ -292,18 +303,38 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         m_dashDirection = TranslateBySurfaceNormal(m_dashDirection, m_currentNormal).normalized;
 
         //2. 캡슐캐스트 진행, 벽이나 땅을 만나는지 체크합니다. 이미 충돌중인 상태인 벽이나 땅은 체크하지 않기 때문에, 실제 콜라이더보다 약간 작은 radius로 검출합니다.
-        Vector3 p1 = m_collider.center + Vector3.up * (0.5f * m_collider.height - m_collider.radius);
-        Vector3 p2 = m_collider.center + Vector3.down * (0.5f * m_collider.height - m_collider.radius);
+        Vector3 p1 = transform.TransformPoint(m_collider.center + Vector3.up * (0.5f * m_collider.height - m_collider.radius));
+        Vector3 p2 = transform.TransformPoint(m_collider.center + Vector3.down * (0.5f * m_collider.height - m_collider.radius));
         float speed = m_data.DashAmount / m_data.DashDuration;
-        int l = LayerMask.GetMask("Ground", "Wall");
-        if (Physics.CapsuleCast(transform.TransformPoint(p1), transform.TransformPoint(p2), m_collider.radius-0.01f, m_dashDirection, out var hit, speed*Time.fixedDeltaTime, l))
+        int mask = LayerMask.GetMask(ConstVariables.MOVEMENT_COLLISION_LAYERS);
+
+        //2.1. 캡슐캐스트는 시작 위치는 체크하지 않기 때문에, 시작위치를 체크하기 위해 OverlapCapsule도 체크합니다.
+        //서있는 땅을 제외하고 다른 오브젝트와 충돌 시 이동하지 않습니다.
+        Collider[] cols = ArrayPool<Collider>.Shared.Rent(100);
+        int count = Physics.OverlapCapsuleNonAlloc(p1, p2, m_collider.radius - 0.01f, cols, mask);
+        for(int i = 0; i < count; i++)
+        {
+            if (cols[i] != m_standingGround)
+            {
+                //내가 서있는 땅과 다른 곳과 충돌했다면 이동하지 않음
+                Debug.Log("Dash: 이상한 놈과 충돌 중...");
+                return;
+            }
+        }
+        ArrayPool<Collider>.Shared.Return(cols);
+
+        //2.2. 오버랩캡슐에서 검출되지 않았다면, 캡슐캐스트로 체크합니다.
+        //만약 검출되었다면, 검출된 위치까지만 이동합니다.
+        if (Physics.CapsuleCast(p1, p2, m_collider.radius-0.01f, m_dashDirection, out var hit, speed*Time.fixedDeltaTime, mask))
         {
             //벽이나 땅을 만난다면, 해당 위치까지만 이동합니다.
+            //Debug.Log($"충돌, {hit.collider.gameObject.name}");
             m_rigidbody.MovePosition(transform.position + m_dashDirection * hit.distance);
         }
         else
         {
             //아무것도 만나지 않는다면, 지정된 위치까지 이동합니다.
+            //Debug.Log("미충돌");
             m_rigidbody.MovePosition(transform.position + m_dashDirection * speed * Time.fixedDeltaTime);
         }
     }
