@@ -2,6 +2,9 @@ using UnityEngine;
 
 public static class ConstVariables
 {
+    [Header("Hacking")]
+    public const float HACKING_SUCCESS_EFFECT_DURATION = 0.5f;
+    
     [Header("Monster")]
     public const float MONSTER_DESTROY_WAIT_TIME = 1f;
     
@@ -21,8 +24,7 @@ public static class ConstVariables
     [Header("Shuriken")]
     public const string SHURIKEN_PATH = "Prefabs/Possession/Shuriken";
     public const float SHURIKEN_COOLTIME = 3f;
-
-
+    
     [Header("Wall")]
     public const string WALL_NORMALMATERIAL_PATH = "Materials/Wall/WallMaterial";
     public const string WALL_NORMALOUTLINEMATERIAL_PATH = "Materials/Wall/WallOutline";
@@ -40,6 +42,7 @@ public static class ConstVariables
     public const string ANIMATOR_PARAMETER_POSSESS = "Possess";
     public const string ANIMATOR_PARAMETER_DEAD = "Dead";
     public const string ANIMATOR_PARAMETER_HIT = "Hit";
+    public const string ANIMATOR_PARAMETER_STUN = "Stun";
     public const string ANIMATOR_PARAMETER_TARGET_CHECK = "TargetCheck";
     public const string ANIMATOR_PARAMETER_BLOCK_IMPACK_INDEX = "BlockImpactIndex";
     public const string ANIMATOR_PARAMETER_HIT_DIRECTION_X = "HitDirectionX";
