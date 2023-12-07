@@ -19,7 +19,7 @@ public class ActorHealth : MonoBehaviour, IHealth
 
     private ActorStatus m_status;
 
-    [Header("Block이 가능한 범위를 나타냅니다. x-z평면 기준")]
+    [Tooltip("Block이 가능한 범위를 나타냅니다. x-z평면 기준")]
     [SerializeField]
     private float m_blockAngle = 180f;
 
