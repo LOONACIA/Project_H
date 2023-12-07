@@ -100,7 +100,7 @@ public class Monster : Actor
         if (velocity.magnitude > 0f)
         {
             if (IsPossessed)
-                movementRatio = Movement.isDashing ? 1 : 0.5f;
+                movementRatio = Movement.IsDashing ? 1 : 0.5f;
             else
                 movementRatio = velocity.magnitude / Movement.Data.MoveSpeed;
         }
@@ -108,8 +108,11 @@ public class Monster : Actor
 
         // 애니메이터에 적용
         Animator.SetFloat(ConstVariables.ANIMATOR_PARAMETER_MOVEMENT_RATIO, m_movementAnimationRatio);
+        
+        // 몬스터 상태이상 적용
+        Animator.SetBool(ConstVariables.ANIMATOR_PARAMETER_STUN, Status.IsStunned);
     }
-    
+
     protected override void OnPossessed()
     {
         base.OnPossessed();
