@@ -40,6 +40,7 @@ public static class ConstVariables
     public const string ANIMATOR_PARAMETER_POSSESS = "Possess";
     public const string ANIMATOR_PARAMETER_DEAD = "Dead";
     public const string ANIMATOR_PARAMETER_HIT = "Hit";
+    public const string ANIMATOR_PARAMETER_STUN = "Stun";
     public const string ANIMATOR_PARAMETER_TARGET_CHECK = "TargetCheck";
     public const string ANIMATOR_PARAMETER_BLOCK_IMPACK_INDEX = "BlockImpactIndex";
     public const string ANIMATOR_PARAMETER_HIT_DIRECTION_X = "HitDirectionX";
