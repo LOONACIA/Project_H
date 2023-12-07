@@ -66,17 +66,26 @@ public class MonsterMovementData : ScriptableObject
     [Header("Ground Check")]
     [SerializeField]
     private LayerMask m_whatIsGround;
-
-    [Header("Dashing Layer")]
-    [SerializeField]
-    [Layer]
-    private int m_dashLayer = 17;
     
     [FormerlySerializedAs("_groundGravity")]
     [Header("Gravity")]
     [SerializeField]
     private float _gravity;
-    
+
+    [Header("Dash")]
+    [SerializeField]
+    [Layer]
+    private int m_dashLayer = 17;
+
+    [SerializeField]
+    private float m_dashAmount = 5f;
+
+    [SerializeField]
+    private float m_dashDuration = 0.15f;
+
+    [SerializeField]
+    private float m_dashCoolTime = 1.0f;
+
     public float MoveSpeed => m_moveSpeed;
     
     public float DashMultiplier => m_dashMultiplier;
@@ -111,7 +120,13 @@ public class MonsterMovementData : ScriptableObject
     
     public LayerMask WhatIsGround => m_whatIsGround;
 
+    public float Gravity => _gravity;
+
     public int DashLayer => m_dashLayer;
 
-    public float Gravity => _gravity;
+    public float DashAmount => m_dashAmount;
+
+    public float DashDuration => m_dashDuration;
+
+    public float DashCoolTime => m_dashCoolTime;
 }

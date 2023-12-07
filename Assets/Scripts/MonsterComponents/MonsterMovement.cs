@@ -44,30 +44,10 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
     // 공격 시 이동 속도를 느리게 만듦
     private float m_speedMultiplier = 1f;
 
-    #region Dash
-    private float m_dashMultiplier = 1f;
-
-    public bool isDashing;
-
-    [Header("대쉬 거리")]
-    [SerializeField]
-    private float m_dashAmount = 5f;
-
-    [Header("대쉬 시간")]
-    [SerializeField]
-    private float m_dashDuration = 0.2f;
-
-    [Header("대쉬 딜레이")]
-    [SerializeField]
-    private float m_dashDelay = 0.3f;
-
-    [Header("대쉬 쿨타임")]
-    [SerializeField]
-    private float m_dashCoolTime = 1f;
+    //private float m_dashMultiplier = 1f; //대쉬가 돌진으로 바뀌면서 미사용
 
     //대쉬 방향
     private Vector3 m_dashDirection = Vector3.zero;
-    #endregion
 
     // 넉백의 최소 지속시간
     private float m_minKnockBackTime = 1f;
@@ -86,7 +66,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         set => SetField(ref m_isOnGround, value);
     }
 
-    public bool IsDashing { get; private set; }
+    public bool IsDashing { get; private set; } = false;
 
     public event PropertyChangedEventHandler PropertyChanged;
 
@@ -136,14 +116,14 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         }
 
         // 대쉬 사용 시 속도 증가
-        m_dashMultiplier = isDashing ? m_data.DashMultiplier : 1;
-        float speedMultiplier = m_speedMultiplier * m_dashMultiplier;
+        //m_dashMultiplier = IsDashing ? m_data.DashMultiplier : 1;
+        //float speedMultiplier = m_speedMultiplier * m_dashMultiplier;
 
         if (TranslateBySurfaceNormal(m_rigidbody.velocity, m_currentNormal).magnitude <
             m_data.ThirdMoveSpeedThreshold)
         {
             m_rigidbody.AddRelativeForce(
-                directionInput * (m_data.FrictionAcceleration * Time.fixedDeltaTime * speedMultiplier),
+                directionInput * (m_data.FrictionAcceleration * Time.fixedDeltaTime * m_speedMultiplier),
                 ForceMode.VelocityChange);
         }
 
@@ -154,15 +134,15 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         }
 
         Vector3 strafe = new(directionInput.x, directionInput.y, Mathf.Min(0, directionInput.z));
-        Vector3 strafeForce = GetForce(strafe, strafeSpeed, m_data.FirstStrafeSpeedThreshold * speedMultiplier,
-            m_data.SecondStrafeSpeedThreshold * speedMultiplier, m_data.ThirdStrafeSpeedThreshold * speedMultiplier);
+        Vector3 strafeForce = GetForce(strafe, strafeSpeed, m_data.FirstStrafeSpeedThreshold * m_speedMultiplier,
+            m_data.SecondStrafeSpeedThreshold * m_speedMultiplier, m_data.ThirdStrafeSpeedThreshold * m_speedMultiplier);
 
         Vector3 forward = new(0, directionInput.y, Mathf.Max(directionInput.z, 0));
         Vector3 forwardForce = GetForce(forward, m_rigidbody.velocity.magnitude,
-            m_data.FirstMoveSpeedThreshold * speedMultiplier, m_data.SecondMoveSpeedThreshold * speedMultiplier,
-            m_data.ThirdMoveSpeedThreshold * speedMultiplier);
+            m_data.FirstMoveSpeedThreshold * m_speedMultiplier, m_data.SecondMoveSpeedThreshold * m_speedMultiplier,
+            m_data.ThirdMoveSpeedThreshold * m_speedMultiplier);
 
-        m_rigidbody.AddRelativeForce((forwardForce + strafeForce) * speedMultiplier, ForceMode.VelocityChange);
+        m_rigidbody.AddRelativeForce((forwardForce + strafeForce) * m_speedMultiplier, ForceMode.VelocityChange);
     }
 
     public void MoveTo(Vector3 destination)
@@ -209,14 +189,8 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         //대쉬 중인 경우 다른 물리 이동(move, jump, gravity)등을 무시하고 해당 위치까지 이동합니다.
         //TryDash에서는 대쉬 시작 명령을 내리고 방향을 정하며, 실제 대쉬 연산은 매 FixedUpdate의 ApplyDash에서 일어납니다.
 
-        //딜레이가 끝났는지 체크한다.
-        if (m_lastDashTime + m_dashDelay > Time.time)
-        {
-            return;
-        }
-
         //쿨타임이 끝났는지 체크한다.
-        if (m_lastDashTime + m_dashCoolTime > Time.time)
+        if (m_lastDashTime + m_data.DashCoolTime > Time.time)
         {
             return;
         }
@@ -305,7 +279,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
 
     private void ApplyDash()
     {
-        if (m_lastDashTime + m_dashDuration <= Time.time)
+        if (m_lastDashTime + m_data.DashDuration <= Time.time)
         {
             //대쉬 시간이 지났다면 대쉬 종료
             IsDashing = false;
@@ -320,7 +294,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         //2. 캡슐캐스트 진행, 벽이나 땅을 만나는지 체크합니다. 이미 충돌중인 상태인 벽이나 땅은 체크하지 않기 때문에, 실제 콜라이더보다 약간 작은 radius로 검출합니다.
         Vector3 p1 = m_collider.center + Vector3.up * (0.5f * m_collider.height - m_collider.radius);
         Vector3 p2 = m_collider.center + Vector3.down * (0.5f * m_collider.height - m_collider.radius);
-        float speed = m_dashAmount / m_dashDuration;
+        float speed = m_data.DashAmount / m_data.DashDuration;
         int l = LayerMask.GetMask("Ground", "Wall");
         if (Physics.CapsuleCast(transform.TransformPoint(p1), transform.TransformPoint(p2), m_collider.radius-0.01f, m_dashDirection, out var hit, speed*Time.fixedDeltaTime, l))
         {
@@ -455,39 +429,5 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
     {
         bool jump = m_actor.IsPossessed ? m_isJumpApplied : !m_isOnGround;
         m_actor.Animator.SetBool("Jump", jump);
-    }
-
-
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        float capsuleScale = Mathf.Max(transform.lossyScale.x, transform.lossyScale.z);
-        CapsuleCollider col = GetComponent<CapsuleCollider>();
-        Vector3 pos = transform.localPosition;
-        Vector3 p1 = col.center + Vector3.up * (0.5f * col.height - col.radius);
-        Vector3 p2 = col.center + Vector3.down * (0.5f * col.height - col.radius);
-        float speed = m_dashAmount / m_dashDuration;
-        int l = LayerMask.GetMask("Ground", "Wall");
-
-        //기준점 그리기
-
-        Gizmos.DrawSphere(transform.TransformPoint(p1), 0.5f);
-        Gizmos.DrawSphere(transform.TransformPoint(p2), 0.5f);
-
-        // 함수 파라미터 : Capsule의 시작점, Capsule의 끝점, Capsule의 크기(x, z 중 가장 큰 값이 크기가 됨), Ray의 방향, RaycastHit 결과, Capsule의 회전값, CapsuleCast를 진행할 거리
-        if (Physics.CapsuleCast(transform.TransformPoint(p1), transform.TransformPoint(p2), col.radius, m_dashDirection, out var hit, m_dashAmount, l))
-        {
-            // Hit된 지점까지 ray를 그려준다.
-            Gizmos.DrawRay(transform.position + col.center, m_dashDirection);
-
-            // Hit된 지점에 Capsule를 그려준다.
-            
-            Gizmos.DrawSphere(transform.position + transform.forward * hit.distance,0.5f);
-        }
-        else
-        {
-            // Hit가 되지 않았으면 최대 검출 거리로 ray를 그려준다.
-            Gizmos.DrawRay(transform.position + col.center, transform.forward * m_dashAmount);
-        }
     }
 }

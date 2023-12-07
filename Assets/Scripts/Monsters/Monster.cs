@@ -100,7 +100,7 @@ public class Monster : Actor
         if (velocity.magnitude > 0f)
         {
             if (IsPossessed)
-                movementRatio = Movement.isDashing ? 1 : 0.5f;
+                movementRatio = Movement.IsDashing ? 1 : 0.5f;
             else
                 movementRatio = velocity.magnitude / Movement.Data.MoveSpeed;
         }
