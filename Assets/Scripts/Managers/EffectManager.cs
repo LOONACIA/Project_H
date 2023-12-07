@@ -88,11 +88,12 @@ public class EffectManager
     /// </summary>
 	public void ShowPossessionStartEffect()
 	{
-		GameManager.Camera.CurrentCamera.m_Lens.FieldOfView = 150f;
+		//GameManager.Camera.CurrentCamera.m_Lens.FieldOfView = 150f;
 
         // Close Eye Effect
+        const float duration = ConstVariables.HACKING_SUCCESS_EFFECT_DURATION;
         m_vignette.color.value = new Color(0f, 0f, 0f);
-		Utility.Lerp(0, 1, 1f, value => m_vignette.intensity.Override(value), ignoreTimeScale: true);
+		Utility.Lerp(0, 1, duration, value => m_vignette.intensity.Override(value), ignoreTimeScale: true);
         Time.timeScale = 0f;
 	}
 	
@@ -103,16 +104,17 @@ public class EffectManager
 	{
 		ClearColorAdjustments();
 		
-		GameManager.Camera.CurrentCamera.m_Lens.FieldOfView = 60f;
+		//GameManager.Camera.CurrentCamera.m_Lens.FieldOfView = 60f;
 
 		// Open Eye Effect
-		Utility.Lerp(1, 0, 1f, value => m_vignette.intensity.Override(value), ignoreTimeScale: true);
+        const float duration = ConstVariables.HACKING_SUCCESS_EFFECT_DURATION;
+		Utility.Lerp(1, 0, duration, value => m_vignette.intensity.Override(value), ignoreTimeScale: true);
         GameManager.Instance.StartCoroutine(RevertTimeScale());
         return;
         
         IEnumerator RevertTimeScale()
         {
-            yield return new WaitForSecondsRealtime(1f);
+            yield return new WaitForSecondsRealtime(duration);
             Time.timeScale = 1f;
         }
     }
@@ -120,19 +122,20 @@ public class EffectManager
     public void ShowGameOverEffect()
     {
         GameManager.UI.CloseSceneUI();
-        var jitter = m_analogGlitchVolume.scanLineJitter.value;
-        var verticalJump = m_analogGlitchVolume.verticalJump.value;
-        Utility.Lerp(jitter, 0.5f, 1f, value => m_analogGlitchVolume.scanLineJitter.value = value, ignoreTimeScale: true);
-        Utility.Lerp(verticalJump, 0.5f, 1, value => m_analogGlitchVolume.verticalJump.value = value, ignoreTimeScale: true);
-        Utility.Lerp(verticalJump, 1f, 1f, value => m_digitalGlithVolume.intensity.value = value, HideGameOverEffect, true);
+        var jitter = m_analogGlitchVolume.scanLineJitter;
+        var verticalJump = m_analogGlitchVolume.verticalJump;
+        var intensity = m_digitalGlithVolume.intensity;
+        Utility.Lerp(jitter.value, 0.5f, 1f, value => jitter.value = value, ignoreTimeScale: true);
+        Utility.Lerp(verticalJump.value, 0.5f, 1, value => verticalJump.value = value, ignoreTimeScale: true);
+        Utility.Lerp(intensity.value, 1f, 1f, value => intensity.value = value, HideGameOverEffect, true);
     }
 
     public void HideGameOverEffect()
     {
-        var jitter = m_analogGlitchVolume.scanLineJitter.value;
-        var verticalJump = m_analogGlitchVolume.verticalJump.value;
-        Utility.Lerp(jitter, 0f, 1f, value => m_analogGlitchVolume.scanLineJitter.value = value, ignoreTimeScale: true);
-        Utility.Lerp(verticalJump, 0f, 1f, value => m_analogGlitchVolume.verticalJump.value = value, ignoreTimeScale: true);
+        var jitter = m_analogGlitchVolume.scanLineJitter;
+        var verticalJump = m_analogGlitchVolume.verticalJump;
+        Utility.Lerp(jitter.value, 0f, 1f, value => jitter.value = value, ignoreTimeScale: true);
+        Utility.Lerp(verticalJump.value, 0f, 1f, value => verticalJump.value = value, ignoreTimeScale: true);
     }
     
     public void ShowDetectionWarningEffect()
@@ -142,10 +145,11 @@ public class EffectManager
 
     public void ShowHitVignetteEffect()
     {
-        m_vignette.color.value = new Color(255/255f, 83/255f, 82/255f);
+        m_vignette.color.value = new(255/255f, 83/255f, 82/255f);
         m_vignette.intensity.value = 0.4f;
 
         GameManager.Instance.StartCoroutine(Recovery());
+        return;
 
         IEnumerator Recovery()
         {
