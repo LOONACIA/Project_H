@@ -110,7 +110,7 @@ public class PossessionShuriken : MonoBehaviour
 
             m_isStop = true;
             m_rb.isKinematic = true;
-
+            TryHackingObject(other.transform);
             GetComponent<Collider>().enabled = false;
             Invoke(nameof(DestroySelf), 5f);
         }
@@ -158,6 +158,8 @@ public class PossessionShuriken : MonoBehaviour
             m_isStop = true;
             m_rb.isKinematic = true;
 
+            TryHackingObject(other.transform);
+
             GetComponent<Collider>().enabled = false;
             Invoke(nameof(DestroySelf), 5f);
         }
@@ -171,6 +173,16 @@ public class PossessionShuriken : MonoBehaviour
     private void OnTargetHit(Actor actor)
     {
         m_onTargetHit?.Invoke(actor);
+    }
+
+    private void TryHackingObject(Transform _target)
+    {
+        HackingObject obj = _target.GetComponent<HackingObject>();
+        Debug.Log("들어와쪄염");
+        if (obj == null)
+            return;
+
+        obj.Interact();
     }
 
     private IEnumerator IE_Destory()
