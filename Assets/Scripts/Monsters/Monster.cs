@@ -111,7 +111,7 @@ public class Monster : Actor
         
         // 몬스터 상태이상 적용
         if (!IsPossessed)
-            Animator.SetBool(ConstVariables.ANIMATOR_PARAMETER_STUN, Status.IsStunned);
+            Animator.SetBool(ConstVariables.ANIMATOR_PARAMETER_IS_STUNED, Status.IsStunned);
     }
 
     protected override void OnPossessed()
