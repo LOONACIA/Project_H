@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.ProBuilder;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(CapsuleCollider))]
@@ -11,26 +12,11 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
 {
     private static readonly int s_animatorKnockBack = Animator.StringToHash("KnockBack");
 
-    public bool isDashing;
-
     [SerializeField]
     private MonsterMovementData m_data;
 
-    [Header("대쉬 거리")]
-    [SerializeField]
-    private float m_dashAmount = 5f;
-
-    [Header("대쉬 시간")]
-    [SerializeField]
-    private float m_dashDuration = 0.05f;
-
-    [Header("대쉬 딜레이")]
-    [SerializeField]
-    private float m_dashDelay = 0.3f;
-
-    [Header("대쉬 쿨타임")]
-    [SerializeField]
-    private float m_dashCoolTime = 1f;
+    //대쉬 시작 시간을 저장하기 위한 값
+    private float m_lastDashTime;
 
     private Actor m_actor;
 
@@ -58,7 +44,30 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
     // 공격 시 이동 속도를 느리게 만듦
     private float m_speedMultiplier = 1f;
 
+    #region Dash
     private float m_dashMultiplier = 1f;
+
+    public bool isDashing;
+
+    [Header("대쉬 거리")]
+    [SerializeField]
+    private float m_dashAmount = 5f;
+
+    [Header("대쉬 시간")]
+    [SerializeField]
+    private float m_dashDuration = 0.2f;
+
+    [Header("대쉬 딜레이")]
+    [SerializeField]
+    private float m_dashDelay = 0.3f;
+
+    [Header("대쉬 쿨타임")]
+    [SerializeField]
+    private float m_dashCoolTime = 1f;
+
+    //대쉬 방향
+    private Vector3 m_dashDirection = Vector3.zero;
+    #endregion
 
     // 넉백의 최소 지속시간
     private float m_minKnockBackTime = 1f;
@@ -68,11 +77,6 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
 
     // 리지드바디 속도가 이것보다 낮아지면 넉백 종료
     private float m_knockBackEndSpeedThreshold = 0.1f;
-
-    //대쉬 중인가?
-
-    //대쉬 시작 시간을 저장하기 위한 값
-    private float m_lastDashTime;
 
     public MonsterMovementData Data => m_data;
 
@@ -107,14 +111,17 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         {
             CalculateCurrentNormal();
         }
-        
+
         if (!IsDashing)
         {
             ApplyGravity();
             ApplyFriction();
         }
+        else
+        {
+            ApplyDash();
+        }
 
-        CheckDashEnd();
         CheckGround();
         CheckKnockBackEnd();
     }
@@ -199,9 +206,8 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
 
     public void TryDash(Vector3 direction)
     {
-        //1. 방향성 체크, 2. 해당 위치 갈 수 있는지 체크, 3. 이동
-        //1인칭인 경우 방향성은 카메라가 보고 있는 방향
-        //3인칭인 경우 방향성은 AI에서 지정해준다.(아마도)
+        //대쉬 중인 경우 다른 물리 이동(move, jump, gravity)등을 무시하고 해당 위치까지 이동합니다.
+        //TryDash에서는 대쉬 시작 명령을 내리고 방향을 정하며, 실제 대쉬 연산은 매 FixedUpdate의 ApplyDash에서 일어납니다.
 
         //딜레이가 끝났는지 체크한다.
         if (m_lastDashTime + m_dashDelay > Time.time)
@@ -216,11 +222,14 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         }
 
         //대쉬를 시도함.
-        //isDashing 중일 경우, 이동, 점프, 중력을 무시하고 해당 방향으로 이동한다.
-        //TODO: 적 통과 로직 생각해보기
-        //TODO: 슬로프에서 대쉬 시 거리에 대해 생각해보기
-        //TODO: 하늘 위로 대쉬 가능하게 할 것인지 생각해보기
-        m_rigidbody.velocity = (transform.TransformDirection(direction.normalized) * m_dashAmount / m_dashDuration);
+        if(direction == Vector3.zero)
+        {
+            m_dashDirection = transform.forward;
+        }
+        else
+        {
+            m_dashDirection = transform.TransformDirection(direction.normalized);
+        }
         m_lastDashTime = Time.time;
         IsDashing = true;
     }
@@ -293,15 +302,33 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
             radius + 0.2f, m_data.WhatIsGround);
     }
 
-    private void CheckDashEnd()
+    private void ApplyDash()
     {
-        if (IsDashing)
+        if (m_lastDashTime + m_dashDuration <= Time.time)
         {
-            if (m_lastDashTime + m_dashDuration <= Time.time)
-            {
-                IsDashing = false;
-                m_rigidbody.velocity = Vector3.zero;
-            }
+            //대쉬 시간이 지났다면 대쉬 종료
+            IsDashing = false;
+            m_dashDirection = Vector3.zero;
+            return;
+        }
+
+        //1. 대쉬 방향을 지정. 땅위라면 땅과 평행, 땅 위가 아니라면 xz 평면과 평행
+        m_dashDirection = TranslateBySurfaceNormal(m_dashDirection, m_currentNormal).normalized;
+
+        //2. 캡슐캐스트 진행, 벽이나 땅을 만나는지 체크합니다. 이미 충돌중인 상태인 벽이나 땅은 체크하지 않기 때문에, 실제 콜라이더보다 약간 작은 radius로 검출합니다.
+        Vector3 p1 = m_collider.center + Vector3.up * (0.5f * m_collider.height - m_collider.radius);
+        Vector3 p2 = m_collider.center + Vector3.down * (0.5f * m_collider.height - m_collider.radius);
+        float speed = m_dashAmount / m_dashDuration;
+        int l = LayerMask.GetMask("Ground", "Wall");
+        if (Physics.CapsuleCast(transform.TransformPoint(p1), transform.TransformPoint(p2), m_collider.radius-0.01f, m_dashDirection, out var hit, speed*Time.fixedDeltaTime, l))
+        {
+            //벽이나 땅을 만난다면, 해당 위치까지만 이동합니다.
+            m_rigidbody.MovePosition(transform.position + m_dashDirection * hit.distance);
+        }
+        else
+        {
+            //아무것도 만나지 않는다면, 지정된 위치까지 이동합니다.
+            m_rigidbody.MovePosition(transform.position + m_dashDirection * speed * Time.fixedDeltaTime);
         }
     }
 
@@ -426,5 +453,39 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
     {
         bool jump = m_actor.IsPossessed ? m_isJumpApplied : !m_isOnGround;
         m_actor.Animator.SetBool("Jump", jump);
+    }
+
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        float capsuleScale = Mathf.Max(transform.lossyScale.x, transform.lossyScale.z);
+        CapsuleCollider col = GetComponent<CapsuleCollider>();
+        Vector3 pos = transform.localPosition;
+        Vector3 p1 = col.center + Vector3.up * (0.5f * col.height - col.radius);
+        Vector3 p2 = col.center + Vector3.down * (0.5f * col.height - col.radius);
+        float speed = m_dashAmount / m_dashDuration;
+        int l = LayerMask.GetMask("Ground", "Wall");
+
+        //기준점 그리기
+
+        Gizmos.DrawSphere(transform.TransformPoint(p1), 0.5f);
+        Gizmos.DrawSphere(transform.TransformPoint(p2), 0.5f);
+
+        // 함수 파라미터 : Capsule의 시작점, Capsule의 끝점, Capsule의 크기(x, z 중 가장 큰 값이 크기가 됨), Ray의 방향, RaycastHit 결과, Capsule의 회전값, CapsuleCast를 진행할 거리
+        if (Physics.CapsuleCast(transform.TransformPoint(p1), transform.TransformPoint(p2), col.radius, m_dashDirection, out var hit, m_dashAmount, l))
+        {
+            // Hit된 지점까지 ray를 그려준다.
+            Gizmos.DrawRay(transform.position + col.center, m_dashDirection);
+
+            // Hit된 지점에 Capsule를 그려준다.
+            
+            Gizmos.DrawSphere(transform.position + transform.forward * hit.distance,0.5f);
+        }
+        else
+        {
+            // Hit가 되지 않았으면 최대 검출 거리로 ray를 그려준다.
+            Gizmos.DrawRay(transform.position + col.center, transform.forward * m_dashAmount);
+        }
     }
 }
