@@ -1,3 +1,4 @@
+using LOONACIA.Unity;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -65,6 +66,11 @@ public class MonsterMovementData : ScriptableObject
     [Header("Ground Check")]
     [SerializeField]
     private LayerMask m_whatIsGround;
+
+    [Header("Dashing Layer")]
+    [SerializeField]
+    [Layer]
+    private int m_dashLayer = 17;
     
     [FormerlySerializedAs("_groundGravity")]
     [Header("Gravity")]
@@ -104,6 +110,8 @@ public class MonsterMovementData : ScriptableObject
     public float FallTime => m_fallTime;
     
     public LayerMask WhatIsGround => m_whatIsGround;
+
+    public int DashLayer => m_dashLayer;
 
     public float Gravity => _gravity;
 }
