@@ -10,13 +10,13 @@ public class Projectile : MonoBehaviour
     private Collider m_collider;
 
     private Action<WeaponAttackInfo> m_onHit;
-	
+
     private bool m_isStopped;
 
     private Vector3 m_initialPosition;
 
     private float m_range;
-    
+
     private LayerMask m_aimLayers;
 
     public Rigidbody Rigidbody { get; private set; }
@@ -37,7 +37,7 @@ public class Projectile : MonoBehaviour
         if (!m_isStopped && Rigidbody.velocity.magnitude > 0)
         {
             transform.rotation = Quaternion.LookRotation(Rigidbody.velocity.normalized);
-            
+
             if (Vector3.Distance(m_initialPosition, transform.position) > m_range)
             {
                 DisableComponents();
@@ -45,25 +45,26 @@ public class Projectile : MonoBehaviour
             }
         }
     }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject == m_owner)
         {
             return;
         }
-        
+
         int bit = 1 << other.gameObject.layer;
         if ((m_aimLayers.value & bit) == 0)
         {
             return;
         }
-		
+
         DisableComponents();
         transform.SetParent(other.transform);
 
         if (other.gameObject.TryGetComponent<Actor>(out var actor))
         {
-            Vector3 direction = (transform.position - other.transform.position).normalized;
+            Vector3 direction = (other.transform.position - transform.position).normalized;
             WeaponAttackInfo attackInfo = new(actor, direction, other.ClosestPoint(transform.position));
             m_onHit(attackInfo);
         }
@@ -77,14 +78,14 @@ public class Projectile : MonoBehaviour
         m_aimLayers = aimLayers;
         m_onHit = onHit;
     }
-    
+
     private void EnableComponents()
     {
         m_isStopped = false;
         Rigidbody.isKinematic = false;
         m_collider.enabled = true;
     }
-    
+
     private void DisableComponents()
     {
         m_isStopped = true;
