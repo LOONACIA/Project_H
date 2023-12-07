@@ -232,6 +232,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         }
         m_lastDashTime = Time.time;
         IsDashing = true;
+        gameObject.layer = LayerMask.NameToLayer("DashingObject");
     }
 
     public void TryKnockBack(Vector3 direction, float power, bool overwrite = true)
@@ -309,6 +310,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
             //대쉬 시간이 지났다면 대쉬 종료
             IsDashing = false;
             m_dashDirection = Vector3.zero;
+            gameObject.layer = LayerMask.NameToLayer("Monster");
             return;
         }
 
