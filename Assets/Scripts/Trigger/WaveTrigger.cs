@@ -157,7 +157,7 @@ public class WaveTrigger : MonoBehaviour
         }
     }
 
-    private void OnMonsterDying(object sender, EventArgs e)
+    private void OnMonsterDying(object sender, DamageInfo info)
     {
         if (sender is Monster monster)
         {
