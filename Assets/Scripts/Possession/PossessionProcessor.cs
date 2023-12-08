@@ -200,7 +200,7 @@ public class PossessionProcessor : MonoBehaviour
         TryHacking(target);
     }
 
-    private void OnTargetDying(object sender, EventArgs e)
+    private void OnTargetDying(object sender, DamageInfo info)
     {
         ClearTarget();
         var target = (Actor)sender;
