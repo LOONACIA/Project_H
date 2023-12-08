@@ -7,22 +7,20 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Statue 4
+  m_Name: HackingWallHackingMaterial
   m_Shader: {fileID: -6465566751694194690, guid: be6e2dd8328a35b4e90bc1b64832bbf6,
     type: 3}
   m_ValidKeywords:
   - INVERT_DIRECTION_ON
   - _ALPHATEST_ON
-  - _AXIS_Y
+  - _AXIS_X
   - _TRIPLANAR_SPACE_WORLD
   - _USE_DISSOLVE
-  - _USE_TRIPLANAR_UVS
-  - _USE_VERTEX_DISPLACEMENT
   m_InvalidKeywords: []
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2450
+  m_CustomRenderQueue: -1
   stringTagMap:
     RenderType: TransparentCutout
   disabledShaderPasses: []
@@ -34,11 +32,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: f424d1795e107b348bebec8a4dc8143e, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
-        m_Texture: {fileID: 2800000, guid: db4ee3571e158eb43967dc32d8a137f0, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -54,15 +52,19 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
-        m_Texture: {fileID: 2800000, guid: 0d54d38a86511bc4cbb5be03a7ee4136, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _GuideTexture:
-        m_Texture: {fileID: 2800000, guid: 45c742fc3e540ae45b741e1754779262, type: 3}
+        m_Texture: {fileID: 2800000, guid: 43559afd0a8d590479a26f81b8efb78e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Guide_Noise:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Lerp_Texture:
+        m_Texture: {fileID: 2800000, guid: 458d6d8d13325b342bf5556568c59584, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -70,7 +72,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Main_Edge_Pattern:
-        m_Texture: {fileID: 2800000, guid: c945893aeaecc1e419dd3f9b30639e41, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -78,7 +80,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Noise:
-        m_Texture: {fileID: 2800000, guid: 0de93f8107571274fac0465711a240d2, type: 3}
+        m_Texture: {fileID: 2800000, guid: 458d6d8d13325b342bf5556568c59584, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
@@ -113,10 +115,10 @@ Material:
     m_Floats:
     - INVERT_DIRECTION: 1
     - _2_SIDED_ADDITIONAL_EDGE: 0
-    - _2_sided_Additional_Edge: 1
-    - _2_sided_Additional_Edge_VD: 1
-    - _AXIS: 1
-    - _Additional_Edge: 1.06
+    - _2_sided_Additional_Edge: 0
+    - _2_sided_Additional_Edge_VD: 0
+    - _AXIS: 0
+    - _Additional_Edge: 0
     - _Additional_Edge_Pattern_TIlling: 58.3
     - _Additional_Edge_Pattern_Tiling: 0
     - _Additional_Edge_Strength: 0
@@ -126,8 +128,8 @@ Material:
     - _Boolean: 0
     - _BumpScale: 1
     - _Burn_Hardness: 0
-    - _Burn_Offset: 1.087
-    - _Burn_Width: 0.127
+    - _Burn_Offset: 0
+    - _Burn_Width: 0
     - _CastShadows: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
@@ -135,39 +137,41 @@ Material:
     - _Cutoff: 0
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
-    - _DissolveAmount: 0
+    - _DissolveAmount: 0.436
     - _Dissolve_Amount: 0
     - _DstBlend: 0
     - _EdgeWidth: 0.0051
     - _Ember_Hardness: 0
     - _Ember_Offset: 1
-    - _Ember_Width: 3
+    - _Ember_Width: 0
     - _EnvironmentReflections: 1
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _GuideAdjuster: 6.74
+    - _GuideAdjuster: 3.01
     - _GuideStrength: 3
-    - _GuideTilling: 8.53
+    - _GuideTilling: 5.72
     - _Guide_Affects_Edges: 1
     - _Guide_Affects_Edges_VD: 1
     - _Guide_Strength: 1
     - _Guide_Tilling: 0.1
     - _Guide_Tilling_Speed: 0
-    - _Hardness: 0.9999
+    - _Hardness: 0.628
     - _Hardness_VD: 0
-    - _Main_Edge: 5
+    - _Lerp_Scroll_Speed: 0.1
+    - _Lerp_Tiling: 2
+    - _Main_Edge: 1.21
     - _Main_Edge_Pattern_TIlling: 16.7
-    - _Main_Edge_Pattern_Tiling: 77.9
-    - _Main_Edge_Strength: 1.273
-    - _MaxValue: 20.75
-    - _Max_Value: 27.23
+    - _Main_Edge_Pattern_Tiling: 12.3
+    - _Main_Edge_Strength: 0.449
+    - _MaxValue: 7.68
+    - _Max_Value: 8.04
     - _Metallic: 0
-    - _MinValue: 0.05
-    - _Min_Value: 0.2
+    - _MinValue: -5.67
+    - _Min_Value: -5.06
     - _Noise_Offset_Speed: 0
-    - _Noise_Scroll_Speed: 0.1
-    - _Noise_Tiling: 7.12
+    - _Noise_Scroll_Speed: 0
+    - _Noise_Tiling: 1.57
     - _Noise_Tilling: 3
     - _OcclusionStrength: 1
     - _Offset: 0
@@ -176,20 +180,20 @@ Material:
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _Rotation: 114
-    - _Rotation_Impact: 0
+    - _Rotation_Impact: 1
     - _Scroll_Speed: 0.001
     - _Smoothness: 1
     - _SmoothnessTextureChannel: 0
     - _Smoothness_1: 2
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _Strength: 0
+    - _Strength: 1.58
     - _Surface: 0
     - _TRIPLANAR_SPACE: 0
     - _USE_BACK_COLOR: 1
     - _USE_DISSOLVE: 1
-    - _USE_TRIPLANAR_UVS: 1
-    - _USE_VERTEX_DISPLACEMENT: 1
+    - _USE_TRIPLANAR_UVS: 0
+    - _USE_VERTEX_DISPLACEMENT: 0
     - _UV_CHANNEL: 0
     - _Use_Metallic_Texture: 1
     - _Width: 2
@@ -198,19 +202,20 @@ Material:
     - _ZWrite: 1
     - _ZWriteControl: 0
     m_Colors:
-    - _Additional_Edge_Color_1: {r: 12.66163, g: 6.388918, b: 67.79352, a: 0}
+    - _Additional_Edge_Color_1: {r: 0, g: 0, b: 0, a: 0}
     - _Additional_Edge_Color_2: {r: 0, g: 0, b: 0, a: 0}
-    - _Back_Color: {r: 32.324566, g: 5.31068, b: 75.05762, a: 1}
+    - _Back_Color: {r: 55.08759, g: 75.05762, b: 0, a: 1}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Burn_Color: {r: 7.307888, g: 32.383606, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _DissolveColor: {r: 9.858462, g: 2.2862422, b: 0.5161497, a: 1}
     - _Ember_Color: {r: 0.025, g: 0.05, b: 0, a: 0}
-    - _EmissionColor: {r: 9.849155, g: 9.849155, b: 9.849155, a: 1}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Emission_Back_Color: {r: 0, g: 0, b: 0, a: 0}
-    - _Main_Edge_Color_1: {r: 12.66163, g: 6.388918, b: 67.79352, a: 0}
+    - _Main_Edge_Color_1: {r: 1.8914452, g: 44.55406, b: 23.975622, a: 1}
     - _Main_Edge_Color_2: {r: 0, g: 0, b: 0, a: 0}
-    - _Rotation_Vector: {r: 2.89, g: 5.74, b: 0, a: 0}
+    - _Rotation_Vector: {r: -1.01, g: 1, b: 1, a: 0}
+    - _Rotation_Vector_Lerp: {r: 0.44, g: -1, b: -1, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &1434149026734732389
