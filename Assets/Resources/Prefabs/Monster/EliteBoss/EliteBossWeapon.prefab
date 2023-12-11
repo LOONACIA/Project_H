@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 2790462457518498214}
   - component: {fileID: 2790462457515106694}
   - component: {fileID: 2790462457516204870}
+  - component: {fileID: 6871957998127794522}
   m_Layer: 0
-  m_Name: TP_EliteBossWeapon
+  m_Name: EliteBossWeapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -86,6 +87,29 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &6871957998127794522
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2790462457518472582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a85380ebcea07b4eba1bd255ea03f95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useFixedUpdate: 0
+  m_trailStart: 1.13
+  m_trailEnd: -0.39
+  m_trailRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_trailCountY: 13
+  m_thicknessX: 5
+  m_thicknessInterval: 0.1
+  m_showGizmo: 1
+  m_gizmoRadius: 0.05
+  m_useEffect: 1
+  m_attackParticle: {fileID: 3373907379822452261}
 --- !u!1 &5767764233148304235
 GameObject:
   m_ObjectHideFlags: 0
@@ -331,6 +355,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ce26584ea7c705d469c19ec01d3140d5, type: 3}
+--- !u!2083052967 &3373907379822452261 stripped
+VisualEffect:
+  m_CorrespondingSourceObject: {fileID: 6583854267812584467, guid: ce26584ea7c705d469c19ec01d3140d5,
+    type: 3}
+  m_PrefabInstance: {fileID: 8470156476311814710}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3373907379822452263 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6583854267812584465, guid: ce26584ea7c705d469c19ec01d3140d5,
