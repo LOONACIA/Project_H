@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 3076032040674420976}
   - component: {fileID: 5784414157522077008}
   - component: {fileID: 196284125825091651}
+  - component: {fileID: 1944651208558503545}
   m_Layer: 7
   m_Name: EliteBoss
   m_TagString: Untagged
@@ -107,12 +108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac1a7e3afc665fa43beeae61d672631e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDashing: 0
   m_data: {fileID: 11400000, guid: e8ce0199fd26e1042bc5416588ac9622, type: 2}
-  m_dashAmount: 5
-  m_dashDuration: 0.05
-  m_dashDelay: 0.3
-  m_dashCoolTime: 1
   m_isOnGround: 0
 --- !u!114 &6534118151209346356
 MonoBehaviour:
@@ -221,6 +217,36 @@ MonoBehaviour:
       Version: 1.7.7
   gizmoViewMode: 2
   showBehaviorDesignerGizmo: 1
+--- !u!114 &1944651208558503545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6516522328200591599}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ea65ea15fb335141bc24d021cf06a7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_spawnEffectInfos:
+  - m_renderer: {fileID: 6105500407226392497}
+    m_originMaterials:
+    - {fileID: 2100000, guid: 5547c9106904e3f4ab3a1d814e6df394, type: 2}
+    - {fileID: 2100000, guid: 0cf38e0cd0fc4a64fb8d54cfa1fb38ff, type: 2}
+    m_spawnMaterials:
+    - {fileID: 2100000, guid: 88485278395dc98408d26d5e9af0b919, type: 2}
+    - {fileID: 2100000, guid: 0cf38e0cd0fc4a64fb8d54cfa1fb38ff, type: 2}
+  - m_renderer: {fileID: 5518897604198976915}
+    m_originMaterials:
+    - {fileID: 2100000, guid: 5547c9106904e3f4ab3a1d814e6df394, type: 2}
+    - {fileID: 2100000, guid: 0cf38e0cd0fc4a64fb8d54cfa1fb38ff, type: 2}
+    m_spawnMaterials:
+    - {fileID: 2100000, guid: 88485278395dc98408d26d5e9af0b919, type: 2}
+    - {fileID: 2100000, guid: 0cf38e0cd0fc4a64fb8d54cfa1fb38ff, type: 2}
+  m_solidifyProgressTime: 2
+  m_solidifyRate: 0.7
+  m_lerpProgressTime: 0.5
 --- !u!1 &7027120903777459876
 GameObject:
   m_ObjectHideFlags: 0
@@ -802,6 +828,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: -5088541133584714402, guid: 37d116bbd6cc6ac49ae4a9b7d34671a1,
         type: 3}
+    - target: {fileID: 2577710056364862661, guid: afa057bc0540ac741bb5b6dfda58c025,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 5547c9106904e3f4ab3a1d814e6df394, type: 2}
     - target: {fileID: 2586168067825710462, guid: afa057bc0540ac741bb5b6dfda58c025,
         type: 3}
       propertyPath: m_Mesh
@@ -953,6 +984,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1095098505199397579, guid: 37d116bbd6cc6ac49ae4a9b7d34671a1,
         type: 3}
+    - target: {fileID: 4317216769646788327, guid: afa057bc0540ac741bb5b6dfda58c025,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 5547c9106904e3f4ab3a1d814e6df394, type: 2}
     - target: {fileID: 4381831173869982495, guid: afa057bc0540ac741bb5b6dfda58c025,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -1269,6 +1305,12 @@ Animator:
     type: 3}
   m_PrefabInstance: {fileID: 8021699848314855766}
   m_PrefabAsset: {fileID: 0}
+--- !u!23 &5518897604198976915 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 2577710056364862661, guid: afa057bc0540ac741bb5b6dfda58c025,
+    type: 3}
+  m_PrefabInstance: {fileID: 8021699848314855766}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &5518897604201173843 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2577710056367124997, guid: afa057bc0540ac741bb5b6dfda58c025,
@@ -1296,4 +1338,11 @@ MonoBehaviour:
   m_thicknessInterval: 0.1
   m_showGizmo: 1
   m_gizmoRadius: 0.05
+  m_useEffect: 0
   m_attackParticle: {fileID: 0}
+--- !u!137 &6105500407226392497 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 4317216769646788327, guid: afa057bc0540ac741bb5b6dfda58c025,
+    type: 3}
+  m_PrefabInstance: {fileID: 8021699848314855766}
+  m_PrefabAsset: {fileID: 0}
