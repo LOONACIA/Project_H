@@ -71,6 +71,8 @@ public abstract class Actor : MonoBehaviour
     public Animator ThirdPersonAnimator => m_thirdPersonAnimator;
 
     public GameObject FirstPersonCameraPivot => m_firstPersonCameraPivot;
+    
+    public event EventHandler Spawned;
 
     public event EventHandler<DamageInfo> Dying;
 
@@ -127,6 +129,8 @@ public abstract class Actor : MonoBehaviour
         {
             m_collider.enabled = true;
         }
+        
+        OnSpawned();
     }
 
     protected virtual void OnDisable()
@@ -238,6 +242,14 @@ public abstract class Actor : MonoBehaviour
         {
             m_rigidbody.isKinematic = false;
         }
+    }
+
+    /// <summary>
+    /// Raise the <see cref="Spawned"/> event.
+    /// </summary>
+    protected virtual void OnSpawned()
+    {
+        Spawned?.Invoke(this, EventArgs.Empty);
     }
 
     /// <summary>
