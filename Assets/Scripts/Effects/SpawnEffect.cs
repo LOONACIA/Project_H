@@ -6,14 +6,9 @@ using UnityEngine;
 
 public class SpawnEffect : MonoBehaviour
 {
-    private readonly Dictionary<Renderer, Material[]> m_originMaterialDic = new();
-    
     [Header("Renderer Info")]
     [SerializeField]
-    private Material m_spawnMaterial;
-
-    [SerializeField]
-    private Renderer[] m_renderers;
+    private SpawnEffectInfo[] m_spawnEffectInfos;
 
     [Header("Solidify Data")]
     [SerializeField]
@@ -36,6 +31,18 @@ public class SpawnEffect : MonoBehaviour
 
     private Coroutine m_lerpCoroutine;
 
+
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        foreach (var info in m_spawnEffectInfos)
+        {
+            if (info.Renderer != null)
+                info.Init();
+        }
+    }
+#endif
+
     private void Awake()
     {
         m_actor = GetComponent<Actor>();
@@ -43,9 +50,11 @@ public class SpawnEffect : MonoBehaviour
 
     private void Start()
     {
-        foreach (Renderer renderer in m_renderers)
+        foreach (var info in m_spawnEffectInfos)
         {
-            m_originMaterialDic.Add(renderer, renderer.materials.ToArray());
+            if (info.Renderer == null) continue;
+
+            info.Init();
         }
     }
 
@@ -59,21 +68,21 @@ public class SpawnEffect : MonoBehaviour
         m_actor.Spawned -= OnSpawned;
     }
 
-    // test
-    private void Update()
-    {
-        if (Input.GetKey(KeyCode.Escape))
-        {
-            if (m_spawnEffectCoroutine != null)
-                StopCoroutine(m_spawnEffectCoroutine);
-            m_spawnEffectCoroutine = StartCoroutine(SwitchMaterials());
-        }
-    }
+    // Test
+    //private void Update()
+    //{
+    //    if (Input.GetKey(KeyCode.Escape))
+    //    {
+    //        if (m_spawnEffectCoroutine != null)
+    //            StopCoroutine(m_spawnEffectCoroutine);
+    //        m_spawnEffectCoroutine = StartCoroutine(SwitchMaterials());
+    //    }
+    //}
 
     public void Play()
     {
         if (m_isSpawned) return;
-        if (m_renderers.Length <= 0) return;
+        if (m_spawnEffectInfos.Length <= 0) return;
 
         if (m_spawnEffectCoroutine != null)
             StopCoroutine(m_spawnEffectCoroutine);
@@ -85,16 +94,11 @@ public class SpawnEffect : MonoBehaviour
         m_isSpawned = true;
 
         // 원본 메테리얼에서 소환용 메테리얼로 변경
-        foreach (Renderer renderer in m_renderers)
+        foreach (var info in m_spawnEffectInfos)
         {
-            Material[] materials = new Material[renderer.materials.Length];
+            if (info.Renderer == null) continue;
 
-            for (int i = 0; i < renderer.materials.Length; i++)
-            {
-                materials[i] = Instantiate(m_spawnMaterial);
-            }
-
-            renderer.materials = materials;
+            info.Renderer.materials = info.SpawnMaterials;
         }
 
         // 소환용 메테리얼의 수치 변경 => 허공에서 몬스터가 생기는 연출
@@ -103,14 +107,16 @@ public class SpawnEffect : MonoBehaviour
         yield return m_solidifyCoroutine = StartCoroutine(SolidifyMaterials());
 
         // 메테리얼 변경이 자연스럽게 
-        //if (m_lerpCoroutine != null)
-        //    StopCoroutine(m_lerpCoroutine);
-        //yield return m_lerpCoroutine = StartCoroutine(LerpMaterials());
+        if (m_lerpCoroutine != null)
+            StopCoroutine(m_lerpCoroutine);
+        yield return m_lerpCoroutine = StartCoroutine(LerpMaterials());
 
         // 소환용 메테리얼에서 원본 메테리얼로 변경
-        foreach (Renderer renderer in m_renderers)
+        foreach (var info in m_spawnEffectInfos)
         {
-            renderer.materials = m_originMaterialDic[renderer];
+            if (info.Renderer == null) continue;
+
+            info.Renderer.materials = info.OriginMaterials;
         }
     }
 
@@ -128,10 +134,12 @@ public class SpawnEffect : MonoBehaviour
 
             float ratio = Mathf.Lerp(1, m_solidifyRate, time / m_solidifyProgressTime);
 
-            foreach (Renderer renderer in m_renderers)
+            foreach (var info in m_spawnEffectInfos)
             {
-                foreach (Material material in renderer.materials)
-                {
+                if (info.Renderer == null) continue;
+
+                foreach (var material in info.Renderer.materials)
+                { 
                     material.SetFloat("_DissolveAmount", ratio);
                 }
             }
@@ -154,15 +162,14 @@ public class SpawnEffect : MonoBehaviour
 
             float ratio = Mathf.Lerp(0, 1, time / m_lerpProgressTime);
 
-            foreach (Renderer renderer in m_renderers)
+            foreach (var info in m_spawnEffectInfos)
             {
-                Material[] currentMaterials = renderer.materials;
-                for (int i = 0; i < renderer.materials.Length; i++)
-                {
-                    currentMaterials[i].Lerp(m_spawnMaterial, m_originMaterialDic[renderer][i], ratio);
-                }
+                if (info.Renderer == null) continue;
 
-                renderer.materials = currentMaterials;
+                for (int i = 0; i < info.SpawnMaterials.Length; i++) 
+                {
+                    info.Renderer.materials[i].Lerp(info.SpawnMaterials[i], info.OriginMaterials[i], ratio);
+                }
             }
 
             yield return null;
