@@ -110,7 +110,8 @@ public class Monster : Actor
         Animator.SetFloat(ConstVariables.ANIMATOR_PARAMETER_MOVEMENT_RATIO, m_movementAnimationRatio);
         
         // 몬스터 상태이상 적용
-        Animator.SetBool(ConstVariables.ANIMATOR_PARAMETER_STUN, Status.IsStunned);
+        if (!IsPossessed)
+            Animator.SetBool(ConstVariables.ANIMATOR_PARAMETER_IS_STUNED, Status.IsStunned);
     }
 
     protected override void OnPossessed()

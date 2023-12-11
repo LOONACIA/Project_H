@@ -71,6 +71,8 @@ public abstract class Actor : MonoBehaviour
     public Animator ThirdPersonAnimator => m_thirdPersonAnimator;
 
     public GameObject FirstPersonCameraPivot => m_firstPersonCameraPivot;
+    
+    public event EventHandler Spawned;
 
     public event EventHandler<DamageInfo> Dying;
 
@@ -127,6 +129,8 @@ public abstract class Actor : MonoBehaviour
         {
             m_collider.enabled = true;
         }
+        
+        OnSpawned();
     }
 
     protected virtual void OnDisable()
@@ -241,6 +245,14 @@ public abstract class Actor : MonoBehaviour
     }
 
     /// <summary>
+    /// Raise the <see cref="Spawned"/> event.
+    /// </summary>
+    protected virtual void OnSpawned()
+    {
+        Spawned?.Invoke(this, EventArgs.Empty);
+    }
+
+    /// <summary>
     /// Actor가 죽을 때 호출됩니다.
     /// </summary>
     protected virtual void OnDying(DamageInfo info)
@@ -293,6 +305,7 @@ public abstract class Actor : MonoBehaviour
         }
 
         GameManager.Effect.PlaySparkEffect(Animator.gameObject, m_collider.bounds.center, seconds);
+        Animator.SetTrigger(ConstVariables.ANIMATOR_PARAMETER_STUN);
         StartCoroutine(CoStun(seconds));
     }
 
