@@ -107,12 +107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac1a7e3afc665fa43beeae61d672631e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDashing: 0
   m_data: {fileID: 11400000, guid: e8ce0199fd26e1042bc5416588ac9622, type: 2}
-  m_dashAmount: 5
-  m_dashDuration: 0.05
-  m_dashDelay: 0.3
-  m_dashCoolTime: 1
   m_isOnGround: 0
 --- !u!114 &6534118151209346356
 MonoBehaviour:
@@ -958,6 +953,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: caf01dd5152f3934d8079e6160aa3b1e, type: 2}
+    - target: {fileID: 4512000247808797550, guid: afa057bc0540ac741bb5b6dfda58c025,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 054891df528052f418d8b4a247167191, type: 2}
     - target: {fileID: 4586909344683941541, guid: afa057bc0540ac741bb5b6dfda58c025,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -1251,12 +1251,37 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 8021699848314855766}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 4636026940924360165}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6ad36176aa803c44fbdede2bc7050bba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &4636026940924360165 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3388031222607467699, guid: afa057bc0540ac741bb5b6dfda58c025,
+    type: 3}
+  m_PrefabInstance: {fileID: 8021699848314855766}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4234718522162911709
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4636026940924360165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61f416c41c62c8c49bca2d1b3e19b8cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_trailRenderer: {fileID: 5894954434248739384}
+--- !u!2083052967 &4970883349288268016 stripped
+VisualEffect:
+  m_CorrespondingSourceObject: {fileID: 3147714406799348134, guid: afa057bc0540ac741bb5b6dfda58c025,
+    type: 3}
+  m_PrefabInstance: {fileID: 8021699848314855766}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5412668540784193375 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2616420816891612681, guid: afa057bc0540ac741bb5b6dfda58c025,
@@ -1296,4 +1321,11 @@ MonoBehaviour:
   m_thicknessInterval: 0.1
   m_showGizmo: 1
   m_gizmoRadius: 0.05
-  m_attackParticle: {fileID: 0}
+  m_useEffect: 1
+  m_attackParticle: {fileID: 4970883349288268016}
+--- !u!96 &5894954434248739384 stripped
+TrailRenderer:
+  m_CorrespondingSourceObject: {fileID: 4512000247808797550, guid: afa057bc0540ac741bb5b6dfda58c025,
+    type: 3}
+  m_PrefabInstance: {fileID: 8021699848314855766}
+  m_PrefabAsset: {fileID: 0}

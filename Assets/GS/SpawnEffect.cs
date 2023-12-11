@@ -60,15 +60,15 @@ public class SpawnEffect : MonoBehaviour
     }
 
     // test
-    //private void Update()
-    //{
-    //    if (Input.GetKey(KeyCode.Escape)) 
-    //    {
-    //        if (m_spawnEffectCoroutine != null)
-    //            StopCoroutine(m_spawnEffectCoroutine); 
-    //        m_spawnEffectCoroutine = StartCoroutine(SwitchMaterials());
-    //    }
-    //}
+    private void Update()
+    {
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            if (m_spawnEffectCoroutine != null)
+                StopCoroutine(m_spawnEffectCoroutine);
+            m_spawnEffectCoroutine = StartCoroutine(SwitchMaterials());
+        }
+    }
 
     public void Play()
     {
