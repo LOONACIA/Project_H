@@ -23,6 +23,11 @@ public class HackingWall : HackingObject
     #region PublicMethod
     public override void Interact()
     {
+        if (isHacking == true)
+            return;
+
+        isHacking = true;
+
         ConvertMat();
     }
 
@@ -31,7 +36,9 @@ public class HackingWall : HackingObject
         TryGetComponent<MeshRenderer>(out mr);
         TryGetComponent<Collider>(out col);
 
-        idleMat = mr.materials[0];
+        idleMat = new Material(Resources.Load<Material>(ConstVariables.WALL_HACKINGNORMALMATERIAL_PATH));
+        hackingMat = new Material(Resources.Load<Material>(ConstVariables.WALL_HACKINGMATERIAL_PATH));
+
         StartCoroutine(IE_Idle());
         col.isTrigger = true;
     }
@@ -54,9 +61,20 @@ public class HackingWall : HackingObject
         StartCoroutine(IE_HackingEffect());
     }
 
+    private void ReturnMat()
+    {
+        isHacking = false;
+
+        col.isTrigger = true;
+        StopAllCoroutines();
+        StartCoroutine(IE_Idle());
+    }
+
     private IEnumerator IE_Idle()
     {
-        float value = m_maxAmount;
+        mr.material = idleMat;
+        float value = (m_maxAmount + m_minAmount) / 2;
+        idleMat.SetFloat("_DissolveAmount", value);
         float mul = -0.01f;
         while (true)
         {
@@ -86,6 +104,10 @@ public class HackingWall : HackingObject
             if (value < 0f)
                 break;
         }
+
+        yield return new WaitForSeconds(5f);
+
+        ReturnMat();
     }
     #endregion
 }

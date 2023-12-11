@@ -77,7 +77,7 @@ public class DetectionCone : MonoBehaviour
         }
     }
     
-    private void OnTargetDying(object sender, EventArgs e)
+    private void OnTargetDying(object sender, DamageInfo info)
     {
         if (sender is Actor actor)
         {

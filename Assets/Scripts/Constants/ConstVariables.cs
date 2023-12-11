@@ -30,6 +30,10 @@ public static class ConstVariables
     public const string WALL_NORMALMATERIAL_PATH = "Materials/Wall/WallMaterial";
     public const string WALL_NORMALOUTLINEMATERIAL_PATH = "Materials/Wall/WallOutline";
     public const string WALL_POSSESSIONLOADINGMATERIAL_PATH = "Materials/Wall/WallLoadingMaterial";
+    public const string WALL_HACKINGMATERIAL_PATH = "Materials/Wall/HackingWallHackingMaterial";
+    public const string WALL_HACKINGNORMALMATERIAL_PATH = "Materials/Wall/HackingWallIdle";
+
+
 
     [Header("Gate")]
     public const string GATE_MATERIAL_PATH = "Materials/Gate/GateMaterial";

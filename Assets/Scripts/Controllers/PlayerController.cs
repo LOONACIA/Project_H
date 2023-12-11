@@ -285,14 +285,14 @@ public partial class PlayerController : MonoBehaviour
         }
     }
     
-    private void OnPlayerCharacterDying(object sender, EventArgs e)
+    private void OnPlayerCharacterDying(object sender, DamageInfo info)
     {
         // TODO: 빙의 중 죽은 경우 어떻게 할 것인지 논의 필요
         if (m_isOnPossessing)
         {
             return;
         }
-        
+                
         GameManager.Instance.SetGameOver();
         m_isGameOver = GameManager.Instance.IsGameOver;
     }

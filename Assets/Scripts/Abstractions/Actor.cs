@@ -72,7 +72,7 @@ public abstract class Actor : MonoBehaviour
 
     public GameObject FirstPersonCameraPivot => m_firstPersonCameraPivot;
 
-    public event EventHandler Dying;
+    public event EventHandler<DamageInfo> Dying;
 
     protected virtual void Awake()
     {
@@ -243,12 +243,12 @@ public abstract class Actor : MonoBehaviour
     /// <summary>
     /// Actor가 죽을 때 호출됩니다.
     /// </summary>
-    protected virtual void OnDying()
+    protected virtual void OnDying(DamageInfo info)
     {
         //StopAllCoroutines();
 
         // Actor 제거 시 별도 처리가 필요한 경우 이곳에 작성합니다.
-        Dying?.Invoke(this, EventArgs.Empty);
+        Dying?.Invoke(this, info);
 
         if (m_collider != null)
         {
@@ -263,7 +263,7 @@ public abstract class Actor : MonoBehaviour
 
     private void OnDying(object sender, DamageInfo info)
     {
-        OnDying();
+        OnDying(info);
     }
 
     private void OnDied(object sender, EventArgs e)
