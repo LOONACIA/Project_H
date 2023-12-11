@@ -293,6 +293,7 @@ public abstract class Actor : MonoBehaviour
         }
 
         GameManager.Effect.PlaySparkEffect(Animator.gameObject, m_collider.bounds.center, seconds);
+        Animator.SetTrigger(ConstVariables.ANIMATOR_PARAMETER_STUN);
         StartCoroutine(CoStun(seconds));
     }
 
