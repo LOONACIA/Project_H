@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class SpawnEffect : MonoBehaviour
 {
+    private readonly Dictionary<Renderer, Material[]> m_originMaterialDic = new();
+    
     [Header("Renderer Info")]
     [SerializeField]
     private Material m_spawnMaterial;
@@ -24,7 +26,7 @@ public class SpawnEffect : MonoBehaviour
     [SerializeField]
     private float m_lerpProgressTime;
 
-    private Dictionary<Renderer, Material[]> m_originMaterialDic = new();
+    private Actor m_actor;
 
     private bool m_isSpawned;
 
@@ -34,12 +36,27 @@ public class SpawnEffect : MonoBehaviour
 
     private Coroutine m_lerpCoroutine;
 
+    private void Awake()
+    {
+        m_actor = GetComponent<Actor>();
+    }
+
     private void Start()
     {
         foreach (Renderer renderer in m_renderers)
         {
             m_originMaterialDic.Add(renderer, renderer.materials.ToArray());
         }
+    }
+
+    private void OnEnable()
+    {
+        m_actor.Spawned += OnSpawned;
+    }
+
+    private void OnDisable()
+    {
+        m_actor.Spawned -= OnSpawned;
     }
 
     // test
@@ -144,10 +161,16 @@ public class SpawnEffect : MonoBehaviour
                 {
                     currentMaterials[i].Lerp(m_spawnMaterial, m_originMaterialDic[renderer][i], ratio);
                 }
+
                 renderer.materials = currentMaterials;
             }
+
             yield return null;
         }
     }
 
+    private void OnSpawned(object sender, EventArgs e)
+    {
+        Play();
+    }
 }
