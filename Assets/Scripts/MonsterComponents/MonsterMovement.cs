@@ -199,7 +199,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         }
 
         //대쉬를 시도함.
-        if(direction == Vector3.zero)
+        if (direction == Vector3.zero)
         {
             m_dashDirection = transform.forward;
         }
@@ -317,7 +317,8 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
             if (cols[i] != m_standingGround)
             {
                 //내가 서있는 땅과 다른 곳과 충돌했다면 이동하지 않음
-                Debug.Log("Dash: 이상한 놈과 충돌 중...");
+                //Debug.Log("Dash: 이상한 놈과 충돌 중...");
+                ArrayPool<Collider>.Shared.Return(cols);
                 return;
             }
         }
