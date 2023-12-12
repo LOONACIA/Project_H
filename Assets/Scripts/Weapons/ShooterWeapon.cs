@@ -155,8 +155,15 @@ public class ShooterWeapon : Weapon
 
         InvokeHitEvent(ProcessHit(targets));
 
-        // TODO: Remove test code
-        Vector3 target = hits.Length > 0 ? end.point : m_ray.GetPoint(m_maxDistance);
+        Vector3 target;
+        if (hits.Length > 0)
+        {
+            target = end.point != default ? end.point : hits[^1].point;
+        }
+        else
+        {
+            target = m_ray.GetPoint(m_maxDistance);
+        }
         DrawLine(target);
     }
 
