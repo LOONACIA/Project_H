@@ -62,12 +62,12 @@ public class Ghost : Actor
     public override void Block(bool value)
     {
     }
+
+    #endregion
     
     private IEnumerator CoDestroy(float seconds)
     {
         yield return new WaitForSeconds(seconds);
         ManagerRoot.Resource.Release(gameObject);
     }
-
-    #endregion
 }
