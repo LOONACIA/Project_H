@@ -27,8 +27,6 @@ public partial class PlayerController : MonoBehaviour
     private Transform m_cameraHolder;
 
     private float m_cameraRotationX;
-
-    private bool m_isGameOver;
     
     private IProgress<float> m_interactProgress;
     
@@ -294,7 +292,6 @@ public partial class PlayerController : MonoBehaviour
         }
                 
         GameManager.Instance.SetGameOver();
-        m_isGameOver = GameManager.Instance.IsGameOver;
     }
 
     private void OnDamaged(object sender, DamageInfo e)

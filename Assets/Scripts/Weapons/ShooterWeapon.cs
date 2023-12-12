@@ -60,6 +60,18 @@ public class ShooterWeapon : Weapon
     
     private CoroutineEx m_drawLineCoroutine;
 
+    private Vector3 m_target;
+
+    public override Vector3 Target
+    {
+        get => m_target;
+        set
+        {
+            m_target = value;
+            UpdateLine(m_target);
+        }
+    }
+
     private void Awake()
     {
         m_owner = GetComponentInParent<Actor>();
@@ -120,18 +132,18 @@ public class ShooterWeapon : Weapon
         }
     }
 
-    private void Aim()
+    private void SetRay()
     {
         Transform cameraTransform = m_vcam.transform;
         Vector3 cameraPosition = cameraTransform.position;
-        Vector3 dir = Target == null ? cameraTransform.forward : (Target.transform.position - cameraTransform.position).normalized;
+        Vector3 dir = Target == default ? cameraTransform.forward : (Target - cameraTransform.position).normalized;
 
         m_ray = new(cameraPosition, dir);
     }
 
     private void Snipe()
     {
-        Aim();
+        SetRay();
 
         var hits = Physics.RaycastAll(m_ray, m_maxDistance, m_aimLayers)
             .OrderBy(hit => hit.distance)
@@ -150,7 +162,7 @@ public class ShooterWeapon : Weapon
 
     private void ShootProjectile()
     {
-        Aim();
+        SetRay();
         
         bool isHit = Physics.Raycast(m_ray, out var hit, m_maxDistance, m_aimLayers);
         Vector3 target = isHit ? hit.point : m_ray.GetPoint(m_maxDistance);
@@ -179,6 +191,21 @@ public class ShooterWeapon : Weapon
                 yield return new(actor, m_ray.direction, hit.point);
             }
         }
+    }
+
+    private void UpdateLine(Vector3 target)
+    {
+        Vector3 direction = (target - m_vcam.transform.position).normalized;
+        Vector3 end = target;
+        if (Physics.Raycast(m_vcam.transform.position, direction, out var hit, m_maxDistance, m_aimLayers))
+        {
+            end = hit.point;
+        }
+        
+        m_renderer.positionCount = 2;
+        m_renderer.SetPosition(0, m_spawnPosition.position);
+        m_renderer.SetPosition(1, end);
+        m_renderer.startWidth = m_renderer.endWidth = 0.05f;
     }
 
     // TODO: Remove test code
