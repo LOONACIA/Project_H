@@ -65,46 +65,26 @@ public class Spawner : MonoBehaviour
     {
         foreach (var waveInfo in m_waveInfoList[m_currentSpawnIndex].WaveInfos)
         {
-            if (waveInfo.Monster == null)
+            if (waveInfo.Monster is null)
+            {
                 continue;
+            }
 
             int i = 0;
             while (i++ < waveInfo.Count)
             {
                 Vector3 spawnPosition = GetRandomSpawnPos(m_collider);
                 var monster = Instantiate(waveInfo.Monster, spawnPosition, transform.rotation);
-                m_waveTrigger.Monsters.Add(monster.GetComponent<Monster>());
+                if (monster.TryGetComponent<Monster>(out var component))
+                {
+                    m_waveTrigger.Monsters.Add(component);
+                }
             }
         }
         m_currentSpawnIndex++;
     }
 
-    /// <summary>
-    /// 전달 받은 최종 좌표로 프리팹 인스턴스화
-    /// </summary>
-    /// <param name="spawnableAreaCollider"></param>
-    /// <returns></returns>
-    //IEnumerator EnemySpawn(Collider spawnableAreaCollider)
-    //{
-    //    yield return new WaitForSeconds(m_spawnDelay);
-    //    var character = FindObjectsOfType<Monster>()
-    //        .SingleOrDefault(monster => monster.IsPossessed);
-
-    //    while (m_spawnedEnemy < m_enemyCount)
-    //    {
-    //        Vector3 spawnPosition = GetRandomSpawnPos(spawnableAreaCollider);
-    //        var go = Instantiate(m_spawnEnemy, spawnPosition, Quaternion.identity);
-    //        if (character != null && go.TryGetComponent<Monster>(out var monster))
-    //        {
-    //            monster.Targets.Add(character);
-    //            m_waveTrigger.Monsters.Add(monster);
-    //        }
-
-    //        yield return new WaitForSeconds(0.1f);
-    //        m_spawnedEnemy++;
-    //    }
-    //}
-
+    // ReSharper disable Unity.PerformanceAnalysis
     /// <summary>
     /// GetRandomPointInCollider에서 전달받은 좌표 내 Layer로 충돌 검출 후 좌표 전달
     /// </summary>
@@ -164,16 +144,14 @@ public class Spawner : MonoBehaviour
     {
         Bounds collBounds = collider.bounds;
 
-        Vector3 minBounds =
-            new Vector3(collBounds.min.x + offset, collBounds.min.y + offset, collBounds.min.z + offset);
-        Vector3 maxBounds =
-            new Vector3(collBounds.max.x - offset, collBounds.max.y - offset, collBounds.max.z - offset);
+        Vector3 minBounds = new(collBounds.min.x + offset, collBounds.min.y + offset, collBounds.min.z + offset);
+        Vector3 maxBounds = new(collBounds.max.x - offset, collBounds.max.y - offset, collBounds.max.z - offset);
 
         float randomX = Random.Range(minBounds.x, maxBounds.x);
         float randomY = Random.Range(minBounds.y, maxBounds.y);
         float randomZ = Random.Range(minBounds.z, maxBounds.z);
 
-        return new Vector3(randomX, randomY, randomZ);
+        return new(randomX, randomY, randomZ);
     }
 
 

@@ -9,23 +9,25 @@ using UnityEngine;
 public class MonsterAttack : MonoBehaviour
 {
     private static readonly int s_attackAnimationKey = Animator.StringToHash("Attack");
-    
+
     private static readonly int s_skillAnimationKey = Animator.StringToHash("Skill");
-    
+
     private static readonly int s_targetCheckAnimationKey = Animator.StringToHash("TargetCheck");
 
     private Weapon m_firstPersonAttack;
-    
+
     private Weapon m_thirdPersonAttack;
 
     private Weapon m_firstPersonSkill;
-    
+
     private Weapon m_thirdPersonSkill;
 
     //현재 미사용, 등록만 되어있음
     private Weapon m_firstPersonBlockPush;
-    
+
     private Weapon m_thirdPersonBlockPush;
+
+    private Vector3 m_target;
 
     [SerializeField]
     private MonsterAttackData m_data;
@@ -38,21 +40,22 @@ public class MonsterAttack : MonoBehaviour
 
     public bool CanAttack { get; set; } = true;
 
-    public GameObject Target { get; set; }
-
-    public bool IsAttacking 
+    public Vector3 Target
     {
-        get
+        get => m_target;
+        set
         {
-            if (AttackWeapon == null) return false;
-            return AttackWeapon.IsAttacking;
+            m_target = value;
+            AttackWeapon.Target = value;
         }
     }
 
+    public bool IsAttacking => AttackWeapon != null && AttackWeapon.IsAttacking;
+
     public Weapon AttackWeapon => m_actor.IsPossessed ? m_firstPersonAttack : m_thirdPersonAttack;
-    
+
     public Weapon SkillWeapon => m_actor.IsPossessed ? m_firstPersonSkill : m_thirdPersonSkill;
-    
+
     public Weapon BlockPushWeapon => m_actor.IsPossessed ? m_firstPersonBlockPush : m_thirdPersonBlockPush;
 
     private void Awake()
@@ -96,7 +99,7 @@ public class MonsterAttack : MonoBehaviour
 
         if (m_actor.IsPossessed)
         {
-            Target = null;
+            Target = default;
         }
 
         m_actor.Animator.SetTrigger(s_attackAnimationKey);
@@ -107,7 +110,7 @@ public class MonsterAttack : MonoBehaviour
     public void Skill()
     {
         //TODO: KnockBack, KnockDown 중 스킬 못하게 할 것인가?
-        if (!CanAttack||m_actor.Status.SkillCoolTime < 1f)
+        if (!CanAttack || m_actor.Status.SkillCoolTime < 1f)
         {
             return;
         }
@@ -144,24 +147,24 @@ public class MonsterAttack : MonoBehaviour
             Debug.Log($"{health.gameObject.name} is hit by {gameObject.name}, damage: {data.Damage}");
 
             //데미지 처리
-            DamageInfo damageInfo = new DamageInfo(data.Damage, hit.AttackDirection, hit.HitPosition,m_actor);
+            DamageInfo damageInfo = new DamageInfo(data.Damage, hit.AttackDirection, hit.HitPosition, m_actor);
 
             //넉다운 적용
-             if (data.KnockDownTime>0f)
-             {
-                 if(hit.HitObject.Status.CanKnockDown)
+            if (data.KnockDownTime > 0f)
+            {
+                if (hit.HitObject.Status.CanKnockDown)
                     hit.HitObject.Status.SetKnockDown(data.KnockDownTime);
-             }
+            }
 
             //넉백 적용
             if (data.KnockBackPower != 0f)
             {
                 MonsterMovement movement = health.gameObject.GetComponent<MonsterMovement>();
 
-                if(hit.HitObject.Status.CanKnockBack)
+                if (hit.HitObject.Status.CanKnockBack)
                     movement.TryKnockBack(hit.KnockBackDirection, data.KnockBackPower);
             }
-            
+
             //BT의 Hit이벤트가 등록되어있어 CC등 처리 후 마지막에 실행
             health.TakeDamage(damageInfo);
         }
@@ -173,10 +176,11 @@ public class MonsterAttack : MonoBehaviour
         Weapon hitWeapon = o as Weapon;
         if (hitWeapon == null)
         {
-            Debug.LogError("무기가 아닌 오브젝트가 공격 호출함: "+o.ToString());
+            Debug.LogError("무기가 아닌 오브젝트가 공격 호출함: " + o.ToString());
             return;
         }
-        MonsterAttackData.AttackData data = GetWeaponDataByType(m_actor.IsPossessed,hitWeapon.Type);
+
+        MonsterAttackData.AttackData data = GetWeaponDataByType(m_actor.IsPossessed, hitWeapon.Type);
 
         var hits = attackInfo.Where(hit => hit.HitObject.gameObject != gameObject);
 
@@ -192,7 +196,7 @@ public class MonsterAttack : MonoBehaviour
             Debug.LogWarning($"{name}: {nameof(m_data)} is null");
         }
     }
-    
+
     public void UpdateSkillCoolTime()
     {
         if (m_actor.Status.SkillCoolTime < 1f)
@@ -200,9 +204,9 @@ public class MonsterAttack : MonoBehaviour
             //TODO: 부동소수점, deltaTime 이슈로 실제 시간과 작은 오차 발생 가능, 해결 필요한지 확인
             float full = m_data.SkillCoolTime;
             float cur = m_actor.Status.SkillCoolTime * full + Time.deltaTime;
-            
+
             //TODO: 1/full 미리 계산해두기(최적화)
-            m_actor.Status.SkillCoolTime = cur/full;
+            m_actor.Status.SkillCoolTime = cur / full;
         }
     }
 
@@ -224,7 +228,8 @@ public class MonsterAttack : MonoBehaviour
         }
     }
 
-    private void RegisterWeaponComponents(Weapon[] weapons, ref Weapon attackWeapon, ref Weapon skillWeapon, ref Weapon blockPushWeapon)
+    private void RegisterWeaponComponents(Weapon[] weapons, ref Weapon attackWeapon, ref Weapon skillWeapon,
+        ref Weapon blockPushWeapon)
     {
         foreach (var weapon in weapons)
         {
@@ -259,7 +264,6 @@ public class MonsterAttack : MonoBehaviour
                     break;
             }
         }
-
     }
 
     private MonsterAttackData.AttackData GetWeaponDataByType(bool isPossessed, Weapon.WeaponType type)

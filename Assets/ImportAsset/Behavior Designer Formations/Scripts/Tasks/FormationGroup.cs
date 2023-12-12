@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using BehaviorDesigner.Runtime.Tasks;
 using Tooltip = BehaviorDesigner.Runtime.Tasks.TooltipAttribute;
-using HelpURL = BehaviorDesigner.Runtime.Tasks.HelpURLAttribute;
 #if DEATHMATCH_AI_KIT_PRESENT
 using Opsive.DeathmatchAIKit;
 #endif

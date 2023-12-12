@@ -33,13 +33,7 @@ public class PossessionProcessor : MonoBehaviour
     
     private CoroutineEx m_possessionCoroutine;
 
-    public float CoolTime 
-    {
-        get 
-        {
-            return Mathf.Clamp(m_curCoolTime / ConstVariables.SHURIKEN_COOLTIME, 0, 1) ; 
-        }
-    }
+    public float CoolTime => Mathf.Clamp(m_curCoolTime / ConstVariables.SHURIKEN_COOLTIME, 0, 1);
 
     /// <summary>
     /// 빙의 타겟 선정에 성공할 경우, 빙의 시작 시 발생하는 이벤트.

@@ -62,6 +62,6 @@ public class UpdateStatus : Action
             TargetObject.Value = null;
         }
 
-        m_owner.Attack.Target = TargetObject.Value;
+        //m_owner.Attack.Target = TargetObject.Value;
     }
 }

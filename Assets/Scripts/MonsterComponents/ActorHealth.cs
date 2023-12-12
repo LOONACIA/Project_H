@@ -44,24 +44,6 @@ public class ActorHealth : MonoBehaviour, IHealth
         m_status.Hp = m_data.MaxHp;
     }
 
-    private void OnEnable()
-    {
-        // var receiver = GetComponentInChildren<DeathAnimationEventReceiver>();
-        // if (receiver != null)
-        // {
-        //     receiver.DeathAnimationEnd += OnDied;
-        // }
-    }
-
-    private void OnDisable()
-    {
-        // var receiver = GetComponentInChildren<DeathAnimationEventReceiver>();
-        // if (receiver != null)
-        // {
-        //     receiver.DeathAnimationEnd -= OnDied;
-        // }
-    }
-
     public void TakeDamage(DamageInfo info)
     {
         if (IsDead)
