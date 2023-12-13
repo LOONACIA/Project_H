@@ -7,7 +7,6 @@ using UnityEngine;
 [RequireComponent(typeof(Renderer))]
 public class HackingLaserConsole : HackingObject
 {
-
     [SerializeField]
     private Material m_idleMaterial;
 
