@@ -104,13 +104,15 @@ public class PossessionShuriken : MonoBehaviour
 
     private void CheckBack()
     {
-        RaycastHit hit;
-        if (!Physics.SphereCast(transform.position - (m_targetDir.normalized), 0.2f, m_targetDir.normalized, out hit, 1.3f, m_surikenStopLayer))
+        if (!Physics.SphereCast(transform.position - m_targetDir.normalized, 0.2f, m_targetDir.normalized,
+                out RaycastHit hit, 1.3f, m_surikenStopLayer))
+        {
             return;
+        }
 
         Transform other = hit.transform;
 
-        if (1 << other.gameObject.layer == m_targetLayer)
+        if (((1 << other.gameObject.layer) & m_targetLayer) != 0)
         {
             if (other.gameObject == throwActor.gameObject)
             {
