@@ -127,7 +127,7 @@ public class PossessionProcessor : MonoBehaviour
     {
     }
     
-    public void ThrowShuriken()
+    private void ThrowShuriken()
     {
         m_currentCoolTime = 0f;
         var cameraPivot = GameManager.Camera.CurrentCamera;
