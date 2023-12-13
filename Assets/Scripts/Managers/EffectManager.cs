@@ -12,7 +12,6 @@ public class EffectManager
 {
     private GameObject m_sparkEffect;
     
-	// TODO END //
 	private Volume m_volume;
 	
 	private GameObject m_possessionTargetObj;

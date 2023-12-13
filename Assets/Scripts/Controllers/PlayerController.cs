@@ -170,6 +170,16 @@ public partial class PlayerController : MonoBehaviour
         }
     }
 
+    private void Hack()
+    {
+        if (m_isOnPossessing)
+        {
+            return;
+        }
+        
+        m_possession.Hack(m_character);
+    }
+
     private void Possess()
     {
         if (m_isOnPossessing)
@@ -177,7 +187,7 @@ public partial class PlayerController : MonoBehaviour
             return;
         }
 
-        m_possession.TryPossess(m_character);
+        m_possession.TryPossess();
     }
 
     private void Block(bool value)
