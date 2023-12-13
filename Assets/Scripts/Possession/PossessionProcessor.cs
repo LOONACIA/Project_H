@@ -93,6 +93,7 @@ public class PossessionProcessor : MonoBehaviour
         m_isPossessable = false;
 
         PossessTarget();
+        ManagerRoot.Resource.Release(m_shuriken.gameObject);
     }
 
     //표창이 박힌 타겟에게 빙의
@@ -193,7 +194,6 @@ public class PossessionProcessor : MonoBehaviour
     private void OnPossessed(Actor actor)
     {
         Possessed?.Invoke(this, actor);
-        ManagerRoot.Resource.Release(m_shuriken.gameObject);
     }
     
     private void OnTargetHit(Actor target)
