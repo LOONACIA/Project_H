@@ -55,7 +55,6 @@ public class ShooterWeapon : Weapon
 
     private bool m_isSnipingMode = true;
 
-    // TODO: Remove test code
     private LineRenderer m_renderer;
     
     private CoroutineEx m_drawLineCoroutine;
@@ -194,7 +193,6 @@ public class ShooterWeapon : Weapon
         {
             if (hit.transform.TryGetComponent(out Actor actor))
             {
-                // TODO: AttackInfo 변경 시 수정 필요
                 yield return new(actor, m_ray.direction, hit.point);
             }
         }
@@ -202,6 +200,12 @@ public class ShooterWeapon : Weapon
 
     private void UpdateLine(Vector3 target)
     {
+        if (target == default)
+        {
+            m_renderer.positionCount = 0;
+            return;
+        }
+        
         Vector3 direction = (target - m_vcam.transform.position).normalized;
         Vector3 end = target;
         if (Physics.Raycast(m_vcam.transform.position, direction, out var hit, m_maxDistance, m_aimLayers))
@@ -215,7 +219,6 @@ public class ShooterWeapon : Weapon
         m_renderer.startWidth = m_renderer.endWidth = 0.05f;
     }
 
-    // TODO: Remove test code
     private void DrawLine(Vector3 target)
     {
         m_renderer.positionCount = 2;
