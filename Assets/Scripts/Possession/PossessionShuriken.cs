@@ -94,7 +94,7 @@ public class PossessionShuriken : MonoBehaviour
             m_targetDir = (m_targetPosition - transform.position).normalized;
         }
 
-        //CheckBack();
+        CheckBack();
         Move();
     }
 
@@ -128,7 +128,10 @@ public class PossessionShuriken : MonoBehaviour
                 return;
 
             m_isStop = true;
-            
+
+            if (m_isTargetWall)
+                transform.position = m_targetPosition;
+
             m_rb.isKinematic = true;
             TryHackingObject(other.transform);
             GetComponent<Collider>().enabled = false;
@@ -210,7 +213,7 @@ public class PossessionShuriken : MonoBehaviour
 
     private IEnumerator IE_Destory()
     {
-        yield return new WaitForSeconds(ConstVariables.SHURIKEN_COOLTIME);
+        yield return new WaitForSeconds(5f);
 
         DestroySelf();
     }
