@@ -3,13 +3,14 @@ using System;
 using LOONACIA.Unity.Managers;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PossessionProcessor : MonoBehaviour
 {
     private static readonly int s_possess = Animator.StringToHash("Possess");
 
     [SerializeField]
-    private float shurikenSphereRadius = 0.5f;
+    private float m_shurikenSphereRadius = 0.5f;
 
     [SerializeField]
     private GameObject m_ghostPrefab;
@@ -89,9 +90,9 @@ public class PossessionProcessor : MonoBehaviour
             return;
         }
 
-        PossessTarget();
+        m_isPossessable = false;
 
-        ManagerRoot.Resource.Release(m_shuriken.gameObject);
+        PossessTarget();
     }
 
     //표창이 박힌 타겟에게 빙의
@@ -133,7 +134,7 @@ public class PossessionProcessor : MonoBehaviour
         var cameraTransform = cameraPivot.transform;
 
         //bool isHit = Physics.Raycast(cameraPivot.transform.position, cameraPivot.transform.forward, out var hit, 300f);
-        bool isHit = Physics.SphereCast(cameraTransform.position, shurikenSphereRadius, cameraTransform.forward,
+        bool isHit = Physics.SphereCast(cameraTransform.position, m_shurikenSphereRadius, cameraTransform.forward,
             out var hit, 300f, m_targetLayers);
 
         m_shuriken =
@@ -189,6 +190,7 @@ public class PossessionProcessor : MonoBehaviour
     private void OnPossessed(Actor actor)
     {
         Possessed?.Invoke(this, actor);
+        ManagerRoot.Resource.Release(m_shuriken.gameObject);
     }
     
     private void OnTargetHit(Actor target)
