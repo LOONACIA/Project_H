@@ -67,7 +67,7 @@ public class ShooterWeapon : Weapon
         set
         {
             m_target = value;
-            UpdateLine(m_target);
+            UpdateTarget();
         }
     }
 
@@ -198,16 +198,31 @@ public class ShooterWeapon : Weapon
         }
     }
 
-    private void UpdateLine(Vector3 target)
+    private void UpdateTarget()
     {
-        if (target == default)
+        UpdateAnimator();
+        UpdateLine();
+    }
+
+    private void UpdateAnimator()
+    {
+        Vector3 from = Vector3.down;
+        Vector3 to = (Target - m_spawnPosition.position).normalized;
+        float angle = Vector3.Angle(from, to) / 180f;
+        angle = Mathf.Clamp(angle, 0.1f, 0.9f);
+        m_owner.Animator.SetFloat(ConstVariables.ANIMATOR_PARAMETER_AIM_ANGLE, angle);
+    }
+
+    private void UpdateLine()
+    {
+        if (Target == default)
         {
             m_renderer.positionCount = 0;
             return;
         }
         
-        Vector3 direction = (target - m_vcam.transform.position).normalized;
-        Vector3 end = target;
+        Vector3 direction = (Target - m_vcam.transform.position).normalized;
+        Vector3 end = Target;
         if (Physics.Raycast(m_vcam.transform.position, direction, out var hit, m_maxDistance, m_aimLayers))
         {
             end = hit.point;
