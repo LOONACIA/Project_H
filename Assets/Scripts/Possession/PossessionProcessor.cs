@@ -137,9 +137,12 @@ public class PossessionProcessor : MonoBehaviour
         bool isHit = Physics.SphereCast(cameraTransform.position, m_shurikenSphereRadius, cameraTransform.forward,
             out var hit, 300f, m_targetLayers);
 
+        Vector2 view = new Vector2(cameraPivot.transform.forward.x, cameraPivot.transform.forward.y);
+        float objectAngle = Vector2.SignedAngle(Vector2.right, view);  
+
         m_shuriken =
             Instantiate(m_sender.Data.ShurikenObj, cameraTransform.position + Vector3.down * 1 / 16f,
-                Quaternion.identity).GetComponent<PossessionShuriken>();
+                Quaternion.Euler(objectAngle, 0, 0)).GetComponent<PossessionShuriken>();
 
         if (isHit && hit.transform.TryGetComponent<Actor>(out var actor) && actor.Status.Shield != null)
         {

@@ -31,7 +31,7 @@ public class UIObjects : UIScene
     }
 
     public void UpdateObjectText(string _text)
-    {   
+    {
         objectText.text = _text;
 
         objectText.transform.localScale = Vector3.one * 2f;
