@@ -200,6 +200,12 @@ public class ShooterWeapon : Weapon
 
     private void UpdateLine(Vector3 target)
     {
+        if (target == default)
+        {
+            m_renderer.positionCount = 0;
+            return;
+        }
+        
         Vector3 direction = (target - m_vcam.transform.position).normalized;
         Vector3 end = target;
         if (Physics.Raycast(m_vcam.transform.position, direction, out var hit, m_maxDistance, m_aimLayers))
