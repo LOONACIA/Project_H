@@ -65,12 +65,20 @@ public partial class PlayerController
                 m_controller.Dash();
             }
         }
-
+        
         public void OnPossess(InputAction.CallbackContext context)
         {
             if (context.performed)
             {
                 m_controller.Possess();
+            }
+        }
+
+        public void OnHack(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+            {
+                m_controller.Hack();
             }
         }
 
