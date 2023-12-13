@@ -20,7 +20,6 @@ public class Ghost : Actor
         
         transform.LookAt(target.FirstPersonCameraPivot.transform.position);
         
-        // TODO: speed 계산
         float speed = ConstVariables.HACKING_SUCCESS_EFFECT_DURATION;
         Utility.Lerp(transform.position, m_target.transform.position, speed, position => transform.position = position, PossessEnd, true);
     }
