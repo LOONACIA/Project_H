@@ -371,6 +371,17 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
                     ""action"": ""Possess"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2ec2af39-23f5-4cdc-82fa-06739a463880"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Possess"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
