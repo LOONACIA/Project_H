@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -11,13 +12,14 @@ public class PossessionShuriken : MonoBehaviour
 
     // 던진 객체
     public Actor throwActor;
-
     #endregion
 
     #region PrivateVariables
 
     // 몬스터를 추적하는지, 아니면 그냥 날아가는지
     private bool m_isTrace = false;
+
+    private bool m_isTargetWall = false;
 
     private bool m_isStop;
 
@@ -50,16 +52,29 @@ public class PossessionShuriken : MonoBehaviour
     }
 
     public void InitSetting(Actor actor, Actor sender, Action<Actor> onTargetHit)
-    {
+    {   
         targetActor = actor;
         m_isTrace = true;
         throwActor = sender;
         m_onTargetHit = onTargetHit;
     }
 
-    public void InitSetting(Vector3 pos, Actor sender, Action<Actor> onTargetHit)
+    public void InitSetting(Vector3 pos, Actor sender, Action<Actor> onTargetHit, bool hit)
     {
-        m_targetDir = pos;
+        
+
+        if (hit)
+        {
+            m_targetDir = (m_targetPosition - transform.position).normalized;
+            m_isTargetWall = true;
+            m_targetPosition = pos;
+            Debug.Log(pos);
+        }
+        else
+        {
+            m_targetDir = pos;
+        }
+        
         throwActor = sender;
         m_onTargetHit = onTargetHit;
     }
@@ -77,7 +92,12 @@ public class PossessionShuriken : MonoBehaviour
             m_targetDir = (targetActor.transform.position + Vector3.up - transform.position).normalized;
         }
 
-        CheckBack();
+        if (m_isTargetWall)
+        {
+            m_targetDir = (m_targetPosition - transform.position).normalized;
+        }
+
+        //CheckBack();
         Move();
     }
 
@@ -109,6 +129,7 @@ public class PossessionShuriken : MonoBehaviour
                 return;
 
             m_isStop = true;
+            
             m_rb.isKinematic = true;
             TryHackingObject(other.transform);
             GetComponent<Collider>().enabled = false;
@@ -157,6 +178,9 @@ public class PossessionShuriken : MonoBehaviour
 
             m_isStop = true;
             m_rb.isKinematic = true;
+
+            if (m_isTargetWall)
+                transform.position = m_targetPosition;
 
             TryHackingObject(other.transform);
 

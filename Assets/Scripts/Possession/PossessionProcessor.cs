@@ -161,27 +161,41 @@ public class PossessionProcessor : MonoBehaviour
         m_curCoolTime = 0f;
         var cameraPivot = GameManager.Camera.CurrentCamera;
 
-        //bool isHit = Physics.Raycast(cameraPivot.transform.position, cameraPivot.transform.forward, out var hit, 300f);
-        bool isHit = Physics.SphereCast(cameraPivot.transform.position, shurikenSphereRadius, cameraPivot.transform.forward, out var hit, 300f);
+        bool isHit = Physics.Raycast(cameraPivot.transform.position, cameraPivot.transform.forward, out var hit, 300f);
+        //bool isHit = Physics.SphereCast(cameraPivot.transform.position, shurikenSphereRadius, cameraPivot.transform.forward, out var hit, 300f);
 
-        m_shuriken = Instantiate(m_sender.Data.ShurikenObj, cameraPivot.transform.position + Vector3.down * 1/16f, Quaternion.identity).GetComponent<PossessionShuriken>();
+        Vector2 view = new Vector2(cameraPivot.transform.forward.x, cameraPivot.transform.forward.y);
+        float objectAngle = Vector2.SignedAngle(Vector2.right, view);        
 
+        m_shuriken = Instantiate(m_sender.Data.ShurikenObj, cameraPivot.transform.position + Vector3.down * 1 / 16f, Quaternion.Euler(new Vector3(objectAngle, 0,0 ))).GetComponent<PossessionShuriken>();
+        
         // Ray를 쏜 곳에 벽이 있을 시,
-        if (isHit && 1 << hit.transform.gameObject.layer == m_obstacleLayers)
+        if (isHit && ((1 << hit.transform.gameObject.layer) & m_obstacleLayers) != 0)
         { 
-            m_shuriken.InitSetting(cameraPivot.transform.forward, m_sender, OnTargetHit);
+            m_shuriken.InitSetting(hit.point, m_sender, OnTargetHit, true);
         }
         else if (isHit && 1 << hit.transform.gameObject.layer == m_targetLayers)
         {
             // 몬스터가 쉴드를 가지고 있으면 빙의 불가
             if (hit.transform.GetComponent<ActorStatus>()?.Shield != null)
-                m_shuriken.InitSetting(cameraPivot.transform.forward, m_sender, OnTargetHit);
+                m_shuriken.InitSetting(cameraPivot.transform.forward, m_sender, OnTargetHit, true);
             else
-                m_shuriken.InitSetting(hit.transform.GetComponent<Actor>(), m_sender, OnTargetHit);
+            {
+                
+                if (hit.transform.gameObject == m_sender.gameObject)
+                {
+                    m_shuriken.InitSetting(cameraPivot.transform.forward, m_sender, OnTargetHit, false);
+                }
+                else
+                {
+                    m_shuriken.InitSetting(hit.transform.GetComponent<Actor>(), m_sender, OnTargetHit);
+                }
+            }
+                
         }
         else
         {
-            m_shuriken.InitSetting(cameraPivot.transform.forward, m_sender, OnTargetHit);
+            m_shuriken.InitSetting(cameraPivot.transform.forward, m_sender, OnTargetHit, false);
         }
     }
     

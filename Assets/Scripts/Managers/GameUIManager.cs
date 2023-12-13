@@ -68,7 +68,7 @@ public class GameUIManager
     }
     
     public void ShowGameOverUI(Action onRestart, Action onExit, string text = "Game Over")
-    {
+    {   
         CloseSceneUI();
         
         var ui = ManagerRoot.UI.ShowPopupUI<UIGameOver>();
