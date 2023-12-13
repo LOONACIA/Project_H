@@ -61,6 +61,13 @@ public class ShooterWeapon : Weapon
 
     private Vector3 m_target;
 
+    [SerializeField]
+    private Color m_lineColor;
+
+    private float m_intensity = 1f;
+
+    private float m_intensityMul = 0.2f;
+
     public override Vector3 Target
     {
         get => m_target;
@@ -231,7 +238,10 @@ public class ShooterWeapon : Weapon
         m_renderer.positionCount = 2;
         m_renderer.SetPosition(0, m_spawnPosition.position);
         m_renderer.SetPosition(1, end);
-        m_renderer.startWidth = m_renderer.endWidth = 0.05f;
+        m_renderer.startWidth = m_renderer.endWidth = 0.005f;
+
+        m_intensity += m_intensityMul;
+        m_renderer.material.SetColor("_EmissionColor", m_lineColor * m_intensity);
     }
 
     private void DrawLine(Vector3 target)
@@ -240,6 +250,10 @@ public class ShooterWeapon : Weapon
         m_renderer.SetPosition(0, m_spawnPosition.position);
         m_renderer.SetPosition(1, target);
 
-        m_drawLineCoroutine = Utility.Lerp(0.1f, 0f, 0.5f, value => m_renderer.startWidth = m_renderer.endWidth = value);
+        //Color c = m_renderer.material.GetColor("_EmissionColor");
+        
+        m_renderer.material.SetColor("_EmissionColor", m_lineColor * 1500f);
+        Debug.Log(m_intensity * 10f);
+        m_drawLineCoroutine = Utility.Lerp(0.3f, 0f, 0.5f, value => m_renderer.startWidth = m_renderer.endWidth = value, () => m_intensity = 1f);
     }
 }
