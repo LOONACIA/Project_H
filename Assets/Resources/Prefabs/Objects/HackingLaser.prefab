@@ -96,7 +96,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 44a458310a780a64fbc30506f4d7e760, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -143,6 +143,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d290b59d36743af49b914001f2b781ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_idleMaterial: {fileID: 2100000, guid: 44a458310a780a64fbc30506f4d7e760, type: 2}
+  m_HackingMaterial: {fileID: 2100000, guid: 412855c4be2cc114c83e60fbc0fef189, type: 2}
+  m_hackingCoolTime: 5
+  m_hackingProgressedTime: 0.5
 --- !u!1 &3922212974459291065
 GameObject:
   m_ObjectHideFlags: 0
@@ -188,10 +192,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99d83d440cb9cb84a865a9d583ba858a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_isOneWay: 1
   m_startPos: {x: 0, y: 0, z: 0}
   m_endPos: {x: 0, y: 0, z: 10}
   m_moveSpeed: 3
-  m_isOneWay: 1
   m_canRotate: 0
   m_rotationVec: {x: 0, y: 0, z: 0}
   m_rotationSpeed: 0
@@ -345,7 +349,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_progressTime: 0.5
-  m_hackingCoolTime: 5
 --- !u!4 &3922212973700736905 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 436056, guid: 11530f2b0a0cd2442949827ecbb622f2,
