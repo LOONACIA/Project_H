@@ -29,8 +29,7 @@ public class TestScript : MonoBehaviour
         m_angle = Vector3.Angle(from, to)/180;
         m_angle = Mathf.Clamp(m_angle, 0.1f, 0.9f);
 
-        Debug.Log(m_angle);
-        m_animator.SetFloat("AimAngle", m_angle);
+        m_animator.SetFloat(ConstVariables.ANIMATOR_PARAMETER_AIM_ANGLE, m_angle);
     }
 
     public static float GetAngle(Vector3 from, Vector3 to)
