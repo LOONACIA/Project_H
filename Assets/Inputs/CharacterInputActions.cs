@@ -64,7 +64,7 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Possess"",
+                    ""name"": ""Hack"",
                     ""type"": ""Button"",
                     ""id"": ""da445bc4-0560-43a3-ad44-9d0244cc72fa"",
                     ""expectedControlType"": ""Button"",
@@ -103,6 +103,15 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
                     ""name"": ""Interact"",
                     ""type"": ""Button"",
                     ""id"": ""34524c13-31ae-450d-9930-da5874a37ce8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Possess"",
+                    ""type"": ""Button"",
+                    ""id"": ""81989a2c-728e-43e1-899e-326b34ef2e9f"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -249,7 +258,7 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
-                    ""action"": ""Possess"",
+                    ""action"": ""Hack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -260,7 +269,7 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""Possess"",
+                    ""action"": ""Hack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -351,6 +360,28 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
                     ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""43d378d2-ab0c-419f-a943-971c4ab434db"",
+                    ""path"": ""<Keyboard>/t"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Possess"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2ec2af39-23f5-4cdc-82fa-06739a463880"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Possess"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -391,11 +422,12 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
         m_Character_Jump = m_Character.FindAction("Jump", throwIfNotFound: true);
         m_Character_Attack = m_Character.FindAction("Attack", throwIfNotFound: true);
         m_Character_Dash = m_Character.FindAction("Dash", throwIfNotFound: true);
-        m_Character_Possess = m_Character.FindAction("Possess", throwIfNotFound: true);
+        m_Character_Hack = m_Character.FindAction("Hack", throwIfNotFound: true);
         m_Character_Look = m_Character.FindAction("Look", throwIfNotFound: true);
         m_Character_Skill = m_Character.FindAction("Skill", throwIfNotFound: true);
         m_Character_Ability = m_Character.FindAction("Ability", throwIfNotFound: true);
         m_Character_Interact = m_Character.FindAction("Interact", throwIfNotFound: true);
+        m_Character_Possess = m_Character.FindAction("Possess", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -461,11 +493,12 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
     private readonly InputAction m_Character_Jump;
     private readonly InputAction m_Character_Attack;
     private readonly InputAction m_Character_Dash;
-    private readonly InputAction m_Character_Possess;
+    private readonly InputAction m_Character_Hack;
     private readonly InputAction m_Character_Look;
     private readonly InputAction m_Character_Skill;
     private readonly InputAction m_Character_Ability;
     private readonly InputAction m_Character_Interact;
+    private readonly InputAction m_Character_Possess;
     public struct CharacterActions
     {
         private @CharacterInputActions m_Wrapper;
@@ -474,11 +507,12 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
         public InputAction @Jump => m_Wrapper.m_Character_Jump;
         public InputAction @Attack => m_Wrapper.m_Character_Attack;
         public InputAction @Dash => m_Wrapper.m_Character_Dash;
-        public InputAction @Possess => m_Wrapper.m_Character_Possess;
+        public InputAction @Hack => m_Wrapper.m_Character_Hack;
         public InputAction @Look => m_Wrapper.m_Character_Look;
         public InputAction @Skill => m_Wrapper.m_Character_Skill;
         public InputAction @Ability => m_Wrapper.m_Character_Ability;
         public InputAction @Interact => m_Wrapper.m_Character_Interact;
+        public InputAction @Possess => m_Wrapper.m_Character_Possess;
         public InputActionMap Get() { return m_Wrapper.m_Character; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -500,9 +534,9 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
             @Dash.started += instance.OnDash;
             @Dash.performed += instance.OnDash;
             @Dash.canceled += instance.OnDash;
-            @Possess.started += instance.OnPossess;
-            @Possess.performed += instance.OnPossess;
-            @Possess.canceled += instance.OnPossess;
+            @Hack.started += instance.OnHack;
+            @Hack.performed += instance.OnHack;
+            @Hack.canceled += instance.OnHack;
             @Look.started += instance.OnLook;
             @Look.performed += instance.OnLook;
             @Look.canceled += instance.OnLook;
@@ -515,6 +549,9 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
+            @Possess.started += instance.OnPossess;
+            @Possess.performed += instance.OnPossess;
+            @Possess.canceled += instance.OnPossess;
         }
 
         private void UnregisterCallbacks(ICharacterActions instance)
@@ -531,9 +568,9 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
             @Dash.started -= instance.OnDash;
             @Dash.performed -= instance.OnDash;
             @Dash.canceled -= instance.OnDash;
-            @Possess.started -= instance.OnPossess;
-            @Possess.performed -= instance.OnPossess;
-            @Possess.canceled -= instance.OnPossess;
+            @Hack.started -= instance.OnHack;
+            @Hack.performed -= instance.OnHack;
+            @Hack.canceled -= instance.OnHack;
             @Look.started -= instance.OnLook;
             @Look.performed -= instance.OnLook;
             @Look.canceled -= instance.OnLook;
@@ -546,6 +583,9 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
+            @Possess.started -= instance.OnPossess;
+            @Possess.performed -= instance.OnPossess;
+            @Possess.canceled -= instance.OnPossess;
         }
 
         public void RemoveCallbacks(ICharacterActions instance)
@@ -587,10 +627,11 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
         void OnJump(InputAction.CallbackContext context);
         void OnAttack(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
-        void OnPossess(InputAction.CallbackContext context);
+        void OnHack(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
         void OnSkill(InputAction.CallbackContext context);
         void OnAbility(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
+        void OnPossess(InputAction.CallbackContext context);
     }
 }

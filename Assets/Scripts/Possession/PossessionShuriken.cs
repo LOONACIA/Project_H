@@ -32,6 +32,8 @@ public class PossessionShuriken : MonoBehaviour
 
     private int m_targetLayer;
 
+    private int m_obstacleLayer;
+
     [SerializeField]
     private float m_speed;
 
@@ -46,8 +48,7 @@ public class PossessionShuriken : MonoBehaviour
     {
         TryGetComponent<Rigidbody>(out m_rb);
         m_targetLayer = LayerMask.GetMask("Monster");
-        m_surikenStopLayer = LayerMask.GetMask("Wall", "Ground", "Monster", "Shield");
-
+        m_surikenStopLayer = LayerMask.GetMask("Wall", "Ground", "Monster", "Shield", "Obstacle");
         StartCoroutine(nameof(IE_Destory));
     }
 
@@ -59,22 +60,18 @@ public class PossessionShuriken : MonoBehaviour
         m_onTargetHit = onTargetHit;
     }
 
-    public void InitSetting(Vector3 pos, Actor sender, Action<Actor> onTargetHit, bool hit)
+    public void InitSetting(Vector3 pos, Actor sender, Action<Actor> onTargetHit)
     {
-        
+        RaycastHit hit;
 
-        if (hit)
+        if (Physics.Raycast(transform.position, pos, out hit, 300f, m_surikenStopLayer))
         {
             m_targetDir = (m_targetPosition - transform.position).normalized;
             m_isTargetWall = true;
-            m_targetPosition = pos;
-            Debug.Log(pos);
+            m_targetPosition = hit.point;
         }
-        else
-        {
-            m_targetDir = pos;
-        }
-        
+
+        m_targetDir = pos;
         throwActor = sender;
         m_onTargetHit = onTargetHit;
     }

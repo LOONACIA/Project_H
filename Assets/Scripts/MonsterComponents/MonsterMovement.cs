@@ -42,10 +42,6 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
 
     private bool m_isJumpApplied;
 
-    // TODO: 공격 시 이동 속도를 느리게 만들 것인가?
-    // 공격 시 이동 속도를 느리게 만듦
-    private float m_speedMultiplier = 1f;
-
     //private float m_dashMultiplier = 1f; //대쉬가 돌진으로 바뀌면서 미사용
 
     //대쉬 방향
@@ -55,7 +51,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
     private float m_minKnockBackTime = 1f;
 
     // 마지막 넉백 시간
-    private float m_lastKnockBackTime = 0f;
+    private float m_lastKnockBackTime;
 
     // 리지드바디 속도가 이것보다 낮아지면 넉백 종료
     private float m_knockBackEndSpeedThreshold = 0.1f;
@@ -125,7 +121,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
             m_data.ThirdMoveSpeedThreshold)
         {
             m_rigidbody.AddRelativeForce(
-                directionInput * (m_data.FrictionAcceleration * Time.fixedDeltaTime * m_speedMultiplier),
+                directionInput * (m_data.FrictionAcceleration * Time.fixedDeltaTime),
                 ForceMode.VelocityChange);
         }
 
@@ -136,15 +132,15 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         }
 
         Vector3 strafe = new(directionInput.x, directionInput.y, Mathf.Min(0, directionInput.z));
-        Vector3 strafeForce = GetForce(strafe, strafeSpeed, m_data.FirstStrafeSpeedThreshold * m_speedMultiplier,
-            m_data.SecondStrafeSpeedThreshold * m_speedMultiplier, m_data.ThirdStrafeSpeedThreshold * m_speedMultiplier);
+        Vector3 strafeForce = GetForce(strafe, strafeSpeed, m_data.FirstStrafeSpeedThreshold,
+            m_data.SecondStrafeSpeedThreshold, m_data.ThirdStrafeSpeedThreshold);
 
         Vector3 forward = new(0, directionInput.y, Mathf.Max(directionInput.z, 0));
         Vector3 forwardForce = GetForce(forward, m_rigidbody.velocity.magnitude,
-            m_data.FirstMoveSpeedThreshold * m_speedMultiplier, m_data.SecondMoveSpeedThreshold * m_speedMultiplier,
-            m_data.ThirdMoveSpeedThreshold * m_speedMultiplier);
+            m_data.FirstMoveSpeedThreshold, m_data.SecondMoveSpeedThreshold,
+            m_data.ThirdMoveSpeedThreshold);
 
-        m_rigidbody.AddRelativeForce((forwardForce + strafeForce) * m_speedMultiplier, ForceMode.VelocityChange);
+        m_rigidbody.AddRelativeForce((forwardForce + strafeForce), ForceMode.VelocityChange);
     }
 
     public void MoveTo(Vector3 destination)
@@ -351,7 +347,6 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         {
             //속도가 최소보다 작아졌으므로 KnockBack 종료, 관련 변수 초기화
             //AI라면 Agent를 켜줍니다.
-            //TODO: AI 점프 적용 시 점프까지 같이 체크해주어야함.
             if (!m_actor.IsPossessed)
             {
                 m_agent.enabled = !m_actor.IsPossessed;
