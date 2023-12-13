@@ -178,7 +178,7 @@ public class PossessionShuriken : MonoBehaviour
     private void TryHackingObject(Transform _target)
     {
         HackingObject obj = _target.GetComponent<HackingObject>();
-        Debug.Log("들어와쪄염");
+
         if (obj == null)
             return;
 
