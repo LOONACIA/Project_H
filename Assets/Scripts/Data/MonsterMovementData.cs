@@ -74,8 +74,9 @@ public class MonsterMovementData : ScriptableObject
 
     [Header("Dash")]
     [SerializeField]
+    [ReadOnly]
     [Layer]
-    private int m_dashLayer = 17;
+    private int m_dashLayer = 17;   //현재는 사용되지 않습니다.
 
     [SerializeField]
     private float m_dashAmount = 5f;
@@ -128,6 +129,9 @@ public class MonsterMovementData : ScriptableObject
 
     public float Gravity => _gravity;
 
+    /// <summary>
+    /// 현재 모든 오브젝트와 충돌하므로 사용되지 않음.
+    /// </summary>
     public int DashLayer => m_dashLayer;
 
     public float DashAmount => m_dashAmount;

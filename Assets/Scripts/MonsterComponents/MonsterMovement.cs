@@ -261,7 +261,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         }
         m_lastDashTime = Time.time;
         IsDashing = true;
-        gameObject.layer = m_data.DashLayer;
+        //gameObject.layer = m_data.DashLayer;
     }
 
     public void TryKnockBack(Vector3 direction, float power, bool overwrite = true)
@@ -342,14 +342,15 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
 
     private void ApplyDash()
     {
-        if (m_lastDashTime + m_data.DashDuration <= Time.time)
+        if (m_lastDashTime + m_data.DashDuration <= Time.time
+            ||m_actor.Status.IsKnockedDown)
         {
             //대쉬 시간이 지났다면 대쉬 종료
             IsDashing = false;
             m_dashDirection = Vector3.zero;
             m_lastDashVelocity = Vector3.zero;
             m_rigidbody.velocity = Vector3.zero;
-            gameObject.layer = LayerMask.NameToLayer("Monster");
+            //gameObject.layer = LayerMask.NameToLayer("Monster");
             return;
         }
 
@@ -370,7 +371,9 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         int count = Physics.OverlapCapsuleNonAlloc(p1, p2, m_collider.radius - 0.01f, cols, mask);
         for(int i = 0; i < count; i++)
         {
-            if (m_standingGround==null||cols[i].gameObject.GetInstanceID() != m_standingGround.gameObject.GetInstanceID())
+            //나 자신을 검사했거나, 밟고있는 땅을 검사할 경우 continue
+            if (cols[i].gameObject.GetInstanceID() != m_collider.gameObject.GetInstanceID()
+                &&(m_standingGround == null || cols[i].gameObject.GetInstanceID() != m_standingGround.gameObject.GetInstanceID()))
             {
                 //내가 서있는 땅과 다른 곳과 충돌했다면 이동하지 않음
                 //Debug.Log("Dash: 이상한 놈과 충돌 중...");
