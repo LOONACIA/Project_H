@@ -1,3 +1,4 @@
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityTransform;
 using DG.Tweening;
 using System;
 using System.Collections;
@@ -48,12 +49,12 @@ public class PossessionShuriken : MonoBehaviour
     {
         TryGetComponent<Rigidbody>(out m_rb);
         m_targetLayer = LayerMask.GetMask("Monster");
-        m_surikenStopLayer = LayerMask.GetMask("Wall", "Ground", "Monster", "Shield", "Obstacle");
+        m_surikenStopLayer = LayerMask.GetMask("Wall", "Ground", "Shield", "Obstacle");
         StartCoroutine(nameof(IE_Destory));
     }
 
     public void InitSetting(Actor actor, Actor sender, Action<Actor> onTargetHit)
-    {   
+    {
         targetActor = actor;
         m_isTrace = true;
         throwActor = sender;
@@ -64,12 +65,12 @@ public class PossessionShuriken : MonoBehaviour
     {
         RaycastHit hit;
 
-        if (Physics.Raycast(transform.position, pos, out hit, 300f, m_surikenStopLayer))
-        {
-            m_targetDir = (m_targetPosition - transform.position).normalized;
-            m_isTargetWall = true;
-            m_targetPosition = hit.point;
-        }
+        //if (Physics.Raycast(transform.position, pos, out hit, 300f, m_surikenStopLayer))
+        //{
+        //    m_targetDir = (m_targetPosition - transform.position).normalized;
+        //    m_isTargetWall = true;
+        //    m_targetPosition = hit.point;
+        //}
 
         m_targetDir = pos;
         throwActor = sender;
@@ -94,7 +95,7 @@ public class PossessionShuriken : MonoBehaviour
             m_targetDir = (m_targetPosition - transform.position).normalized;
         }
 
-        //CheckBack();
+        CheckBack();
         Move();
     }
 
@@ -104,13 +105,17 @@ public class PossessionShuriken : MonoBehaviour
 
     private void CheckBack()
     {
-        if (!Physics.SphereCast(transform.position - m_targetDir.normalized, 0.2f, m_targetDir.normalized,
+        if (!Physics.SphereCast(transform.position, 0.2f, m_targetDir.normalized,
                 out RaycastHit hit, 1.3f, m_surikenStopLayer))
         {
             return;
         }
 
+
         Transform other = hit.transform;
+
+        m_isTargetWall = true;
+        m_targetPosition = hit.point;
 
         if (((1 << other.gameObject.layer) & m_targetLayer) != 0)
         {
@@ -128,7 +133,14 @@ public class PossessionShuriken : MonoBehaviour
                 return;
 
             m_isStop = true;
-            
+
+            if (m_isTargetWall)
+            {
+                transform.position = m_targetPosition;
+                transform.SetParent(other.transform);
+            }
+
+
             m_rb.isKinematic = true;
             TryHackingObject(other.transform);
             GetComponent<Collider>().enabled = false;
@@ -159,7 +171,7 @@ public class PossessionShuriken : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other)
-    {
+    {   //TODO - 코드 정리하겠습니다 나중에
         if (1 << other.gameObject.layer == m_targetLayer)
         {
             if (other.gameObject == throwActor.gameObject)
@@ -172,19 +184,22 @@ public class PossessionShuriken : MonoBehaviour
         }
         else if ((m_surikenStopLayer & (1 << other.gameObject.layer)) != 0)
         {
-            if (m_isTrace)
-                return;
+            //if (m_isTrace)
+            //    return;
 
-            m_isStop = true;
-            m_rb.isKinematic = true;
+            //m_isStop = true;
+            //m_rb.isKinematic = true;
 
-            if (m_isTargetWall)
-                transform.position = m_targetPosition;
+            //if (m_isTargetWall)
+            //{
+            //    transform.position = m_targetPosition;
+            //    transform.SetParent(other.transform);
+            //}
 
-            TryHackingObject(other.transform);
 
-            GetComponent<Collider>().enabled = false;
-            Invoke(nameof(DestroySelf), 5f);
+            //TryHackingObject(other.transform);
+            //GetComponent<Collider>().enabled = false;
+            //Invoke(nameof(DestroySelf), 5f);
         }
     }
 
@@ -210,7 +225,7 @@ public class PossessionShuriken : MonoBehaviour
 
     private IEnumerator IE_Destory()
     {
-        yield return new WaitForSeconds(ConstVariables.SHURIKEN_COOLTIME);
+        yield return new WaitForSeconds(5f);
 
         DestroySelf();
     }
