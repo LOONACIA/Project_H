@@ -71,5 +71,5 @@ public static class ConstVariables
 
     [Header("MovementCollisionLayers")]
     [Layer]
-    public static readonly string[] MOVEMENT_COLLISION_LAYERS = new[] { "Ground", "Wall", "Obstacle", "Gate", "BlockPlane" };
+    public static readonly string[] MOVEMENT_COLLISION_LAYERS = new[] { "Ground", "Wall", "Obstacle", "Gate", "BlockPlane", "Monster" };
 }
