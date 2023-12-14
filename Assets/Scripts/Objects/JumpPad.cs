@@ -40,8 +40,6 @@ public class JumpPad : MonoBehaviour, IHackable
         if (m_isHacking) return;
 
         m_isHacking = true;
-
-        Debug.Log(m_isHacking);
     }
 
     public void Recovery()
@@ -63,6 +61,7 @@ public class JumpPad : MonoBehaviour, IHackable
 
         if (target.TryGetComponent<Rigidbody>(out var rigidbody))
         {
+            rigidbody.velocity = rigidbody.velocity.GetFlatVector();
             rigidbody.AddForce(m_jumpPower * transform.up, ForceMode.VelocityChange);
         }
     }
