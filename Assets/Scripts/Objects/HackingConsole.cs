@@ -24,7 +24,9 @@ public class HackingConsole : HackingObject
 
     private Renderer m_renderer;
 
-    private Coroutine m_coroutine;
+    private Coroutine m_coolTimeCoroutine;
+
+    private Coroutine m_materialCoroutine;
 
     [Tooltip("해킹당한 상태인지 여부")]
     private bool m_isHacking;
@@ -43,16 +45,23 @@ public class HackingConsole : HackingObject
 
     public override void Interact()
     {
-        if (m_isHacking) return;
+        //if (m_isHacking) return;
 
         OnHacking?.Invoke(this, EventArgs.Empty);
-        
+
         Hacking();
     }
 
     public void Hacking()
     {
-        if (m_isHacking) return;
+        if (m_isHacking)
+        {
+            if (m_materialCoroutine != null)
+                StopCoroutine(m_coolTimeCoroutine);
+
+            m_coolTimeCoroutine = StartCoroutine(IE_WaitCoolTime());
+            return;
+        }
 
         m_isHacking = true;
 
@@ -63,7 +72,8 @@ public class HackingConsole : HackingObject
             hackable.Hacking();
         }
 
-        Invoke(nameof(Recovery), m_hackingCoolTime);
+        m_coolTimeCoroutine = StartCoroutine(IE_WaitCoolTime());
+        //Invoke(nameof(Recovery), m_hackingCoolTime);
     }
 
     private void Recovery()
@@ -80,17 +90,17 @@ public class HackingConsole : HackingObject
 
     private void ConvertMaterial(Material from, Material to)
     {
-        if (m_coroutine != null)
-            StopCoroutine(m_coroutine);
+        if (m_materialCoroutine != null)
+            StopCoroutine(m_materialCoroutine);
 
-        m_coroutine = StartCoroutine(IE_ConvertMaterial(from, to));
+        m_materialCoroutine = StartCoroutine(IE_ConvertMaterial(from, to));
     }
 
     private IEnumerator IE_ConvertMaterial(Material from, Material to)
     {
         float time = 0;
 
-        while (time < m_hackingProgressedTime) 
+        while (time < m_hackingProgressedTime)
         {
             time += Time.deltaTime;
 
@@ -100,5 +110,19 @@ public class HackingConsole : HackingObject
         }
 
         m_renderer.material = to;
+    }
+
+    private IEnumerator IE_WaitCoolTime()
+    {
+        float time = 0;
+
+        while (time < m_hackingCoolTime)
+        {
+            time += Time.deltaTime;
+
+            yield return null;
+        }
+
+        Recovery();
     }
 }
