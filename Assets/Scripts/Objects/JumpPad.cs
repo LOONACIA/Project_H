@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 [RequireComponent(typeof(Collider))]
 public class JumpPad : MonoBehaviour, IHackable
@@ -19,6 +20,8 @@ public class JumpPad : MonoBehaviour, IHackable
 
     private bool m_isHacking;
 
+    private bool m_canJump = true;
+
     private void OnTriggerStay(Collider other)
     {
         if (m_isHacking && other.gameObject.layer == LayerMask.NameToLayer("Monster"))
@@ -27,13 +30,16 @@ public class JumpPad : MonoBehaviour, IHackable
         }
     }
 
+    private void OnTriggerExit(Collider other)
+    {
+        m_canJump = true;
+    }
+
     public void Hacking()
     {
         if (m_isHacking) return;
 
         m_isHacking = true;
-
-        Debug.Log(m_isHacking);
     }
 
     public void Recovery()
@@ -44,6 +50,9 @@ public class JumpPad : MonoBehaviour, IHackable
     private void Jump(GameObject target)
     {
         if (target == null) return;
+        if (!m_canJump) return;
+
+        m_canJump = false;
 
         if (target.TryGetComponent<ActorStatus>(out var actorStatus))
         {
@@ -52,9 +61,8 @@ public class JumpPad : MonoBehaviour, IHackable
 
         if (target.TryGetComponent<Rigidbody>(out var rigidbody))
         {
+            rigidbody.velocity = rigidbody.velocity.GetFlatVector();
             rigidbody.AddForce(m_jumpPower * transform.up, ForceMode.VelocityChange);
-
-            Debug.Log(m_jumpPower * transform.up);
         }
     }
 }
