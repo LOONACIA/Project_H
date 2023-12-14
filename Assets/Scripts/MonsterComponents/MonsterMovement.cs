@@ -342,7 +342,8 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
 
     private void ApplyDash()
     {
-        if (m_lastDashTime + m_data.DashDuration <= Time.time)
+        if (m_lastDashTime + m_data.DashDuration <= Time.time
+            ||m_actor.Status.IsKnockedDown)
         {
             //대쉬 시간이 지났다면 대쉬 종료
             IsDashing = false;
