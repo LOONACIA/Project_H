@@ -17,6 +17,8 @@ public class Laser : MonoBehaviour
 
     private float m_originWidth;
 
+    private bool m_isHacking;
+
     private void Start()
     {
         m_collider = GetComponent<CapsuleCollider>();
@@ -28,27 +30,30 @@ public class Laser : MonoBehaviour
         m_originWidth = m_volumetricLineBehavior.LineWidth;
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Monster"))
+        if (other.TryGetComponent<Actor>(out var actor))
         {
-            if (collision.gameObject.TryGetComponent<ActorHealth>(out var health))
-            {
-                // TODO : 데미지 계산
-            }
+            actor.Health.Kill();
         }
     }
 
+
     public void Hacking()
     {
-        m_collider.isTrigger = true;
+        if (m_isHacking) return;
+        
+        m_isHacking = true;
+        m_collider.enabled = false;
 
         StartCoroutine(IE_ChangeWidth(m_originWidth, 0));
+
     }
 
     public void Recovery()
     {
-        m_collider.isTrigger = false;
+        m_isHacking = false;
+        m_collider.enabled = true;
 
         StartCoroutine(IE_ChangeWidth(0, m_originWidth));
     }

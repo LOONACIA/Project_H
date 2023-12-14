@@ -15,9 +15,6 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
     [SerializeField]
     private MonsterMovementData m_data;
 
-    //대쉬 시작 시간을 저장하기 위한 값
-    private float m_lastDashTime;
-
     private Actor m_actor;
 
     private Rigidbody m_rigidbody;
@@ -47,6 +44,15 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
     //대쉬 방향
     private Vector3 m_dashDirection = Vector3.zero;
 
+    //마지막으로 대쉬를 누른 시간
+    private float m_lastDashTime;
+
+    //대쉬 쿨타임이 체크되기 시작된 시간
+    private float m_dashCooldownStartTime;
+
+    //남은 대쉬 수
+    private int m_dashCount;
+
     // 넉백의 최소 지속시간
     private float m_minKnockBackTime = 1f;
 
@@ -66,6 +72,26 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
 
     public bool IsDashing { get; private set; } = false;
 
+    /// <summary>
+    /// 다음 대쉬 카운트가 충전될때까지 남은 시간을 0~1 사이 값으로 반환합니다. 
+    /// 만약 대쉬 카운트가 가득 찼다면 1을 반환합니다.
+    /// </summary>
+    public float CurrentDashCoolDown
+    {
+        get
+        {
+            if (m_dashCount == m_data.MaxDashCount)
+            {
+                return 1;
+            }
+            else
+            {
+                if (m_data.DashCoolTime <= 0) return 1;
+                else return (Time.time - m_dashCooldownStartTime/m_data.DashCoolTime);
+            }
+        }
+    }
+
     public event PropertyChangedEventHandler PropertyChanged;
 
     private void Start()
@@ -74,6 +100,8 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         m_rigidbody = GetComponent<Rigidbody>();
         m_collider = GetComponent<CapsuleCollider>();
         m_agent = GetComponent<NavMeshAgent>();
+
+        m_dashCount = m_data.MaxDashCount;
     }
 
     private void Update()
@@ -81,6 +109,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         CheckJumping();
 
         UpdateAnimator();
+        UpdateDashCoolDown();
     }
 
     private void FixedUpdate()
@@ -187,11 +216,25 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         //대쉬 중인 경우 다른 물리 이동(move, jump, gravity)등을 무시하고 해당 위치까지 이동합니다.
         //TryDash에서는 대쉬 시작 명령을 내리고 방향을 정하며, 실제 대쉬 연산은 매 FixedUpdate의 ApplyDash에서 일어납니다.
 
-        //쿨타임이 끝났는지 체크한다.
-        if (m_lastDashTime + m_data.DashCoolTime > Time.time)
+        //이미 대쉬 중이거나, 대쉬 딜레이 중이거나, 남은 대쉬가 없다면 대쉬 불가능
+        if (IsDashing || m_lastDashTime + m_data.DashDelay > Time.time|| m_dashCount <= 0)
         {
+            if (m_dashCount <= 0)
+                Debug.Log("남은 대쉬0... 차지까지 남은 시간: " + (m_dashCooldownStartTime + m_data.DashCoolTime - Time.time));
+            if (IsDashing)
+                Debug.Log("이미 대쉬 중...");
+            if(m_lastDashTime + m_data.DashDelay > Time.time)
+                Debug.Log("대쉬 딜레이중...");
             return;
         }
+
+        //만약 대쉬가 꽉 차있었다면, 쿨타임을 갱신함
+        if(m_dashCount == m_data.MaxDashCount)
+        {
+            m_dashCooldownStartTime = Time.time;
+        }
+
+        m_dashCount -= 1;
 
         //대쉬를 시도함.
         if (direction == Vector3.zero)
@@ -332,6 +375,27 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
             //아무것도 만나지 않는다면, 지정된 위치까지 이동합니다.
             //Debug.Log("미충돌");
             m_rigidbody.MovePosition(transform.position + m_dashDirection * speed * Time.fixedDeltaTime);
+        }
+    }
+
+    /// <summary>
+    /// 매 프레임 대쉬 쿨타임이 지났다면, count를 올려줍니다.
+    /// </summary>
+    private void UpdateDashCoolDown()
+    {
+        if(m_data.MaxDashCount>m_dashCount
+            &&m_dashCooldownStartTime+m_data.DashCoolTime < Time.time)      
+        {
+            //최대 대쉬 카운트가 아니면서
+            //마지막 대쉬 시간부터 쿨타임이 지났다면 대쉬 카운트 +1
+            m_dashCount += 1;
+            Debug.Log($"대쉬 충전됨, 남은 대쉬 수: {m_dashCount}");
+
+            //만약 더해줬어도 풀이 아니라면, 지금 시간부터 다시 대쉬 쿨타임 카운트 시작
+            if (m_dashCount != m_data.MaxDashCount)
+            {
+                m_dashCooldownStartTime = Time.time;
+            }
         }
     }
 
