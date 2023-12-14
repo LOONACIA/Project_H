@@ -261,7 +261,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         }
         m_lastDashTime = Time.time;
         IsDashing = true;
-        gameObject.layer = m_data.DashLayer;
+        //gameObject.layer = m_data.DashLayer;
     }
 
     public void TryKnockBack(Vector3 direction, float power, bool overwrite = true)
@@ -349,7 +349,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
             m_dashDirection = Vector3.zero;
             m_lastDashVelocity = Vector3.zero;
             m_rigidbody.velocity = Vector3.zero;
-            gameObject.layer = LayerMask.NameToLayer("Monster");
+            //gameObject.layer = LayerMask.NameToLayer("Monster");
             return;
         }
 
