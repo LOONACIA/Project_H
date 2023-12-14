@@ -19,6 +19,5 @@ public class TestScript : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(m_status.IsKnockedDown);
     }
 }

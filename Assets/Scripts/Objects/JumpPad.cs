@@ -9,12 +9,8 @@ using UnityEngine.Animations.Rigging;
 public class JumpPad : MonoBehaviour, IHackable
 {
     [SerializeField]
-    private float m_progressTime = 0.5f;
-
-    [SerializeField]
     private float m_jumpPower = 10;
 
-    // TODO : KnockDown 말고 다른 변수로 설정
     [SerializeField]
     private float m_knockDownTime = 0.5f;
 
@@ -61,8 +57,18 @@ public class JumpPad : MonoBehaviour, IHackable
 
         if (target.TryGetComponent<Rigidbody>(out var rigidbody))
         {
-            rigidbody.velocity = rigidbody.velocity.GetFlatVector();
-            rigidbody.AddForce(m_jumpPower * transform.up, ForceMode.VelocityChange);
+            var normalVec = transform.up;
+            var reflectionVec = GetReflectionVector(rigidbody.velocity.normalized, normalVec).normalized;
+            var targetVec = (reflectionVec + transform.up).normalized;
+
+            rigidbody.velocity = Vector3.zero;
+
+            rigidbody.AddForce(targetVec * m_jumpPower, ForceMode.VelocityChange);
         }
+    }
+
+    private Vector3 GetReflectionVector(Vector3 incidentVec, Vector3 normalVec)
+    { 
+        return incidentVec + 2 * normalVec * Vector3.Dot(-incidentVec, normalVec);
     }
 }
