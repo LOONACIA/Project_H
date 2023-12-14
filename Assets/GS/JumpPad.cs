@@ -15,7 +15,7 @@ public class JumpPad : MonoBehaviour, IHackable
 
     private bool m_isHacking;
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         if (m_isHacking && other.gameObject.layer == LayerMask.NameToLayer("Monster"))
         {
@@ -42,8 +42,10 @@ public class JumpPad : MonoBehaviour, IHackable
         if (target == null) return; 
 
         if (target.TryGetComponent<Rigidbody>(out var rigidbody))
-        { 
+        {
             rigidbody.AddForce(m_jumpPower * transform.up, ForceMode.VelocityChange);
+
+            Debug.Log(m_jumpPower * transform.up);
         }
     }
 }

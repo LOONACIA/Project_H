@@ -6,7 +6,7 @@ using VolumetricLines;
 
 [RequireComponent(typeof(CapsuleCollider))]
 [RequireComponent(typeof(VolumetricLineBehavior))]
-public class Laser : MonoBehaviour, IHackable
+public class Laser : MonoBehaviour
 {
     [SerializeField]
     private float m_progressTime = 0.5f;
@@ -16,6 +16,8 @@ public class Laser : MonoBehaviour, IHackable
     private VolumetricLineBehavior m_volumetricLineBehavior;
 
     private float m_originWidth;
+
+    private bool m_isHacking;
 
     private void Start()
     {
@@ -28,26 +30,29 @@ public class Laser : MonoBehaviour, IHackable
         m_originWidth = m_volumetricLineBehavior.LineWidth;
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Monster"))
+        if (other.TryGetComponent<Actor>(out var actor))
         {
-            if (collision.gameObject.TryGetComponent<ActorHealth>(out var health))
-            {
-                // TODO : 데미지 계산
-            }
+            actor.Health.Kill();
         }
     }
 
+
     public void Hacking()
     {
+        if (m_isHacking) return;
+
+        m_isHacking = true;
         m_collider.isTrigger = true;
 
         StartCoroutine(IE_ChangeWidth(m_originWidth, 0));
+
     }
 
     public void Recovery()
     {
+        m_isHacking = false;
         m_collider.isTrigger = false;
 
         StartCoroutine(IE_ChangeWidth(0, m_originWidth));
