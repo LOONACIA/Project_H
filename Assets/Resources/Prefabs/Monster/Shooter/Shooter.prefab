@@ -87,6 +87,37 @@ Transform:
   m_Father: {fileID: 2485717508786612688}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: -2.104, y: 84.938, z: -81.2}
+--- !u!1 &1044386628995101047
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4733928857299894235}
+  m_Layer: 0
+  m_Name: ShootPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4733928857299894235
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1044386628995101047}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.00238, y: -0.201, z: -0.00676}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2485717508786612688}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1652969160381171567
 GameObject:
   m_ObjectHideFlags: 0
@@ -480,6 +511,37 @@ Transform:
   m_Father: {fileID: 7468131969556736455}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5030293745216914699
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4623728794879833331}
+  m_Layer: 0
+  m_Name: ShootPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4623728794879833331
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5030293745216914699}
+  m_LocalRotation: {x: -0.55748445, y: -0.23088501, z: 0.0019030259, w: 0.79743314}
+  m_LocalPosition: {x: -0.0024, y: -0.2066, z: -0.0054}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 356340660462157180}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5633780154010830171
 GameObject:
   m_ObjectHideFlags: 0
@@ -636,6 +698,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ff90c82a7b2d46f40a06ca5d1f62b7b6, type: 3}
+--- !u!4 &356340660462157180 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2245176560484423118, guid: ff90c82a7b2d46f40a06ca5d1f62b7b6,
+    type: 3}
+  m_PrefabInstance: {fileID: 2006777903285201074}
+  m_PrefabAsset: {fileID: 0}
 --- !u!23 &356340660463927196 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 2245176560481998638, guid: ff90c82a7b2d46f40a06ca5d1f62b7b6,
@@ -1298,10 +1366,50 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3257968528142613903, guid: 54d40161d16ca8642929e01e97b258ef,
         type: 3}
+      propertyPath: m_laserColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3257968528142613903, guid: 54d40161d16ca8642929e01e97b258ef,
+        type: 3}
+      propertyPath: m_spawnPosition
+      value: 
+      objectReference: {fileID: 4733928857299894235}
+    - target: {fileID: 3257968528142613903, guid: 54d40161d16ca8642929e01e97b258ef,
+        type: 3}
       propertyPath: m_projectilePrefab
       value: 
       objectReference: {fileID: 4293170359346217614, guid: 5ae863600b2b34144bfabcf9b6eade54,
         type: 3}
+    - target: {fileID: 3257968528142613903, guid: 54d40161d16ca8642929e01e97b258ef,
+        type: 3}
+      propertyPath: m_shootLineColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3257968528142613903, guid: 54d40161d16ca8642929e01e97b258ef,
+        type: 3}
+      propertyPath: m_shootLineColor.b
+      value: 0.3820755
+      objectReference: {fileID: 0}
+    - target: {fileID: 3257968528142613903, guid: 54d40161d16ca8642929e01e97b258ef,
+        type: 3}
+      propertyPath: m_shootLineColor.g
+      value: 0.57318616
+      objectReference: {fileID: 0}
+    - target: {fileID: 3257968528142613903, guid: 54d40161d16ca8642929e01e97b258ef,
+        type: 3}
+      propertyPath: m_shootLineColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3257968528142613903, guid: 54d40161d16ca8642929e01e97b258ef,
+        type: 3}
+      propertyPath: m_shotgunBulletCount
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3257968528142613903, guid: 54d40161d16ca8642929e01e97b258ef,
+        type: 3}
+      propertyPath: m_shotgunSpreadAngle
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 3431406922424870189, guid: 54d40161d16ca8642929e01e97b258ef,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2586,12 +2694,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 8940702259344650510}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &4669205830241608394 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4386392388138881988, guid: d4c5ea9dbe85b9e45be3932eb81e2144,
-    type: 3}
-  m_PrefabInstance: {fileID: 8940702259344650510}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7468131969556736455 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1997314689023858889, guid: d4c5ea9dbe85b9e45be3932eb81e2144,
@@ -2723,7 +2825,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Type>k__BackingField: 0
-  m_spawnPosition: {fileID: 4669205830241608394}
+  m_spawnPosition: {fileID: 4623728794879833331}
   m_aimLayers:
     serializedVersion: 2
     m_Bits: 2496
@@ -2735,7 +2837,10 @@ MonoBehaviour:
   m_shotgunBulletCount: 5
   m_shotgunRange: 10
   m_maxDistance: 100
-  m_lineColor: {r: 1, g: 0.57318616, b: 0.3820755, a: 1}
+  m_monsterMaxAmmo: 5
+  m_playerMaxAmmo: 5
+  m_shootLineColor: {r: 1, g: 0.57318616, b: 0.3820755, a: 1}
+  m_laserColor: {r: 1, g: 0, b: 0, a: 0}
 --- !u!114 &6440975857097757200
 MonoBehaviour:
   m_ObjectHideFlags: 0
