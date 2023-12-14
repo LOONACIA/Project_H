@@ -46,6 +46,17 @@ public class ShooterWeapon : Weapon
     [Header("Sniper")]
     [SerializeField]
     private float m_maxDistance = 100f;
+    
+    [SerializeField]
+    [Tooltip("장탄 수")]
+    private int m_monsterMaxAmmo = 5;
+    
+    [SerializeField]
+    [Tooltip("플레이어의 장탄 수")]
+    private int m_playerMaxAmmo = 5;
+    
+    [SerializeField]
+    private Color m_lineColor;
 
     private Actor m_owner;
 
@@ -61,12 +72,11 @@ public class ShooterWeapon : Weapon
 
     private Vector3 m_target;
 
-    [SerializeField]
-    private Color m_lineColor;
-
     private float m_intensity = 1f;
 
     private float m_intensityMul = 0.2f;
+
+    public int Ammo => m_owner.IsPossessed ? m_playerMaxAmmo : m_monsterMaxAmmo;
 
     public override Vector3 Target
     {
@@ -109,6 +119,7 @@ public class ShooterWeapon : Weapon
     }
 
     protected override void OnHitMotion()
+    
     {
         Fire();
     }
@@ -119,11 +130,9 @@ public class ShooterWeapon : Weapon
     
     private static Vector3 GetRandomConeDirection(Vector3 coneDirection, float maxAngle)
     {
-        Vector3 randomDirection = Random.insideUnitCircle.normalized;
-        randomDirection = new(randomDirection.x, randomDirection.y, Random.Range(-maxAngle, maxAngle));
-
-        Quaternion rotation = Quaternion.Euler(randomDirection);
-        return rotation * coneDirection;
+        float angle = Random.Range(-maxAngle, maxAngle);
+        Vector3 randomDirection = Random.insideUnitSphere;
+        return Vector3.RotateTowards(coneDirection, randomDirection, Mathf.Deg2Rad * angle, 0.0f);
     }
 
     private void Fire()
@@ -149,6 +158,12 @@ public class ShooterWeapon : Weapon
 
     private void Snipe()
     {
+        int ammo = m_owner.IsPossessed ? m_playerMaxAmmo-- : m_monsterMaxAmmo--;
+        if (ammo <= 0)
+        {
+            return;
+        }
+        
         SetRay();
 
         var hits = Physics.RaycastAll(m_ray, m_maxDistance, m_aimLayers)
@@ -207,6 +222,11 @@ public class ShooterWeapon : Weapon
 
     private void UpdateTarget()
     {
+        if (m_owner.IsPossessed)
+        {
+            return;
+        }
+        
         UpdateAnimator();
         UpdateLine();
     }
@@ -254,6 +274,6 @@ public class ShooterWeapon : Weapon
         
         m_renderer.material.SetColor("_EmissionColor", m_lineColor * 1500f);
         Debug.Log(m_intensity * 10f);
-        m_drawLineCoroutine = Utility.Lerp(0.2f, 0f, 0.5f, value => m_renderer.startWidth = m_renderer.endWidth = value, () => m_intensity = 1f);
+        m_drawLineCoroutine = Utility.Lerp(0.3f, 0f, 0.5f, value => m_renderer.startWidth = m_renderer.endWidth = value, () => m_intensity = 1f);
     }
 }
