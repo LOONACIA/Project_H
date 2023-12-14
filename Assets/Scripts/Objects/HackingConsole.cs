@@ -7,25 +7,30 @@ using UnityEngine;
 [RequireComponent(typeof(Renderer))]
 public class HackingConsole : HackingObject
 {
-    [SerializeField]
+    [SerializeField, Tooltip("해킹 전의 원래 메테리얼")]
     private Material m_idleMaterial;
 
-    [SerializeField]
+    [SerializeField, Tooltip("해킹 후의 변경되는 메테리얼")]
     private Material m_HackingMaterial;
 
-    [SerializeField]
+    [SerializeField, Tooltip("해킹이 지속되는 시간")]
     private float m_hackingCoolTime = 5f;
 
-    [SerializeField]
+    [SerializeField, Tooltip("해킹에 걸리는 시간 ")]
     private float m_hackingProgressedTime = 0.5f;
 
+    [Tooltip("해킹 가능한 객체들")]
     private IHackable[] m_hackable;
 
     private Renderer m_renderer;
 
     private Coroutine m_coroutine;
 
+    [Tooltip("해킹당한 상태인지 여부")]
     private bool m_isHacking;
+
+    [Tooltip("해킹될 때 발생하는 이벤트")]
+    public event EventHandler OnHacking;
 
     private void Start()
     {
@@ -37,6 +42,15 @@ public class HackingConsole : HackingObject
     }
 
     public override void Interact()
+    {
+        if (m_isHacking) return;
+
+        OnHacking?.Invoke(this, EventArgs.Empty);
+        
+        Hacking();
+    }
+
+    public void Hacking()
     {
         if (m_isHacking) return;
 
