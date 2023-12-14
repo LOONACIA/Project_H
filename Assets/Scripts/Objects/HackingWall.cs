@@ -12,6 +12,8 @@ public class HackingWall : HackingObject
     public Collider col;
 
     public bool isHacking = false;
+
+    private float returnTime = 1.5f;
     #endregion
 
     #region PrivateVariables
@@ -104,7 +106,7 @@ public class HackingWall : HackingObject
                 break;
         }
 
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(returnTime);
 
         ReturnMat();
     }

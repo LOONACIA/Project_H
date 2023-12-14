@@ -302,23 +302,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4669205829997923240, guid: 03633e1d6064feb4a9223b746f5bec0a,
         type: 3}
-      propertyPath: m_lineColor.a
-      value: 1
+      propertyPath: m_shotgunBulletCount
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4669205829997923240, guid: 03633e1d6064feb4a9223b746f5bec0a,
         type: 3}
-      propertyPath: m_lineColor.b
-      value: 0.3820755
-      objectReference: {fileID: 0}
-    - target: {fileID: 4669205829997923240, guid: 03633e1d6064feb4a9223b746f5bec0a,
-        type: 3}
-      propertyPath: m_lineColor.g
-      value: 0.57318616
-      objectReference: {fileID: 0}
-    - target: {fileID: 4669205829997923240, guid: 03633e1d6064feb4a9223b746f5bec0a,
-        type: 3}
-      propertyPath: m_lineColor.r
-      value: 1
+      propertyPath: m_shotgunSpreadAngle
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03633e1d6064feb4a9223b746f5bec0a, type: 3}
@@ -378,7 +368,6 @@ GameObject:
   - component: {fileID: 635904840}
   - component: {fileID: 635904839}
   - component: {fileID: 635904838}
-  - component: {fileID: 635904837}
   m_Layer: 6
   m_Name: Wall (2)
   m_TagString: Untagged
@@ -386,22 +375,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 8
   m_IsActive: 1
---- !u!208 &635904837
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 635904836}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
 --- !u!65 &635904838
 BoxCollider:
   m_ObjectHideFlags: 0
