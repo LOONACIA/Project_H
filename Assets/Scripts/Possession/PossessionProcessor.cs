@@ -139,8 +139,7 @@ public class PossessionProcessor : MonoBehaviour
             out var hit, 300f, m_targetLayers);
 
         Vector2 view = new Vector2(cameraPivot.transform.forward.x, cameraPivot.transform.forward.y);
-        Vector2 viewNormal = new Vector2(cameraPivot.transform.forward.x, 0);
-        float objectAngle = Vector2.SignedAngle(viewNormal, view);  
+        float objectAngle = Vector2.SignedAngle(Vector2.right, view);  
 
         m_shuriken =
             Instantiate(m_sender.Data.ShurikenObj, cameraTransform.position + Vector3.down * 1 / 16f,

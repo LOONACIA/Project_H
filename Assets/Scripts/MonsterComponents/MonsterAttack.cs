@@ -102,6 +102,12 @@ public class MonsterAttack : MonoBehaviour
             Target = default;
         }
 
+        // TODO: 하드코딩 제거
+        if (AttackWeapon is ShooterWeapon { Ammo: <= 0 })
+        {
+            return;
+        }
+
         m_actor.Animator.SetTrigger(s_attackAnimationKey);
         AttackWeapon.Target = Target;
         AttackWeapon.StartAttack();
