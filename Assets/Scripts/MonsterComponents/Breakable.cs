@@ -52,7 +52,9 @@ public class Breakable : MonoBehaviour
         ExplodePart(info.AttackDirection);
 
         if (m_coroutine == null)
+        {
             m_coroutine = StartCoroutine(DestroyPart(m_initInterval));
+        }
     }
 
     private void ExplodePart(Vector3 attackDirection)
@@ -61,9 +63,10 @@ public class Breakable : MonoBehaviour
         m_rigidbody.AddForce(attackDirection*m_explosionForce,ForceMode.Impulse);
     }
 
-    private IEnumerator DestroyPart(float interver)
-    { 
-        yield return new WaitForSeconds(interver);
+    private IEnumerator DestroyPart(float interval)
+    {
+        float randomInterval = Random.Range(interval * 0.9f, interval * 1.1f);
+        yield return new WaitForSeconds(randomInterval);
         Destroy(gameObject);
     }
 }
