@@ -6,6 +6,8 @@ public class DoNothingIfStunned : Action
     private ActorStatus m_status;
 
     private NavMeshAgent m_navMeshAgent;
+
+    private bool m_isAborted;
     
     public override void OnAwake()
     {
@@ -17,7 +19,7 @@ public class DoNothingIfStunned : Action
 
     public override void OnStart()
     {
-        m_navMeshAgent.isStopped = m_status.IsStunned;
+        m_navMeshAgent.isStopped = m_isAborted = m_status.IsStunned;
     }
 
     public override TaskStatus OnUpdate()
@@ -27,6 +29,9 @@ public class DoNothingIfStunned : Action
 
     public override void OnEnd()
     {
-        m_navMeshAgent.isStopped = false;
+        if (m_isAborted && m_navMeshAgent.enabled)
+        {
+            m_navMeshAgent.isStopped = false;
+        }
     }
 }
