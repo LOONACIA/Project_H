@@ -86,12 +86,6 @@ public class MonsterMovementData : ScriptableObject
     [SerializeField]
     private float m_dashCoolTime = 1.0f;
 
-    [SerializeField]
-    private float m_dashDelay = 0.2f;
-
-    [SerializeField]
-    private int m_maxDashCount = 2;
-
     public float MoveSpeed => m_moveSpeed;
     
     public float DashMultiplier => m_dashMultiplier;
@@ -135,8 +129,4 @@ public class MonsterMovementData : ScriptableObject
     public float DashDuration => m_dashDuration;
 
     public float DashCoolTime => m_dashCoolTime;
-
-    public float DashDelay => m_dashDelay;
-
-    public int MaxDashCount => m_maxDashCount;
 }
