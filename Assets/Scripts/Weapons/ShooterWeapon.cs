@@ -56,7 +56,10 @@ public class ShooterWeapon : Weapon
     private int m_playerMaxAmmo = 5;
     
     [SerializeField]
-    private Color m_lineColor;
+    private Color m_shootLineColor;
+
+    [SerializeField]
+    private Color m_laserColor;
 
     private Actor m_owner;
 
@@ -261,7 +264,7 @@ public class ShooterWeapon : Weapon
         m_renderer.startWidth = m_renderer.endWidth = 0.005f;
 
         m_intensity += m_intensityMul;
-        m_renderer.material.SetColor("_EmissionColor", m_lineColor * m_intensity);
+        m_renderer.material.SetColor("_EmissionColor", m_laserColor * m_intensity);
     }
 
     private void DrawLine(Vector3 target)
@@ -272,8 +275,8 @@ public class ShooterWeapon : Weapon
 
         //Color c = m_renderer.material.GetColor("_EmissionColor");
         
-        m_renderer.material.SetColor("_EmissionColor", m_lineColor * 1500f);
-        Debug.Log(m_intensity * 10f);
-        m_drawLineCoroutine = Utility.Lerp(0.3f, 0f, 0.5f, value => m_renderer.startWidth = m_renderer.endWidth = value, () => m_intensity = 1f);
+        m_renderer.material.SetColor("_EmissionColor", m_shootLineColor * 1500f);
+
+        m_drawLineCoroutine = Utility.Lerp(0.2f, 0f, 0.5f, value => m_renderer.startWidth = m_renderer.endWidth = value, () => m_intensity = 1f);
     }
 }
