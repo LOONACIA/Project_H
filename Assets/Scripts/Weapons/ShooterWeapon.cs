@@ -254,6 +254,6 @@ public class ShooterWeapon : Weapon
         
         m_renderer.material.SetColor("_EmissionColor", m_lineColor * 1500f);
         Debug.Log(m_intensity * 10f);
-        m_drawLineCoroutine = Utility.Lerp(0.3f, 0f, 0.5f, value => m_renderer.startWidth = m_renderer.endWidth = value, () => m_intensity = 1f);
+        m_drawLineCoroutine = Utility.Lerp(0.2f, 0f, 0.5f, value => m_renderer.startWidth = m_renderer.endWidth = value, () => m_intensity = 1f);
     }
 }
