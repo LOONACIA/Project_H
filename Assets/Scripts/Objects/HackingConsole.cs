@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 
 [RequireComponent(typeof(Renderer))]
-public class HackingLaserConsole : HackingObject
+public class HackingConsole : HackingObject
 {
     [SerializeField]
     private Material m_idleMaterial;
@@ -19,7 +19,7 @@ public class HackingLaserConsole : HackingObject
     [SerializeField]
     private float m_hackingProgressedTime = 0.5f;
 
-    private Laser[] m_lasers;
+    private IHackable[] m_hackable;
 
     private Renderer m_renderer;
 
@@ -29,7 +29,7 @@ public class HackingLaserConsole : HackingObject
 
     private void Start()
     {
-        m_lasers = GetComponentsInChildren<Laser>();
+        m_hackable = GetComponentsInChildren<IHackable>();
 
         m_renderer = GetComponent<Renderer>();
         m_idleMaterial = Instantiate(m_renderer.material);
@@ -44,9 +44,9 @@ public class HackingLaserConsole : HackingObject
 
         ConvertMaterial(m_idleMaterial, m_HackingMaterial);
 
-        foreach (var laser in m_lasers)
-        { 
-            laser.Hacking();
+        foreach (var hackable in m_hackable)
+        {
+            hackable.Hacking();
         }
 
         Invoke(nameof(Recovery), m_hackingCoolTime);
@@ -58,9 +58,9 @@ public class HackingLaserConsole : HackingObject
 
         ConvertMaterial(m_HackingMaterial, m_idleMaterial);
 
-        foreach (var laser in m_lasers)
+        foreach (var hackable in m_hackable)
         {
-            laser.Recovery();
+            hackable.Recovery();
         }
     }
 
