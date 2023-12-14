@@ -64,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 44a458310a780a64fbc30506f4d7e760, type: 2}
+  - {fileID: 2100000, guid: db3f5778e844ab84984db1e5903210c1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -111,9 +111,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d290b59d36743af49b914001f2b781ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_idleMaterial: {fileID: 2100000, guid: 44a458310a780a64fbc30506f4d7e760, type: 2}
-  m_HackingMaterial: {fileID: 2100000, guid: 412855c4be2cc114c83e60fbc0fef189, type: 2}
-  m_hackingCoolTime: 5
+  m_idleMaterial: {fileID: 2100000, guid: db3f5778e844ab84984db1e5903210c1, type: 2}
+  m_HackingMaterial: {fileID: 2100000, guid: a6844b77ac3ee2b448e46ffb43c2f99d, type: 2}
+  m_hackingCoolTime: 1
   m_hackingProgressedTime: 0.5
 --- !u!1 &3215487049314508566
 GameObject:
@@ -125,7 +125,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3215487049314508567}
   m_Layer: 0
-  m_Name: HackingJump
+  m_Name: HackingJumpPad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -258,4 +258,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_progressTime: 0.5
-  m_jumpPower: 20
+  m_jumpPower: 10
+  m_knockDownTime: 0.5

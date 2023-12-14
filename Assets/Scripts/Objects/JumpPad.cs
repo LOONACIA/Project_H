@@ -13,6 +13,10 @@ public class JumpPad : MonoBehaviour, IHackable
     [SerializeField]
     private float m_jumpPower = 10;
 
+    // TODO : KnockDown 말고 다른 변수로 설정
+    [SerializeField]
+    private float m_knockDownTime = 0.5f;
+
     private bool m_isHacking;
 
     private void OnTriggerStay(Collider other)
@@ -39,7 +43,12 @@ public class JumpPad : MonoBehaviour, IHackable
 
     private void Jump(GameObject target)
     {
-        if (target == null) return; 
+        if (target == null) return;
+
+        if (target.TryGetComponent<ActorStatus>(out var actorStatus))
+        {
+            actorStatus.SetKnockDown(m_knockDownTime);
+        }
 
         if (target.TryGetComponent<Rigidbody>(out var rigidbody))
         {
