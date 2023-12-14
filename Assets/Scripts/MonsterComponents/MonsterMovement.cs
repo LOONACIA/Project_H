@@ -370,7 +370,9 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         int count = Physics.OverlapCapsuleNonAlloc(p1, p2, m_collider.radius - 0.01f, cols, mask);
         for(int i = 0; i < count; i++)
         {
-            if (m_standingGround==null||cols[i].gameObject.GetInstanceID() != m_standingGround.gameObject.GetInstanceID())
+            //나 자신을 검사했거나, 밟고있는 땅을 검사할 경우 continue
+            if (cols[i].gameObject.GetInstanceID() != m_collider.gameObject.GetInstanceID()
+                &&(m_standingGround == null || cols[i].gameObject.GetInstanceID() != m_standingGround.gameObject.GetInstanceID()))
             {
                 //내가 서있는 땅과 다른 곳과 충돌했다면 이동하지 않음
                 //Debug.Log("Dash: 이상한 놈과 충돌 중...");
