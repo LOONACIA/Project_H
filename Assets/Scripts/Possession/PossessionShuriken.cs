@@ -125,7 +125,8 @@ public class PossessionShuriken : MonoBehaviour
             }
 
             targetActor = other.gameObject.GetComponent<Actor>();
-            HitTarget();
+            HitTarget(); 
+            Invoke(nameof(DestroySelf), 1f);
         }
         else if ((m_surikenStopLayer & (1 << other.gameObject.layer)) != 0)
         {
@@ -181,6 +182,7 @@ public class PossessionShuriken : MonoBehaviour
 
             targetActor = other.gameObject.GetComponent<Actor>();
             HitTarget();
+            Invoke(nameof(DestroySelf), 1f);
         }
         else if ((m_surikenStopLayer & (1 << other.gameObject.layer)) != 0)
         {
