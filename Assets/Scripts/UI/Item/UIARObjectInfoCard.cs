@@ -29,6 +29,10 @@ public class UIARObjectInfoCard : UIScene
     [SerializeField]
     private float m_textYPosition = 10f;
 
+    private RectTransform m_canvasRectTransform;
+
+    private CanvasScaler m_canvasScaler;
+
     private Animator m_animator;
 
     private Image m_leftTop;
@@ -52,6 +56,8 @@ public class UIARObjectInfoCard : UIScene
         base.Awake();
 
         m_animator = GetComponent<Animator>();
+        m_canvasRectTransform = GetComponentInChildren<Canvas>().transform as RectTransform;
+        m_canvasScaler = GetComponentInChildren<CanvasScaler>();
     }
 
     private void OnEnable()
@@ -89,32 +95,33 @@ public class UIARObjectInfoCard : UIScene
     public void UpdatePosition(float xMin, float xMax, float yMin, float yMax)
     {
         float width = xMax - xMin;
-        float scale = 1f;
+        float distanceScale = 1f;
         if (width < 128f)
         {
-            scale = Mathf.Max(width, 32f) / 128f;
+            distanceScale = Mathf.Max(width, 32f) / 128f;
         }
-        
-        m_leftTop.rectTransform.anchoredPosition = transform.InverseTransformPoint(new(xMin, yMin));
-        m_leftBottom.rectTransform.anchoredPosition = transform.InverseTransformPoint(new(xMin, yMax));
-        m_rightTop.rectTransform.anchoredPosition = transform.InverseTransformPoint(new(xMax, yMin));
-        m_rightBottom.rectTransform.anchoredPosition = transform.InverseTransformPoint(new(xMax, yMax));
 
-        m_leftTop.rectTransform.localScale = new(scale, scale);
-        m_leftBottom.rectTransform.localScale = new(scale, scale);
-        m_rightTop.rectTransform.localScale = new(scale, scale);
-        m_rightBottom.rectTransform.localScale = new(scale, scale);
+        m_leftTop.rectTransform.anchoredPosition = m_canvasRectTransform.InverseTransformPoint(new(xMin, yMin));
+        m_leftBottom.rectTransform.anchoredPosition = m_canvasRectTransform.InverseTransformPoint(new(xMin, yMax));
+        m_rightTop.rectTransform.anchoredPosition = m_canvasRectTransform.InverseTransformPoint(new(xMax, yMin));
+        m_rightBottom.rectTransform.anchoredPosition = m_canvasRectTransform.InverseTransformPoint(new(xMax, yMax));
+
+        m_leftTop.rectTransform.localScale = new(distanceScale, distanceScale);
+        m_leftBottom.rectTransform.localScale = new(distanceScale, distanceScale);
+        m_rightTop.rectTransform.localScale = new(distanceScale, distanceScale);
+        m_rightBottom.rectTransform.localScale = new(distanceScale, distanceScale);
+        
+        // UI가 반응형으로 동작하게 만드는 스케일 변수
+        float reactiveXScale = m_canvasScaler.referenceResolution.x / Screen.width;
         
         // Line의 길이를 실제 text가 렌더링되는 길이와 맞추기 위함
-        float respectedWidth = width;
-        respectedWidth = Mathf.Max(respectedWidth, m_description.GetRenderedValues().x);
+        float respectedWidth = Mathf.Max(width, m_description.GetRenderedValues().x / reactiveXScale);
         
-        //float xOffset = (respectedWidth - width) / 2f * scale;
         float respectedXCenter = xMin + (respectedWidth / 2f);
         
-        Vector3 respectedDescriptionPosition = transform.InverseTransformPoint(new(respectedXCenter, yMin + m_textYPosition * scale));
+        Vector3 respectedDescriptionPosition = m_canvasRectTransform.InverseTransformPoint(new(respectedXCenter, yMin + m_textYPosition * distanceScale));
         m_description.rectTransform.anchoredPosition = respectedDescriptionPosition;
-        m_description.rectTransform.sizeDelta = new(respectedWidth, m_description.rectTransform.sizeDelta.y);
+        m_description.rectTransform.sizeDelta = new(respectedWidth * reactiveXScale, m_description.rectTransform.sizeDelta.y);
     }
 
     protected override void Init()
