@@ -19,7 +19,7 @@ public class HackingConsole : HackingObject
     [SerializeField, Tooltip("해킹에 걸리는 시간 ")]
     private float m_hackingProgressedTime = 0.5f;
 
-    [Tooltip("해킹 가능한 객체들")]
+    [SerializeField, Tooltip("해킹 가능한 객체들")]
     private IHackable[] m_hackable;
 
     private Renderer m_renderer;
