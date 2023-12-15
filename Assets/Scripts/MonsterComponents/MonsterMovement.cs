@@ -356,6 +356,11 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         else
         {
             m_standingGround = null;
+
+            if (m_isJumped) 
+            {
+                m_isJumpApplied = true;
+            }
         }
     }
 
@@ -508,13 +513,13 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
     private void CheckJumping()
     {
         //점프키가 눌렸고 속도가 0보다 크다면 진짜 점프중
-        if (m_isJumped && m_rigidbody.velocity.y > 0)
-        {
-            m_isJumpApplied = true;
-        }
+        //if (m_isJumped && m_rigidbody.velocity.y > 0)
+        //{
+        //    m_isJumpApplied = true;
+        //}
 
         //실제 점프 중이면서, 속도는 0 이하이고, 땅에 닿았다면 점프 끝
-        if (m_isJumpApplied && m_rigidbody.velocity.y <= 0 && IsOnGround)
+        if (m_isJumpApplied && /*m_rigidbody.velocity.y <= 0 &&*/ IsOnGround)
         {
             m_isJumped = false;
             m_isJumpApplied = false;
@@ -566,6 +571,6 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
     private void UpdateAnimator()
     {
         bool jump = m_actor.IsPossessed ? m_isJumpApplied : !m_isOnGround;
-        m_actor.Animator.SetBool("Jump", jump);
+        m_actor.Animator.SetBool(ConstVariables.ANIMATOR_PARAMETER_JUMP, jump);
     }
 }
