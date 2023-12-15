@@ -30,7 +30,12 @@ public class ActorStatus : MonoBehaviour
     [SerializeField]
     [ReadOnly]
     private float m_knockDownTime;
-    
+
+    [SerializeField]
+    [ReadOnly]
+    [Tooltip("JumpPad로 인해 공중에 떠있는 상태")]
+    private bool m_isFlying;
+
     [SerializeField]
     [ReadOnly]
     private bool m_isKnockBack;
@@ -88,16 +93,21 @@ public class ActorStatus : MonoBehaviour
         set
         {
             // 기존에 생성한 오브젝트 제거
-            if (m_shield?.ShieldObject != null)
-                Destroy(m_shield.ShieldObject);
-
             if (m_shield != null)
+            {
                 m_shield.ShieldChanged -= OnShieldChanged;
+                if (m_shield.ShieldObject != null)
+                {
+                    Destroy(m_shield.ShieldObject);
+                }
+            }
 
             m_shield = value;
 
-            if (m_shield != null) 
+            if (m_shield != null)
+            {
                 m_shield.ShieldChanged += OnShieldChanged;
+            }
 
             ShieldChanged?.Invoke(this, EventArgs.Empty);
         }
@@ -116,6 +126,12 @@ public class ActorStatus : MonoBehaviour
     {
         get => m_knockDownTime;
         private set => m_knockDownTime = value;
+    }
+
+    public bool IsFlying
+    {
+        get => m_isFlying;
+        set => m_isFlying = value;
     }
 
     /// <summary>
@@ -151,7 +167,7 @@ public class ActorStatus : MonoBehaviour
         
         KnockDownTime = duration;
     }
-    
+
     private void Update()
     {
         UpdateKnockDownTime();
