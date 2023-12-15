@@ -349,6 +349,9 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         if (IsOnGround)
         {
             m_standingGround = ground.collider.gameObject;
+
+            // 착지시 IsFlying 상태이상 초기화
+            m_actor.Status.IsFlying = false;
         }
         else
         {
@@ -467,7 +470,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
 
     private void ApplyFriction()
     {
-        if (m_actor.Status.IsKnockedDown && !IsOnGround) return;
+        if (m_actor.Status.IsFlying) return;
 
         Vector3 frictionDirection = -m_rigidbody.velocity.GetFlatVector().normalized *
                                     (Time.fixedDeltaTime * m_data.FrictionAcceleration);
