@@ -36,6 +36,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         public override TaskStatus OnUpdate()
         {
             if (HasArrived()) {
+                m_monsterMovement.StopAgentMove();
                 return TaskStatus.Success;
             }
 
@@ -43,6 +44,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             var target = Target();
             if (target == Vector3.zero)
             {
+                m_monsterMovement.StopAgentMove();
                 return TaskStatus.Failure;
             }
             m_monsterMovement.MoveTo(target);
