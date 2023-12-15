@@ -44,6 +44,8 @@ public class WaveTrigger : MonoBehaviour
 
     private bool m_isTriggered;
 
+    private WaitForSeconds m_waitForSecondsCache = new(0.1f);
+
     public event EventHandler Triggered;
 
     public event EventHandler WaveStart;
@@ -88,7 +90,7 @@ public class WaveTrigger : MonoBehaviour
     {
         while (enabled)
         {
-            yield return new WaitForSeconds(0.1f);
+            yield return m_waitForSecondsCache;
             Evaluate();
         }
     }
