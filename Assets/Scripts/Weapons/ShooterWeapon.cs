@@ -240,6 +240,11 @@ public class ShooterWeapon : Weapon
         Vector3 to = (Target - m_spawnPosition.position).normalized;
         float angle = Vector3.Angle(from, to) / 180f;
         angle = Mathf.Clamp(angle, 0.1f, 0.9f);
+
+        // 타겟과 거리가 너무 가까운 경우에는 정면을 보도록 설정
+        if (Vector3.Distance(Target, m_spawnPosition.position) < 3f)
+            angle = 0.5f;
+
         m_owner.Animator.SetFloat(ConstVariables.ANIMATOR_PARAMETER_AIM_ANGLE, angle);
     }
 
