@@ -538,7 +538,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
     {
         if (m_data == null)
         {
-            Debug.LogWarning($"{name}: {nameof(m_data)} is null");
+            Debug.LogWarning($"{name}: {nameof(m_data)} is null", gameObject);
         }
     }
 

@@ -138,8 +138,7 @@ public class MonsterAttack : MonoBehaviour
         // 공격 성공 시 애니메이션 실행 
         //StartCoroutine(AttackImpact());
         m_actor.Animator.SetTrigger(s_targetCheckAnimationKey);
-
-
+        
         foreach (var hit in info)
         {
             IHealth health = hit.HitObject.Health;
@@ -149,8 +148,6 @@ public class MonsterAttack : MonoBehaviour
             {
                 continue;
             }
-
-            Debug.Log($"{health.gameObject.name} is hit by {gameObject.name}, damage: {data.Damage}");
 
             //데미지 처리
             DamageInfo damageInfo = new DamageInfo(data.Damage, hit.AttackDirection, hit.HitPosition, m_actor);
@@ -176,13 +173,12 @@ public class MonsterAttack : MonoBehaviour
         }
     }
 
-    public void OnHitEvent(object o, IEnumerable<WeaponAttackInfo> attackInfo)
+    private void OnHitEvent(object o, IEnumerable<WeaponAttackInfo> attackInfo)
     {
         //대상 무기의 공격 데이터를 설정정함
-        Weapon hitWeapon = o as Weapon;
-        if (hitWeapon == null)
+        if (o is not Weapon hitWeapon)
         {
-            Debug.LogError("무기가 아닌 오브젝트가 공격 호출함: " + o.ToString());
+            Debug.LogError("무기가 아닌 오브젝트가 공격 호출함: " + o);
             return;
         }
 

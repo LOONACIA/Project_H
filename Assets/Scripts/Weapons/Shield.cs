@@ -19,7 +19,6 @@ public class Shield : MonoBehaviour
     // 쉴드 생성한 시간
     private float m_startTime;
 
-
     // 쉴드 프리팹
     public GameObject ShieldObject { get; private set; }
 
@@ -51,10 +50,13 @@ public class Shield : MonoBehaviour
             return true;
         }
     }
-
-
+    
     public event EventHandler ShieldChanged;
-
+    
+    private void Awake()
+    {
+        Init(m_shieldPoint, m_timeLimit, gameObject);
+    }
 
     public void Init(float shieldPoint, float timeLimit, GameObject shieldObject)
     {
@@ -63,7 +65,7 @@ public class Shield : MonoBehaviour
         m_timeLimit = timeLimit;
 
         // 쉴드 제한 시간이 0 이하면, 제한 시간이 없는 것으로 처리
-        m_hasTimeLimit = (timeLimit > 0 ? true : false); 
+        m_hasTimeLimit = (timeLimit > 0 ? true : false);
 
         if (shieldObject != null)
             ShieldObject = shieldObject;
@@ -76,10 +78,4 @@ public class Shield : MonoBehaviour
         ShieldPoint -= damage;
         ShieldChanged?.Invoke(this, null);
     }
-
-    private void Start()
-    {
-        Init(m_shieldPoint, m_timeLimit, gameObject);
-    }
-
 }

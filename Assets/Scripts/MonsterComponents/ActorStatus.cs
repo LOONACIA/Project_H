@@ -88,16 +88,21 @@ public class ActorStatus : MonoBehaviour
         set
         {
             // 기존에 생성한 오브젝트 제거
-            if (m_shield?.ShieldObject != null)
-                Destroy(m_shield.ShieldObject);
-
             if (m_shield != null)
+            {
                 m_shield.ShieldChanged -= OnShieldChanged;
+                if (m_shield.ShieldObject != null)
+                {
+                    Destroy(m_shield.ShieldObject);
+                }
+            }
 
             m_shield = value;
 
-            if (m_shield != null) 
+            if (m_shield != null)
+            {
                 m_shield.ShieldChanged += OnShieldChanged;
+            }
 
             ShieldChanged?.Invoke(this, EventArgs.Empty);
         }
