@@ -30,7 +30,12 @@ public class ActorStatus : MonoBehaviour
     [SerializeField]
     [ReadOnly]
     private float m_knockDownTime;
-    
+
+    [SerializeField]
+    [ReadOnly]
+    [Tooltip("JumpPad로 인해 공중에 떠있는 상태")]
+    private bool m_isFlying;
+
     [SerializeField]
     [ReadOnly]
     private bool m_isKnockBack;
@@ -123,6 +128,12 @@ public class ActorStatus : MonoBehaviour
         private set => m_knockDownTime = value;
     }
 
+    public bool IsFlying
+    {
+        get => m_isFlying;
+        set => m_isFlying = value;
+    }
+
     /// <summary>
     /// 0~1로 표현되며, 1일때 스킬 사용 가능.
     /// </summary>
@@ -156,7 +167,7 @@ public class ActorStatus : MonoBehaviour
         
         KnockDownTime = duration;
     }
-    
+
     private void Update()
     {
         UpdateKnockDownTime();
