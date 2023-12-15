@@ -29,7 +29,7 @@ public class WallGridSizeSetting : MonoBehaviour
         float sizeX = transform.lossyScale.x / 4f;
         float sizeZ = transform.lossyScale.z / 4f;
         //mr.material.SetTextureOffset("_MainTex", new Vector2(maxSize, maxSize));
-        mr.material.mainTextureScale = new Vector2(sizeX, sizeZ);
+        mr.material.mainTextureScale = new Vector2(sizeZ, sizeX);
     }
     #endregion
 }
