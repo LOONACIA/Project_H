@@ -75,6 +75,8 @@ public class PossessionProcessor : MonoBehaviour
             return;
         }
         
+        ClearTarget();
+        
         m_sender = sender;
         IAnimationEventReceiver receiver = m_sender.GetComponentInChildren<IAnimationEventReceiver>();
         receiver?.SetPossession(this);
