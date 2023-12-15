@@ -58,6 +58,20 @@ public class JumpPad : MonoBehaviour, IHackable
 
         m_canJump = false;
 
+        if (target.TryGetComponent<ActorStatus>(out var status))
+        {
+            // 대상을 잠시 KnockDown 상태로 만듦 => 대쉬 상태를 끊음
+            status.SetKnockDown(0.1f);
+
+            // 대상을 IsFlying 상태로 만듦
+            if (target.TryGetComponent<MonsterMovement>(out var movement))
+            {
+                if (m_coroutine != null)
+                    StopCoroutine(m_coroutine);
+                m_coroutine = StartCoroutine(IE_SetIsFlying(status, movement));
+            }
+        }
+
         // 대상에 힘을 가함
         if (target.TryGetComponent<Rigidbody>(out var rigidbody))
         {
@@ -68,13 +82,6 @@ public class JumpPad : MonoBehaviour, IHackable
             rigidbody.velocity = Vector3.zero;
 
             rigidbody.AddForce(targetVec * m_jumpPower, ForceMode.VelocityChange);
-        }
-
-        // 대상을 IsFlying 상태로 만듦
-        if (target.TryGetComponent<ActorStatus>(out var status)
-            && target.TryGetComponent<MonsterMovement>(out var movement))
-        {
-            StartCoroutine(IE_SetIsFlying(status, movement));
         }
     }
 
