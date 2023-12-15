@@ -198,6 +198,22 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         }
     }
 
+    /// <summary>
+    /// NavMeshAgent의 움직임을 멈춥니다.
+    /// </summary>
+    public void StopAgentMove()
+    {
+        if (m_agent.enabled)
+        {
+            m_agent.isStopped = true;
+            m_agent.ResetPath();
+            m_agent.velocity = Vector3.zero;    
+
+            //m_agent.updatePosition = false;
+            //m_agent.updateRotation = false;
+        }
+    }
+
     public void TryJump()
     {
         // 지상에 있지 않은 경우
