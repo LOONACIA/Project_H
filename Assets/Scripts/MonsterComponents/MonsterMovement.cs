@@ -451,6 +451,8 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
 
     private void ApplyFriction()
     {
+        if (m_actor.Status.IsKnockedDown && !IsOnGround) return;
+
         Vector3 frictionDirection = -m_rigidbody.velocity.GetFlatVector().normalized *
                                     (Time.fixedDeltaTime * m_data.FrictionAcceleration);
         if (Mathf.Abs(m_rigidbody.velocity.x) - Mathf.Abs(frictionDirection.x) < 0)
