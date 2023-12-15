@@ -44,7 +44,7 @@ public class Laser : MonoBehaviour, IHackable
         if (m_isHacking) return;
 
         m_isHacking = true;
-        m_collider.isTrigger = true;
+        m_collider.enabled = false;
 
         StartCoroutine(IE_ChangeWidth(m_originWidth, 0));
 
@@ -53,7 +53,7 @@ public class Laser : MonoBehaviour, IHackable
     public void Recovery()
     {
         m_isHacking = false;
-        m_collider.isTrigger = false;
+        m_collider.enabled = true;
 
         StartCoroutine(IE_ChangeWidth(0, m_originWidth));
     }
