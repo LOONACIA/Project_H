@@ -5,7 +5,7 @@ public class BodyPartController : MonoBehaviour
 {
     private IHealth m_health;
 
-    private List<Breakable> m_bodyPartScripts = new();
+    private List<Breakable> m_bodyPartScripts = new(50);
 
     private GameObject m_bodyPartCollector;
 
@@ -13,24 +13,26 @@ public class BodyPartController : MonoBehaviour
     {
         m_health = GetComponentInParent<IHealth>(true);
         m_health.Dying += ReplaceBody;
+        
+        int layer = LayerMask.NameToLayer("Body Parts");
 
         var children = GetComponentsInChildren<Transform>(true);
         foreach (var child in children)
         {
-            if (child.gameObject.layer == LayerMask.NameToLayer("Body Parts"))
+            if (child.gameObject.layer == layer)
             { 
                 var bodyPartScript = child.gameObject.AddComponent<Breakable>();
                 
                 m_bodyPartScripts.Add(bodyPartScript);
 
-                child.gameObject.layer = LayerMask.NameToLayer("Body Parts");
+                child.gameObject.layer = layer;
             }
         }
 
         m_bodyPartCollector = GameObject.Find("BodyPartCollector");
         if (m_bodyPartCollector == null)
         {
-            m_bodyPartCollector = new GameObject() { name = "BodyPartCollector" };
+            m_bodyPartCollector = new() { name = "BodyPartCollector" };
         }
     }
 
