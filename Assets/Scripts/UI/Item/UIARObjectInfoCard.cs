@@ -64,8 +64,8 @@ public class UIARObjectInfoCard : UIScene
     {
         if (m_description is not null)
         {
-            // Clear text for typewriter effect.
-            m_description.text = string.Empty;
+            // Clear for typewriter effect.
+            m_description.maxVisibleCharacters = 0;
         }
         
         m_animator.SetTrigger(s_showFillAnimationKey);
@@ -75,6 +75,7 @@ public class UIARObjectInfoCard : UIScene
     {
         m_typeWritingCoroutine?.Abort();
         m_info = info;
+        m_description.text = m_info.Description;
         m_waitForSecondsCache = new(info.TypeWritingDelay);
     }
     
@@ -115,7 +116,7 @@ public class UIARObjectInfoCard : UIScene
         float reactiveXScale = m_canvasScaler.referenceResolution.x / Screen.width;
         
         // Line의 길이를 실제 text가 렌더링되는 길이와 맞추기 위함
-        float respectedWidth = Mathf.Max(width, m_description.GetRenderedValues().x / reactiveXScale);
+        float respectedWidth = Mathf.Max(width, m_description.GetPreferredValues(m_description.text).x / reactiveXScale);
         
         float respectedXCenter = xMin + (respectedWidth / 2f);
         
@@ -145,15 +146,15 @@ public class UIARObjectInfoCard : UIScene
             yield break;
         }
 
-        string text = m_info.Description;
-
         yield return new WaitUntil(() => m_description != null);
-        int cursor = text.Length;
-
-        while (cursor >= 0)
+        
+        int count = 0;
+        int maxLength = m_info.Description.Length;
+        
+        while (count < maxLength)
         {
             yield return m_waitForSecondsCache;
-            m_description.text = text[..^cursor--];
+            m_description.maxVisibleCharacters = ++count;
         }
     }
 }
