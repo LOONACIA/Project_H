@@ -357,10 +357,11 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         {
             m_standingGround = null;
 
+            if (m_rigidbody.velocity.y < 0)
+                m_isJumped = false;
+
             if (m_isJumped) 
-            {
                 m_isJumpApplied = true;
-            }
         }
     }
 
@@ -570,7 +571,8 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
 
     private void UpdateAnimator()
     {
-        bool jump = m_actor.IsPossessed ? m_isJumpApplied : !m_isOnGround;
+        //bool jump = m_actor.IsPossessed ? m_isJumpApplied : !m_isOnGround;
+        bool jump = m_actor.IsPossessed ? !m_isOnGround : !m_isOnGround;
         m_actor.Animator.SetBool(ConstVariables.ANIMATOR_PARAMETER_JUMP, jump);
     }
 }
