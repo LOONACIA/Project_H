@@ -48,10 +48,6 @@ public class ShooterWeapon : Weapon
     private float m_maxDistance = 100f;
     
     [SerializeField]
-    [Tooltip("장탄 수")]
-    private int m_monsterMaxAmmo = 5;
-    
-    [SerializeField]
     [Tooltip("플레이어의 장탄 수")]
     private int m_playerMaxAmmo = 5;
     
@@ -79,7 +75,7 @@ public class ShooterWeapon : Weapon
 
     private float m_intensityMul = 0.2f;
 
-    public int Ammo => m_owner.IsPossessed ? m_playerMaxAmmo : m_monsterMaxAmmo;
+    public int Ammo => m_owner.IsPossessed && m_isSnipingMode ? m_playerMaxAmmo : 1;
 
     public override Vector3 Target
     {
@@ -161,8 +157,7 @@ public class ShooterWeapon : Weapon
 
     private void Snipe()
     {
-        int ammo = m_owner.IsPossessed ? m_playerMaxAmmo-- : m_monsterMaxAmmo--;
-        if (ammo <= 0)
+        if (m_owner.IsPossessed && m_playerMaxAmmo-- <= 0)
         {
             return;
         }
