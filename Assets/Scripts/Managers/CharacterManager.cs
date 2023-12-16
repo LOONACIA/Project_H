@@ -1,3 +1,4 @@
+using LOONACIA.Unity.Managers;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -50,5 +51,6 @@ public class CharacterManager
     {
         FindController();
         RespawnPlayerCharacter();
+        ManagerRoot.UI.ShowSceneUI<UIInfoOverlay>().Register(Controller);
     }
 }
