@@ -90,7 +90,7 @@ public class MoveMachine : InteractableObject
             sqrDistance = (m_destination - m_target.transform.position).sqrMagnitude;
             yield return new WaitForFixedUpdate();
         }
-
+        m_target.transform.position = m_destination;
         transform.SetParent(m_originalParent);
     }
 
