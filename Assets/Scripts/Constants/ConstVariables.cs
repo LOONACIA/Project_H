@@ -56,6 +56,7 @@ public static class ConstVariables
     public const string ANIMATOR_PARAMETER_ATTACK_INDEX = "AttackIndex";
     public const string ANIMATOR_PARAMETER_MOVEMENT_RATIO = "MovementRatio";
     public const string ANIMATOR_PARAMETER_AIM_ANGLE = "AimAngle";
+    public const string ANIMATOR_PARAMETER_JUMP = "Jump";
 
     [Header("Visual Effects")]
     public const string VFX_GRAPH_PARAMETER_PARTICLE_COUNT = "ParticleCount";
