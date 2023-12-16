@@ -79,14 +79,14 @@ public class UIShuriken : UIScene
 
     private void OnTargetHit(object sender, float _time)
     {
-        Get<Image, Images>(Images.ShurikenImage).gameObject.SetActive(false);
+        //Get<Image, Images>(Images.ShurikenImage).gameObject.SetActive(false);
 
-        var possessionImage = Get<Image, Images>(Images.PossessionImage);
-        possessionImage.gameObject.SetActive(true);
+        //var possessionImage = Get<Image, Images>(Images.PossessionImage);
+        //possessionImage.gameObject.SetActive(true);
 
-        Color color = possessionImage.color;
-        color.a = 0.5f; // 타겟에 표창 적중 시의 알파 값
-        possessionImage.color = color;
+        //Color color = possessionImage.color;
+        //color.a = 0.5f; // 타겟에 표창 적중 시의 알파 값
+        //possessionImage.color = color;
 
         // 빙의 쿨타임 게이지 색 변경
         var PossessionGague = Get<Image, Images>(Images.PossessionGague);
@@ -100,17 +100,17 @@ public class UIShuriken : UIScene
 
     private void OnPossessable(object sender, EventArgs e)
     {
-        var possessionImage = Get<Image, Images>(Images.PossessionImage);
+        //var possessionImage = Get<Image, Images>(Images.PossessionImage);
 
-        Color color = possessionImage.color;
-        color.a = 1; // 빙의가 가능할 때의 알파 값
-        possessionImage.color = color;
+        //Color color = possessionImage.color;
+        //color.a = 1; // 빙의가 가능할 때의 알파 값
+        //possessionImage.color = color;
     }
     
     private void OnPossessed(object sender, Actor e)
     {
-        Get<Image, Images>(Images.ShurikenImage).gameObject.SetActive(true);
-        Get<Image, Images>(Images.PossessionImage).gameObject.SetActive(false);
+        //Get<Image, Images>(Images.ShurikenImage).gameObject.SetActive(true);
+        //Get<Image, Images>(Images.PossessionImage).gameObject.SetActive(false);
 
         var possessionGague = Get<Image, Images>(Images.PossessionGague);
 
