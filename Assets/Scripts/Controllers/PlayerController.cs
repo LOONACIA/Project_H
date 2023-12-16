@@ -347,6 +347,7 @@ public partial class PlayerController : MonoBehaviour
         GameManager.Camera.CurrentCamera = m_character.GetComponentInChildren<CinemachineVirtualCamera>();
     }
 
+    // ReSharper disable Unity.PerformanceAnalysis
     private void ChangeActor(Actor oldActor, Actor newActor)
     {
         if (newActor == null)

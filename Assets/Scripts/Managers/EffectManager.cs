@@ -1,4 +1,5 @@
 using LOONACIA.Unity;
+using LOONACIA.Unity.Coroutines;
 using LOONACIA.Unity.Managers;
 using System.Collections;
 using UnityEngine;
@@ -10,6 +11,8 @@ using URPGlitch.Runtime.DigitalGlitch;
 
 public class EffectManager
 {
+    private readonly WaitForSeconds m_waitForSecondsCache = new(0.1f);
+    
     private GameObject m_sparkEffect;
     
 	private Volume m_volume;
@@ -27,8 +30,10 @@ public class EffectManager
     private DigitalGlitchVolume m_digitalGlithVolume;
 
     private ChromaticAberration m_chromaticAberration;
-	
-	public void Init()
+    
+    private CoroutineEx m_hitVignetteCoroutine;
+
+    public void Init()
 	{
         m_sparkEffect = GameManager.Settings.SparkEffect;
 
@@ -144,15 +149,16 @@ public class EffectManager
 
     public void ShowHitVignetteEffect()
     {
+        m_hitVignetteCoroutine?.Abort();
         m_vignette.color.value = new(255/255f, 83/255f, 82/255f);
         m_vignette.intensity.value = 0.4f;
 
-        GameManager.Instance.StartCoroutine(Recovery());
+        m_hitVignetteCoroutine = CoroutineEx.Create(GameManager.Instance, Recovery());
         return;
 
         IEnumerator Recovery()
         {
-            yield return new WaitForSeconds(0.5f);
+            yield return m_waitForSecondsCache;
             RecoverVignetteEffect();
         }
     }
@@ -207,7 +213,7 @@ public class EffectManager
 
     private void RecoverVignetteEffect()
     {
-        Utility.Lerp(0.5f, 0, 1.5f, value => m_vignette.intensity.Override(value), ignoreTimeScale: true);
+        m_hitVignetteCoroutine = Utility.Lerp(0.5f, 0, 1f, value => m_vignette.intensity.Override(value), ignoreTimeScale: true);
     }
 
     #region Camera
