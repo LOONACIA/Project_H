@@ -16722,6 +16722,7 @@ Transform:
   - {fileID: 5140683870811011937}
   - {fileID: 5704226084767637848}
   - {fileID: 5704226084171222557}
+  - {fileID: 6566296436824825173}
   m_Father: {fileID: 5140683870898437603}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -18151,7 +18152,6 @@ Transform:
   - {fileID: 7561946784195269764}
   - {fileID: 5548850547444476236}
   - {fileID: 1179740598036440719}
-  - {fileID: 6566296436824825173}
   m_Father: {fileID: 5140683870898437603}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -25992,9 +25992,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6566296436824825173}
-  - component: {fileID: 2591505522546146740}
+  - component: {fileID: 389204866318562892}
   m_Layer: 8
-  m_Name: Platform (21)
+  m_Name: TransparentNavMeshStatic
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -26008,26 +26008,29 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5937966286182182807}
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -204.59998, y: 100, z: 19.999996}
+  m_LocalPosition: {x: -204.60004, y: 100, z: 20}
   m_LocalScale: {x: 10, y: 10, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5140683870095643743}
-  m_RootOrder: 18
+  m_Father: {fileID: 5140683869672443147}
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!65 &2591505522546146740
-BoxCollider:
+--- !u!208 &389204866318562892
+NavMeshObstacle:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5937966286182182807}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &7294857924854107502
 GameObject:
   m_ObjectHideFlags: 0
