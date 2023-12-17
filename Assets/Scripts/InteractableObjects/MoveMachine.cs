@@ -1,5 +1,6 @@
 using LOONACIA.Unity;
 using LOONACIA.Unity.Coroutines;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -29,6 +30,8 @@ public class MoveMachine : InteractableObject
     private Vector3 m_destination;
 
     private CoroutineEx m_moveCoroutine;
+
+    public event EventHandler ElevatorMoveEnd;
 
     private void Awake()
     {
@@ -91,6 +94,7 @@ public class MoveMachine : InteractableObject
             yield return new WaitForFixedUpdate();
         }
         m_target.transform.position = m_destination;
+        ElevatorMoveEnd.Invoke(this, null);
         transform.SetParent(m_originalParent);
     }
 
