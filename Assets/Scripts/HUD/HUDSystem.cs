@@ -1,9 +1,7 @@
-using Cinemachine;
 using LOONACIA.Unity.Collections;
 using LOONACIA.Unity.Managers;
 using System;
 using System.Buffers;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -11,6 +9,9 @@ using UnityEngine;
 public class HUDSystem : MonoBehaviour
 {
     private readonly Dictionary<Transform, UIARObjectInfoCard> m_cards = new();
+
+    [SerializeField]
+    private PlayerController m_controller;
 
     [SerializeField]
     private LayerMask m_aimLayers;
@@ -28,6 +29,7 @@ public class HUDSystem : MonoBehaviour
 
     private void Awake()
     {
+        ManagerRoot.UI.ShowSceneUI<UIHUD>().Register(m_controller);
         m_camera = Camera.main;
 
         var ui = ManagerRoot.UI.ShowSceneUI<UIARObjectInfoCard>();

@@ -3,7 +3,6 @@ using System;
 using LOONACIA.Unity.Managers;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class PossessionProcessor : MonoBehaviour
 {
