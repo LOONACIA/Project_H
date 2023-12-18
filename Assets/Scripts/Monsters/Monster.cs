@@ -85,7 +85,30 @@ public class Monster : Actor
             Animator.SetBool(ConstVariables.ANIMATOR_PARAMETER_BLOCK, value);
         }
     }
-    
+
+    protected override void EnableAIComponents()
+    {
+        base.EnableAIComponents();
+        if (m_navMeshAgent != null)
+        {
+            //NavMeshAgent가 켜질 수 있는 조건이 되면, Movement에서 자동으로 on합니다.
+            m_navMeshAgent.enabled = false;
+            m_rigidbody.isKinematic = false;
+        }
+    }
+
+    protected override void DisableAIComponents()
+    {
+        base.DisableAIComponents();
+
+        if (m_navMeshAgent != null)
+        {
+            m_navMeshAgent.enabled = false;
+            m_rigidbody.isKinematic = false;
+        }
+    }
+
+
     protected virtual void UpdateAnimator()
     {
         var velocity = IsPossessed ? m_rigidbody.velocity.GetFlatVector() : m_navMeshAgent.velocity.GetFlatVector();
