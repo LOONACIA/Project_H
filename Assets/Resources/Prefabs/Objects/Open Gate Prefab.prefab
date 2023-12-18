@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5559460463675797661}
   - component: {fileID: 5559460463675797660}
   - component: {fileID: 5559460463675797663}
+  - component: {fileID: 1473269629463656012}
   m_Layer: 0
   m_Name: GateOpenMachine
   m_TagString: Untagged
@@ -112,7 +113,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_requiredTime: 0.5
   m_gate: {fileID: 5559460464346311103}
-  m_alarmRadius: 0
+  m_alarmWhenOpen: 1
+--- !u!114 &1473269629463656012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5559460463675797662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a13d5732330cc954cae609a46b563059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_origin: {fileID: 0}
+  <AlertRange>k__BackingField: 10
 --- !u!1 &5559460463727037364
 GameObject:
   m_ObjectHideFlags: 0
@@ -175,8 +190,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a38e8df93730829489380c2e4a1042ea, type: 2}
-  - {fileID: 2100000, guid: 511443f74cd609144be6f73118508a68, type: 2}
+  - {fileID: 2100000, guid: 29e54a01a824d8b49aab72d2063ca00e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -222,7 +236,7 @@ GameObject:
   - component: {fileID: 5559460464346311100}
   - component: {fileID: 7989590787356003388}
   m_Layer: 0
-  m_Name: Gate
+  m_Name: Gates
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -356,8 +370,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a38e8df93730829489380c2e4a1042ea, type: 2}
-  - {fileID: 2100000, guid: 511443f74cd609144be6f73118508a68, type: 2}
+  - {fileID: 2100000, guid: 29e54a01a824d8b49aab72d2063ca00e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

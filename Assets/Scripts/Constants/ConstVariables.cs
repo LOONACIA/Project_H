@@ -58,6 +58,10 @@ public static class ConstVariables
     public const string ANIMATOR_PARAMETER_AIM_ANGLE = "AimAngle";
     public const string ANIMATOR_PARAMETER_JUMP = "Jump";
 
+    [Header("Animator Layer")]
+    public const string ANIMATOR_LAYER_BASE_LAYER = "Base Layer";
+    public const string ANIMATOR_LAYER_AIM_LAYER = "Aim Layer";
+
     [Header("Visual Effects")]
     public const string VFX_GRAPH_PARAMETER_PARTICLE_COUNT = "ParticleCount";
     public const string VFX_GRAPH_PARAMETER_DIRECTION = "Direction";
