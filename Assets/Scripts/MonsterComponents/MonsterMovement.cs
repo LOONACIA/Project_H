@@ -137,6 +137,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
 
         CheckGround();
         CheckKnockBackEnd();
+        CheckCanUseNavMesh();
     }
 
     public void Move(Vector3 directionInput)
@@ -453,24 +454,29 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
 
     private void CheckKnockBackEnd()
     {
+        //넉백이 아니라면 처리하지 않음
         if (!m_actor.Status.IsKnockBack) return;
 
-        //최소 넉백시간이 지나지 않았다면 return;
+        //넉백 종료조건: 정해진 최소 시간 경과&IsOnGround
         if (m_lastKnockBackTime + m_minKnockBackTime > Time.time) return;
+        if (!IsOnGround) return;
 
-        float sqrThreshold = m_knockBackEndSpeedThreshold * m_knockBackEndSpeedThreshold;
-        if (m_rigidbody.velocity.sqrMagnitude <= sqrThreshold)
+        //23.12.18 NavMeshAgent는 CheckCanUseNavMesh에서 처리
+        m_actor.Status.IsKnockBack = false;
+        m_actor.Animator.SetBool(s_animatorKnockBack, false);
+    }
+
+    private void CheckCanUseNavMesh()
+    {
+        //해킹된 상태가 아니면서, 땅위에 있으면서, 아무 상태이상도 아닌 경우에만 true
+        if (!m_actor.IsPossessed &&!m_agent.enabled&&IsOnGround)
         {
-            //속도가 최소보다 작아졌으므로 KnockBack 종료, 관련 변수 초기화
-            //AI라면 Agent를 켜줍니다.
-            if (!m_actor.IsPossessed)
-            {
-                m_agent.enabled = !m_actor.IsPossessed;
-                m_rigidbody.isKinematic = true;
-            }
+            //NavMesh가 켜지면 안되는 상태이상에 대한 처리
+            //TODO: 넉백을 시간 대신, 물리 값으로 처리할지에 대한 여부
+            if (m_actor.Status.IsKnockBack) return;
 
-            m_actor.Status.IsKnockBack = false;
-            m_actor.Animator.SetBool(s_animatorKnockBack, false);
+            m_agent.enabled = true;
+            m_rigidbody.isKinematic = true;
         }
     }
 
