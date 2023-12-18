@@ -85,9 +85,6 @@ public class GameUIManager
 
     public void ShowObjects()
     {
-        //TEST 코드
-        return;
-
         m_objects = ManagerRoot.UI.ShowSceneUI<UIObjects>();
     }
     
@@ -179,9 +176,6 @@ public class GameUIManager
     
     public int ShowDialog(string text)
     {
-        //TEST 코드
-        return -1;
-
         if (m_dialog == null)
         {
             m_dialog = ManagerRoot.UI.ShowPopupUI<UIMessageDialog>();            
@@ -194,9 +188,6 @@ public class GameUIManager
 
     public int ShowDialog(MessageDialogInfo[] texts, float interval = 1f)
     {
-        //TEST 코드
-        return -1;
-
         if (m_dialog == null)
         {
             m_dialog = ManagerRoot.UI.ShowPopupUI<UIMessageDialog>();

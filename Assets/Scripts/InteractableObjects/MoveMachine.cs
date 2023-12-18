@@ -8,6 +8,8 @@ using UnityEngine;
 public class MoveMachine : InteractableObject
 {
     private readonly Dictionary<Transform, Transform> m_targets = new();
+    
+    private readonly WaitForFixedUpdate m_waitForFixedUpdateCache = new();
 
     [SerializeField]
     [Tooltip("이동할 오브젝트")]
@@ -91,7 +93,7 @@ public class MoveMachine : InteractableObject
             m_target.transform.position = Vector3.MoveTowards(m_target.transform.position, m_destination,
                 m_speed * Time.fixedDeltaTime);
             sqrDistance = (m_destination - m_target.transform.position).sqrMagnitude;
-            yield return new WaitForFixedUpdate();
+            yield return m_waitForFixedUpdateCache;
         }
         m_target.transform.position = m_destination;
         ElevatorMoveEnd.Invoke(this, null);
