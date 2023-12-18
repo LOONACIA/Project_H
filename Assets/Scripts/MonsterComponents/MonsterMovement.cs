@@ -329,14 +329,12 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         }
         else if (IsOnGround)
         {
-            m_rigidbody.AddForce(Vector3.up * (m_data.Gravity * Time.fixedDeltaTime),
-                ForceMode.VelocityChange);
+            m_rigidbody.AddForce(Vector3.up * (m_data.Gravity * Time.fixedDeltaTime), ForceMode.VelocityChange);
         }
         else
         {
             // 점프 중력 적용
-            float jumpGravity = -2f * m_data.JumpHeight /
-                                (m_data.FallTime * m_data.FallTime);
+            float jumpGravity = -2f * m_data.JumpHeight / (m_data.FallTime * m_data.FallTime);
             m_rigidbody.AddForce(Vector3.up * (jumpGravity * Time.fixedDeltaTime), ForceMode.VelocityChange);
         }
     }
@@ -478,8 +476,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
     {
         if (m_actor.Status.IsFlying) return;
 
-        Vector3 frictionDirection = -m_rigidbody.velocity.GetFlatVector().normalized *
-                                    (Time.fixedDeltaTime * m_data.FrictionAcceleration);
+        Vector3 frictionDirection = -m_rigidbody.velocity.GetFlatVector().normalized * (Time.fixedDeltaTime * m_data.FrictionAcceleration);
         if (Mathf.Abs(m_rigidbody.velocity.x) - Mathf.Abs(frictionDirection.x) < 0)
         {
             frictionDirection.x = -m_rigidbody.velocity.x;

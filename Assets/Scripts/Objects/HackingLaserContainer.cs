@@ -1,9 +1,4 @@
-using BehaviorDesigner.Runtime.Tasks.Unity.UnityTransform;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using Unity.Collections;
 using UnityEngine;
 
 public class HackingLaserContainer : MonoBehaviour
