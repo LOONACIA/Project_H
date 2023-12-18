@@ -6,6 +6,7 @@ using Michsky.UI.Shift;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class UIInfoOverlay : UIScene
@@ -15,6 +16,11 @@ public class UIInfoOverlay : UIScene
         BackLayerCanvas,
         FrontLayerCanvas
     }
+    
+    private enum Texts
+    {
+        HPText
+    }    
     
     private readonly List<RectTransform> m_backLayerHpBoxes = new();
     
@@ -33,6 +39,8 @@ public class UIInfoOverlay : UIScene
     private Canvas m_backLayerCanvas;
     
     private Canvas m_frontLayerCanvas;
+
+    private TextMeshProUGUI m_hpTextBox;
 
     private GameObject m_backLayerRoot;
     
@@ -66,9 +74,12 @@ public class UIInfoOverlay : UIScene
     protected override void Init()
     {
         Bind<Canvas, Canvases>();
+        Bind<TextMeshProUGUI, Texts>();
         
         m_backLayerCanvas = Get<Canvas, Canvases>(Canvases.BackLayerCanvas);
         m_frontLayerCanvas = Get<Canvas, Canvases>(Canvases.FrontLayerCanvas);
+
+        m_hpTextBox = Get<TextMeshProUGUI, Texts>(Texts.HPText);
 
         m_backLayerRoot = m_backLayerCanvas.gameObject.FindChild("Root");
         m_frontLayerRoot = m_frontLayerCanvas.gameObject.FindChild("Root");
@@ -82,7 +93,7 @@ public class UIInfoOverlay : UIScene
         }
         
         m_controller.CharacterChanged += OnCharacterChanged;
-        m_controller.Damaged += OnDamaged;
+        m_controller.HpChanged += OnHpChanged;
     }
 
     private void UnregisterEvents()
@@ -93,17 +104,17 @@ public class UIInfoOverlay : UIScene
         }
         
         m_controller.CharacterChanged -= OnCharacterChanged;
-        m_controller.Damaged -= OnDamaged;
-    }
-    
-    private void OnDamaged(object sender, DamageInfo e)
-    {
-        int damage = e.Damage;
+        m_controller.HpChanged -= OnHpChanged;
     }
     
     private void OnCharacterChanged(object sender, Actor e)
     {
         ResetHpBoxes();
+    }
+    
+    private void OnHpChanged(object sender, int e)
+    {
+        m_hpTextBox.text = e.ToString();
     }
 
     private void ResetHpBoxes()
