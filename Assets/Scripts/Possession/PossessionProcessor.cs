@@ -95,7 +95,12 @@ public class PossessionProcessor : MonoBehaviour
         m_isPossessable = false;
 
         PossessTarget();
-        ManagerRoot.Resource.Release(m_shuriken.gameObject);
+
+        //Shuriken이 시간이 지나면 사라지기도 하므로, 삭제가 되었을 때는 Release하지 않음
+        if (m_shuriken != null)
+        {
+            ManagerRoot.Resource.Release(m_shuriken.gameObject);
+        }
     }
 
     //표창이 박힌 타겟에게 빙의
