@@ -1,14 +1,14 @@
 using System.Collections;
 using UnityEngine;
 
-public enum GateState
-{ 
-    Close,
-    Open,
-}
-
 public class DissolveGate : MonoBehaviour, IGate
 {
+    private enum GateState
+    {
+        Close,
+        Open,
+    }
+
     [SerializeField]
     private GateState m_state;
 

@@ -46,6 +46,8 @@ public class WaveTrigger : MonoBehaviour
 
     private WaitForSeconds m_waitForSecondsCache = new(0.1f);
 
+    private Collider m_collider;
+
     public event EventHandler Triggered;
 
     public event EventHandler WaveStart;
@@ -63,6 +65,8 @@ public class WaveTrigger : MonoBehaviour
     private void Start()
     {
         Monsters.CollectionChanged += OnMonsterCollectionChanged;
+
+        TryGetComponent<Collider>(out m_collider);
     }
 
     private void OnEnable()
@@ -209,10 +213,10 @@ public class WaveTrigger : MonoBehaviour
 
     private void AddInitialMontsers()
     {
-        if (!TryGetComponent<Collider>(out var collider))
+        if (m_collider == null)
             return;
 
-        var monsterColliders = Physics.OverlapBox(collider.bounds.center, collider.bounds.size / 2, Quaternion.identity, LayerMask.NameToLayer("Montser"));
+        var monsterColliders = Physics.OverlapBox(m_collider.bounds.center, m_collider.bounds.size / 2, Quaternion.identity, LayerMask.NameToLayer("Montser"));
         foreach (var monsterCollider in monsterColliders)
         {
             if (monsterCollider.TryGetComponent<Monster>(out var monster) && !monster.IsPossessed)

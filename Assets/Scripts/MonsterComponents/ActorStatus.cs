@@ -54,7 +54,7 @@ public class ActorStatus : MonoBehaviour
         {
             if (m_hp != value)
             {
-                m_hp = value;
+                m_hp = Mathf.Max(value, 0);
                 HpChanged?.Invoke(this, m_hp);
             }
         }

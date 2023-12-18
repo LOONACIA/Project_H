@@ -19,11 +19,15 @@ public class DoNothingIfStunned : Action
 
     public override void OnStart()
     {
-        m_navMeshAgent.isStopped = m_isAborted = m_status.IsStunned;
+        m_isAborted = m_status.IsStunned;
     }
 
     public override TaskStatus OnUpdate()
     {
+        if (m_navMeshAgent.enabled)
+        {
+            m_navMeshAgent.isStopped = m_isAborted;
+        }
         return m_status.IsStunned ? TaskStatus.Running : TaskStatus.Failure;
     }
 

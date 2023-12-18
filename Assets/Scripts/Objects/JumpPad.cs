@@ -1,10 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Animations.Rigging;
-using UnityEngine.Rendering;
 
 [RequireComponent(typeof(Collider))]
 public class JumpPad : MonoBehaviour, IHackable

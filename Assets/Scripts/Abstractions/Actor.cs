@@ -203,13 +203,8 @@ public abstract class Actor : MonoBehaviour
         }
     }
 
-    protected void EnableAIComponents()
+    protected virtual void EnableAIComponents()
     {
-        if (m_navMeshAgent != null)
-        {
-            m_navMeshAgent.enabled = true;
-        }
-
         if (m_rigidbody != null)
         {
             m_rigidbody.isKinematic = true;
@@ -226,16 +221,11 @@ public abstract class Actor : MonoBehaviour
         }
     }
 
-    protected void DisableAIComponents()
+    protected virtual void DisableAIComponents()
     {
         if (m_behaviorTree != null)
         {
             m_behaviorTree.enabled = false;
-        }
-
-        if (m_navMeshAgent != null)
-        {
-            m_navMeshAgent.enabled = false;
         }
 
         if (m_rigidbody != null)

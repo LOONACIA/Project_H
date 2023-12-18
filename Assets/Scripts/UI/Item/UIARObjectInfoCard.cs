@@ -1,6 +1,5 @@
 using LOONACIA.Unity.Coroutines;
 using LOONACIA.Unity.UI;
-using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;

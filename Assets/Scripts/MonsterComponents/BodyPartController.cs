@@ -1,3 +1,4 @@
+using LOONACIA.Unity;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,7 +22,7 @@ public class BodyPartController : MonoBehaviour
         {
             if (child.gameObject.layer == layer)
             { 
-                var bodyPartScript = child.gameObject.AddComponent<Breakable>();
+                var bodyPartScript = child.gameObject.GetOrAddComponent<Breakable>();
                 
                 m_bodyPartScripts.Add(bodyPartScript);
 
