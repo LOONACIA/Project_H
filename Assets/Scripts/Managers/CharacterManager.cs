@@ -51,6 +51,5 @@ public class CharacterManager
     {
         FindController();
         RespawnPlayerCharacter();
-        ManagerRoot.UI.ShowSceneUI<UIInfoOverlay>().Register(Controller);
     }
 }
