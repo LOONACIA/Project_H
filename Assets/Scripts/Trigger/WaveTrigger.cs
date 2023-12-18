@@ -153,7 +153,7 @@ public class WaveTrigger : MonoBehaviour
         if (e.NewItems != null)
         {
             foreach (var monster in e.NewItems.OfType<Monster>())
-            {
+            { 
                 monster.Dying += OnMonsterDying;
             }
         }
@@ -199,10 +199,26 @@ public class WaveTrigger : MonoBehaviour
 
         // Trigger spawn
         m_isTriggered = true;
+        AddInitialMontsers();
         Triggered?.Invoke(this, EventArgs.Empty);
         StartCoroutine(CoWaitSpawn());
     }
-    
+
+    private void AddInitialMontsers()
+    {
+        if (!TryGetComponent<Collider>(out var collider))
+            return;
+
+        var monsterColliders = Physics.OverlapBox(collider.bounds.center, collider.bounds.size / 2, Quaternion.identity, LayerMask.NameToLayer("Montser"));
+        foreach (var monsterCollider in monsterColliders)
+        {
+            if (monsterCollider.TryGetComponent<Monster>(out var monster) && !monster.IsPossessed)
+            {
+                Monsters.Add(monster);
+            }
+        }
+    }
+
     private IEnumerator CoWaitSpawn()
     {
         m_processor.ClearTarget();
