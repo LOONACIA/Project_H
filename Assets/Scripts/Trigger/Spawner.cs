@@ -7,36 +7,11 @@ public class Spawner : MonoBehaviour
     [SerializeField]
     private WaveInfoList[] m_waveInfoList;
 
-    //[SerializeField]
-    //private Collider m_spawnPos;
-
-    //private int m_spawnedEnemy = 0;
-
-    //private CoroutineEx m_enemySpawnCoroutine;
-
     private WaveTrigger m_waveTrigger;
 
     private int m_currentSpawnIndex;
 
     private Collider m_collider;
-
-    // Start is called before the first frame update
-    //private void OnEnable()
-    //{
-    //    m_spawnPos = this.transform.GetComponent<Collider>();
-    //    Monster monster = GetComponent<Monster>();
-    //    m_enemySpawnCoroutine = CoroutineEx.Create(this, EnemySpawn(m_spawnPos));
-    //    m_waveTrigger = GetComponentInParent<WaveTrigger>();
-    //    if (m_spawnedEnemy == m_enemyCount)
-    //    {
-    //        if (m_enemySpawnCoroutine?.IsRunning is true)
-    //        {
-    //            m_enemySpawnCoroutine.Abort();
-    //            m_enemySpawnCoroutine = null;
-    //            // this.gameObject.SetActive(false);
-    //        }
-    //    }
-    //}
 
     private void Start()
     {
@@ -133,7 +108,6 @@ public class Spawner : MonoBehaviour
         return spawnPosition;
     }
 
-
     /// <summary>
     /// 콜라이더 범위 내 좌표 전달
     /// </summary>
@@ -153,8 +127,7 @@ public class Spawner : MonoBehaviour
 
         return new(randomX, randomY, randomZ);
     }
-
-
+    
     [System.Serializable]
     private class WaveInfo
     {
