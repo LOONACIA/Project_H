@@ -16,36 +16,20 @@ public class SpawnEffectInfo
 
     public Renderer Renderer => m_renderer;
 
-    public Material[] OriginMaterials
-    {
-        get
-        {
-            return m_originMaterials.ToArray();
-        }
-        set
-        {
-            m_originMaterials = value;
-        }
-    }
-
-    public Material[] SpawnMaterials 
-    {
-        get
-        { 
-            return m_spawnMaterials.ToArray();
-        }
-        private set
-        { 
-            m_spawnMaterials = value;
-        }
-    }
+    public Material[] GetOriginMaterials() => m_originMaterials.ToArray();
+    
+    public Material[] GetSpawnMaterials() => m_spawnMaterials.ToArray();
 
     public void Init()
     {
-        if (OriginMaterials == null) 
-            OriginMaterials = Renderer.sharedMaterials;  
-        
-        if (SpawnMaterials == null)
-            SpawnMaterials = OriginMaterials;
+        if (m_originMaterials == null)
+        {
+            m_originMaterials = Renderer.sharedMaterials;
+        }
+
+        if (m_spawnMaterials == null)
+        {
+            m_spawnMaterials = m_originMaterials;
+        }
     }
 }

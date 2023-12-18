@@ -4,6 +4,7 @@ using UnityEngine;
 public class HackingDissolveWall : HackingObject
 {
     #region PublicVariables
+
     public MeshRenderer mr;
     public Material idleMat;
     public Material hackingMat;
@@ -12,14 +13,23 @@ public class HackingDissolveWall : HackingObject
     public bool isHacking = false;
 
     private float returnTime = 3f;
+
     #endregion
 
     #region PrivateVariables
-    [SerializeField] float m_minAmount = 0.85f;
-    [SerializeField] float m_maxAmount = 0.95f;
+
+    private static readonly int s_dissolveAmountID = Shader.PropertyToID("_DissolveAmount");
+
+    [SerializeField]
+    float m_minAmount = 0.85f;
+
+    [SerializeField]
+    float m_maxAmount = 0.95f;
+
     #endregion
 
     #region PublicMethod
+
     public override void Interact()
     {
         if (isHacking == true)
@@ -38,9 +48,11 @@ public class HackingDissolveWall : HackingObject
 
         StartCoroutine(IE_Idle());
     }
+
     #endregion
 
     #region PrivateMethod
+
     private void ConvertMat()
     {
         isHacking = true;
@@ -70,12 +82,12 @@ public class HackingDissolveWall : HackingObject
     {
         mr.material = idleMat;
         float value = (m_maxAmount + m_minAmount) / 2;
-        idleMat.SetFloat("_DissolveAmount", value);
+        idleMat.SetFloat(s_dissolveAmountID, value);
         float mul = -0.01f;
         while (true)
         {
             value += mul;
-            idleMat.SetFloat("_DissolveAmount", value);
+            idleMat.SetFloat(s_dissolveAmountID, value);
 
             yield return new WaitForSeconds(0.05f);
 
@@ -91,7 +103,7 @@ public class HackingDissolveWall : HackingObject
 
         while (true)
         {
-            mr.material.SetFloat("_DissolveAmount", value);
+            mr.material.SetFloat(s_dissolveAmountID, value);
 
             value -= 0.005f;
 
@@ -107,5 +119,6 @@ public class HackingDissolveWall : HackingObject
 
         ReturnMat();
     }
+
     #endregion
 }

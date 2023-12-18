@@ -1,3 +1,4 @@
+using LOONACIA.Unity;
 using LOONACIA.Unity.Coroutines;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,7 +12,10 @@ public class DetectionCone : MonoBehaviour
     
     [SerializeField]
     [Tooltip("수신자 목록을 업데이트하는 간격")]
+    [NotifyFieldChanged(nameof(OnUpdateIntervalChanged))]
     private float m_updateInterval = 0.5f;
+    
+    private WaitForSeconds m_waitForSecondsCache;
 
     private Alarm m_alarm;
     
@@ -31,6 +35,8 @@ public class DetectionCone : MonoBehaviour
 
     private void Start()
     {
+        m_waitForSecondsCache = new(m_updateInterval);
+        
         // Cone angle is half of spot angle
         float angle = m_light.spotAngle / 2f;
         m_coneAngle = Mathf.Cos(angle * Mathf.Deg2Rad);
@@ -109,8 +115,13 @@ public class DetectionCone : MonoBehaviour
                 m_alarm.Trigger(actor);
             }
             
-            yield return new WaitForSeconds(m_updateInterval);
+            yield return m_waitForSecondsCache;
         }
+    }
+
+    private void OnUpdateIntervalChanged()
+    {
+        m_waitForSecondsCache = new(m_updateInterval);
     }
 
     private void OnValidate()

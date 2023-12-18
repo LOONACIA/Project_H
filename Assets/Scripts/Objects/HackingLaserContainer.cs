@@ -70,7 +70,7 @@ public class HackingLaserContainer : MonoBehaviour
 
     private void Rotate()
     {
-        transform.Rotate(m_rotationVec * m_rotationSpeed * Time.deltaTime);
+        transform.Rotate(m_rotationVec * (m_rotationSpeed * Time.deltaTime));
     }
 
     private void OnDrawGizmosSelected()

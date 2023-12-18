@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class SpawnEffect : MonoBehaviour
 {
+    private static readonly int s_dissolveAmount = Shader.PropertyToID("_DissolveAmount");
+    
     [Header("Renderer Info")]
     [SerializeField]
     private SpawnEffectInfo[] m_spawnEffectInfos;
@@ -28,7 +30,6 @@ public class SpawnEffect : MonoBehaviour
     private Coroutine m_solidifyCoroutine;
 
     private Coroutine m_lerpCoroutine;
-
 
 #if UNITY_EDITOR
     private void OnValidate()
@@ -66,17 +67,6 @@ public class SpawnEffect : MonoBehaviour
         m_actor.Spawned -= OnSpawned;
     }
 
-    // Test
-    //private void Update()
-    //{
-    //    if (Input.GetKey(KeyCode.Escape))
-    //    {
-    //        if (m_spawnEffectCoroutine != null)
-    //            StopCoroutine(m_spawnEffectCoroutine);
-    //        m_spawnEffectCoroutine = StartCoroutine(SwitchMaterials());
-    //    }
-    //}
-
     public void Play()
     {
         if (m_isSpawned) return;
@@ -96,7 +86,7 @@ public class SpawnEffect : MonoBehaviour
         {
             if (info.Renderer == null) continue;
 
-            info.Renderer.materials = info.SpawnMaterials;
+            info.Renderer.materials = info.GetSpawnMaterials();
         }
 
         // 소환용 메테리얼의 수치 변경 => 허공에서 몬스터가 생기는 연출
@@ -114,7 +104,7 @@ public class SpawnEffect : MonoBehaviour
         {
             if (info.Renderer == null) continue;
 
-            info.Renderer.materials = info.OriginMaterials;
+            info.Renderer.materials = info.GetOriginMaterials();
         }
     }
 
@@ -138,7 +128,7 @@ public class SpawnEffect : MonoBehaviour
 
                 foreach (var material in info.Renderer.materials)
                 { 
-                    material.SetFloat("_DissolveAmount", ratio);
+                    material.SetFloat(s_dissolveAmount, ratio);
                 }
             }
 
@@ -163,10 +153,13 @@ public class SpawnEffect : MonoBehaviour
             foreach (var info in m_spawnEffectInfos)
             {
                 if (info.Renderer == null) continue;
+                var spawnMaterials = info.GetSpawnMaterials();
+                var originMaterials = info.GetOriginMaterials();
 
-                for (int i = 0; i < info.SpawnMaterials.Length; i++) 
+                int length = spawnMaterials.Length;
+                for (int i = 0; i < length; i++) 
                 {
-                    info.Renderer.materials[i].Lerp(info.SpawnMaterials[i], info.OriginMaterials[i], ratio);
+                    info.Renderer.materials[i].Lerp(spawnMaterials[i], originMaterials[i], ratio);
                 }
             }
 

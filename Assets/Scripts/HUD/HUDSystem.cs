@@ -31,9 +31,6 @@ public class HUDSystem : MonoBehaviour
     {
         ManagerRoot.UI.ShowSceneUI<UIHUD>().Register(m_controller);
         m_camera = Camera.main;
-
-        var ui = ManagerRoot.UI.ShowSceneUI<UIARObjectInfoCard>();
-        ManagerRoot.Resource.Release(ui.gameObject);
     }
 
     public void FixedUpdate()
