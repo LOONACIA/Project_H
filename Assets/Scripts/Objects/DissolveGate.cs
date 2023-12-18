@@ -54,8 +54,12 @@ public class DissolveGate : MonoBehaviour, IGate
     {
         if (m_gate == null) yield break;
 
-        if (m_state == GateState.Close) yield break;
-            m_state = GateState.Close;
+        if (m_state == GateState.Close)
+        {
+            yield break;
+        }
+        
+        m_state = GateState.Close;
 
         gameObject.layer = LayerMask.NameToLayer("Wall");
 
@@ -104,11 +108,8 @@ public class DissolveGate : MonoBehaviour, IGate
         {
             time += Time.deltaTime;
 
-            float ratio;
-            if (value == true)
-                ratio = Mathf.Lerp(0, 1, time / m_progressTime);
-            else
-                ratio = Mathf.Lerp(1, 0, time / m_progressTime);
+            (float from, float to) = value ? (0, 1) : (1, 0);
+            float ratio = Mathf.Lerp(from, to, time / m_progressTime);
 
             m_gateRenderer.material.SetFloat("_DissolveAmount", ratio);
 
