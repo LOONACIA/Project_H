@@ -90,6 +90,11 @@ public class GameUIManager
     
     public void UpdateObject(string _text)
     {
+        if (m_objects == null)
+        {
+            return;
+        }
+        
         m_objects.UpdateObjectText(_text);
     }
 

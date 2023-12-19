@@ -1,118 +1,198 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-/// <summary>
-/// 공격, 스킬의 부모 클래스
-/// </summary>
-[RequireComponent(typeof(AttackAnimationEventReceiver))]
 public abstract class Weapon : MonoBehaviour
 {
-    #region
+    private WeaponState m_state;
+    
+    private IEventProxy m_eventProxy;
+    
+    public Monster Owner { get; set; }
+    
+    [field: SerializeField]
+    public int Damage { get; set; }
+    
+    [field: SerializeField]
+    public float KnockDownTime { get; set; }
+    
+    [field: SerializeField]
+    public float KnockBackPower { get; set; }
 
-    private bool m_isAttackTriggered = false;
-    
-    #endregion
-    
-    #region Properties
+    public virtual bool CanAttack { get; protected set; } = true;
 
-    public bool IsAttacking => State != AttackState.Idle || m_isAttackTriggered;
-    
+    public bool IsEquipped { get; private set; }
+
     public virtual Vector3 Target { get; set; }
 
-    [field: SerializeField]
-    public WeaponType Type { get; private set; }
+    public bool IsAttacking => State != WeaponState.Idle;
+
+    public WeaponState State
+    {
+        get => m_state;
+        private set
+        {
+            if (m_state == value)
+            {
+                return;
+            }
+
+            m_state = value;
+            OnStateChanged(m_state);
+        }
+    }
     
-    public AttackState State { get; private set; }
-
-    public event EventHandler<IEnumerable<WeaponAttackInfo>> OnHitEvent;
-
-    #endregion
+    public event EventHandler AttackHit;
     
-    /// <summary>
-    /// 실제 공격이 일어날 때 MonsterAtaack의 attackEvent Handler에 의해 호출됩니다.
-    /// </summary>
-    public void StartAttack()
+    public event EventHandler<WeaponState> StateChanged;
+
+    protected virtual void Awake()
     {
-        m_isAttackTriggered = true;
-        Attack();
+        if (Owner == null)
+        {
+            Owner = GetComponentInParent<Monster>();
+        }
+
+        m_eventProxy = GetComponent<IEventProxy>();
     }
 
-    protected abstract void Attack();
-
-    public virtual void InvokeHitEvent(IEnumerable<WeaponAttackInfo> attackInfo)
+    public void Equip(Monster owner)
     {
-        OnHitEvent?.Invoke(this, attackInfo);
+        IsEquipped = true;
+        Owner = owner;
+        RegisterEvents(m_eventProxy);
+    }
+    
+    public void UnEquip()
+    {
+        IsEquipped = false;
+        UnregisterEvents(m_eventProxy);
     }
 
-    #region ProtectedAnimationEvents
-
-    protected virtual void OnIdleMotion() { }
-
-    protected virtual void OnLeadInMotion() { }
-
-    protected virtual void OnHitMotion() { }
-
-    protected virtual void OnFollowThroughMotion() { }
-
-    #endregion
-
-    #region Change State
-
-    public void EnterIdleState(object sender, EventArgs e)
+    protected void Hit(IEnumerable<AttackInfo> e)
     {
-        //Idle 상태로 들어가면 모든 공격 트리거가 초기화됨. (Animator 참조)
+        bool isHit = false;
+        foreach (var attackInfo in e.Where(attackInfo => attackInfo.Victim.gameObject != Owner.gameObject))
+        {
+            bool victimIsActor = attackInfo.Victim.gameObject.TryGetComponent<Actor>(out var victim);
+            
+            if (victimIsActor)
+            {
+                // 빙의되지 않은 몬스터가 타겟이 아닌 대상을 공격하는 경우
+                if (!Owner.IsPossessed && !Owner.Targets.Contains(victim))
+                {
+                    continue;
+                }
+                
+                //넉다운 적용
+                if (victim.Status.CanKnockDown && KnockDownTime > 0f)
+                {
+                    victim.Status.SetKnockDown(KnockDownTime);
+                }
+
+                //넉백 적용
+                if (victim.Status.CanKnockBack && KnockBackPower != 0f)
+                {
+                    MonsterMovement movement = attackInfo.Victim.gameObject.GetComponent<MonsterMovement>();
+                    // TODO: 넉백 방향 수정
+                    movement.TryKnockBack(attackInfo.AttackDirection, KnockBackPower);
+                }
+            }
+            
+            attackInfo.Victim.TakeDamage(attackInfo);
+            isHit = true;
+        }
+
+        if (isHit)
+        {
+            OnAttackHit();
+        }
+    }
+
+    protected virtual void OnAttackHit()
+    {
+        AttackHit?.Invoke(this, EventArgs.Empty);
+    }
+    
+    protected virtual void OnStateChanged(WeaponState state)
+    {
+        StateChanged?.Invoke(this, state);
+    }
+    
+    protected virtual void RegisterEvents(IEventProxy eventProxy)
+    {
+        eventProxy.AddHandler($"On{nameof(WeaponState.Idle)}", OnIdle);
+        eventProxy.AddHandler($"On{nameof(WeaponState.WaitAttack)}", OnWaitAttack);
+        eventProxy.AddHandler($"On{nameof(WeaponState.Attack)}", OnAttack);
+        eventProxy.AddHandler($"On{nameof(WeaponState.Recovery)}", OnRecovery);
+    }
+    
+    protected virtual void UnregisterEvents(IEventProxy eventProxy)
+    {
+        eventProxy.RemoveHandler($"On{nameof(WeaponState.Idle)}", OnIdle);
+        eventProxy.RemoveHandler($"On{nameof(WeaponState.WaitAttack)}", OnWaitAttack);
+        eventProxy.RemoveHandler($"On{nameof(WeaponState.Attack)}", OnAttack);
+        eventProxy.RemoveHandler($"On{nameof(WeaponState.Recovery)}", OnRecovery);
+    }
+
+    protected virtual void OnIdleState()
+    {
+    }
+
+    protected virtual void OnWaitAttackState()
+    {
+    }
+
+    protected virtual void OnAttackState()
+    {
+    }
+
+    protected virtual void OnRecoveryState()
+    {
+    }
+
+    private void OnIdle()
+    {
+        if (State == WeaponState.Idle)
+        {
+            return;
+        }
         
-        //Weapon이 Idle이더라도, Attack 애니메이션으로 들어가기 전에 Idle 이벤트가 실행되었다면 Animator의 Attack Trigger가 초기화 되므로 공격 트리거 정보역시 소멸해야함
-        m_isAttackTriggered = false;
+        State = WeaponState.Idle;
+        OnIdleState();
+    }
+
+    private void OnWaitAttack()
+    {
+        if (State == WeaponState.WaitAttack)
+        {
+            return;
+        }
         
-        if (State == AttackState.Idle) return;
-        State = AttackState.Idle;
-        OnIdleMotion();
+        State = WeaponState.WaitAttack;
+        OnWaitAttackState();
     }
-
-    public void EnterLeadInState(object sender, EventArgs e)
+    
+    private void OnAttack()
     {
-        if (State == AttackState.LeadIn) return;
-        State = AttackState.LeadIn;
-        OnLeadInMotion();
+        if (State == WeaponState.Attack)
+        {
+            return;
+        }
+        
+        State = WeaponState.Attack;
+        OnAttackState();
     }
-
-    public void EnterHitState(object sender, EventArgs e)
+    
+    private void OnRecovery()
     {
-        if (State == AttackState.Hit) return;
-        State = AttackState.Hit;
-        OnHitMotion();
-    }
-
-    public void EnterFollowThroughState(object sender, EventArgs e)
-    {
-        //Follow Through: Attack이 끝나고 후딜 시작되는 상황
-        //공격 종료 판정
-
-        if (State == AttackState.FollowThrough) return;
-        State = AttackState.FollowThrough;
-        OnFollowThroughMotion();
-    }
-
-    #endregion
-
-    public enum WeaponType
-    {
-        AttackWeapon,
-        SkillWeapon,
-        BlockPushWeapon,
-    }
-
-
-    /// <summary>
-    /// State는 Animation Event가 발생할 때 해당 Event의 정보로 변경됩니다.
-    /// </summary>
-    public enum AttackState
-    {
-        Idle,
-        LeadIn, //선딜
-        Hit, //실제 공격
-        FollowThrough, //후딜
+        if (State == WeaponState.Recovery)
+        {
+            return;
+        }
+        
+        State = WeaponState.Recovery;
+        OnRecoveryState();
     }
 }

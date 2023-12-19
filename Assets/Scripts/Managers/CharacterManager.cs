@@ -1,4 +1,3 @@
-using LOONACIA.Unity.Managers;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;

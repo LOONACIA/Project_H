@@ -43,7 +43,7 @@ public static class ConstVariables
     [Header("Animator Parameter")]
     public const string ANIMATOR_PARAMETER_ATTACK = "Attack";
     public const string ANIMATOR_PARAMETER_BLOCK = "Block";
-    public const string ANIMATOR_PARAMETER_SKILL = "Skill";
+    public const string ANIMATOR_PARAMETER_ABILITY = "Ability";
     public const string ANIMATOR_PARAMETER_POSSESS = "Possess";
     public const string ANIMATOR_PARAMETER_DEAD = "Dead";
     public const string ANIMATOR_PARAMETER_HIT = "Hit";

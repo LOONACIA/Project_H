@@ -6,7 +6,7 @@ public class Shield : MonoBehaviour
 {
     // 쉴드량
     [SerializeField]
-    private float m_shieldPoint = 30;
+    private float m_shieldAmount = 30;
 
     // 쉴드 제한 시간 여부
     [SerializeField]
@@ -23,10 +23,10 @@ public class Shield : MonoBehaviour
     public GameObject ShieldObject { get; private set; }
 
     // 남은 쉴드량
-    public float ShieldPoint
+    public float ShieldAmount
     {
-        get => Mathf.Max(m_shieldPoint, 0);
-        private set => m_shieldPoint = value;
+        get => Mathf.Max(m_shieldAmount, 0);
+        private set => m_shieldAmount = value;
     }
 
     public float MaxShieldPoint { get; private set; }
@@ -42,12 +42,7 @@ public class Shield : MonoBehaviour
             }
 
             // 쉴드량을 모두 소모했을 경우 false 반환
-            if (ShieldPoint <= 0)
-            {
-                return false;
-            }
-
-            return true;
+            return ShieldAmount > 0;
         }
     }
     
@@ -55,27 +50,29 @@ public class Shield : MonoBehaviour
     
     private void Awake()
     {
-        Init(m_shieldPoint, m_timeLimit, gameObject);
+        Init(m_shieldAmount, m_timeLimit, gameObject);
     }
 
     public void Init(float shieldPoint, float timeLimit, GameObject shieldObject)
     {
         MaxShieldPoint = shieldPoint;
-        ShieldPoint = MaxShieldPoint;
+        ShieldAmount = MaxShieldPoint;
         m_timeLimit = timeLimit;
 
         // 쉴드 제한 시간이 0 이하면, 제한 시간이 없는 것으로 처리
-        m_hasTimeLimit = (timeLimit > 0 ? true : false);
+        m_hasTimeLimit = timeLimit > 0;
 
         if (shieldObject != null)
+        {
             ShieldObject = shieldObject;
+        }
 
         m_startTime = Time.time;
     }
 
     public void TakeDamage(float damage)
     {
-        ShieldPoint -= damage;
+        ShieldAmount -= damage;
         ShieldChanged?.Invoke(this, null);
     }
 }

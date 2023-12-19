@@ -108,6 +108,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // ReSharper disable Unity.PerformanceAnalysis
     private static void CreateInstance()
     {
         if (s_isApplicationQuitting)

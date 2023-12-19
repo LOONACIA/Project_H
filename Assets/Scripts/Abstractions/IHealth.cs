@@ -11,11 +11,11 @@ public interface IHealth
     
     void Kill();
     
-    event EventHandler<DamageInfo> Damaged;
+    event RefEventHandler<AttackInfo> Damaged;
 
-    event EventHandler<DamageInfo> Dying;
+    event RefEventHandler<AttackInfo> Dying;
     
     event EventHandler Died;
     
-    void TakeDamage(DamageInfo damageInfo);
+    void TakeDamage(in AttackInfo damageInfo);
 }

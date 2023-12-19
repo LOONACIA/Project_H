@@ -49,7 +49,7 @@ public class Spawner : MonoBehaviour
             while (i++ < waveInfo.Count)
             {
                 Vector3 spawnPosition = GetRandomSpawnPos(m_collider);
-                var monster = Instantiate(waveInfo.Monster, this.transform.position, transform.rotation);
+                var monster = Instantiate(waveInfo.Monster, spawnPosition, transform.rotation);
                 if (monster.TryGetComponent<Monster>(out var component))
                 {
                     m_waveTrigger.Monsters.Add(component);

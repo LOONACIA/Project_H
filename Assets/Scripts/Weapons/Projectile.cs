@@ -9,7 +9,7 @@ public class Projectile : MonoBehaviour
 
     private Collider m_collider;
 
-    private Action<WeaponAttackInfo> m_onHit;
+    private Action<AttackInfo> m_onHit;
 
     private bool m_isStopped;
 
@@ -18,6 +18,8 @@ public class Projectile : MonoBehaviour
     private float m_range;
 
     private LayerMask m_aimLayers;
+    
+    private int m_damage;
 
     public Rigidbody Rigidbody { get; private set; }
 
@@ -64,15 +66,19 @@ public class Projectile : MonoBehaviour
 
         if (other.gameObject.TryGetComponent<Actor>(out var actor))
         {
-            Vector3 direction = (other.transform.position - transform.position).normalized;
-            WeaponAttackInfo attackInfo = new(actor, direction, other.ClosestPoint(transform.position));
+            Vector3 hitPoint = other.ClosestPoint(transform.position);
+            Vector3 direction = (hitPoint - m_initialPosition).normalized;
+            AttackInfo attackInfo = new(m_owner, actor.Health, m_damage, hitPoint, direction);
             m_onHit(attackInfo);
         }
+        
+        ManagerRoot.Resource.Release(gameObject);
     }
 
-    public void Init(GameObject owner, float range, LayerMask aimLayers, Action<WeaponAttackInfo> onHit)
+    public void Init(GameObject owner, int damage, float range, LayerMask aimLayers, Action<AttackInfo> onHit)
     {
         m_owner = owner;
+        m_damage = damage;
         m_initialPosition = transform.position;
         m_range = range;
         m_aimLayers = aimLayers;
