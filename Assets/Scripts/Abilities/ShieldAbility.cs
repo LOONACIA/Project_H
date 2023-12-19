@@ -34,6 +34,7 @@ public class ShieldAbility : Ability
 
     private void CreateShield()
     {
+        Debug.Log("Dd");
         GameObject shieldObject;
         if (m_shieldPrefab != null)
         {
@@ -42,7 +43,8 @@ public class ShieldAbility : Ability
         }
         else
         {
-            shieldObject = new();
+            shieldObject = new() { name = "Shield" };
+            shieldObject.transform.SetParent(m_shieldParent);
         }
 
         Shield shield = shieldObject.GetOrAddComponent<Shield>();
