@@ -52,6 +52,11 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             return TaskStatus.Running;
         }
 
+        public override void OnConditionalAbort()
+        {
+            m_monsterMovement.StopAgentMove();
+        }
+
         // Predict the position of the target
         private Vector3 Target()
         {
