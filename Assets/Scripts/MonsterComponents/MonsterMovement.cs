@@ -180,18 +180,38 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
     {
         if (m_agent.enabled)
         {
-            m_agent.isStopped = false;
-            m_agent.SetDestination(destination);
-
-            if (!IsOnGround)
+            NavMeshPath path = new NavMeshPath();
+            if (NavMesh.CalculatePath(transform.position, destination, m_agent.areaMask, path))
             {
-                // 몬스터가 떨어지는 경우 중력 영향을 받음
-                m_agent.speed += Physics.gravity.y * Time.deltaTime * -1;
-                m_agent.speed = Mathf.Clamp(m_agent.speed, 0, 30);
+                //1. Path상 다음 목적지를 찾는다.
+                Vector3 navDest = path.corners.Length > 0 ? path.corners[1] : path.corners[0];
+
+                //2. 목표 지점을 향한 방향 탐색
+                Vector3 dir = (navDest - transform.position).normalized;
+
+                //2.1. 주변 적들과의 거리를 계산하여, 가중치를 부여함 (boids 알고리즘의 separation)
+                // - 굳이 없어도 자연스러운 것 같아 구현하지 않음.
+
+                //3. Move
+                // ObstacleAvoidance가 None이 아니면, Move하되 충돌검사는 해주는 것 같음
+                m_agent.Move(dir * Time.deltaTime * m_data.MoveSpeed);
+
+
+                if (!IsOnGround)
+                {
+                    // 몬스터가 떨어지는 경우 중력 영향을 받음
+                    m_agent.speed += Physics.gravity.y * Time.deltaTime * -1;
+                    m_agent.speed = Mathf.Clamp(m_agent.speed, 0, 30);
+                }
+                else
+                {
+                    m_agent.speed = m_data.MoveSpeed;
+                }
             }
             else
             {
-                m_agent.speed = m_data.MoveSpeed;
+                //path를 찾지 못함.
+                Debug.Log($"{gameObject.name}: no path found, {path.status.ToString()}");
             }
         }
     }
