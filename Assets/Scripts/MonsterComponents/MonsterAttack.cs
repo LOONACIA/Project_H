@@ -1,19 +1,17 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 /*
- * 1인칭, 3인칭 공격을 시전, 데미지 처리
+ * 1인칭, 3인칭 공격을 시전
  */
 [RequireComponent(typeof(ActorStatus))]
 public class MonsterAttack : MonoBehaviour
 {
-    private static readonly int s_attackAnimationKey = Animator.StringToHash("Attack");
+    private static readonly int s_attackAnimationKey = Animator.StringToHash(ConstVariables.ANIMATOR_PARAMETER_ATTACK);
 
-    private static readonly int s_skillAnimationKey = Animator.StringToHash("Skill");
+    private static readonly int s_abilityAnimationKey = Animator.StringToHash(ConstVariables.ANIMATOR_PARAMETER_ABILITY);
 
-    private static readonly int s_targetCheckAnimationKey = Animator.StringToHash("TargetCheck");
+    private static readonly int s_targetCheckAnimationKey = Animator.StringToHash(ConstVariables.ANIMATOR_PARAMETER_TARGET_CHECK);
 
     private Vector3 m_target;
 
@@ -21,8 +19,9 @@ public class MonsterAttack : MonoBehaviour
     private MonsterAttackData m_data;
 
     private Monster m_actor;
-
-    public MonsterAttackData Data => m_data;
+    
+    [field: SerializeField]
+    public AbilityType AbilityType { get; private set; }
 
     public Vector3 Target
     {
@@ -113,7 +112,7 @@ public class MonsterAttack : MonoBehaviour
         m_actor.Animator.SetTrigger(s_attackAnimationKey);
     }
 
-    public void Ability()
+    public void Ability(bool isToggled)
     {
         //TODO: KnockBack, KnockDown 중 스킬 못하게 할 것인가?
         if (m_actor.Status.SkillCoolTime < 1f)
@@ -121,8 +120,22 @@ public class MonsterAttack : MonoBehaviour
             return;
         }
 
-        m_actor.Animator.SetTrigger(s_skillAnimationKey);
-        m_actor.Status.SkillCoolTime = 0f;
+        switch (AbilityType)
+        {
+            case AbilityType.Trigger when isToggled:
+                m_actor.Animator.SetTrigger(s_abilityAnimationKey);
+                break;
+            case AbilityType.Toggle:
+                m_actor.Animator.SetBool(s_abilityAnimationKey, isToggled);
+                break;
+            default:
+                return;
+        }
+
+        if (AbilityType == AbilityType.Trigger || !isToggled)
+        {
+            m_actor.Status.SkillCoolTime = 0f;
+        }
     }
     
     private void OnAttackHit(object sender, EventArgs e)
@@ -150,4 +163,10 @@ public class MonsterAttack : MonoBehaviour
             m_actor.Status.SkillCoolTime = cur / full;
         }
     }
+}
+
+public enum AbilityType
+{
+    Trigger,
+    Toggle
 }

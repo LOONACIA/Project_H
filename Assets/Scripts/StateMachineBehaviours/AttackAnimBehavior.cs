@@ -7,7 +7,7 @@ public class AttackAnimBehavior : StateMachineBehaviour
     private List<float> m_animProbability;
 
     // OnStateEnter is called before OnStateEnter is called on any state inside this state machine
-    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.SetInteger(ConstVariables.ANIMATOR_PARAMETER_ATTACK_INDEX, GetAnimIndex());
     }
@@ -33,7 +33,9 @@ public class AttackAnimBehavior : StateMachineBehaviour
             randomNum -= m_animProbability[i];
 
             if (randomNum <= 0)
+            {
                 return i;
+            }
         }
 
         return 0;

@@ -162,11 +162,9 @@ public abstract class Actor : MonoBehaviour
 
     public abstract void TryAttack();
 
-    public abstract void Ability();
+    public abstract void Ability(bool isToggled);
 
     public abstract void Dash(Vector3 direction);
-
-    public abstract void Block(bool value);
 
     public void PlayHackAnimation()
     {
