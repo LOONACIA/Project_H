@@ -41,7 +41,7 @@ public class ActorStatus : MonoBehaviour
 
     [SerializeField]
     [ReadOnly]
-    private float m_skillCoolTime;
+    private float m_skillCoolTime = 1;
 
     public int Hp
     {
@@ -140,13 +140,8 @@ public class ActorStatus : MonoBehaviour
         get => m_skillCoolTime;
         set
         {
-            if (value > 1f) value = 1f;
-            if (value < 0f) value = 0f;
-            if (m_skillCoolTime != value)
-            {
-                m_skillCoolTime = value;
-                SkillCoolTimeChanged?.Invoke(this, m_skillCoolTime);
-            }
+            m_skillCoolTime = Mathf.Clamp(value, 0, 1);
+            SkillCoolTimeChanged?.Invoke(this, m_skillCoolTime);
         }
     }
     
