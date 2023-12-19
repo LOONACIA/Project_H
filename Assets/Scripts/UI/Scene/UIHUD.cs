@@ -120,7 +120,7 @@ public class UIHUD : UIScene
         ResetHpBoxes();
     }
     
-    private void OnDamaged(object sender, DamageInfo e)
+    private void OnDamaged(object sender, in AttackInfo e)
     {
         m_colorChangeEffectCoroutine?.Abort();
         m_colorChangeEffectCoroutine = CoroutineEx.Create(this, CoColorChangeEffect());
@@ -157,7 +157,7 @@ public class UIHUD : UIScene
             frontLayerHpBox.rotation = m_frontLayerRoot.transform.rotation;
             m_backLayerHpBoxes.Add(backLayerHpBox);
             m_frontLayerHpBoxes.Add(frontLayerHpBox);
-            backLayerHpBox.GetComponent<UIManagerImage>().colorType = UIManagerImage.ColorType.Secondary;
+            backLayerHpBox.GetComponent<UIManagerImage>().colorType = UIManagerImage.ColorType.Negative;
             frontLayerHpBox.GetComponent<UIManagerImage>().colorType = UIManagerImage.ColorType.Secondary;
         }
 

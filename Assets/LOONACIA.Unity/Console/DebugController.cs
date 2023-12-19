@@ -97,7 +97,7 @@ namespace LOONACIA.Unity.Console
                     id: "kill",
                     description: "Kill the specified GameObject",
                     format: "kill <name>",
-                    execute: input => GameObject.Find(input).GetComponent<ActorHealth>().TakeDamage(new(9999, Vector3.zero, Vector3.zero, FindObjectOfType<PlayerController>().Character)),
+                    execute: input => GameObject.Find(input).GetComponent<ActorHealth>().Kill(),
                     parser: ArgumentParserBag.TryGetString),
 
                 new TransformObjectCommand(

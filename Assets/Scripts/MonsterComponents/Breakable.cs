@@ -41,7 +41,7 @@ public class Breakable : MonoBehaviour
         }
     }
 
-    public void ReplacePart(DamageInfo info)
+    public void ReplacePart(in AttackInfo info)
     {
         if (m_rigidbody == null ||  m_collider == null) return;
 

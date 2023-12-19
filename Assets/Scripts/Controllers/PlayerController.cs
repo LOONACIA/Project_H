@@ -41,12 +41,12 @@ public partial class PlayerController : MonoBehaviour
     /// <summary>
     /// 데미지를 입었을 시, Indicator에 보내주는 이벤트
     /// </summary>
-    public event EventHandler<DamageInfo> Damaged;
+    public event RefEventHandler<AttackInfo> Damaged;
 
     /// <summary>
     /// Block 했을 시, Indicator에 보내주는 이벤트
     /// </summary>
-    public event EventHandler<DamageInfo> Blocked;
+    public event RefEventHandler<AttackInfo> Blocked;
 
     public event EventHandler<int> HpChanged;
 
@@ -166,7 +166,7 @@ public partial class PlayerController : MonoBehaviour
     {
         if (m_character != null)
         {
-            m_character.Skill();
+            m_character.Ability();
         }
     }
 
@@ -188,6 +188,14 @@ public partial class PlayerController : MonoBehaviour
         }
 
         m_possession.TryPossess();
+    }
+
+    private void Ability()
+    {
+        if (m_character != null)
+        {
+            m_character.Ability();
+        }
     }
 
     private void Block(bool value)
@@ -293,7 +301,7 @@ public partial class PlayerController : MonoBehaviour
         }
     }
     
-    private void OnPlayerCharacterDying(object sender, DamageInfo info)
+    private void OnPlayerCharacterDying(object sender, in AttackInfo info)
     {
         // TODO: 빙의 중 죽은 경우 어떻게 할 것인지 논의 필요
         if (m_isOnPossessing)
@@ -304,12 +312,12 @@ public partial class PlayerController : MonoBehaviour
         GameManager.Instance.SetGameOver();
     }
 
-    private void OnDamaged(object sender, DamageInfo e)
+    private void OnDamaged(object sender, in AttackInfo e)
     {
         Damaged?.Invoke(this, e);
     }
 
-    private void OnBlocked(object sender, DamageInfo e)
+    private void OnBlocked(object sender, in AttackInfo e)
     {
         Blocked?.Invoke(this, e);
     }

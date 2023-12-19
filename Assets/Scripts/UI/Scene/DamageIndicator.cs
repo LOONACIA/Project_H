@@ -5,23 +5,26 @@ using UnityEngine.UI;
 public class DamageIndicator : MonoBehaviour
 {
     #region PublicVariables
+
     public Image indicatorImage;
 
     public float fadeOutTime;
+
     #endregion
 
     #region PrivateVariables
-    private Actor m_attacker;
-    private Actor m_victim;
 
-    
+    private GameObject m_attacker;
+    private Actor m_victim;
 
     private Quaternion m_rotation;
     private float m_angle;
+
     #endregion
 
     #region PublicMethod
-    public void Init(DamageInfo _info, Actor _sender)
+
+    public void Init(in AttackInfo _info, Actor _sender)
     {
         m_attacker = _info.Attacker;
         m_victim = _sender;
@@ -31,7 +34,7 @@ public class DamageIndicator : MonoBehaviour
         StartCoroutine(nameof(IE_FadeOut));
     }
 
-    public void Init(DamageInfo _info, Actor _sender, Color color)
+    public void Init(in AttackInfo _info, Actor _sender, Color color)
     {
         m_attacker = _info.Attacker;
         m_victim = _sender;
@@ -46,9 +49,11 @@ public class DamageIndicator : MonoBehaviour
     {
         TraceTarget();
     }
+
     #endregion
 
     #region PrivateMethod
+
     private void TraceTarget()
     {
         transform.rotation = Quaternion.Euler(0, 0, CalculateAngle());
@@ -61,7 +66,7 @@ public class DamageIndicator : MonoBehaviour
             Destroy(gameObject);
             return default;
         }
-        
+
         Vector3 posA = m_victim.transform.position;
         Vector3 posB = m_attacker.transform.position;
 
@@ -87,7 +92,7 @@ public class DamageIndicator : MonoBehaviour
             color = new Color(color.r, color.g, color.b, alpha);
             indicatorImage.color = color;
             alpha -= value;
-            yield return new WaitForSeconds(1/30);
+            yield return new WaitForSeconds(1 / 30);
 
             if (alpha <= 0)
                 break;
@@ -95,5 +100,6 @@ public class DamageIndicator : MonoBehaviour
 
         Destroy(gameObject);
     }
+
     #endregion
 }

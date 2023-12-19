@@ -21,19 +21,34 @@ public class EventProxy : MonoBehaviour, IEventProxy
         }
     }
     
-    private void DispatchEvent(string eventName)
+    public void DispatchEvent(string eventName)
     {
         if (m_eventTable.TryGetValue(eventName, out ListenerList value))
         {
             value.RaiseEvent();
         }
     }
+    
+    private readonly struct StrongEventListener : IEventListener
+    {
+        public StrongEventListener(Delegate handler)
+        {
+            Handler = handler;
+        }
+        
+        public Delegate Handler { get; }
+        
+        public bool IsSame(Delegate handler)
+        {
+            return Equals(handler, Handler);
+        }
+    }
 
-    private readonly struct EventListener
+    private readonly struct WeakEventListener : IEventListener
     {
         private readonly WeakReference<Delegate> m_handler;
 
-        public EventListener(Delegate handler)
+        public WeakEventListener(Delegate handler)
         {
             m_handler = new(handler);
         }
@@ -50,21 +65,23 @@ public class EventProxy : MonoBehaviour, IEventProxy
     
     private class ListenerList
     {
-        private readonly List<EventListener> m_listeners = new();
+        private readonly List<IEventListener> m_listeners = new();
         
-        public void AddListener(EventListener listener)
+        public void AddListener(IEventListener listener)
         {
             m_listeners.Add(listener);
         }
         
-        public void RemoveListener(EventListener listener)
+        public void RemoveListener(IEventListener listener)
         {
             m_listeners.Remove(listener);
         }
 
         public void AddHandler(Delegate handler)
         {
-            m_listeners.Add(new(handler));
+            IEventListener listener = new StrongEventListener(handler);
+            
+            m_listeners.Add(listener);
         }
 
         public void RemoveHandler(Delegate handler)
@@ -87,7 +104,7 @@ public class EventProxy : MonoBehaviour, IEventProxy
             }
         }
 
-        private void RaiseEvent(in EventListener listener)
+        private void RaiseEvent(in IEventListener listener)
         {
             if (listener.Handler is Action action)
             {
@@ -95,4 +112,11 @@ public class EventProxy : MonoBehaviour, IEventProxy
             }
         }
     }
+}
+
+public interface IEventListener
+{
+    Delegate Handler { get; }
+
+    bool IsSame(Delegate handler);
 }

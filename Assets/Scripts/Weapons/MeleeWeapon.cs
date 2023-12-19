@@ -7,66 +7,50 @@ using UnityEngine;
  */
 public class MeleeWeapon : Weapon
 {
+    private readonly List<AttackInfo> m_attackInfoBuffer = new();
+    
     [SerializeField]
     private TrailCaster m_trailCaster;
-
-    private List<WeaponAttackInfo> m_attackInfoBuffer = new();
-
-    protected override void Attack()
+    
+    private void Update()
     {
-        //TODO: 이번 공격의 End보다 다음 공격의 Start가 먼저 호출될 수 있음.
-        //공격 중인데 다음 공격 딜레이가 오지 않았다면 return;
-        //if (IsAttacking && !m_canNextAttack) return;
+        if (State == WeaponState.Attack)
+        {
+            TrailCast();
+        }
     }
 
-    #region AnimationEvent
-
-    protected override void OnHitMotion()
+    protected override void OnAttackState()
     {
         //TODO: 1인칭일 경우 카메라 쉐이킹
         m_trailCaster.StartCheck();
     }
 
-    protected override void OnFollowThroughMotion()
+    protected override void OnRecoveryState()
     {
         m_trailCaster.EndCheck();
     }
-
-    #endregion
-
-    #region UnityEvent
-
-    private void Update()
+    
+    // ReSharper disable Unity.PerformanceAnalysis
+    private void TrailCast()
     {
-        if (State == AttackState.Hit)
+        //검의 TrailCaster로 충돌체크
+        IEnumerable<TrailCaster.HitInfo> detectedRayCast = m_trailCaster.PopBuffer();
+
+        //공격한 오브젝트 버퍼 초기화
+        m_attackInfoBuffer.Clear();
+
+        //AttackInfo 제작해줌
+        foreach (var hitInfo in detectedRayCast)
         {
-            //검의 TrailCaster로 충돌체크
-            IEnumerable<TrailCaster.HitInfo> detectedRayCast = m_trailCaster.PopBuffer();
-
-            //공격한 오브젝트 버퍼 초기화
-            m_attackInfoBuffer.Clear();
-
-            //AttackInfo 제작해줌
-            foreach (var hitInfo in detectedRayCast)
+            //체력이 없는 오브젝트거나, 본인이 타겟된 경우는 체크하지 않음.
+            if (hitInfo.Hit.transform.TryGetComponent<IHealth>(out var hitObject))
             {
-                Actor hitObject = hitInfo.Hit.transform.GetComponent<Actor>();
-
-                //체력이 없는 오브젝트거나, 본인이 타겟된 경우는 체크하지 않음.
-                if (hitObject != null)
-                {
-                    m_attackInfoBuffer.Add(new WeaponAttackInfo(hitObject, hitInfo.AttackDirection,hitInfo.Hit.point));
-                }
-            }
-
-            //11.17: trailCaster에서 중복처리를 하므로 여기선 하지 않아도 됨
-
-            //공격한 오브젝트가 존재한다면, 공격 정보를 MonsterAttack으로 넘겨줌
-            if (m_attackInfoBuffer.Any())
-            {
-                InvokeHitEvent(m_attackInfoBuffer);
+                m_attackInfoBuffer.Add(new(Owner.gameObject, hitObject, Damage, hitInfo.Hit.point, hitInfo.AttackDirection));
             }
         }
+            
+        //공격한 오브젝트가 존재한다면, 공격 정보를 MonsterAttack으로 넘겨줌
+        Hit(m_attackInfoBuffer);
     }
-
-    #endregion
 }

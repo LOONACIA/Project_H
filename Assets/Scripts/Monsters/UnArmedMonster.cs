@@ -6,7 +6,7 @@ public class UnArmedMonster : Monster
     { 
     }
 
-    public override void Skill()
+    public override void Ability()
     { 
     }
 

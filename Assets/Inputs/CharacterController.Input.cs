@@ -84,17 +84,21 @@ public partial class PlayerController
 
         public void OnAbility(InputAction.CallbackContext context)
         {
-            switch (context.phase)
+            if (context.performed)
             {
-                case InputActionPhase.Started:
-                    m_controller.Block(true);
-                    break;
-                case InputActionPhase.Performed:
-                    break;
-                case InputActionPhase.Canceled:
-                    m_controller.Block(false);
-                    break;
+                m_controller.Ability();
             }
+            // switch (context.phase)
+            // {
+            //     case InputActionPhase.Started:
+            //         m_controller.Block(true);
+            //         break;
+            //     case InputActionPhase.Performed:
+            //         break;
+            //     case InputActionPhase.Canceled:
+            //         m_controller.Block(false);
+            //         break;
+            // }
         }
 
         public void OnInteract(InputAction.CallbackContext context)

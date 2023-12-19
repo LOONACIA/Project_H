@@ -8,11 +8,7 @@ public class ActorStatus : MonoBehaviour
     [ReadOnly]
     [Tooltip("Hp는 " + nameof(ActorHealth) + "에서 관리됨")]
     private int m_hp;
-
-    [SerializeField]
-    [ReadOnly]
-    private int m_damage;
-
+    
     [SerializeField]
     [ReadOnly]
     private bool m_isBlocking;
@@ -59,13 +55,7 @@ public class ActorStatus : MonoBehaviour
             }
         }
     }
-
-    public int Damage
-    {
-        get => m_damage;
-        set => m_damage = value;
-    }
-
+    
     public bool CanKnockBack
     {
         get => m_canKnockBack;
@@ -86,7 +76,6 @@ public class ActorStatus : MonoBehaviour
         get => m_isBlocking;
         set => m_isBlocking = value;
     }
-
 
     public bool IsKnockedDown => m_knockDownTime > 0f;
 
