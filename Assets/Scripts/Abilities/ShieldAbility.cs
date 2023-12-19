@@ -49,6 +49,7 @@ public class ShieldAbility : Ability
         if (shield != null)
         {
             shield.Init(m_shieldAmount, m_shieldDuration, shieldObject);
+            Owner.Status.Shield = shield;
         }
     }
 }
