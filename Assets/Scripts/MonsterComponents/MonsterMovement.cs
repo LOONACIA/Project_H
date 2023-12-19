@@ -176,12 +176,59 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         m_rigidbody.AddRelativeForce((forwardForce + strafeForce), ForceMode.VelocityChange);
     }
 
+    private RaycastHit[] nextTest = new RaycastHit[100];
+
     public void MoveTo(Vector3 destination)
     {
         if (m_agent.enabled)
         {
             m_agent.isStopped = false;
-            m_agent.SetDestination(destination);
+
+            NavMeshPath path = new NavMeshPath();
+            if (m_agent.CalculatePath(destination, path))
+            {
+                //목표 지점까지 이동 가능
+                //TODO: 플레이어가 점프하여도 실행되는지 확인 필요
+                
+                //다음 이동 위치를 지정한다.
+                m_agent.SetDestination(destination);
+                //1. 다음 위치까지 Ray 발사한다.
+
+                Vector3 p1 = transform.position + m_collider.center +
+                             Vector3.up * (m_collider.height * 0.5f - m_collider.radius);
+                Vector3 p2 = transform.position + m_collider.center +
+                             Vector3.down * (m_collider.height * 0.5f - m_collider.radius);
+                Vector3 dir = (m_agent.nextPosition - transform.position).normalized;
+                float dist = (m_agent.nextPosition - transform.position).magnitude;
+
+                int max = Physics.CapsuleCastNonAlloc(p1, p2, m_collider.radius, dir, nextTest, dist,
+                    LayerMask.GetMask("Monster"));
+                Debug.DrawRay((p1+p2)*0.5f,dir*dist*100f,Color.red,0.3f);
+                Debug.Log($"포지션: {transform.position}, p1: {p1}, nextPos: {m_agent.nextPosition}");
+                //TODO: 배열 길이보다 넓은 경우에 대한 처리 필요
+                float minDist = dist;
+                for (int i = 0; i < max; i++)
+                {
+                    if (nextTest[i].collider.gameObject.GetInstanceID() != gameObject.GetInstanceID() &&
+                        nextTest[i].distance < minDist)
+                    {
+                        //본인이 아니면서 가장 거리가 작다면 등록
+                        minDist = nextTest[i].distance;
+                        Debug.Log($"기존: {dist}, 변경 후: {minDist}");
+                    }
+                }
+                m_agent.nextPosition = transform.position + dir * minDist;
+                
+            }
+            else
+            {
+                //TODO: 플레이어가 NavMesh위에 있지 않은 경우에 대한 판정 필요
+                Debug.Log($"{gameObject.name}: 이동할 수 없습니다.");
+                m_agent.nextPosition = transform.position;
+            }
+            
+            
+            
 
             if (!IsOnGround)
             {
