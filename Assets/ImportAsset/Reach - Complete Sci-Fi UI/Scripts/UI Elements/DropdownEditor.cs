@@ -1,8 +1,6 @@
 ﻿#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
-using static UnityEngine.GraphicsBuffer;
-using UnityEditor.SceneManagement;
 
 namespace Michsky.UI.Reach
 {

@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -25,6 +26,8 @@ public class Monster : Actor
 
         Attack = GetComponent<MonsterAttack>();
         Movement = GetComponent<MonsterMovement>();
+        var weapons = Animator.GetComponents<Weapon>();
+        Attack.ChangeWeapon(weapons.FirstOrDefault(weapon => weapon.enabled));
     }
 
     protected override void OnEnable()
@@ -63,9 +66,9 @@ public class Monster : Actor
         Attack.Attack();
     }
 
-    public override void Skill()
+    public override void Ability(bool isToggled)
     {
-        Attack.Skill();
+        Attack.Ability(isToggled);
     }
 
     public override void Dash(Vector3 direction)
@@ -75,14 +78,6 @@ public class Monster : Actor
         {
             //Movement.TryDash(FirstPersonCameraPivot.transform.forward);
             Movement.TryDash(direction);
-        }
-    }
-    
-    public override void Block(bool value)
-    {
-        if (IsPossessed)
-        {
-            Animator.SetBool(ConstVariables.ANIMATOR_PARAMETER_BLOCK, value);
         }
     }
 
@@ -140,7 +135,7 @@ public class Monster : Actor
     {
         base.OnPossessed();
         
-        Status.Damage = Attack.Data.PossessedAttack.Damage;
+        Attack.ChangeWeapon(Animator.GetComponent<Weapon>());
         m_directionInput = Vector3.zero;
     }
 
@@ -148,7 +143,7 @@ public class Monster : Actor
     {
         base.OnUnPossessed();
 
-        Status.Damage = Attack.Data.Attack.Damage;
+        Attack.ChangeWeapon(Animator.GetComponent<Weapon>());
         Status.IsBlocking = false;
     }
     
@@ -171,7 +166,7 @@ public class Monster : Actor
         }
     }
 
-    private void OnTargetDying(object sender, DamageInfo info)
+    private void OnTargetDying(object sender, in AttackInfo info)
     {
         if (sender is not Actor actor)
         {

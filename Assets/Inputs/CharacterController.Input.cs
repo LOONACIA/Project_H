@@ -86,13 +86,11 @@ public partial class PlayerController
         {
             switch (context.phase)
             {
-                case InputActionPhase.Started:
-                    m_controller.Block(true);
-                    break;
                 case InputActionPhase.Performed:
+                    m_controller.Ability(true);
                     break;
                 case InputActionPhase.Canceled:
-                    m_controller.Block(false);
+                    m_controller.Ability(false);
                     break;
             }
         }
@@ -113,14 +111,6 @@ public partial class PlayerController
         public void OnLook(InputAction.CallbackContext context)
         {
             m_controller.m_lookDelta = context.ReadValue<Vector2>();
-        }
-
-        public void OnSkill(InputAction.CallbackContext context)
-        {
-            if (context.performed)
-            {
-                m_controller.Skill();
-            }
         }
     }
 }

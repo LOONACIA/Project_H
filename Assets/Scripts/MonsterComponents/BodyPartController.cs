@@ -37,7 +37,7 @@ public class BodyPartController : MonoBehaviour
         }
     }
 
-    private void ReplaceBody(object sender, DamageInfo info)
+    private void ReplaceBody(object sender, in AttackInfo info)
     {
         foreach (var bodyPartScript in m_bodyPartScripts)
         {

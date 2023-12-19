@@ -64,9 +64,6 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
     // 마지막 넉백 시간
     private float m_lastKnockBackTime;
 
-    // 리지드바디 속도가 이것보다 낮아지면 넉백 종료
-    private float m_knockBackEndSpeedThreshold = 0.1f;
-
     public MonsterMovementData Data => m_data;
 
     public bool IsOnGround

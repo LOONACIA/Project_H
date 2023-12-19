@@ -8,11 +8,7 @@ public class ActorStatus : MonoBehaviour
     [ReadOnly]
     [Tooltip("Hp는 " + nameof(ActorHealth) + "에서 관리됨")]
     private int m_hp;
-
-    [SerializeField]
-    [ReadOnly]
-    private int m_damage;
-
+    
     [SerializeField]
     [ReadOnly]
     private bool m_isBlocking;
@@ -45,7 +41,7 @@ public class ActorStatus : MonoBehaviour
 
     [SerializeField]
     [ReadOnly]
-    private float m_skillCoolTime;
+    private float m_skillCoolTime = 1;
 
     public int Hp
     {
@@ -59,13 +55,7 @@ public class ActorStatus : MonoBehaviour
             }
         }
     }
-
-    public int Damage
-    {
-        get => m_damage;
-        set => m_damage = value;
-    }
-
+    
     public bool CanKnockBack
     {
         get => m_canKnockBack;
@@ -86,7 +76,6 @@ public class ActorStatus : MonoBehaviour
         get => m_isBlocking;
         set => m_isBlocking = value;
     }
-
 
     public bool IsKnockedDown => m_knockDownTime > 0f;
 
@@ -151,13 +140,8 @@ public class ActorStatus : MonoBehaviour
         get => m_skillCoolTime;
         set
         {
-            if (value > 1f) value = 1f;
-            if (value < 0f) value = 0f;
-            if (m_skillCoolTime != value)
-            {
-                m_skillCoolTime = value;
-                SkillCoolTimeChanged?.Invoke(this, m_skillCoolTime);
-            }
+            m_skillCoolTime = Mathf.Clamp(value, 0, 1);
+            SkillCoolTimeChanged?.Invoke(this, m_skillCoolTime);
         }
     }
     

@@ -1,15 +1,21 @@
 using UnityEngine;
 
 public class EnterAttackStateBehaviour : StateMachineBehaviour
-{   
-    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+{
+    private Actor m_actor;
+    
+    public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        var status = animator.gameObject.GetComponentInParent<ActorStatus>();
-        if (status != null)
+        if (m_actor == null)
         {
-            status.IsBlocking = false;
+            m_actor = animator.gameObject.GetComponentInParent<Actor>();
+        }
+        
+        if (m_actor != null)
+        {
+            m_actor.Status.IsBlocking = false;
         }
 
-        animator.SetBool(ConstVariables.ANIMATOR_PARAMETER_BLOCK, false);
+        animator.SetBool(ConstVariables.ANIMATOR_PARAMETER_ABILITY, false);
     }
 }

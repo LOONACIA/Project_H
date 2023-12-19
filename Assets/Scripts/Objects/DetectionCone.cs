@@ -82,7 +82,7 @@ public class DetectionCone : MonoBehaviour
         }
     }
     
-    private void OnTargetDying(object sender, DamageInfo info)
+    private void OnTargetDying(object sender, in AttackInfo info)
     {
         if (sender is Actor actor)
         {
