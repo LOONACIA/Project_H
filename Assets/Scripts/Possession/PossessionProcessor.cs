@@ -184,7 +184,7 @@ public class PossessionProcessor : MonoBehaviour
 
     private void TryHacking(Actor target)
     {
-        target.Health.TakeDamage(new(0, default, default, m_sender));
+        target.Health.TakeDamage(new(m_sender.gameObject, target.Health, 0, Vector3.zero, Vector3.zero));
         target.PlayHackAnimation();
         m_possessionCoroutine = CoroutineEx.Create(this, CoWaitForPossession(target.Data.PossessionRequiredTime));
     }
@@ -209,7 +209,7 @@ public class PossessionProcessor : MonoBehaviour
         TryHacking(target);
     }
 
-    private void OnTargetDying(object sender, DamageInfo info)
+    private void OnTargetDying(object sender, in AttackInfo info)
     {
         ClearTarget();
         var target = (Actor)sender;

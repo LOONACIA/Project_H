@@ -41,7 +41,10 @@ public class HitBox
 
     public void DrawGizmo(Transform parent)
     {
-        if (!m_showGizmo) return;
+        if (!m_showGizmo)
+        {
+            return;
+        }
         
         Gizmos.color = GizmoColor;
         Matrix4x4 parentMat = Matrix4x4.TRS(parent.position, parent.rotation, Vector3.one);
@@ -52,8 +55,5 @@ public class HitBox
         Gizmos.matrix = parentMat * hitBoxMat;
         //Debug.Log($"pos: {parent.TransformPoint(Position)}, {parent.rotation * Rotation}");
         Gizmos.DrawWireCube(Vector3.zero, HalfExtents * 2f);
-
     }
-    
-    
 }

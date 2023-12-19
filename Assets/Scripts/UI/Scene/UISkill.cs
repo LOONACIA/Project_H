@@ -114,6 +114,6 @@ public class UISkill : UIScene
         m_skillGauge.fillAmount = m_actorStatus.SkillCoolTime;
 
         // 스킬을 가지고 있는 몬스터의 경우에만 표시
-        m_canvas.enabled = actor is Monster { Attack: { SkillWeapon: not null } };
+        //m_canvas.enabled = actor is Monster { Attack: { SkillWeapon: not null } };
     }
 }

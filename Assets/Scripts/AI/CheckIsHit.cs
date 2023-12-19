@@ -13,7 +13,7 @@ public class CheckIsHit : Conditional
     {
         m_owner = GetComponent<Monster>();
         m_health = GetComponent<ActorHealth>();
-        m_health.Damaged += OnDamaged; ;
+        m_health.Damaged += OnDamaged;
     }
 
     public override TaskStatus OnUpdate()
@@ -29,7 +29,7 @@ public class CheckIsHit : Conditional
 
     }
 
-    private void OnDamaged(object sender, DamageInfo e)
+    private void OnDamaged(object sender, in AttackInfo e)
     {
         // 대미지를 입으면 Attacker에 대입
         IsHit.Value = true;

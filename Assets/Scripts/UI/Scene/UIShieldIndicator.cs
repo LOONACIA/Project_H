@@ -64,10 +64,10 @@ public class UIShieldIndicator : UIScene
 
             var slider = Get<Slider, Sliders>(Sliders.ShieldSlider);
             slider.maxValue = m_player.Character.Status.Shield.MaxShieldPoint;
-            slider.value = m_player.Character.Status.Shield.ShieldPoint;
+            slider.value = m_player.Character.Status.Shield.ShieldAmount;
 
             var text = Get<TextMeshProUGUI, Texts>(Texts.ShieldText);
-            text.text = m_player.Character.Status.Shield.ShieldPoint.ToString();
+            text.text = m_player.Character.Status.Shield.ShieldAmount.ToString();
         }
     }
 }

@@ -66,15 +66,11 @@ public abstract class Actor : MonoBehaviour
 
     public Animator Animator => IsPossessed ? m_firstPersonAnimator : m_thirdPersonAnimator;
 
-    public Animator FirstPersonAnimator => m_firstPersonAnimator;
-
-    public Animator ThirdPersonAnimator => m_thirdPersonAnimator;
-
     public GameObject FirstPersonCameraPivot => m_firstPersonCameraPivot;
     
     public event EventHandler Spawned;
 
-    public event EventHandler<DamageInfo> Dying;
+    public event RefEventHandler<AttackInfo> Dying;
 
     protected virtual void Awake()
     {
@@ -93,26 +89,6 @@ public abstract class Actor : MonoBehaviour
         }
 
         EnableAIComponents();
-    }
-
-    public IInteractableObject GetClosestInteractableObject()
-    {
-        if (m_interactableObjects.Count == 0)
-        {
-            return null;
-        }
-
-        Vector3 origin = m_vcam.transform.position;
-
-        return m_interactableObjects
-            .Where(obj => GetDot(obj) > 0.75f)
-            .OrderByDescending(GetDot)
-            .FirstOrDefault();
-
-        float GetDot(IInteractableObject obj)
-        {
-            return Vector3.Dot(m_vcam.transform.forward, (obj.transform.position - origin).normalized);
-        }
     }
 
     protected virtual void OnEnable()
@@ -159,6 +135,26 @@ public abstract class Actor : MonoBehaviour
             m_interactableObjects.Remove(obj);
         }
     }
+    
+    public IInteractableObject GetClosestInteractableObject()
+    {
+        if (m_interactableObjects.Count == 0)
+        {
+            return null;
+        }
+
+        Vector3 origin = m_vcam.transform.position;
+
+        return m_interactableObjects
+            .Where(obj => GetDot(obj) > 0.75f)
+            .OrderByDescending(GetDot)
+            .FirstOrDefault();
+
+        float GetDot(IInteractableObject obj)
+        {
+            return Vector3.Dot(m_vcam.transform.forward, (obj.transform.position - origin).normalized);
+        }
+    }
 
     public abstract void Move(Vector3 direction);
 
@@ -166,7 +162,7 @@ public abstract class Actor : MonoBehaviour
 
     public abstract void TryAttack();
 
-    public abstract void Skill();
+    public abstract void Ability();
 
     public abstract void Dash(Vector3 direction);
 
@@ -245,7 +241,7 @@ public abstract class Actor : MonoBehaviour
     /// <summary>
     /// Actor가 죽을 때 호출됩니다.
     /// </summary>
-    protected virtual void OnDying(DamageInfo info)
+    protected virtual void OnDying(in AttackInfo info)
     {
         //StopAllCoroutines();
 
@@ -263,7 +259,7 @@ public abstract class Actor : MonoBehaviour
         StartCoroutine(CoDie(ConstVariables.MONSTER_DESTROY_WAIT_TIME));
     }
 
-    private void OnDying(object sender, DamageInfo info)
+    private void OnDying(object sender, in AttackInfo info)
     {
         OnDying(info);
     }

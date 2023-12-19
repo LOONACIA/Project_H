@@ -27,15 +27,17 @@ public class UIDamageIndicator : UIScene
         m_characterController.Blocked += OnCharacterBlocked;
     }
 
-    private void OnCharacterDamaged(object sender, DamageInfo e)
+    private void OnCharacterDamaged(object sender, in AttackInfo e)
     {
+        // TODO: 로직 최적화
         DamageIndicator indi = Instantiate(damageIndicator, indicatorParent.transform).GetComponent<DamageIndicator>();
 
         indi.Init(e, m_characterController.Character);
     }
 
-    private void OnCharacterBlocked(object sender, DamageInfo e)
+    private void OnCharacterBlocked(object sender, in AttackInfo e)
     {
+        // TODO: 로직 최적화
         DamageIndicator indi = Instantiate(damageIndicator, indicatorParent.transform).GetComponent<DamageIndicator>();
         Color color = new Color(192f / 255f, 192f / 255f, 192f / 255f);
 
