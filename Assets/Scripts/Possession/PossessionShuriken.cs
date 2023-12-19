@@ -61,7 +61,7 @@ public class PossessionShuriken : MonoBehaviour
 
     public void InitSetting(Vector3 pos, Actor sender, Action<Actor> onTargetHit)
     {
-        RaycastHit hit;
+        //RaycastHit hit;
 
         //if (Physics.Raycast(transform.position, pos, out hit, 300f, m_surikenStopLayer))
         //{

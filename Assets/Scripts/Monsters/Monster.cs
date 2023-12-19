@@ -66,9 +66,9 @@ public class Monster : Actor
         Attack.Attack();
     }
 
-    public override void Ability()
+    public override void Ability(bool isToggled)
     {
-        Attack.Ability();
+        Attack.Ability(isToggled);
     }
 
     public override void Dash(Vector3 direction)
@@ -78,14 +78,6 @@ public class Monster : Actor
         {
             //Movement.TryDash(FirstPersonCameraPivot.transform.forward);
             Movement.TryDash(direction);
-        }
-    }
-    
-    public override void Block(bool value)
-    {
-        if (IsPossessed)
-        {
-            Animator.SetBool(ConstVariables.ANIMATOR_PARAMETER_BLOCK, value);
         }
     }
 

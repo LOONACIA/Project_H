@@ -1,6 +1,4 @@
 using LOONACIA.Unity;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ShieldAbility : Ability
@@ -34,7 +32,6 @@ public class ShieldAbility : Ability
 
     private void CreateShield()
     {
-        Debug.Log("Dd");
         GameObject shieldObject;
         if (m_shieldPrefab != null)
         {

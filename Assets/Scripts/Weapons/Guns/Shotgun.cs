@@ -1,6 +1,4 @@
 using LOONACIA.Unity.Managers;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 

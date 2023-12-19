@@ -2,12 +2,18 @@ using UnityEngine;
 
 public class BlockAnimBehaviour : StateMachineBehaviour
 {
-    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    private Actor m_actor;
+    
+    public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        var status = animator.gameObject.GetComponentInParent<ActorStatus>();
-        if (status != null)
+        if (m_actor == null)
         {
-            status.IsBlocking = true;               
+            m_actor = animator.gameObject.GetComponentInParent<Actor>();
+        }
+        
+        if (m_actor != null)
+        {
+            m_actor.Status.IsBlocking = true;               
         }
     }
 }

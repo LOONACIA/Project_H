@@ -6,15 +6,11 @@ public class UnArmedMonster : Monster
     { 
     }
 
-    public override void Ability()
+    public override void Ability(bool isToggled)
     { 
     }
 
     public override void Dash(Vector3 direction)
-    { 
-    }
-
-    public override void Block(bool value)
     { 
     }
 }

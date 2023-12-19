@@ -162,14 +162,6 @@ public partial class PlayerController : MonoBehaviour
         }
     }
 
-    private void Skill()
-    {
-        if (m_character != null)
-        {
-            m_character.Ability();
-        }
-    }
-
     private void Hack()
     {
         if (m_isOnPossessing)
@@ -190,19 +182,11 @@ public partial class PlayerController : MonoBehaviour
         m_possession.TryPossess();
     }
 
-    private void Ability()
+    private void Ability(bool isToggled)
     {
         if (m_character != null)
         {
-            m_character.Ability();
-        }
-    }
-
-    private void Block(bool value)
-    {
-        if (m_character != null)
-        {
-            m_character.Block(value);
+            m_character.Ability(isToggled);
         }
     }
 
