@@ -66,6 +66,17 @@ public class ActorStatus : MonoBehaviour
         set => m_damage = value;
     }
 
+    public bool CanKnockBack
+    {
+        get => m_canKnockBack;
+        set => m_canKnockBack = value;
+    }
+    public bool CanKnockDown
+    {
+        get => m_canKnockDown;
+        set => m_canKnockDown = value;
+    }
+
     [field: SerializeField]
     [ReadOnly]
     public bool IsStunned { get; set; }
@@ -76,15 +87,34 @@ public class ActorStatus : MonoBehaviour
         set => m_isBlocking = value;
     }
 
-    public bool CanKnockBack
+
+    public bool IsKnockedDown => m_knockDownTime > 0f;
+
+    //주의: IsKnockBack값의 수정은 Monster류, Actor류 클래스에서만 일어나야함.
+    public bool IsKnockBack
     {
-        get => m_canKnockBack;
-        set => m_canKnockBack = value;
+        get => m_isKnockBack;
+        set => m_isKnockBack = value;
     }
-    public bool CanKnockDown
+
+    public float KnockDownTime
     {
-        get => m_canKnockDown;
-        set => m_canKnockDown = value;
+        get => m_knockDownTime;
+        private set => m_knockDownTime = value;
+    }
+
+    public bool IsFlying
+    {
+        get => m_isFlying;
+        set => m_isFlying = value;
+    }
+
+    /// <summary>
+    /// 상태이상 중 하나라도 걸려있는지 확인
+    /// </summary>
+    public bool IsInCrowdControl
+    {
+        get => IsStunned || IsKnockedDown || IsKnockBack || IsFlying;
     }
 
     public Shield Shield
@@ -111,27 +141,6 @@ public class ActorStatus : MonoBehaviour
 
             ShieldChanged?.Invoke(this, EventArgs.Empty);
         }
-    }
-
-    public bool IsKnockedDown => m_knockDownTime > 0f;
-    
-    //주의: IsKnockBack값의 수정은 Monster류, Actor류 클래스에서만 일어나야함.
-    public bool IsKnockBack
-    {
-        get => m_isKnockBack;
-        set => m_isKnockBack = value;   
-    }
-
-    public float KnockDownTime
-    {
-        get => m_knockDownTime;
-        private set => m_knockDownTime = value;
-    }
-
-    public bool IsFlying
-    {
-        get => m_isFlying;
-        set => m_isFlying = value;
     }
 
     /// <summary>

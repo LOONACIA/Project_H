@@ -2,7 +2,7 @@ using LOONACIA.Unity;
 using LOONACIA.Unity.Coroutines;
 using LOONACIA.Unity.Managers;
 using LOONACIA.Unity.UI;
-using Michsky.UI.Shift;
+using Michsky.UI.Reach;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -157,7 +157,7 @@ public class UIHUD : UIScene
             frontLayerHpBox.rotation = m_frontLayerRoot.transform.rotation;
             m_backLayerHpBoxes.Add(backLayerHpBox);
             m_frontLayerHpBoxes.Add(frontLayerHpBox);
-            backLayerHpBox.GetComponent<UIManagerImage>().colorType = UIManagerImage.ColorType.Negative;
+            backLayerHpBox.GetComponent<UIManagerImage>().colorType = UIManagerImage.ColorType.Secondary;
             frontLayerHpBox.GetComponent<UIManagerImage>().colorType = UIManagerImage.ColorType.Secondary;
         }
 
