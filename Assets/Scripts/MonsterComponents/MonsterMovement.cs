@@ -83,14 +83,15 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
                 Debug.LogError("MonsterMovement에 Data가 없습니다.");
                 return 0;
             }
-            if(m_dashCount == m_data.MaxDashCount)
+
+            if (m_dashCount == m_data.MaxDashCount)
             {
                 return 1;
             }
             else
             {
                 if (m_data.DashCoolTime <= 0) return 1;
-                else return Mathf.Clamp((Time.time - m_dashCooldownStartTime) / m_data.DashCoolTime,0f,1f);
+                else return Mathf.Clamp((Time.time - m_dashCooldownStartTime) / m_data.DashCoolTime, 0f, 1f);
             }
         }
     }
@@ -205,7 +206,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         {
             m_agent.isStopped = true;
             m_agent.ResetPath();
-            m_agent.velocity = Vector3.zero;    
+            m_agent.velocity = Vector3.zero;
 
             //m_agent.updatePosition = false;
             //m_agent.updateRotation = false;
@@ -237,16 +238,17 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         //TryDash에서는 대쉬 시작 명령을 내리고 방향을 정하며, 실제 대쉬 연산은 매 FixedUpdate의 ApplyDash에서 일어납니다.
 
         //이미 대쉬 중이거나, 대쉬 딜레이 중이거나, 남은 대쉬가 없다면 대쉬 불가능
-        if(IsDashing||m_lastDashTime+m_data.DashDelay > Time.time || m_dashCount <= 0)
+        if (IsDashing || m_lastDashTime + m_data.DashDelay > Time.time || m_dashCount <= 0)
         {
-            if (m_dashCount <= 0) Debug.Log("남은 대쉬 0, 차지까지 남은 시간: " + (m_dashCooldownStartTime + m_data.DashCoolTime - Time.time));
+            if (m_dashCount <= 0)
+                Debug.Log("남은 대쉬 0, 차지까지 남은 시간: " + (m_dashCooldownStartTime + m_data.DashCoolTime - Time.time));
             if (IsDashing) Debug.Log("이미 대쉬 중");
             if (m_lastDashTime + m_data.DashDelay > Time.time) Debug.Log("대쉬 딜레이중");
             return;
         }
 
         //만약 대쉬가 꽉 차있었는데 대쉬를 시도했다면, 쿨타임을 세기 시작함.
-        if(m_dashCount == m_data.MaxDashCount)
+        if (m_dashCount == m_data.MaxDashCount)
         {
             m_dashCooldownStartTime = Time.time;
         }
@@ -255,7 +257,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
 
         //대쉬를 시도함.
         //1. 속도값을 지정 (나눗셈 연산을 줄이기 위해 한번만 수행)
-        if(m_data.DashDuration == 0)
+        if (m_data.DashDuration == 0)
         {
             Debug.LogWarning("대쉬한 오브젝트의 대쉬 지속시간이 0입니다.");
             m_dashSpeed = 0f;
@@ -264,6 +266,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         {
             m_dashSpeed = m_data.DashAmount / m_data.DashDuration;
         }
+
         //2. 대쉬의 초기 방향을 지정
         if (direction == Vector3.zero)
         {
@@ -273,6 +276,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         {
             m_dashDirection = transform.TransformDirection(direction.normalized);
         }
+
         m_lastDashTime = Time.time;
         IsDashing = true;
         //gameObject.layer = m_data.DashLayer;
@@ -358,7 +362,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
             if (m_rigidbody.velocity.y < 0)
                 m_isJumped = false;
 
-            if (m_isJumped) 
+            if (m_isJumped)
                 m_isJumpApplied = true;
         }
     }
@@ -366,7 +370,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
     private void ApplyDash()
     {
         if (m_lastDashTime + m_data.DashDuration <= Time.time
-            ||m_actor.Status.IsKnockedDown)
+            || m_actor.Status.IsKnockedDown)
         {
             //대쉬 시간이 지났다면 대쉬 종료
             IsDashing = false;
@@ -384,19 +388,22 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         m_dashDirection = TranslateBySurfaceNormal(m_dashDirection, m_currentNormal).normalized;
 
         //2. 캡슐캐스트 진행, 벽이나 땅을 만나는지 체크합니다. 이미 충돌중인 상태인 벽이나 땅은 체크하지 않기 때문에, 실제 콜라이더보다 약간 작은 radius로 검출합니다.
-        Vector3 p1 = transform.TransformPoint(m_collider.center + Vector3.up * (0.5f * m_collider.height - m_collider.radius));
-        Vector3 p2 = transform.TransformPoint(m_collider.center + Vector3.down * (0.5f * m_collider.height - m_collider.radius));
+        Vector3 p1 =
+            transform.TransformPoint(m_collider.center + Vector3.up * (0.5f * m_collider.height - m_collider.radius));
+        Vector3 p2 =
+            transform.TransformPoint(m_collider.center + Vector3.down * (0.5f * m_collider.height - m_collider.radius));
         int mask = LayerMask.GetMask(ConstVariables.MOVEMENT_COLLISION_LAYERS);
 
         //2.1. 캡슐캐스트는 시작 위치는 체크하지 않기 때문에, 시작위치를 체크하기 위해 OverlapCapsule도 체크합니다.
         //서있는 땅을 제외하고 다른 오브젝트와 충돌 시 이동하지 않습니다.
         Collider[] cols = ArrayPool<Collider>.Shared.Rent(100);
         int count = Physics.OverlapCapsuleNonAlloc(p1, p2, m_collider.radius - 0.01f, cols, mask);
-        for(int i = 0; i < count; i++)
+        for (int i = 0; i < count; i++)
         {
             //나 자신을 검사했거나, 밟고있는 땅을 검사할 경우 continue
             if (cols[i].gameObject.GetInstanceID() != m_collider.gameObject.GetInstanceID()
-                &&(m_standingGround == null || cols[i].gameObject.GetInstanceID() != m_standingGround.gameObject.GetInstanceID()))
+                && (m_standingGround == null ||
+                    cols[i].gameObject.GetInstanceID() != m_standingGround.gameObject.GetInstanceID()))
             {
                 //내가 서있는 땅과 다른 곳과 충돌했다면 이동하지 않음
                 //Debug.Log("Dash: 이상한 놈과 충돌 중...");
@@ -404,11 +411,13 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
                 return;
             }
         }
+
         ArrayPool<Collider>.Shared.Return(cols);
 
         //2.2. 오버랩캡슐에서 검출되지 않았다면, 캡슐캐스트로 체크합니다.
         //만약 검출되었다면, 검출된 위치까지만 이동합니다.
-        if (Physics.CapsuleCast(p1, p2, m_collider.radius - 0.01f, m_dashDirection, out var hit, m_dashSpeed * Time.fixedDeltaTime, mask))
+        if (Physics.CapsuleCast(p1, p2, m_collider.radius - 0.01f, m_dashDirection, out var hit,
+                m_dashSpeed * Time.fixedDeltaTime, mask))
         {
             //벽이나 땅을 만난다면, 해당 위치까지만 이동합니다.
             //아래 주석은, MovePosition으로 로직을 변경할 가능성이 있어 남겨두었습니다.
@@ -433,8 +442,8 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
 
     private void UpdateDashCoolDown()
     {
-        if(m_data.MaxDashCount > m_dashCount
-            &&m_dashCooldownStartTime + m_data.DashCoolTime <= Time.time)
+        if (m_data.MaxDashCount > m_dashCount
+            && m_dashCooldownStartTime + m_data.DashCoolTime <= Time.time)
         {
             //최대 대쉬 카운트가 아니면서
             //마지막 대쉬 시간부터 쿨타임이 지났다면 대쉬 카운트 +1
@@ -442,7 +451,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
             Debug.Log($"대쉬 충전됨, 남은 대쉬 수: {m_dashCount}");
 
             //만약 더해줬어도 최대 대쉬 수가 아니라면, 지금 시간부터 다시 대쉬 쿨타임 카운트 시작
-            if(m_dashCount != m_data.MaxDashCount)
+            if (m_dashCount != m_data.MaxDashCount)
             {
                 m_dashCooldownStartTime = Time.time;
             }
@@ -466,7 +475,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
     private void CheckCanUseNavMesh()
     {
         //해킹된 상태가 아니면서, 땅위에 있으면서, 아무 상태이상도 아닌 경우에만 true
-        if (!m_actor.IsPossessed &&!m_agent.enabled&&IsOnGround)
+        if (!m_actor.IsPossessed && !m_agent.enabled && IsOnGround)
         {
             //NavMesh가 켜지면 안되는 상태이상에 대한 처리
             //TODO: 넉백을 시간 대신, 물리 값으로 처리할지에 대한 여부
@@ -481,7 +490,8 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
     {
         if (m_actor.Status.IsFlying) return;
 
-        Vector3 frictionDirection = -m_rigidbody.velocity.GetFlatVector().normalized * (Time.fixedDeltaTime * m_data.FrictionAcceleration);
+        Vector3 frictionDirection = -m_rigidbody.velocity.GetFlatVector().normalized *
+                                    (Time.fixedDeltaTime * m_data.FrictionAcceleration);
         if (Mathf.Abs(m_rigidbody.velocity.x) - Mathf.Abs(frictionDirection.x) < 0)
         {
             frictionDirection.x = -m_rigidbody.velocity.x;

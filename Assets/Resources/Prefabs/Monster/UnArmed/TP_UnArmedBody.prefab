@@ -5575,8 +5575,7 @@ GameObject:
   - component: {fileID: 8529971585593267615}
   - component: {fileID: 8529971585593267614}
   - component: {fileID: 4022100438615415676}
-  - component: {fileID: 6879153006063861844}
-  - component: {fileID: 7123162258964269876}
+  - component: {fileID: 1094900707344166818}
   m_Layer: 0
   m_Name: TP_UnArmedBody
   m_TagString: Untagged
@@ -5647,7 +5646,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ad36176aa803c44fbdede2bc7050bba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Type>k__BackingField: 0
+  <Damage>k__BackingField: 0
+  <KnockDownTime>k__BackingField: 0
+  <KnockBackPower>k__BackingField: 0
   m_trailCaster: {fileID: 0}
 --- !u!114 &4022100438615415676
 MonoBehaviour:
@@ -5661,7 +5662,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d03c6d82a33dec94e966c1d207df021f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6879153006063861844
+--- !u!114 &1094900707344166818
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5670,26 +5671,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 8836592601881727389}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c936006f1fdd084abb9785133b8ff0c, type: 3}
+  m_Script: {fileID: 11500000, guid: 2c10204d846cec54bbdededa7dac799a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &7123162258964269876
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8836592601881727389}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f24b0d15d26df5409c670b025632b32, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <Type>k__BackingField: 1
-  rocketProjectile: {fileID: 5772304690384904770, guid: 069a53e5eab42424aa148d82f0f056d1,
-    type: 3}
-  spawnPosition: {x: 0, y: 0, z: 0}
-  isShowingSpawnPositionGizmo: 0
 --- !u!1 &8856491620874119508
 GameObject:
   m_ObjectHideFlags: 0
