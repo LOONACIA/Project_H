@@ -26,11 +26,11 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
     //이동 관련
     private float m_movementRatio;
 
-    //MoveTo함수에서 사용되는 속도값.
+    //MoveTo함수에서 계산되는 속도값.
     private float m_currentMoveToSpeed = 0f;
 
-    //MoveTo함수에서 사용되는 가속도값
-    float m_currentMoveToAccel = 1f;
+    //MoveTo함수에서 계산되는 가속도값
+    private float m_currentMoveToAccel = 1f;
 
     private NavMeshPath m_lastPath;
 
@@ -119,6 +119,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         m_agent = GetComponent<NavMeshAgent>();
 
         m_dashCount = m_data.MaxDashCount;
+        m_currentMoveToAccel = (m_data.AccelerationTime>0f?(1f/m_data.AccelerationTime):(float.PositiveInfinity));
         m_lastPath = new NavMeshPath(); //네브매쉬패스는 Start, Awake에서 초기화되어야함.
     }
     public Transform tr;
@@ -231,16 +232,14 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
             // - ObstacleAvoidance가 None이 아니면, Move하되 충돌검사는 해주는 것 같음
 
             //3.1. Rotate
-            float angularSpeed = 120f;
-
             //각속도 적용
             float angle = Vector3.SignedAngle(transform.forward.GetFlatVector(), dir.GetFlatVector(), Vector3.up);
-            if (Mathf.Abs(angle) > Mathf.Abs(angularSpeed * Time.deltaTime))
+            if (Mathf.Abs(angle) > Mathf.Abs(Data.AngularSpeed * Time.deltaTime))
             {
                 if (angle >= 0)
-                    angle = angularSpeed * Time.deltaTime;
+                    angle = Data.AngularSpeed * Time.deltaTime;
                 else
-                    angle = -angularSpeed * Time.deltaTime;
+                    angle = -Data.AngularSpeed * Time.deltaTime;
             }
             Vector3 nextDir = Quaternion.Euler(0f, angle, 0f) * transform.forward.GetFlatVector();
 
@@ -251,6 +250,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
             m_currentMoveToSpeed += m_currentMoveToAccel * Data.MoveSpeed * Time.deltaTime;
             if (m_currentMoveToSpeed > Data.MoveSpeed)
                 m_currentMoveToSpeed = Data.MoveSpeed;
+            Debug.Log($"속도: {m_currentMoveToSpeed}, 가속도{m_currentMoveToAccel}, 걸리는 시간{m_data.AccelerationTime}");
             m_agent.Move(nextDir * Time.deltaTime * m_currentMoveToSpeed);
 
             //4. 애니메이션 적용
