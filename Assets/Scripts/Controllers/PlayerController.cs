@@ -68,6 +68,7 @@ public partial class PlayerController : MonoBehaviour
         GameManager.UI.ShowShurikenIndicator(m_possession);
         GameManager.UI.ShowDamageIndicator();
         GameManager.UI.ShowObjects();
+        GameManager.UI.ShowSkillIndicator(this);
     }
 
     private void Start()
