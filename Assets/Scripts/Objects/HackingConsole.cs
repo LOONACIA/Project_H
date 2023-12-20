@@ -82,7 +82,7 @@ public class HackingConsole : HackingObject
 
         foreach (var hackable in m_hackable)
         {
-            hackable.InActivate();
+            hackable.Deactivate();
         }
     }
 
