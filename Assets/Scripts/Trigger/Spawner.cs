@@ -102,7 +102,7 @@ public class Spawner : MonoBehaviour
 
         if (!isSpawnPosValid)
         {
-            Debug.LogWarning("정상 스폰 위치 찾을 수 없음.");
+            Debug.LogWarning("정상 스폰 위치 찾을 수 없음.", gameObject);
         }
 
         return spawnPosition;
