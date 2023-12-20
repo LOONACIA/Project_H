@@ -15,6 +15,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         [Tooltip("The GameObject that the agent is pursuing")]
         public SharedTransform target;
         private MonsterMovement m_monsterMovement;
+        private Vector3 m_lastTarget;
 
         // The position of the target at the last frame
         private Vector3 targetPosition;
@@ -28,7 +29,8 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             base.OnStart();
 
             targetPosition = target.Value.transform.position;
-            m_monsterMovement.MoveTo(Target());
+            m_lastTarget = Target();
+            m_monsterMovement.MoveTo(m_lastTarget);
         }
 
         // Pursue the destination. Return success once the agent has reached the destination.
@@ -41,13 +43,13 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             }
 
             // Target will return the predicated position
-            var target = Target();
-            if (target == Vector3.zero)
+            m_lastTarget = Target();
+            if (m_lastTarget == Vector3.zero)
             {
                 m_monsterMovement.StopAgentMove();
                 return TaskStatus.Failure;
             }
-            m_monsterMovement.MoveTo(target);
+            m_monsterMovement.MoveTo(m_lastTarget);
 
             return TaskStatus.Running;
         }
@@ -91,6 +93,14 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             targetDistPrediction = 20;
             targetDistPredictionMult = 20;
             target = null;
+        }
+
+        protected override bool HasArrived()
+        {
+            //MoveTo가 SetDestination에서 Move로 변경됨에 따라 HasArrived 함수를 수정함.
+            float remainingDistance = Vector3.Distance(transform.position,m_lastTarget);
+
+            return remainingDistance <= arriveDistance.Value;
         }
     }
 }
