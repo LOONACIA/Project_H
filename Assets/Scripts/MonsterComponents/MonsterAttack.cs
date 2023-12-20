@@ -157,6 +157,11 @@ public class MonsterAttack : MonoBehaviour
     
     private void OnAbilityStateChanged(object sender, AbilityState e)
     {
+        if (m_data.SkillCoolTime == 0)
+        {
+            return;
+        }
+
         if (AbilityType == AbilityType.Trigger && e == AbilityState.Activate)
         {
             m_actor.Status.SkillCoolTime = 0f;
