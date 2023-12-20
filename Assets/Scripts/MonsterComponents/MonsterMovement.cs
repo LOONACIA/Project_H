@@ -110,9 +110,15 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
 
         m_dashCount = m_data.MaxDashCount;
     }
+    public Transform tr;
 
     private void Update()
     {
+        if (tr!=null)
+        {
+            if (Vector3.Distance(tr.position, transform.position) > 0.5f)
+                MoveTo(tr.position);
+        }
         CheckJumping();
 
         UpdateAnimator();
@@ -180,6 +186,8 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         m_rigidbody.AddRelativeForce((forwardForce + strafeForce), ForceMode.VelocityChange);
     }
 
+    float currentSpeed = 0f;
+    float accel = 0.5f;
     public void MoveTo(Vector3 destination)
     {
         if (m_agent.enabled)
@@ -187,6 +195,12 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
             NavMeshPath path = new NavMeshPath();
             if (NavMesh.CalculatePath(transform.position, destination, m_agent.areaMask, path))
             {
+                //string log = "";
+                //foreach(var p in path.corners)
+                //{
+                //    log += $"{p}, ";
+                //}
+                //Debug.Log(log);
                 //1. Path상 다음 목적지를 찾는다.
                 Vector3 navDest = path.corners.Length > 0 ? path.corners[1] : path.corners[0];
 
@@ -197,8 +211,28 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
                 // - 굳이 없어도 자연스러운 것 같아 구현하지 않음.
                 // - ObstacleAvoidance가 None이 아니면, Move하되 충돌검사는 해주는 것 같음
 
-                //3. Move
-                m_agent.Move(dir * Time.deltaTime * m_data.MoveSpeed);
+                //3.1. Rotate
+                float angularSpeed = 120f;
+
+                //각속도 적용
+                float angle = Vector3.SignedAngle(transform.forward.GetFlatVector(), dir.GetFlatVector(),Vector3.up);
+                if(Mathf.Abs(angle) > Mathf.Abs(angularSpeed*Time.deltaTime))
+                {
+                    if (angle >= 0)
+                        angle = angularSpeed * Time.deltaTime;
+                    else
+                        angle = -angularSpeed * Time.deltaTime;
+                }
+                Vector3 nextDir = Quaternion.Euler(0f, angle, 0f) * transform.forward.GetFlatVector();
+
+                //Vector3 nextDir = Vector3.Lerp(transform.forward.GetFlatVector(), dir.GetFlatVector(), Time.deltaTime * rotSpeed);
+                transform.rotation = Quaternion.LookRotation(nextDir);
+
+                //3.2. 이동
+                currentSpeed += accel * Data.MoveSpeed*0.7f * Time.deltaTime;
+                if(currentSpeed>Data.MoveSpeed*0.7f)
+                    currentSpeed = Data.MoveSpeed *0.7f;
+                m_agent.Move(nextDir * Time.deltaTime * currentSpeed);
 
                 //4. 애니메이션 적용
                 m_movementRatio = 1f;
