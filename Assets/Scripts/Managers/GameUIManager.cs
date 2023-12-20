@@ -110,7 +110,7 @@ public class GameUIManager
     public void ShowShurikenIndicator(PossessionProcessor processor)
     {
         var ui = ManagerRoot.UI.ShowSceneUI<UIShuriken>();
-        ui.GetComponent<Canvas>().sortingOrder = -2;
+        //ui.GetComponent<Canvas>().sortingOrder = -2;
         ui.SetPossessionProcessor(processor);
         m_sceneUIs.Add(ui);
     }
@@ -118,7 +118,7 @@ public class GameUIManager
     public void ShowSkillIndicator(PlayerController player)
     { 
         var ui = ManagerRoot.UI.ShowSceneUI<UISkill>();
-        ui.GetComponent<Canvas>().sortingOrder = -2;
+        //ui.GetComponent<Canvas>().sortingOrder = -2;
         ui.SetActorStatus(player);
         m_sceneUIs.Add(ui);
     }

@@ -40,6 +40,11 @@ public class SetTargetIfDamaged : Conditional
     
     private void OnDamaged(object sender, in AttackInfo e)
     {
+        if (e.Attacker is null)
+        {
+            return;
+        }
+        
         // 대미지를 입으면 Attacker에 대입
         if (e.Attacker.TryGetComponent<Actor>(out var actor))
         {

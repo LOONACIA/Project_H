@@ -15,8 +15,6 @@ public abstract class Actor : MonoBehaviour
 {
     private static readonly int s_hitAnimationKey = Animator.StringToHash("Hit");
 
-    protected NavMeshAgent m_navMeshAgent;
-
     protected Rigidbody m_rigidbody;
 
     protected Collider m_collider;
@@ -74,7 +72,6 @@ public abstract class Actor : MonoBehaviour
 
     protected virtual void Awake()
     {
-        m_navMeshAgent = GetComponent<NavMeshAgent>();
         m_collider = GetComponent<Collider>();
         m_rigidbody = GetComponent<Rigidbody>();
         m_behaviorTree = GetComponent<BehaviorTree>();
