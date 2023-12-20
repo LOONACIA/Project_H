@@ -64,12 +64,10 @@ public partial class PlayerController : MonoBehaviour
         m_possession.Possessed += OnPossessed;
         
         GameManager.UI.ShowCrosshair();
-        // GameManager.UI.ShowHpIndicator(this);
-        // GameManager.UI.ShowShieldIndicator(this);
-        // GameManager.UI.ShowShurikenIndicator(m_possession);
-        // GameManager.UI.ShowDamageIndicator();
-        // GameManager.UI.ShowObjects();
-        // GameManager.UI.ShowSkillIndicator(this);
+        GameManager.UI.ShowShieldIndicator(this);
+        GameManager.UI.ShowShurikenIndicator(m_possession);
+        GameManager.UI.ShowDamageIndicator();
+        GameManager.UI.ShowObjects();
     }
 
     private void Start()
