@@ -38,6 +38,8 @@ public class BossStageSpawner : MonoBehaviour
 
     private bool m_active;
 
+    private float m_lastSpawnTime;
+
     private ObservableCollection<Monster> Monsters { get; } = new();
 
     private void Start()
@@ -54,12 +56,12 @@ public class BossStageSpawner : MonoBehaviour
         Spawn();
     }
 
-    public void EndSpawn()
-    {
-        if (!m_active) return;
+    //public void EndSpawn()
+    //{
+    //    if (!m_active) return;
 
-        m_active = false;
-    }
+    //    m_active = false;
+    //}
 
     private void OnMonsterCollectionChanged(object sender,
        System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -139,7 +141,7 @@ public class BossStageSpawner : MonoBehaviour
 
         // temp
         float spawnHeight = 5;
-        float constHeight = 0.5f;
+        float constHeight = 2f;
         float constRadius = 0.5f;
 
         for (int i = 0; i < m_maxSpawnAttemp; i++)
@@ -152,9 +154,14 @@ public class BossStageSpawner : MonoBehaviour
             var obstacleColliders = Physics.OverlapCapsule(spawnPos, spawnPos + new Vector3(0, constHeight, 0), constRadius, m_layerToNotSpawnOn);
             if (obstacleColliders.Length == 0)
             {
+                // temp
+                var temp = Physics.RaycastAll(spawnPos, Vector3.down, spawnHeight);
                 var groundCollier = Physics.Raycast(spawnPos, Vector3.down, spawnHeight, LayerMask.GetMask("Ground"));
                 if (groundCollier)
+                {
+                    Debug.Log(Vector3.Distance(spawnPos, m_character.transform.position));
                     return spawnPos;
+                }
             }
         }
 

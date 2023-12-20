@@ -25,7 +25,7 @@ public class Laser : MonoBehaviour, IActivate
 
         m_collider.center = (m_volumetricLineBehavior.StartPos + m_volumetricLineBehavior.EndPos) / 2;
         m_collider.height = MathF.Abs(m_volumetricLineBehavior.StartPos.y - m_volumetricLineBehavior.EndPos.y);
-
+        //m_collider.radius = m_volumetricLineBehavior.LineWidth / 2 * (1 - m_volumetricLineBehavior.LightSaberFactor);
         m_originWidth = m_volumetricLineBehavior.LineWidth;
     }
 
@@ -49,7 +49,7 @@ public class Laser : MonoBehaviour, IActivate
 
     }
 
-    public void InActivate()
+    public void Deactivate()
     {
         m_isHacking = false;
         m_collider.enabled = true;

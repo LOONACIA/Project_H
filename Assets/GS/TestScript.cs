@@ -8,7 +8,7 @@ public class TestScript : MonoBehaviour
 
     private ActorStatus m_status;
 
-    public BossStagePhase bossStagePhase;
+    public BossStageRoot bossStagePhase;
 
     private void Start()
     {
@@ -18,9 +18,5 @@ public class TestScript : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyUp(KeyCode.Escape))
-        {
-            bossStagePhase.StartPhase();
-        }
     }
 }
