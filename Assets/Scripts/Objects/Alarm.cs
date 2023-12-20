@@ -1,7 +1,6 @@
 using LOONACIA.Unity.Collections;
 using System;
 using System.Buffers;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -10,18 +9,20 @@ using UnityEngine;
 public class Alarm : MonoBehaviour
 {
     // Monster Layer
-    private static int s_recipientLayers = 1 << 7;
-    
+    private static readonly int s_recipientLayers = 1 << 7;
+
     [SerializeField]
     [Tooltip("수신자를 감지하는 원점")]
     private Transform m_origin;
 
-    private Collider m_collider;
+    private BoxCollider m_collider;
+
+    private bool m_hasBoxCollider;
 
     [field: SerializeField]
-    [Tooltip("원점에 Collider가 있을 경우 Collider를 사용하여 수신자를 감지합니다.")]
-    public bool UseCollider { get; private set; }
-    
+    [Tooltip("원점에 BoxCollider가 있을 경우 BoxCollider를 사용하여 수신자를 감지합니다.")]
+    public bool UseBoxCollider { get; private set; }
+
     [field: SerializeField]
     [Tooltip("수신자를 감지할 수 있는 레이어. UseCollider가 true일 경우에만 적용됩니다.")]
     public LayerMask RecipientLayers { get; private set; }
@@ -37,9 +38,11 @@ public class Alarm : MonoBehaviour
             m_origin = transform;
         }
 
-        if (UseCollider && m_origin.TryGetComponent<Collider>(out var origin))
+        m_hasBoxCollider = false;
+        if (UseBoxCollider && m_origin.TryGetComponent<BoxCollider>(out var origin))
         {
             m_collider = origin;
+            m_hasBoxCollider = true;
         }
     }
 
@@ -47,15 +50,15 @@ public class Alarm : MonoBehaviour
     {
         PooledList<Monster> recipients;
 
-        if (UseCollider)
+        if (m_hasBoxCollider)
         {
             Collider[] colliders = ArrayPool<Collider>.Shared.Rent(GameManager.Actor.GetMonsterCount());
 
             int recipientLayers = RecipientLayers > 0 ? RecipientLayers : s_recipientLayers;
-            Bounds bounds = m_collider.bounds;
-            
-            int length = Physics.OverlapBoxNonAlloc(bounds.center, bounds.extents, colliders,  m_origin.transform.rotation,
-                recipientLayers);
+
+            Vector3 halfExtents = Vector3.Scale(m_collider.size / 2f, m_origin.lossyScale);
+            int length = Physics.OverlapBoxNonAlloc(m_origin.position + m_collider.center, halfExtents,
+                colliders, m_origin.rotation, recipientLayers);
 
             recipients = new(length);
             foreach (Collider recipient in colliders.AsSpan(0, length))
@@ -114,10 +117,15 @@ public class Alarm : MonoBehaviour
         }
 
         Gizmos.color = Color.red;
-        if (UseCollider)
+        if (UseBoxCollider)
         {
-            m_collider ??= m_origin.GetComponent<Collider>();
-            Gizmos.DrawWireCube(m_origin.position, m_collider.bounds.size);
+            if (m_collider == null)
+            {
+                m_collider = m_origin.GetComponent<BoxCollider>();
+            }
+
+            Gizmos.matrix = Matrix4x4.TRS(m_origin.position, m_origin.rotation, m_origin.lossyScale);
+            Gizmos.DrawWireCube(Vector3.zero, m_collider.size);
         }
         else
         {
