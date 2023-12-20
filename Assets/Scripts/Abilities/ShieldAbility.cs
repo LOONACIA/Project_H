@@ -25,8 +25,6 @@ public class ShieldAbility : Ability
 
     protected override void OnActivateState()
     {
-        base.OnActivateState();
-        
         CreateShield();
     }
 
