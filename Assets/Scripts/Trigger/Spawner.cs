@@ -1,6 +1,9 @@
+using System;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
+[Serializable]
 public class Spawner : MonoBehaviour
 {
     [FormerlySerializedAs("m_waveInfos")]
