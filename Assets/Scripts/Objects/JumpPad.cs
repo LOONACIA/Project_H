@@ -23,7 +23,10 @@ public class JumpPad : MonoBehaviour, IActivate
 
     private void OnTriggerStay(Collider other)
     {
-        if (m_isActive && other.gameObject.layer == LayerMask.NameToLayer("Monster"))
+        if (m_isActive 
+            && other.gameObject.layer == LayerMask.NameToLayer("Monster")
+            && other.gameObject.TryGetComponent<Monster>(out var monster)
+            && monster.IsPossessed)
         {
             Jump(other.gameObject);
         }
@@ -90,6 +93,8 @@ public class JumpPad : MonoBehaviour, IActivate
     {
         if (target.TryGetComponent<Rigidbody>(out var rigidbody))
         {
+            rigidbody.velocity = Vector3.zero;
+
             rigidbody.AddForce(transform.up * m_jumpPower, ForceMode.VelocityChange);
         }
     }

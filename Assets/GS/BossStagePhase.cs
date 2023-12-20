@@ -46,6 +46,8 @@ public class BossStagePhase : MonoBehaviour
 
     private bool m_active;
 
+    private Coroutine m_readyPhaseCoroutine;
+
     private Coroutine m_spawnCoroutine;
 
     public event EventHandler PhaseEnd;
@@ -72,7 +74,7 @@ public class BossStagePhase : MonoBehaviour
         m_active = true;
 
         // 플레이어가 특정 위치에 존재할 때 Phase 진행
-        m_spawnCoroutine = StartCoroutine(IE_WaitForStageReady());
+        m_readyPhaseCoroutine = StartCoroutine(IE_WaitForStageReady());
 
         // 스테이지 시작하면 groundTrigger 활성화
         // 플레이어가 Trigger에 검출되면 바닥 생성
@@ -82,7 +84,7 @@ public class BossStagePhase : MonoBehaviour
     private void StartPhase()
     {
         // 몬스터 스폰
-        StartCoroutine(IE_WaitSpawnDelay());
+        m_spawnCoroutine = StartCoroutine(IE_WaitSpawnDelay());
 
         // 객체 활성화
         foreach (var activeObject in m_onStartActiveObjects)
@@ -97,8 +99,11 @@ public class BossStagePhase : MonoBehaviour
 
         m_active = false;
 
+        if (m_readyPhaseCoroutine != null)
+            StopCoroutine(m_readyPhaseCoroutine);
+        
         if (m_spawnCoroutine != null)
-            StopCoroutine(IE_WaitForStageReady());
+            StopCoroutine(m_spawnCoroutine);
 
         // 폭발 이벤트 
         Invoke(nameof(Explode), m_explosionDelay);
@@ -143,7 +148,7 @@ public class BossStagePhase : MonoBehaviour
         {
             if (m_phaseTrigger.IsInArea(charater.transform.position) == true
                 && charater.Movement.IsOnGround)
-                break;
+               break;
 
             yield return null;
         }
@@ -154,6 +159,19 @@ public class BossStagePhase : MonoBehaviour
     private IEnumerator IE_WaitSpawnDelay()
     { 
         yield return new WaitForSeconds(m_spawnDelay);
+
+        var charater = m_character as Monster;
+        if (charater == null)
+            yield break;
+
+        while (true)
+        {
+            if (charater.Movement.IsOnGround)
+                break;
+
+            yield return null;
+        }
+
         m_spawner.StartSpawn();
     }
 }

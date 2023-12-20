@@ -23,10 +23,16 @@ public class BossStageSpawner : MonoBehaviour
     [SerializeField, Tooltip("소환 최대 시도 횟수")]
     private float m_maxSpawnAttemp = 10;
 
-    [SerializeField, Tooltip("남은 몬스터 수가 encounterCount보다 작으면 다음 소환 준비 ")]
-    private float m_encounterCount;
+    [SerializeField, Tooltip("남은 몬스터 수가 m_minEncounterCount 작으면 다음 소환 준비")]
+    private float m_minEncounterCount;    
+    
+    [SerializeField, Tooltip("남은 몬스터 수가 m_maxEncounterCount 크면 소환 하지 않음")]
+    private float m_maxEncounterCount;
 
-    [SerializeField, Tooltip("소환과 소환 사이의 간격")]
+    [SerializeField, Tooltip("다음 소환까지의 지연 시간")]
+    private float m_spawnDelay;
+
+    [SerializeField, Tooltip("소환 후 일정 시간이 지나면 다시 소환")]
     private float m_spawnInterval;
 
     [SerializeField, Tooltip("소환 위치에 해당 레이어의 오브젝트가 존재하면 소환하지 않음")]
@@ -39,6 +45,8 @@ public class BossStageSpawner : MonoBehaviour
     private bool m_active;
 
     private float m_lastSpawnTime;
+
+    private Coroutine m_spawnCoroutine;
 
     private ObservableCollection<Monster> Monsters { get; } = new();
 
@@ -54,6 +62,7 @@ public class BossStageSpawner : MonoBehaviour
         m_active = true;
         m_currentSpawnIndex = 0;
         Spawn();
+        InvokeRepeating(nameof(Evaluate), 0, 0.5f);
     }
 
     //public void EndSpawn()
@@ -95,10 +104,22 @@ public class BossStageSpawner : MonoBehaviour
 
     private void Evaluate()
     {
-        // 남은 몬스터 수 확인, 일정 수 이하면 m_spawnInterval 시간 뒤에 소환
-        if (Monsters.Count < m_encounterCount)
+        if (!m_active)
         { 
-            Invoke(nameof(Spawn), m_spawnInterval);    
+            CancelInvoke(nameof(Evaluate));
+            return;
+        }
+
+        // 이미 소환 대기 중이면 반환
+        if (m_spawnCoroutine != null) return;
+
+        // 최대 몬스터 수를 넘겼으면 반환
+        if (Monsters.Count > m_maxEncounterCount) return;
+
+        if (Monsters.Count < m_minEncounterCount 
+            || Time.time - m_lastSpawnTime > m_spawnInterval)
+        {
+            m_spawnCoroutine = StartCoroutine(IE_WaitSpawnDelay());
         }
     }
 
@@ -106,8 +127,14 @@ public class BossStageSpawner : MonoBehaviour
     {
         if (!m_active) return;
 
+        if (m_spawnCoroutine != null)
+            m_spawnCoroutine = null;
+
         if (m_currentSpawnIndex >= m_waveInfoList.Length)
             m_currentSpawnIndex = 0;
+
+        // 마지막 스폰 시간 저장
+        m_lastSpawnTime = Time.time;
 
         // 몬스터 스폰
         foreach (var waveInfo in m_waveInfoList[m_currentSpawnIndex].WaveInfos)
@@ -148,25 +175,28 @@ public class BossStageSpawner : MonoBehaviour
         {
             Vector2 randomXZPos = Random.insideUnitCircle * Random.Range(m_minSpawnRadius, m_maxSpawnRadius);
             Vector3 spawnPos = new Vector3(randomXZPos.x, 0, randomXZPos.y);
-            spawnPos.y = Random.Range(-spawnHeight, spawnHeight);
+            spawnPos.y = spawnHeight;
             spawnPos += m_character.transform.position;
 
             var obstacleColliders = Physics.OverlapCapsule(spawnPos, spawnPos + new Vector3(0, constHeight, 0), constRadius, m_layerToNotSpawnOn);
             if (obstacleColliders.Length == 0)
             {
-                // temp
-               var temp = Physics.RaycastAll(spawnPos, Vector3.down, spawnHeight);
-                Debug.DrawRay(spawnPos, spawnPos + Vector3.down, Color.red);
-               var groundCollier = Physics.Raycast(spawnPos, Vector3.down, spawnHeight, LayerMask.GetMask("Ground"));
+                var groundCollier = Physics.Raycast(spawnPos, Vector3.down, out var hit, 50, LayerMask.GetMask("Ground"));
                 if (groundCollier)
                 {
-                    Debug.Log(Vector3.Distance(spawnPos, m_character.transform.position));
-                    return spawnPos;
+                    return hit.point;
                 }
             }
         }
 
         return Vector3.zero;
+    }
+
+    private IEnumerator IE_WaitSpawnDelay()
+    { 
+        yield return new WaitForSeconds(m_spawnDelay);
+
+        Spawn();
     }
 
     [System.Serializable]
