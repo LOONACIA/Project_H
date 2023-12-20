@@ -5,7 +5,7 @@ using VolumetricLines;
 
 [RequireComponent(typeof(CapsuleCollider))]
 [RequireComponent(typeof(VolumetricLineBehavior))]
-public class Laser : MonoBehaviour, IHackable
+public class Laser : MonoBehaviour, IActivate
 {
     [SerializeField]
     private float m_progressTime = 0.5f;
@@ -38,7 +38,7 @@ public class Laser : MonoBehaviour, IHackable
     }
 
 
-    public void Hacking()
+    public void Activate()
     {
         if (m_isHacking) return;
 
@@ -49,7 +49,7 @@ public class Laser : MonoBehaviour, IHackable
 
     }
 
-    public void Recovery()
+    public void InActivate()
     {
         m_isHacking = false;
         m_collider.enabled = true;
