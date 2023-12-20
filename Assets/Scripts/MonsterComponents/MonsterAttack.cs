@@ -1,3 +1,4 @@
+using LOONACIA.Unity;
 using System;
 using UnityEngine;
 
@@ -35,6 +36,8 @@ public class MonsterAttack : MonoBehaviour
 
     public bool IsAttacking => CurrentWeapon != null && CurrentWeapon.IsAttacking;
 
+    [field: SerializeField]
+    [field: ReadOnly]
     public Weapon CurrentWeapon { get; private set; }
 
     private void Awake()
@@ -79,6 +82,11 @@ public class MonsterAttack : MonoBehaviour
 
     public void ChangeWeapon(Weapon weapon)
     {
+        if (weapon == CurrentWeapon)
+        {
+            return;
+        }
+        
         if (CurrentWeapon != null)
         {
             CurrentWeapon.AttackHit -= OnAttackHit;
