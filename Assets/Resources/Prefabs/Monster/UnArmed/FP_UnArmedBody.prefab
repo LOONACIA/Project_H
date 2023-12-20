@@ -782,10 +782,8 @@ GameObject:
   - component: {fileID: 9140673815523639760}
   - component: {fileID: 8715104108228880038}
   - component: {fileID: 8715104108228880037}
-  - component: {fileID: 8309772970511744547}
-  - component: {fileID: 5938176032620007910}
-  - component: {fileID: 2327127942058260475}
   - component: {fileID: 4563261364783099810}
+  - component: {fileID: 7559271081063595649}
   m_Layer: 0
   m_Name: FP_UnArmedBody
   m_TagString: Untagged
@@ -855,64 +853,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ad36176aa803c44fbdede2bc7050bba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Type>k__BackingField: 0
+  <Damage>k__BackingField: 0
+  <KnockDownTime>k__BackingField: 0
+  <KnockBackPower>k__BackingField: 0
   m_trailCaster: {fileID: 0}
---- !u!114 &8309772970511744547
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2554049100426101008}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c936006f1fdd084abb9785133b8ff0c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &5938176032620007910
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2554049100426101008}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cec7e6f2fe0ec594e8df7782e64f6bd6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <Type>k__BackingField: 2
-  hitBoxBaseTransform: {fileID: 2898663065983490986}
-  hitBox:
-    m_position: {x: 0, y: 1.76, z: 1.03}
-    m_halfExtents: {x: 1, y: 1, z: 1}
-    m_rotation: {x: 0, y: 0, z: 0, w: 1}
-    m_gizmoColor: {r: 0.51523685, g: 0, b: 1, a: 1}
-    m_showGizmo: 0
-  attackDirectionBaseTransform: {fileID: 2898663065983490986}
-  attackDirection: {x: 0, y: 0, z: 1}
---- !u!114 &2327127942058260475
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2554049100426101008}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cec7e6f2fe0ec594e8df7782e64f6bd6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <Type>k__BackingField: 1
-  hitBoxBaseTransform: {fileID: 2898663065983490986}
-  hitBox:
-    m_position: {x: 0, y: -0.5, z: 3.75}
-    m_halfExtents: {x: 2.5, y: 1.27, z: 4}
-    m_rotation: {x: 0, y: 0, z: 0, w: 1}
-    m_gizmoColor: {r: 1, g: 0.9964251, b: 0, a: 1}
-    m_showGizmo: 1
-  attackDirectionBaseTransform: {fileID: 2898663065983490986}
-  attackDirection: {x: 0, y: -1, z: 2}
 --- !u!114 &4563261364783099810
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -926,6 +870,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraRotation: {x: 0, y: 0, z: 0}
+--- !u!114 &7559271081063595649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2554049100426101008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c10204d846cec54bbdededa7dac799a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2865157204968263327
 GameObject:
   m_ObjectHideFlags: 0
