@@ -155,8 +155,9 @@ public class BossStageSpawner : MonoBehaviour
             if (obstacleColliders.Length == 0)
             {
                 // temp
-                var temp = Physics.RaycastAll(spawnPos, Vector3.down, spawnHeight);
-                var groundCollier = Physics.Raycast(spawnPos, Vector3.down, spawnHeight, LayerMask.GetMask("Ground"));
+               var temp = Physics.RaycastAll(spawnPos, Vector3.down, spawnHeight);
+                Debug.DrawRay(spawnPos, spawnPos + Vector3.down, Color.red);
+               var groundCollier = Physics.Raycast(spawnPos, Vector3.down, spawnHeight, LayerMask.GetMask("Ground"));
                 if (groundCollier)
                 {
                     Debug.Log(Vector3.Distance(spawnPos, m_character.transform.position));
