@@ -8,6 +8,8 @@ public class TestScript : MonoBehaviour
 
     private ActorStatus m_status;
 
+    public BossStagePhase bossStagePhase;
+
     private void Start()
     {
         m_status = m_character.GetComponent<ActorStatus>();
@@ -16,5 +18,9 @@ public class TestScript : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyUp(KeyCode.Escape))
+        {
+            bossStagePhase.StartPhase();
+        }
     }
 }

@@ -54,11 +54,19 @@ public abstract class Weapon : MonoBehaviour
             Owner = GetComponentInParent<Monster>();
         }
 
-        m_eventProxy = GetComponent<IEventProxy>();
+        if (m_eventProxy == null)
+        {
+            m_eventProxy = GetComponent<IEventProxy>();
+        }
     }
 
     public void Equip(Monster owner)
     {
+        if (m_eventProxy == null)
+        {
+            m_eventProxy = GetComponent<IEventProxy>();
+        }
+        
         IsEquipped = true;
         Owner = owner;
         RegisterEvents(m_eventProxy);
@@ -194,5 +202,18 @@ public abstract class Weapon : MonoBehaviour
         
         State = WeaponState.Recovery;
         OnRecoveryState();
+    }
+    
+    private void OnValidate()
+    {
+        if (m_eventProxy == null)
+        {
+            m_eventProxy = GetComponent<IEventProxy>();
+        }
+
+        if (m_eventProxy == null)
+        {
+            Debug.LogWarning("EventProxy is null", gameObject);
+        }
     }
 }

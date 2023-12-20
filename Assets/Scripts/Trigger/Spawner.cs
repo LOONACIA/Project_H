@@ -1,6 +1,9 @@
+using System;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
+[Serializable]
 public class Spawner : MonoBehaviour
 {
     [FormerlySerializedAs("m_waveInfos")]
@@ -100,10 +103,11 @@ public class Spawner : MonoBehaviour
             attemptCount++;
         }
 
-        if (!isSpawnPosValid)
-        {
-            Debug.LogWarning("정상 스폰 위치 찾을 수 없음.");
-        }
+        // TODO: 스폰 에러 시 이곳을 확인
+        //if (!isSpawnPosValid)
+        //{
+            //Debug.LogWarning("정상 스폰 위치 찾을 수 없음.", gameObject);
+        //}
 
         return spawnPosition;
     }
