@@ -18,7 +18,7 @@ public class HackingConsole : HackingObject
     private float m_hackingProgressedTime = 0.5f;
 
     [SerializeField, Tooltip("해킹 가능한 객체들")]
-    private IHackable[] m_hackable;
+    private IActivate[] m_hackable;
 
     private Renderer m_renderer;
 
@@ -34,7 +34,7 @@ public class HackingConsole : HackingObject
 
     private void Start()
     {
-        m_hackable = GetComponentsInChildren<IHackable>();
+        m_hackable = GetComponentsInChildren<IActivate>();
 
         m_renderer = GetComponent<Renderer>();
         m_idleMaterial = Instantiate(m_renderer.material);
@@ -67,7 +67,7 @@ public class HackingConsole : HackingObject
 
         foreach (var hackable in m_hackable)
         {
-            hackable.Hacking();
+            hackable.Activate();
         }
 
         m_coolTimeCoroutine = StartCoroutine(IE_WaitCoolTime());
@@ -82,7 +82,7 @@ public class HackingConsole : HackingObject
 
         foreach (var hackable in m_hackable)
         {
-            hackable.Recovery();
+            hackable.InActivate();
         }
     }
 

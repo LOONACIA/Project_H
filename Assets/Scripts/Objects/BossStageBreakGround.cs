@@ -1,3 +1,7 @@
+using LOONACIA.Unity;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BossStageBreakGround : MonoBehaviour
@@ -7,6 +11,9 @@ public class BossStageBreakGround : MonoBehaviour
     #endregion
 
     #region PrivateVariables
+    [SerializeField]
+    private BossStagePhase m_bossStagePhase;
+    private Transform[] m_childrenList;
     private MeshRenderer m_mr;
     private MeshCollider m_col;
     private BoxCollider m_trigger;
@@ -18,6 +25,8 @@ public class BossStageBreakGround : MonoBehaviour
         m_mr = GetComponent<MeshRenderer>();
         m_col = GetComponent<MeshCollider>();
         m_trigger = GetComponent<BoxCollider>();
+
+        m_childrenList = GetComponentsInChildren<Transform>(true);
     }
     #endregion
 
@@ -27,7 +36,13 @@ public class BossStageBreakGround : MonoBehaviour
         m_trigger.enabled = false;
         ThrowPlayer(other.transform);
         BreakGround();
+        m_bossStagePhase.StartPhase();
         boss.SetActive(true);
+
+        foreach (var child in m_childrenList)
+        {
+            child.gameObject.layer = LayerMask.NameToLayer("Default");
+        }
     }
 
     private void ThrowPlayer(Transform other)
