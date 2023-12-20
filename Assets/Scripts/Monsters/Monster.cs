@@ -1,3 +1,4 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
@@ -9,6 +10,8 @@ using UnityEngine.AI;
 [RequireComponent(typeof(MonsterMovement))]
 public class Monster : Actor
 {
+    private NavMeshAgent m_navMeshAgent;
+    
     // Movement animation ratio (for lerp)
     private float m_movementAnimationRatio;
 
@@ -24,6 +27,7 @@ public class Monster : Actor
     {
         base.Awake();
 
+        m_navMeshAgent = GetComponent<NavMeshAgent>();
         Attack = GetComponent<MonsterAttack>();
         Movement = GetComponent<MonsterMovement>();
         var weapons = Animator.GetComponents<Weapon>();
@@ -48,6 +52,20 @@ public class Monster : Actor
     protected void Update()
     {
         UpdateAnimator();
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        if (IsPossessed)
+        {
+            return;
+        }
+        
+        if (((1 << other.gameObject.layer) & Movement.Data.WhatIsGround) != 0 && Movement.IsOnGround)
+        {
+            m_rigidbody.isKinematic = true;
+            m_navMeshAgent.enabled = true;
+        }
     }
 
     public override void Move(Vector3 direction)
@@ -84,11 +102,11 @@ public class Monster : Actor
     protected override void EnableAIComponents()
     {
         base.EnableAIComponents();
-        if (m_navMeshAgent != null)
+
+        m_rigidbody.isKinematic = false;
+        if (Movement != null && Movement.IsOnGround)
         {
-            //NavMeshAgent가 켜질 수 있는 조건이 되면, Movement에서 자동으로 on합니다.
-            m_navMeshAgent.enabled = false;
-            m_rigidbody.isKinematic = false;
+            m_navMeshAgent.enabled = true;
         }
     }
 
@@ -96,14 +114,9 @@ public class Monster : Actor
     {
         base.DisableAIComponents();
 
-        if (m_navMeshAgent != null)
-        {
-            m_navMeshAgent.enabled = false;
-            m_rigidbody.isKinematic = false;
-        }
+        m_navMeshAgent.enabled = false;
     }
-
-
+    
     protected virtual void UpdateAnimator()
     {
         var velocity = m_rigidbody.velocity.GetFlatVector();
