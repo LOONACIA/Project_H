@@ -1,5 +1,6 @@
 using BehaviorDesigner.Runtime.Tasks;
 using BehaviorDesigner.Runtime;
+using UnityEngine;
 
 public class AnimationAction : Action
 {
@@ -28,6 +29,7 @@ public class AnimationAction : Action
             //Debug.Log("공격중");
             return TaskStatus.Running;
         }
+        
         //Debug.Log(isAttacking.Value);
         return TaskStatus.Success;
     }

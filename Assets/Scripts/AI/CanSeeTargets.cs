@@ -10,9 +10,15 @@ public class CanSeeTargets : Conditional
     public LayerMask targetLayer;
     public float fovAngle;
     public SharedFloat viewDistance;
+    public SharedBool isAiming;
 
     public override TaskStatus OnUpdate()
     {
+        if (isAiming?.Value is true)
+        {
+            return TaskStatus.Success;
+        }
+        
         Vector3 selfPosition = self.Value.transform.position + Vector3.up;
         Vector3 targetPosition = target.Value.transform.position + (Vector3.up / 2f);
 
