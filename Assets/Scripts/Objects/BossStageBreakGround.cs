@@ -7,12 +7,11 @@ using UnityEngine;
 public class BossStageBreakGround : MonoBehaviour
 {
     #region PublicVariables
-    public GameObject boss;
     #endregion
 
     #region PrivateVariables
     [SerializeField]
-    private BossStagePhase m_bossStagePhase;
+    private BossStageRoot m_bossStageRoot;
     private Transform[] m_childrenList;
     private MeshRenderer m_mr;
     private MeshCollider m_col;
@@ -36,8 +35,7 @@ public class BossStageBreakGround : MonoBehaviour
         m_trigger.enabled = false;
         ThrowPlayer(other.transform);
         BreakGround();
-        m_bossStagePhase.StartPhase();
-        boss.SetActive(true);
+        m_bossStageRoot.StageStart();
 
         foreach (var child in m_childrenList)
         {
