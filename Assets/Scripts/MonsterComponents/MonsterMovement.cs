@@ -29,6 +29,9 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
     //MoveTo함수에서 사용되는 속도값.
     private float m_currentMoveToSpeed = 0f;
 
+    //MoveTo함수에서 사용되는 가속도값
+    float m_currentMoveToAccel = 1f;
+
     private NavMeshPath m_lastPath;
 
     private Vector3 m_currentNormal;
@@ -194,7 +197,6 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         m_rigidbody.AddRelativeForce((forwardForce + strafeForce), ForceMode.VelocityChange);
     }
 
-    float accel = 1.2f;
     public void MoveTo(Vector3 destination)
     {
         if (m_agent.enabled)
@@ -203,8 +205,8 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
             if (!NavMesh.CalculatePath(transform.position, destination, m_agent.areaMask, m_lastPath))
             {
                 //만약 Invalid한 위치(공중 or Navmesh가 없는 곳)에 있다면, 반경 10f 안에 가장 가까운 NavMesh위치로 이동합니다.
-                if(!(NavMesh.SamplePosition(destination, out var hit, 10f, m_agent.areaMask)
-                    &&NavMesh.CalculatePath(transform.position, hit.position, m_agent.areaMask, m_lastPath)))
+                if (!(NavMesh.SamplePosition(destination, out var hit, float.PositiveInfinity, m_agent.areaMask)
+                    && NavMesh.CalculatePath(transform.position, hit.position, m_agent.areaMask, m_lastPath)))
                 {
                     //반경 10f 안에 가장 가까운 NavMesh가 없다면, return합니다.
                     Debug.LogWarning($"{gameObject.name}: destination에 인접한 NavMesh가 없어 길찾기 실패.");
@@ -212,7 +214,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
                 }
             }
 
-            Vector3 navDest = m_lastPath.corners.Length > 0 ? m_lastPath.corners[1] : m_lastPath.corners[0];
+            Vector3 navDest = m_lastPath.corners.Length > 1 ? m_lastPath.corners[1] : m_lastPath.corners[0];
 
             //string log = "";
             //foreach(var p in path.corners)
@@ -246,9 +248,9 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
             transform.rotation = Quaternion.LookRotation(nextDir);
 
             //3.2. 이동
-            m_currentMoveToSpeed += accel * Data.MoveSpeed * 0.7f * Time.deltaTime;
-            if (m_currentMoveToSpeed > Data.MoveSpeed * 0.7f)
-                m_currentMoveToSpeed = Data.MoveSpeed * 0.7f;
+            m_currentMoveToSpeed += m_currentMoveToAccel * Data.MoveSpeed * Time.deltaTime;
+            if (m_currentMoveToSpeed > Data.MoveSpeed)
+                m_currentMoveToSpeed = Data.MoveSpeed;
             m_agent.Move(nextDir * Time.deltaTime * m_currentMoveToSpeed);
 
             //4. 애니메이션 적용
