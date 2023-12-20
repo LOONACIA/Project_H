@@ -2,14 +2,18 @@ using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
-public class JumpPad : MonoBehaviour, IHackable
+public class JumpPad : MonoBehaviour, IActivate
 {
+    [SerializeField]
+    [Tooltip("대상을 날리는 방향")]
+    private JumpType m_jumpType;
+
     [SerializeField]
     [Tooltip("JumpPad로 점프하는 힘")]
     private float m_jumpPower = 10;
 
     [Tooltip("JumpPad가 사용 가능한지의 여부")]
-    private bool m_isHacking;
+    private bool m_isActive;
 
     [Tooltip("JumpPad로 점프를 할 수 있는지의 여부")]
     private bool m_canJump = true;
@@ -19,7 +23,7 @@ public class JumpPad : MonoBehaviour, IHackable
 
     private void OnTriggerStay(Collider other)
     {
-        if (m_isHacking && other.gameObject.layer == LayerMask.NameToLayer("Monster"))
+        if (m_isActive && other.gameObject.layer == LayerMask.NameToLayer("Monster"))
         {
             Jump(other.gameObject);
         }
@@ -30,16 +34,16 @@ public class JumpPad : MonoBehaviour, IHackable
         m_canJump = true;
     }
 
-    public void Hacking()
+    public void Activate()
     {
-        if (m_isHacking) return;
+        if (m_isActive) return;
 
-        m_isHacking = true;
+        m_isActive = true;
     }
 
-    public void Recovery()
+    public void InActivate()
     {
-        m_isHacking = false;
+        m_isActive = false;
     }
 
     /// <summary>
@@ -67,7 +71,35 @@ public class JumpPad : MonoBehaviour, IHackable
             }
         }
 
-        // 대상에 힘을 가함
+        switch (m_jumpType)
+        {
+            case JumpType.Reflection:
+                JumpUp(target);
+                break;
+            case JumpType.Up:
+                JumpUp(target);
+                break;
+        }
+    }
+
+    /// <summary>
+    /// target을 위로 날림
+    /// </summary>
+    /// <param name="target"></param>
+    private void JumpUp(GameObject target)
+    {
+        if (target.TryGetComponent<Rigidbody>(out var rigidbody))
+        {
+            rigidbody.AddForce(transform.up * m_jumpPower, ForceMode.VelocityChange);
+        }
+    }
+
+    /// <summary>
+    /// target을 반사 벡터 방향으로 날림
+    /// </summary>
+    /// <param name="target"></param>
+    private void JumpReflection(GameObject target) 
+    {
         if (target.TryGetComponent<Rigidbody>(out var rigidbody))
         {
             var normalVec = transform.up;
@@ -107,5 +139,11 @@ public class JumpPad : MonoBehaviour, IHackable
     private Vector3 GetReflectionVector(Vector3 incidentVec, Vector3 normalVec)
     { 
         return incidentVec + 2 * normalVec * Vector3.Dot(-incidentVec, normalVec);
+    }
+
+    private enum JumpType 
+    {
+        Reflection,
+        Up
     }
 }
