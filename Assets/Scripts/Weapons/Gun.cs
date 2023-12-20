@@ -93,7 +93,9 @@ public abstract class Gun : Weapon
 
         // 타겟과 거리가 너무 가까운 경우에는 정면을 보도록 설정
         if (Vector3.Distance(Target, m_spawnPosition.position) < 2f)
+        {
             angle = 0.5f;
+        }
 
         Owner.Animator.SetFloat(ConstVariables.ANIMATOR_PARAMETER_AIM_ANGLE, angle);
     }
