@@ -103,10 +103,11 @@ public class Spawner : MonoBehaviour
             attemptCount++;
         }
 
-        if (!isSpawnPosValid)
-        {
-            Debug.LogWarning("정상 스폰 위치 찾을 수 없음.", gameObject);
-        }
+        // TODO: 스폰 에러 시 이곳을 확인
+        //if (!isSpawnPosValid)
+        //{
+            //Debug.LogWarning("정상 스폰 위치 찾을 수 없음.", gameObject);
+        //}
 
         return spawnPosition;
     }
