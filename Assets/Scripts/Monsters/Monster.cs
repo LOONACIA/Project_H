@@ -106,7 +106,7 @@ public class Monster : Actor
 
     protected virtual void UpdateAnimator()
     {
-        var velocity = IsPossessed ? m_rigidbody.velocity.GetFlatVector() : m_navMeshAgent.velocity.GetFlatVector();
+        var velocity = m_rigidbody.velocity.GetFlatVector();
         if (IsPossessed && m_directionInput.magnitude <= 0f)
         {
             velocity = Vector3.zero;
@@ -114,12 +114,14 @@ public class Monster : Actor
         
         // move blend tree 값 설정 (정지 0, 걷기 0.5, 달리기 1)
         float movementRatio = 0f;
-        if (velocity.magnitude > 0f)
+        
+        if (velocity.magnitude > 0f&&IsPossessed)
         {
-            if (IsPossessed)
-                movementRatio = Movement.IsDashing ? 1 : 0.5f;
-            else
-                movementRatio = velocity.magnitude / Movement.Data.MoveSpeed;
+            movementRatio = Movement.IsDashing ? 1 : 0.5f;
+        }
+        if (!IsPossessed)
+        {
+            movementRatio = Movement.MovementRatio;
         }
         m_movementAnimationRatio = Mathf.Lerp(m_movementAnimationRatio, movementRatio, Time.deltaTime * 5f);
 

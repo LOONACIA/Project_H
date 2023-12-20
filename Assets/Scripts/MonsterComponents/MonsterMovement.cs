@@ -23,6 +23,8 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
 
     private NavMeshAgent m_agent;
 
+    private float m_movementRatio;
+
     private Vector3 m_currentNormal;
 
     private float m_lastJumpedTime;
@@ -65,6 +67,8 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
     private float m_lastKnockBackTime;
 
     public MonsterMovementData Data => m_data;
+
+    public float MovementRatio => m_movementRatio;
 
     public bool IsOnGround
     {
@@ -191,11 +195,13 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
 
                 //2.1. 주변 적들과의 거리를 계산하여, 가중치를 부여함 (boids 알고리즘의 separation)
                 // - 굳이 없어도 자연스러운 것 같아 구현하지 않음.
+                // - ObstacleAvoidance가 None이 아니면, Move하되 충돌검사는 해주는 것 같음
 
                 //3. Move
-                // ObstacleAvoidance가 None이 아니면, Move하되 충돌검사는 해주는 것 같음
                 m_agent.Move(dir * Time.deltaTime * m_data.MoveSpeed);
 
+                //4. 애니메이션 적용
+                m_movementRatio = 1f;
 
                 if (!IsOnGround)
                 {
@@ -225,7 +231,10 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         {
             m_agent.isStopped = true;
             m_agent.ResetPath();
-            m_agent.velocity = Vector3.zero;    
+            m_agent.velocity = Vector3.zero;
+
+            //애니메이션 값 0
+            m_movementRatio = 0f;
 
             //m_agent.updatePosition = false;
             //m_agent.updateRotation = false;
