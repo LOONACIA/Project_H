@@ -16,8 +16,6 @@ public class ChangeWeaponAbility : Ability
 
     protected override void OnActivateState()
     {
-        base.OnActivateState();
-        
         Weapon newWeapon = m_primaryWeapon.IsEquipped ? m_secondaryWeapon : m_primaryWeapon;
         Owner.Attack.ChangeWeapon(newWeapon);
     }

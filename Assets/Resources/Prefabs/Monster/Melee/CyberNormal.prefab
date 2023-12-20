@@ -2414,7 +2414,7 @@ GameObject:
   - component: {fileID: 8140333552822045598}
   - component: {fileID: 6266252559590317755}
   - component: {fileID: 8334533624269876220}
-  - component: {fileID: 412941890597583771}
+  - component: {fileID: 3926290161020571446}
   m_Layer: 0
   m_Name: FP_MeleeBody
   m_TagString: Untagged
@@ -2542,17 +2542,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Damage>k__BackingField: 0
   <KnockDownTime>k__BackingField: 0
-  <KnockBackPower>k__BackingField: 0
+  <KnockBackPower>k__BackingField: 14
   hitBoxBaseTransform: {fileID: 5821003330393394505}
   hitBox:
     m_position: {x: 0, y: 1.76, z: 1.03}
     m_halfExtents: {x: 1, y: 1, z: 1}
     m_rotation: {x: 0, y: 0, z: 0, w: 1}
     m_gizmoColor: {r: 0.7007837, g: 0, b: 1, a: 1}
-    m_showGizmo: 1
+    m_showGizmo: 0
   attackDirectionBaseTransform: {fileID: 5821003330393394505}
   attackDirection: {x: 0, y: 0, z: 1}
---- !u!114 &412941890597583771
+--- !u!114 &3926290161020571446
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2561,11 +2561,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 6594267234909460467}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a0a1e7dd0f4ea9c438362975e36344ae, type: 3}
+  m_Script: {fileID: 11500000, guid: 66657a762d014404a98d6c702e9eae35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_primaryWeapon: {fileID: 1150087238}
-  m_secondaryWeapon: {fileID: 8334533624269876220}
+  m_defaultWeapon: {fileID: 1150087238}
+  m_blockWeapon: {fileID: 8334533624269876220}
 --- !u!1 &6614377243960094522
 GameObject:
   m_ObjectHideFlags: 0
@@ -3362,6 +3362,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_data: {fileID: 11400000, guid: d620c25030d388a489b49d237f2ed684, type: 2}
   <AbilityType>k__BackingField: 1
+  <CurrentWeapon>k__BackingField: {fileID: 0}
 --- !u!114 &6848251869324873253
 MonoBehaviour:
   m_ObjectHideFlags: 0
