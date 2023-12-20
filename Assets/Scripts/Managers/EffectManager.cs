@@ -45,8 +45,8 @@ public class EffectManager
 	{
         m_sparkEffect = GameManager.Settings.SparkEffect;
 
-        //m_dashEffect = GameManager.Settings.DashEffect;
-        m_dashEffect = GameObject.Find("DashEffect");
+        m_dashEffect = GameManager.Settings.DashEffect;
+        //m_dashEffect = GameObject.Find("DashEffect");
         m_dashEffect.SetActive(false);
 
         InitComponents();
@@ -177,19 +177,27 @@ public class EffectManager
 
     public void ShowDashEffect()
     {
-        m_dashEffect.SetActive(true);
+        //m_dashEffect.SetActive(true);
+        // 스파크 이펙트 오브젝트 생성
+        Vector3 pos = Vector3.zero; //new Vector3(0, 0, 2.5f);
+        GameObject go = ManagerRoot.Resource.Instantiate(m_dashEffect, Camera.main.transform);
+        go.transform.localPosition = new Vector3(0, 0, 2.5f);
+        go.transform.localEulerAngles = Vector3.zero;
+
         GameManager.Camera.CurrentCamera.m_Lens.FieldOfView = m_dashFOV;
 
-        GameManager.Instance.StartCoroutine(GameManager.Effect.IE_EndDashEffect());
-    }
+        GameManager.Instance.StartCoroutine(IE_EndDashEffect());
+        return;
 
-    public IEnumerator IE_EndDashEffect()
-    {
-        yield return new WaitForSeconds(0.15f);
-        GameManager.Camera.CurrentCamera.m_Lens.FieldOfView = 60f;
-        yield return new WaitForSeconds(0.20f);
-        m_dashEffect.SetActive(false);
-    }
+        IEnumerator IE_EndDashEffect()
+        {
+            yield return new WaitForSeconds(0.15f);
+            GameManager.Camera.CurrentCamera.m_Lens.FieldOfView = 60f;
+            yield return new WaitForSeconds(0.20f);
+            //m_dashEffect.SetActive(false);
+            ManagerRoot.Resource.Release(go);
+        }
+    } 
 
     /// <summary>
     /// 스파크 이펙트를 실행합니다.
