@@ -41,7 +41,7 @@ public class JumpPad : MonoBehaviour, IActivate
         m_isActive = true;
     }
 
-    public void InActivate()
+    public void Deactivate()
     {
         m_isActive = false;
     }
