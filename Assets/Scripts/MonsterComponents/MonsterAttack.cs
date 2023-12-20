@@ -21,6 +21,8 @@ public class MonsterAttack : MonoBehaviour
 
     private Monster m_actor;
     
+    private Ability[] m_abilities;
+    
     [field: SerializeField]
     public AbilityType AbilityType { get; private set; }
 
@@ -43,6 +45,7 @@ public class MonsterAttack : MonoBehaviour
     private void Awake()
     {
         m_actor = GetComponent<Monster>();
+        m_abilities = GetComponentsInChildren<Ability>();
     }
 
     private void Start()
@@ -65,6 +68,12 @@ public class MonsterAttack : MonoBehaviour
             CurrentWeapon.AttackHit -= OnAttackHit;
             CurrentWeapon.AttackHit += OnAttackHit;
         }
+        
+        foreach (Ability ability in m_abilities.AsSpan())
+        {
+            ability.Owner = m_actor;
+            ability.StateChanged += OnAbilityStateChanged;
+        }
     }
 
     private void OnDisable()
@@ -72,6 +81,11 @@ public class MonsterAttack : MonoBehaviour
         if (CurrentWeapon != null)
         {
             CurrentWeapon.AttackHit -= OnAttackHit;
+        }
+        
+        foreach (Ability ability in m_abilities.AsSpan())
+        {
+            ability.StateChanged -= OnAbilityStateChanged;
         }
     }
 
@@ -140,7 +154,15 @@ public class MonsterAttack : MonoBehaviour
                 return;
         }
 
-        if (AbilityType == AbilityType.Trigger || !isToggled)
+        // if (AbilityType == AbilityType.Trigger || !isToggled)
+        // {
+        //     m_actor.Status.SkillCoolTime = 0f;
+        // }
+    }
+    
+    private void OnAbilityStateChanged(object sender, AbilityState e)
+    {
+        if (AbilityType == AbilityType.Trigger && e == AbilityState.Activate)
         {
             m_actor.Status.SkillCoolTime = 0f;
         }
@@ -161,14 +183,19 @@ public class MonsterAttack : MonoBehaviour
 
     private void UpdateSkillCoolTime()
     {
+        float coolTime = m_data.SkillCoolTime;
+        if (coolTime <= 0f)
+        {
+            return;
+        }
+        
         if (m_actor.Status.SkillCoolTime < 1f)
         {
             //TODO: 부동소수점, deltaTime 이슈로 실제 시간과 작은 오차 발생 가능, 해결 필요한지 확인
-            float full = m_data.SkillCoolTime;
-            float cur = m_actor.Status.SkillCoolTime * full + Time.deltaTime;
+            float cur = m_actor.Status.SkillCoolTime * coolTime + Time.deltaTime;
 
             //TODO: 1/full 미리 계산해두기(최적화)
-            m_actor.Status.SkillCoolTime = cur / full;
+            m_actor.Status.SkillCoolTime = cur / coolTime;
         }
     }
 }
