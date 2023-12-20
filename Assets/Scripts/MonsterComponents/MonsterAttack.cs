@@ -153,15 +153,15 @@ public class MonsterAttack : MonoBehaviour
             default:
                 return;
         }
-
-        // if (AbilityType == AbilityType.Trigger || !isToggled)
-        // {
-        //     m_actor.Status.SkillCoolTime = 0f;
-        // }
     }
     
     private void OnAbilityStateChanged(object sender, AbilityState e)
     {
+        if (m_data.SkillCoolTime == 0)
+        {
+            return;
+        }
+
         if (AbilityType == AbilityType.Trigger && e == AbilityState.Activate)
         {
             m_actor.Status.SkillCoolTime = 0f;

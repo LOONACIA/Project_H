@@ -79,7 +79,7 @@ public class AimTarget : Action
         
         if (Time.time - m_timer < m_aimDuration)
         {
-            Vector3 targetPosition = Vector3.Lerp(m_previousTargetPosition, (m_target.Value.position + m_collider.center), (Time.time - m_timer) / m_aimSpeed.Value);
+            Vector3 targetPosition = Vector3.Lerp(m_previousTargetPosition, m_target.Value.position + m_collider.center, (Time.time - m_timer) / m_aimSpeed.Value);
 
             Vector3 lookAt = new(targetPosition.x, m_owner.transform.position.y, targetPosition.z);
             m_owner.transform.LookAt(lookAt);
