@@ -23,7 +23,13 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
 
     private NavMeshAgent m_agent;
 
+    //이동 관련
     private float m_movementRatio;
+
+    //MoveTo함수에서 사용되는 속도값.
+    private float m_currentMoveToSpeed = 0f;
+
+    private NavMeshPath m_lastPath;
 
     private Vector3 m_currentNormal;
 
@@ -110,12 +116,13 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         m_agent = GetComponent<NavMeshAgent>();
 
         m_dashCount = m_data.MaxDashCount;
+        m_lastPath = new NavMeshPath(); //네브매쉬패스는 Start, Awake에서 초기화되어야함.
     }
     public Transform tr;
 
     private void Update()
     {
-        if (tr!=null)
+        if (tr != null)
         {
             if (Vector3.Distance(tr.position, transform.position) > 0.5f)
                 MoveTo(tr.position);
@@ -187,72 +194,82 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         m_rigidbody.AddRelativeForce((forwardForce + strafeForce), ForceMode.VelocityChange);
     }
 
-    float currentSpeed = 0f;
-    float accel = 0.5f;
+    float accel = 1.2f;
     public void MoveTo(Vector3 destination)
     {
         if (m_agent.enabled)
         {
-            NavMeshPath path = new NavMeshPath();
-            if (NavMesh.CalculatePath(transform.position, destination, m_agent.areaMask, path))
+            //1. Path상 다음 목적지를 찾는다.
+            if (!NavMesh.CalculatePath(transform.position, destination, m_agent.areaMask, m_lastPath))
             {
-                //string log = "";
-                //foreach(var p in path.corners)
-                //{
-                //    log += $"{p}, ";
-                //}
-                //Debug.Log(log);
-                //1. Path상 다음 목적지를 찾는다.
-                Vector3 navDest = path.corners.Length > 0 ? path.corners[1] : path.corners[0];
-
-                //2. 목표 지점을 향한 방향 탐색
-                Vector3 dir = (navDest - transform.position).normalized;
-
-                //2.1. 주변 적들과의 거리를 계산하여, 가중치를 부여함 (boids 알고리즘의 separation)
-                // - 굳이 없어도 자연스러운 것 같아 구현하지 않음.
-                // - ObstacleAvoidance가 None이 아니면, Move하되 충돌검사는 해주는 것 같음
-
-                //3.1. Rotate
-                float angularSpeed = 120f;
-
-                //각속도 적용
-                float angle = Vector3.SignedAngle(transform.forward.GetFlatVector(), dir.GetFlatVector(),Vector3.up);
-                if(Mathf.Abs(angle) > Mathf.Abs(angularSpeed*Time.deltaTime))
+                //만약 Invalid한 위치(공중 or Navmesh가 없는 곳)에 있다면, 반경 10f 안에 가장 가까운 NavMesh위치로 이동합니다.
+                if(!(NavMesh.SamplePosition(destination, out var hit, 10f, m_agent.areaMask)
+                    &&NavMesh.CalculatePath(transform.position, hit.position, m_agent.areaMask, m_lastPath)))
                 {
-                    if (angle >= 0)
-                        angle = angularSpeed * Time.deltaTime;
-                    else
-                        angle = -angularSpeed * Time.deltaTime;
+                    //반경 10f 안에 가장 가까운 NavMesh가 없다면, return합니다.
+                    Debug.LogWarning($"{gameObject.name}: destination에 인접한 NavMesh가 없어 길찾기 실패.");
+                    return;
                 }
-                Vector3 nextDir = Quaternion.Euler(0f, angle, 0f) * transform.forward.GetFlatVector();
+            }
 
-                //Vector3 nextDir = Vector3.Lerp(transform.forward.GetFlatVector(), dir.GetFlatVector(), Time.deltaTime * rotSpeed);
-                transform.rotation = Quaternion.LookRotation(nextDir);
+            Vector3 navDest = m_lastPath.corners.Length > 0 ? m_lastPath.corners[1] : m_lastPath.corners[0];
 
-                //3.2. 이동
-                currentSpeed += accel * Data.MoveSpeed*0.7f * Time.deltaTime;
-                if(currentSpeed>Data.MoveSpeed*0.7f)
-                    currentSpeed = Data.MoveSpeed *0.7f;
-                m_agent.Move(nextDir * Time.deltaTime * currentSpeed);
+            //string log = "";
+            //foreach(var p in path.corners)
+            //{
+            //    log += $"{p}, ";
+            //}
+            //Debug.Log(log);
 
-                //4. 애니메이션 적용
-                m_movementRatio = 1f;
+            //2. 목표 지점을 향한 방향 탐색
+            Vector3 dir = (navDest - transform.position).normalized;
 
-                if (!IsOnGround)
-                {
-                    // 몬스터가 떨어지는 경우 중력 영향을 받음
-                    m_agent.speed += Physics.gravity.y * Time.deltaTime * -1;
-                    m_agent.speed = Mathf.Clamp(m_agent.speed, 0, 30);
-                }
+            //2.1. 주변 적들과의 거리를 계산하여, 가중치를 부여함 (boids 알고리즘의 separation)
+            // - 굳이 없어도 자연스러운 것 같아 구현하지 않음.
+            // - ObstacleAvoidance가 None이 아니면, Move하되 충돌검사는 해주는 것 같음
+
+            //3.1. Rotate
+            float angularSpeed = 120f;
+
+            //각속도 적용
+            float angle = Vector3.SignedAngle(transform.forward.GetFlatVector(), dir.GetFlatVector(), Vector3.up);
+            if (Mathf.Abs(angle) > Mathf.Abs(angularSpeed * Time.deltaTime))
+            {
+                if (angle >= 0)
+                    angle = angularSpeed * Time.deltaTime;
                 else
-                {
-                    m_agent.speed = m_data.MoveSpeed;
-                }
+                    angle = -angularSpeed * Time.deltaTime;
+            }
+            Vector3 nextDir = Quaternion.Euler(0f, angle, 0f) * transform.forward.GetFlatVector();
+
+            //Vector3 nextDir = Vector3.Lerp(transform.forward.GetFlatVector(), dir.GetFlatVector(), Time.deltaTime * rotSpeed);
+            transform.rotation = Quaternion.LookRotation(nextDir);
+
+            //3.2. 이동
+            m_currentMoveToSpeed += accel * Data.MoveSpeed * 0.7f * Time.deltaTime;
+            if (m_currentMoveToSpeed > Data.MoveSpeed * 0.7f)
+                m_currentMoveToSpeed = Data.MoveSpeed * 0.7f;
+            m_agent.Move(nextDir * Time.deltaTime * m_currentMoveToSpeed);
+
+            //4. 애니메이션 적용
+            m_movementRatio = 1f;
+
+            if (!IsOnGround)
+            {
+                // 몬스터가 떨어지는 경우 중력 영향을 받음
+                m_agent.speed += Physics.gravity.y * Time.deltaTime * -1;
+                m_agent.speed = Mathf.Clamp(m_agent.speed, 0, 30);
             }
             else
             {
-                //path를 찾지 못함.
-                Debug.Log($"{gameObject.name}: no path found, {path.status.ToString()}");
+                m_agent.speed = m_data.MoveSpeed;
+            }
+
+            m_agent.autoTraverseOffMeshLink = false;
+            if (m_agent.isOnOffMeshLink)
+            {
+                m_agent.CompleteOffMeshLink();
+                Debug.Log($"{gameObject.name}: OffMeshLink에잇슴");
             }
         }
     }
