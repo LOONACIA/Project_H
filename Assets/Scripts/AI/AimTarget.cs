@@ -7,6 +7,8 @@ using Tooltip = BehaviorDesigner.Runtime.Tasks.TooltipAttribute;
 [System.Serializable]
 public class AimTarget : Action
 {
+    private static readonly int s_isAiming = Animator.StringToHash("IsAiming");
+    
     [SerializeField]
     [Tooltip("조준할 타겟")]
     private SharedTransform m_target;
@@ -27,6 +29,9 @@ public class AimTarget : Action
     [Tooltip("조준을 시작할 때 타겟의 위치를 랜덤으로 변경할 범위")]
     private SharedFloat m_randomRange;
     
+    [SerializeField]
+    private SharedBool m_isAiming;
+    
     private Monster m_owner;
     
     private CapsuleCollider m_collider;
@@ -38,7 +43,6 @@ public class AimTarget : Action
     private float m_aimDuration;
 
     private float m_waitDuration;
-    private static readonly int s_isAiming = Animator.StringToHash("IsAiming");
 
     public override void OnAwake()
     {
@@ -71,6 +75,8 @@ public class AimTarget : Action
         {
             return TaskStatus.Failure;
         }
+        
+        m_isAiming.Value = true;
 
         if (m_owner.Attack.IsAttacking)
         {
@@ -86,6 +92,7 @@ public class AimTarget : Action
             
             m_previousTargetPosition = targetPosition;
             m_owner.Attack.Target = targetPosition;
+            
             return TaskStatus.Running;
         }
         else if (Time.time - m_timer < m_waitDuration)
@@ -101,6 +108,7 @@ public class AimTarget : Action
 
     public override void OnEnd()
     {
+        m_isAiming.Value = false;
         m_owner.Animator.SetBool(s_isAiming, false);
         m_previousTargetPosition = Vector3.zero;
     }
