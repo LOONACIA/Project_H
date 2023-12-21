@@ -31,7 +31,8 @@ public class Laser : MonoBehaviour, IActivate
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent<Actor>(out var actor))
+        if (other.TryGetComponent<Actor>(out var actor) 
+            && actor.IsPossessed)
         {
             actor.Health.Kill();
         }

@@ -11,7 +11,7 @@ public class Explosive : MonoBehaviour
 
     private Rigidbody m_rigidBody;
 
-    public void Explode(float force, Vector3 worldPosition, float radius)
+    public void Explode(float force, Vector3 centerPosition, float radius)
     {
         if (TryGetComponent<Collider>(out m_collider)
             && TryGetComponent<Rigidbody>(out m_rigidBody))
@@ -19,7 +19,13 @@ public class Explosive : MonoBehaviour
             m_collider.isTrigger = true;
             m_rigidBody.isKinematic = false;
 
-            m_rigidBody.AddExplosionForce(force, worldPosition, radius, 50, ForceMode.VelocityChange);
+            var direction = (transform.position - centerPosition).normalized;
+            var randomVec = Random.insideUnitSphere * 0.1f;
+            direction += randomVec;
+            m_rigidBody.AddForce(direction * force, ForceMode.VelocityChange);
+
+            // temp
+            m_rigidBody.AddExplosionForce(100, centerPosition, 100, 100);
         }
     }
 }
