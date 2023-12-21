@@ -12,16 +12,12 @@ using UnityEngine.UI;
 
 public class UIHUD : UIScene
 {
-    // private enum Canvases
-    // {
-    //     BackLayerCanvas,
-    //     FrontLayerCanvas
-    // }
-
     private enum Panels
     {
+        BackgroundPanel,
         BackPanel,
         FrontPanel,
+        CenterPanel
     }
 
     private enum Texts
@@ -31,7 +27,8 @@ public class UIHUD : UIScene
 
     private enum Images
     {
-        Crosshair
+        Crosshair,
+        HackingIndicator
     }
 
     private enum Presenters
@@ -46,6 +43,8 @@ public class UIHUD : UIScene
     private readonly WaitForEndOfFrame m_waitForEndOfFrameCache = new();
     
     private readonly WaitForSeconds m_waitForSecondsCache = new(0.2f);
+    
+    private HUDSettings m_settings;
 
     [SerializeField]
     private GameObject m_hpBoxPrefab;
@@ -55,9 +54,15 @@ public class UIHUD : UIScene
 
     private PlayerController m_controller;
 
+    private PossessionProcessor m_processor;
+    
+    private GameObject m_backgroundPanel;
+
     private GameObject m_backPanel;
     
     private GameObject m_frontPanel;
+    
+    private GameObject m_centerPanel;
 
     private TextMeshProUGUI m_hpTextBox;
 
@@ -66,10 +71,15 @@ public class UIHUD : UIScene
     private GameObject m_backLayerRoot;
 
     private GameObject m_frontLayerRoot;
+
+    // Center Layer의 Scale을 조절하기 위한 객체
+    private GameObject m_centerLayerRoot;
     
     private ProgressBar m_abilityPresenter;
 
     private Image m_crosshair;
+    
+    private Image m_hackingIndicator;
 
     private int m_hpBoxCursor;
 
@@ -78,6 +88,8 @@ public class UIHUD : UIScene
     private CoroutineEx m_hpChangingEffectCoroutine;
     
     private CoroutineEx m_colorChangeEffectCoroutine;
+    
+    private CoroutineEx m_hackingIndicatorCoroutine;
 
     private void OnEnable()
     {
@@ -96,11 +108,26 @@ public class UIHUD : UIScene
         UpdateCrosshair();
     }
 
-    public void Register(PlayerController controller)
+    public UIHUD Init(HUDSettings settings)
     {
-        UnregisterEvents();
+        m_settings = settings;
+        return this;
+    }
+
+    public UIHUD RegisterController(PlayerController controller)
+    {
+        UnregisterEvents(m_controller);
         m_controller = controller;
-        RegisterEvents();
+        RegisterEvents(m_controller);
+        return this;
+    }
+    
+    public UIHUD RegisterProcessor(PossessionProcessor processor)
+    {
+        UnregisterEvents(m_processor);
+        m_processor = processor;
+        RegisterEvents(m_processor);
+        return this;
     }
 
     protected override void Init()
@@ -110,8 +137,10 @@ public class UIHUD : UIScene
         Bind<ProgressBar, Presenters>();
         Bind<Image, Images>();
 
+        m_backgroundPanel = Get<GameObject, Panels>(Panels.BackgroundPanel);
         m_backPanel = Get<GameObject, Panels>(Panels.BackPanel);
         m_frontPanel = Get<GameObject, Panels>(Panels.FrontPanel);
+        m_centerPanel = Get<GameObject, Panels>(Panels.CenterPanel);
 
         m_hpTextBox = Get<TextMeshProUGUI, Texts>(Texts.HpText);
         m_hpText = m_hpTextBox.GetComponent<UIManagerText>();
@@ -119,35 +148,71 @@ public class UIHUD : UIScene
         m_abilityPresenter = Get<ProgressBar, Presenters>(Presenters.AbilityPresenter);
         
         m_crosshair = Get<Image, Images>(Images.Crosshair);
+        m_hackingIndicator = Get<Image, Images>(Images.HackingIndicator);
 
         m_backLayerRoot = m_backPanel.gameObject.FindChild("Root");
         m_frontLayerRoot = m_frontPanel.gameObject.FindChild("Root");
+        m_centerLayerRoot = m_centerPanel.gameObject.FindChild("Root");
+    }
+
+    private void RegisterEvents(PlayerController controller)
+    {
+        if (controller == null)
+        {
+            return;
+        }
+
+        controller.CharacterChanged += OnCharacterChanged;
+        controller.Damaged += OnDamaged;
+        controller.HpChanged += OnHpChanged;
+        controller.AbilityRateChanged += OnAbilityRateChanged;
     }
 
     private void RegisterEvents()
     {
-        if (m_controller == null)
-        {
-            return;
-        }
-
-        m_controller.CharacterChanged += OnCharacterChanged;
-        m_controller.Damaged += OnDamaged;
-        m_controller.HpChanged += OnHpChanged;
-        m_controller.AbilityRateChanged += OnAbilityRateChanged;
+        RegisterEvents(m_controller);
+        RegisterEvents(m_processor);
     }
-
+    
     private void UnregisterEvents()
     {
-        if (m_controller == null)
+        UnregisterEvents(m_controller);
+        UnregisterEvents(m_processor);
+    }
+    
+    private void RegisterEvents(PossessionProcessor processor)
+    {
+        if (processor == null)
+        {
+            return;
+        }
+        
+        processor.TargetHit += OnTargetHit;
+        processor.Possessable += OnPossessable;
+    }
+
+    private void UnregisterEvents(PossessionProcessor processor)
+    {
+        if (processor == null)
+        {
+            return;
+        }
+        
+        processor.TargetHit -= OnTargetHit;
+        processor.Possessable -= OnPossessable;
+    }
+
+    private void UnregisterEvents(PlayerController controller)
+    {
+        if (controller == null)
         {
             return;
         }
 
-        m_controller.CharacterChanged -= OnCharacterChanged;
-        m_controller.Damaged -= OnDamaged;
-        m_controller.HpChanged -= OnHpChanged;
-        m_controller.AbilityRateChanged -= OnAbilityRateChanged;
+        controller.CharacterChanged -= OnCharacterChanged;
+        controller.Damaged -= OnDamaged;
+        controller.HpChanged -= OnHpChanged;
+        controller.AbilityRateChanged -= OnAbilityRateChanged;
     }
 
     private void OnCharacterChanged(object sender, Actor e)
@@ -163,7 +228,12 @@ public class UIHUD : UIScene
 
     private void OnHpChanged(object sender, int e)
     {
-        m_hpTextBox.enabled = e > 0;
+        bool isActive = e > 0;
+        m_abilityPresenter.gameObject.SetActive(isActive);
+        m_crosshair.gameObject.SetActive(isActive);
+        m_hpText.gameObject.SetActive(isActive);
+        m_backgroundPanel.SetActive(isActive);
+        m_centerPanel.SetActive(isActive);
 
         m_hpTextBox.text = e.ToString();
     }
@@ -176,14 +246,23 @@ public class UIHUD : UIScene
     
     private void UpdateCrosshair()
     {
-        if (m_controller.Character is Monster { Attack: { CurrentWeapon: Shotgun } })
+        if (m_settings.CrosshairSprites.TryGetValue(m_controller.Character.Data.Type, out Sprite sprite))
         {
-            m_crosshair.transform.localScale = Vector3.one * 2.5f;
+            m_crosshair.sprite = sprite;
         }
-        else
+
+        m_crosshair.transform.localScale = m_controller.Character switch
         {
-            m_crosshair.transform.localScale = Vector3.one * 0.7f;
-        }
+            Monster { Attack: { CurrentWeapon: Shotgun } } => Vector3.one * 1.5f,
+            Monster { Attack: { CurrentWeapon: Sniper } } => Vector3.one * 0.5f,
+            _ => Vector3.one
+        };
+
+        m_centerLayerRoot.transform.localScale = m_controller.Character switch
+        {
+            Monster { Attack: { CurrentWeapon: Sniper } } => Vector3.one,
+            _ => Vector3.one * 1.25f
+        };
     }
 
     private void ResetHpBoxes()
@@ -279,5 +358,46 @@ public class UIHUD : UIScene
         }
 
         rectTransform.localScale = new(scale, 1, 1);
+    }
+    
+    private void OnPossessable(object sender, EventArgs e)
+    {
+        m_hackingIndicator.fillAmount = 1;
+        Color from = m_hackingIndicator.color;
+        Color to = new(from.r, 0.85f, 0.85f, 1);
+        Utility.Lerp(from, to, 0.1f, color => m_hackingIndicator.color = color,
+            () =>
+            {
+                Utility.Lerp(to, from, 0.1f,
+                    color => m_hackingIndicator.color = color);
+            });
+        
+        Vector3 scaleFrom = m_centerLayerRoot.transform.localScale;
+        Vector3 scaleTo = scaleFrom * 1.05f;
+        Utility.Lerp(scaleFrom, scaleTo, 0.1f, scale => m_centerLayerRoot.transform.localScale = scale,
+            () =>
+            {
+                Utility.Lerp(scaleTo, scaleFrom, 0.1f,
+                    scale => m_centerLayerRoot.transform.localScale = scale);
+            });
+    }
+
+    private void OnTargetHit(object sender, float e)
+    {
+        m_hackingIndicatorCoroutine?.Abort();
+        m_hackingIndicatorCoroutine = CoroutineEx.Create(this, CoHackingIndicator(e));
+    }
+
+    private IEnumerator CoHackingIndicator(float seconds)
+    {
+        float timer = 0;
+        while (timer < seconds)
+        {
+            m_hackingIndicator.fillAmount = timer / seconds;
+            yield return m_waitForEndOfFrameCache;
+            timer += Time.deltaTime;
+        }
+
+        m_hackingIndicator.fillAmount = 1f;
     }
 }

@@ -25,6 +25,8 @@ public class MonsterAttack : MonoBehaviour
     private NavMeshAgent m_agent;
     
     private Ability[] m_abilities;
+
+    private bool m_isAttackTriggered;
     
     [field: SerializeField]
     public AbilityType AbilityType { get; private set; }
@@ -42,7 +44,7 @@ public class MonsterAttack : MonoBehaviour
         }
     }
 
-    public bool IsAttacking => CurrentWeapon != null && CurrentWeapon.IsAttacking;
+    public bool IsAttacking => (CurrentWeapon != null && CurrentWeapon.IsAttacking) || m_isAttackTriggered;
 
     [field: SerializeField]
     [field: ReadOnly]
@@ -111,6 +113,7 @@ public class MonsterAttack : MonoBehaviour
         if (CurrentWeapon != null)
         {
             CurrentWeapon.AttackHit -= OnAttackHit;
+            CurrentWeapon.StateChanged -= OnWeaponStateChanged;
             CurrentWeapon.UnEquip();
         }
         
@@ -122,7 +125,10 @@ public class MonsterAttack : MonoBehaviour
             CurrentWeapon.AttackHit -= OnAttackHit;
             CurrentWeapon.AttackHit += OnAttackHit;
             CurrentWeapon.Equip(m_actor);
+            CurrentWeapon.StateChanged += OnWeaponStateChanged;
         }
+
+        m_isAttackTriggered = false;
     }
 
     public void Attack()
@@ -139,6 +145,7 @@ public class MonsterAttack : MonoBehaviour
             m_agent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance;
         }
 
+        m_isAttackTriggered = true;
         m_actor.Animator.SetTrigger(s_attackAnimationKey);
     }
 
@@ -161,6 +168,11 @@ public class MonsterAttack : MonoBehaviour
             default:
                 return;
         }
+    }
+    
+    private void OnWeaponStateChanged(object sender, WeaponState e)
+    {
+        m_isAttackTriggered = false;
     }
     
     private void OnAbilityStateChanged(object sender, AbilityState e)

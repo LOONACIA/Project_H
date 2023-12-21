@@ -36,7 +36,7 @@ public class PossessionShuriken : MonoBehaviour
     [SerializeField]
     private float m_speed;
 
-    private Action<Actor> m_onTargetHit;
+    private Action<PossessionShuriken, Actor> m_onTargetHit;
 
     private int m_surikenStopLayer;
     #endregion
@@ -51,7 +51,7 @@ public class PossessionShuriken : MonoBehaviour
         StartCoroutine(nameof(IE_Destory));
     }
 
-    public void InitSetting(Actor actor, Actor sender, Action<Actor> onTargetHit)
+    public void InitSetting(Actor actor, Actor sender, Action<PossessionShuriken, Actor> onTargetHit)
     {
         targetActor = actor;
         m_isTrace = true;
@@ -59,7 +59,7 @@ public class PossessionShuriken : MonoBehaviour
         m_onTargetHit = onTargetHit;
     }
 
-    public void InitSetting(Vector3 pos, Actor sender, Action<Actor> onTargetHit)
+    public void InitSetting(Vector3 pos, Actor sender, Action<PossessionShuriken, Actor> onTargetHit)
     {
         //RaycastHit hit;
 
@@ -210,7 +210,7 @@ public class PossessionShuriken : MonoBehaviour
 
     private void OnTargetHit(Actor actor)
     {
-        m_onTargetHit?.Invoke(actor);
+        m_onTargetHit?.Invoke(this, actor);
     }
 
     private void TryHackingObject(Transform _target)

@@ -11,4 +11,12 @@ public class Shooter : Monster
             Animator.SetLayerWeight(Animator.GetLayerIndex(ConstVariables.ANIMATOR_LAYER_AIM_LAYER), weight);
         }
     }
+
+    protected override void OnUnPossessed()
+    {
+        base.OnUnPossessed();
+
+        // Shooter는 빙의 해제 시 스나이퍼로 강제 전환
+        Attack.ChangeWeapon(Animator.GetComponent<Sniper>());
+    }
 }
