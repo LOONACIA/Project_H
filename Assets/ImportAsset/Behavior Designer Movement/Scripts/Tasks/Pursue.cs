@@ -74,7 +74,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             float futurePrediction = 0;
             // Set the future prediction to max prediction if the speed is too small to give an accurate prediction
             //if (speed <= distance / targetDistPrediction.Value) {
-                futurePrediction = targetDistPrediction.Value;
+            futurePrediction = targetDistPrediction.Value*0.3f;
             //} else {
             //    futurePrediction = (distance / speed) * targetDistPredictionMult.Value; // the prediction should be accurate enough
             //}
