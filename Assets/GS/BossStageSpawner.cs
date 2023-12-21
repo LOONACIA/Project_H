@@ -48,7 +48,7 @@ public class BossStageSpawner : MonoBehaviour
 
     private Coroutine m_spawnCoroutine;
 
-    private ObservableCollection<Monster> Monsters { get; } = new();
+    public ObservableCollection<Monster> Monsters { get; } = new();
 
     private void Start()
     {
