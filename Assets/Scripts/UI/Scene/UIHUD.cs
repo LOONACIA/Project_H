@@ -12,14 +12,9 @@ using UnityEngine.UI;
 
 public class UIHUD : UIScene
 {
-    // private enum Canvases
-    // {
-    //     BackLayerCanvas,
-    //     FrontLayerCanvas
-    // }
-
     private enum Panels
     {
+        BackgroundPanel,
         BackPanel,
         FrontPanel,
     }
@@ -46,6 +41,8 @@ public class UIHUD : UIScene
     private readonly WaitForEndOfFrame m_waitForEndOfFrameCache = new();
     
     private readonly WaitForSeconds m_waitForSecondsCache = new(0.2f);
+    
+    private HUDSettings m_settings;
 
     [SerializeField]
     private GameObject m_hpBoxPrefab;
@@ -54,6 +51,8 @@ public class UIHUD : UIScene
     private int m_hpPerBox = 10;
 
     private PlayerController m_controller;
+    
+    private GameObject m_backgroundPanel;
 
     private GameObject m_backPanel;
     
@@ -96,11 +95,18 @@ public class UIHUD : UIScene
         UpdateCrosshair();
     }
 
-    public void Register(PlayerController controller)
+    public UIHUD Init(HUDSettings settings)
+    {
+        m_settings = settings;
+        return this;
+    }
+
+    public UIHUD Register(PlayerController controller)
     {
         UnregisterEvents();
         m_controller = controller;
         RegisterEvents();
+        return this;
     }
 
     protected override void Init()
@@ -110,6 +116,7 @@ public class UIHUD : UIScene
         Bind<ProgressBar, Presenters>();
         Bind<Image, Images>();
 
+        m_backgroundPanel = Get<GameObject, Panels>(Panels.BackgroundPanel);
         m_backPanel = Get<GameObject, Panels>(Panels.BackPanel);
         m_frontPanel = Get<GameObject, Panels>(Panels.FrontPanel);
 
@@ -163,7 +170,11 @@ public class UIHUD : UIScene
 
     private void OnHpChanged(object sender, int e)
     {
-        m_hpTextBox.enabled = e > 0;
+        bool isActive = e > 0;
+        m_abilityPresenter.gameObject.SetActive(isActive);
+        m_crosshair.gameObject.SetActive(isActive);
+        m_hpText.gameObject.SetActive(isActive);
+        m_backgroundPanel.SetActive(isActive);
 
         m_hpTextBox.text = e.ToString();
     }
@@ -176,14 +187,17 @@ public class UIHUD : UIScene
     
     private void UpdateCrosshair()
     {
-        if (m_controller.Character is Monster { Attack: { CurrentWeapon: Shotgun } })
+        if (m_settings.CrosshairSprites.TryGetValue(m_controller.Character.Data.Type, out Sprite sprite))
         {
-            m_crosshair.transform.localScale = Vector3.one * 2.5f;
+            m_crosshair.sprite = sprite;
         }
-        else
+
+        m_crosshair.transform.localScale = m_controller.Character switch
         {
-            m_crosshair.transform.localScale = Vector3.one * 0.7f;
-        }
+            Monster { Attack: { CurrentWeapon: Shotgun } } => Vector3.one * 1.5f,
+            Monster { Attack: { CurrentWeapon: Sniper } } => Vector3.one * 0.5f,
+            _ => Vector3.one
+        };
     }
 
     private void ResetHpBoxes()

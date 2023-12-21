@@ -14,22 +14,14 @@ public class HUDSystem : MonoBehaviour
     private PlayerController m_controller;
 
     [SerializeField]
-    private LayerMask m_aimLayers;
-
-    [SerializeField]
-    private float m_checkRadius = 0.5f;
-
-    [SerializeField]
-    private float m_minDistance = 5f;
-
-    [SerializeField]
-    private float m_maxDistance = 50f;
+    private HUDSettings m_settings;
 
     private Camera m_camera;
 
     private void Awake()
     {
-        ManagerRoot.UI.ShowSceneUI<UIHUD>().Register(m_controller);
+        ManagerRoot.UI.ShowSceneUI<UIHUD>().Init(m_settings)
+            .Register(m_controller);
         m_camera = Camera.main;
     }
 
@@ -37,14 +29,14 @@ public class HUDSystem : MonoBehaviour
     {
         var hits = ArrayPool<RaycastHit>.Shared.Rent(16);
         Transform cameraTransform = m_camera.transform;
-        int length = Physics.SphereCastNonAlloc(cameraTransform.position, m_checkRadius, cameraTransform.forward, hits,
-            m_maxDistance, m_aimLayers);
+        int length = Physics.SphereCastNonAlloc(cameraTransform.position, m_settings.CheckRadius, cameraTransform.forward, hits,
+            m_settings.MaxDistance, m_settings.AimLayers);
 
         if (length > 0)
         {
             foreach (var hit in hits.AsSpan(0, length))
             {
-                if (hit.distance < m_minDistance)
+                if (hit.distance < m_settings.MinDistance)
                 {
                     continue;
                 }
@@ -100,7 +92,9 @@ public class HUDSystem : MonoBehaviour
         Vector3 cameraPosition = m_camera.transform.position.GetFlatVector();
         Vector3 direction = targetPosition - cameraPosition;
         float sqrDistance = direction.sqrMagnitude;
-        if (sqrDistance < m_minDistance * m_minDistance || sqrDistance > m_maxDistance * m_maxDistance)
+        float sqrMinDistance = m_settings.MinDistance * m_settings.MinDistance;
+        float sqrMaxDistance = m_settings.MaxDistance * m_settings.MaxDistance;
+        if (sqrDistance < sqrMinDistance || sqrDistance > sqrMaxDistance)
         {
             return true;
         }
