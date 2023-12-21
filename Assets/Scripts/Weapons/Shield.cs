@@ -19,9 +19,6 @@ public class Shield : MonoBehaviour
     // 쉴드 생성한 시간
     private float m_startTime;
 
-    // 쉴드 프리팹
-    public GameObject ShieldObject { get; private set; }
-
     // 남은 쉴드량
     public float ShieldAmount
     {
@@ -29,7 +26,7 @@ public class Shield : MonoBehaviour
         private set => m_shieldAmount = value;
     }
 
-    public float MaxShieldPoint { get; private set; }
+    public float MaxShieldAmount { get; private set; }
 
     public bool IsValid
     {
@@ -46,26 +43,31 @@ public class Shield : MonoBehaviour
         }
     }
     
-    public event EventHandler ShieldChanged;
+    public event EventHandler<float> ShieldChanged;
+    
+    public event EventHandler Destroyed;
     
     private void Awake()
     {
-        Init(m_shieldAmount, m_timeLimit, gameObject);
+        Init(m_shieldAmount, m_timeLimit);
     }
 
-    public void Init(float shieldPoint, float timeLimit, GameObject shieldObject)
+    private void Update()
     {
-        MaxShieldPoint = shieldPoint;
-        ShieldAmount = MaxShieldPoint;
+        if (m_hasTimeLimit && Time.time - m_startTime > m_timeLimit)
+        {
+            Destroy();
+        }
+    }
+
+    public void Init(float shieldPoint, float timeLimit)
+    {
+        MaxShieldAmount = shieldPoint;
+        ShieldAmount = MaxShieldAmount;
         m_timeLimit = timeLimit;
 
         // 쉴드 제한 시간이 0 이하면, 제한 시간이 없는 것으로 처리
         m_hasTimeLimit = timeLimit > 0;
-
-        if (shieldObject != null)
-        {
-            ShieldObject = shieldObject;
-        }
 
         m_startTime = Time.time;
     }
@@ -73,6 +75,18 @@ public class Shield : MonoBehaviour
     public void TakeDamage(float damage)
     {
         ShieldAmount -= damage;
-        ShieldChanged?.Invoke(this, null);
+        if (ShieldAmount < 0)
+        {
+            Destroy();
+        }
+        
+        float percent = ShieldAmount / MaxShieldAmount;
+        ShieldChanged?.Invoke(this, percent);
+    }
+
+    public void Destroy()
+    {
+        Destroyed?.Invoke(this, EventArgs.Empty);
+        Destroy(gameObject);
     }
 }
