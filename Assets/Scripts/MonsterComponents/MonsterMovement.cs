@@ -119,7 +119,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         m_agent = GetComponent<NavMeshAgent>();
 
         m_dashCount = m_data.MaxDashCount;
-        m_currentMoveToAccel = (m_data.AccelerationTime>0f?(1f/m_data.AccelerationTime):(float.PositiveInfinity));
+        m_currentMoveToAccel = (m_data.AccelerationTime > 0f ? (1f / m_data.AccelerationTime) : (float.PositiveInfinity));
         m_lastPath = new NavMeshPath(); //네브매쉬패스는 Start, Awake에서 초기화되어야함.
     }
     public Transform tr;
@@ -200,6 +200,11 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
 
     public void MoveTo(Vector3 destination)
     {
+        MoveToWithNavSetDest(destination);
+    }
+
+    private void MoveToWithNavMove(Vector3 destination)
+    {
         if (m_agent.enabled)
         {
             //1. Path상 다음 목적지를 찾는다.
@@ -272,6 +277,26 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
             {
                 m_agent.CompleteOffMeshLink();
                 Debug.Log($"{gameObject.name}: OffMeshLink에잇슴");
+            }
+        }
+    }
+
+    private void MoveToWithNavSetDest(Vector3 destination)
+    {
+        if (m_agent.enabled)
+        {
+            m_agent.isStopped = false;
+            m_agent.SetDestination(destination);
+
+            if (!IsOnGround)
+            {
+                // 몬스터가 떨어지는 경우 중력 영향을 받음
+                m_agent.speed += Physics.gravity.y * Time.deltaTime * -1;
+                m_agent.speed = Mathf.Clamp(m_agent.speed, 0, 30);
+            }
+            else
+            {
+                m_agent.speed = m_data.MoveSpeed;
             }
         }
     }
