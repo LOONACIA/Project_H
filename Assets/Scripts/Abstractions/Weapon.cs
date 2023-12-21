@@ -5,6 +5,11 @@ using UnityEngine;
 
 public abstract class Weapon : MonoBehaviour
 {
+    /// <summary>
+    /// IsAttacking을 내부에서 핸들링하기 위한 변수
+    /// </summary>
+    protected bool m_isAttacking;
+    
     private WeaponState m_state;
     
     private IEventProxy m_eventProxy;
@@ -26,7 +31,7 @@ public abstract class Weapon : MonoBehaviour
 
     public virtual Vector3 Target { get; set; }
 
-    public bool IsAttacking => State != WeaponState.Idle;
+    public bool IsAttacking => State != WeaponState.Idle || m_isAttacking;
 
     public WeaponState State
     {

@@ -1,5 +1,6 @@
 using LOONACIA.Unity;
 using LOONACIA.Unity.Coroutines;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -44,8 +45,17 @@ public class Sniper : Gun
         m_drawLineCoroutine?.Abort();
     }
 
+    private void FixedUpdate()
+    {
+        if (!IsAttacking)
+        {
+            UpdateLine();
+        }
+    }
+
     protected override void Fire()
     {
+        m_isAttacking = true;
         Ray ray = GetRay();
 
         var hits = Physics.RaycastAll(ray, m_maxDistance, m_aimLayers)
@@ -67,7 +77,8 @@ public class Sniper : Gun
         {
             target = ray.GetPoint(m_maxDistance);
         }
-        
+
+        Target = Vector3.zero;
         DrawLine(target);
     }
 
@@ -98,7 +109,11 @@ public class Sniper : Gun
         
         m_renderer.material.SetColor(s_emissionColorID, m_shootLineColor * 1500f);
 
-        m_drawLineCoroutine = Utility.Lerp(0.2f, 0f, 0.5f, value => m_renderer.startWidth = m_renderer.endWidth = value, () => m_intensity = 1f);
+        m_drawLineCoroutine = Utility.Lerp(0.2f, 0f, 0.5f, value => m_renderer.startWidth = m_renderer.endWidth = value, () =>
+        {
+            m_isAttacking = false;
+            m_intensity = 1f;
+        });
     }
     
     private void UpdateLine()
