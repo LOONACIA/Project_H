@@ -18,6 +18,9 @@ public class BossStageRoot : MonoBehaviour
     [SerializeField]
     private GameObject m_fence;
 
+    [SerializeField]
+    private GameObject m_detectionLight;
+
     private Actor m_character;
 
     private int m_currentPhase;
@@ -45,9 +48,11 @@ public class BossStageRoot : MonoBehaviour
         ThrowPlayer();
         
         // Stage 주변을 감쌀 울타리 활성화
-        m_fence.SetActive(true);
+        m_fence?.SetActive(true);
 
-        m_bossStagePhaseList[m_currentPhase].ReadyPhase();
+        m_detectionLight?.SetActive(true);
+
+        m_bossStagePhaseList[m_currentPhase]?.ReadyPhase();
     }
 
     private void NextPhase(object sender, EventArgs e)
