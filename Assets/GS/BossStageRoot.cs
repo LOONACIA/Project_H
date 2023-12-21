@@ -27,7 +27,7 @@ public class BossStageRoot : MonoBehaviour
 
         boss.SetActive(true);
 
-        m_bossStagePhaseList[m_currentPhase].StartPhase();
+        m_bossStagePhaseList[m_currentPhase].ReadyPhase();
     }
 
     private void NextPhase(object sender, EventArgs e)
@@ -38,7 +38,7 @@ public class BossStageRoot : MonoBehaviour
             return;
         }
 
-        m_bossStagePhaseList[++m_currentPhase].StartPhase();
+        m_bossStagePhaseList[++m_currentPhase].ReadyPhase();
     }
 
     private void StageClear()

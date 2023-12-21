@@ -27,9 +27,14 @@ public class JumpPad : MonoBehaviour, IActivate
 
     private void OnTriggerStay(Collider other)
     {
-        if (m_isActive && other.gameObject.layer == LayerMask.NameToLayer("Monster"))
+        if (m_isActive 
+            && other.gameObject.layer == LayerMask.NameToLayer("Monster")
+            && other.gameObject.TryGetComponent<Monster>(out var monster)
+            && monster.IsPossessed)
         {
             Jump(other.gameObject);
+
+            monster.Status.IsFlying = true;
         }
     }
 
@@ -67,12 +72,12 @@ public class JumpPad : MonoBehaviour, IActivate
             status.SetKnockDown(0.1f);
 
             // 대상을 IsFlying 상태로 만듦
-            if (target.TryGetComponent<MonsterMovement>(out var movement))
-            {
-                if (m_coroutine != null)
-                    StopCoroutine(m_coroutine);
-                m_coroutine = StartCoroutine(IE_SetIsFlying(status, movement));
-            }
+            //if (target.TryGetComponent<MonsterMovement>(out var movement))
+            //{
+            //    if (m_coroutine != null)
+            //        StopCoroutine(m_coroutine);
+            //    m_coroutine = StartCoroutine(IE_SetIsFlying(status, movement));
+            //}
         }
 
         switch (m_jumpType)
@@ -97,6 +102,8 @@ public class JumpPad : MonoBehaviour, IActivate
     {
         if (target.TryGetComponent<Rigidbody>(out var rigidbody))
         {
+            rigidbody.velocity = Vector3.zero;
+
             rigidbody.AddForce(transform.up * m_jumpPower, ForceMode.VelocityChange);
         }
     }
@@ -137,13 +144,14 @@ public class JumpPad : MonoBehaviour, IActivate
 
         while (movement.IsOnGround)
         { 
-            if (Time.time - startTime > 1f)
+            if (Time.time - startTime > 0.1f)
                 yield break;
 
             yield return null;
         }
 
-        status.IsFlying = true;
+        if (status.IsFlying == false)
+            status.IsFlying = true;
     }
 
     /// <summary>
