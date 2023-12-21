@@ -48,7 +48,7 @@ public class UIShuriken : UIScene
         if (m_processor != null)
         {
             m_processor.Possessable += OnPossessable;
-            m_processor.TargetHit += OnTargetHit;
+            m_processor.HackStarted += OnHackStarted;
             m_processor.Possessed += OnPossessed;
             m_processor.CoolTimeChanged += OnCooltimeChanged;
         }
@@ -59,7 +59,7 @@ public class UIShuriken : UIScene
         if (m_processor != null)
         {
             m_processor.Possessable -= OnPossessable;
-            m_processor.TargetHit -= OnTargetHit;
+            m_processor.HackStarted -= OnHackStarted;
             m_processor.Possessed -= OnPossessed;
             m_processor.CoolTimeChanged -= OnCooltimeChanged;
         }
@@ -77,7 +77,7 @@ public class UIShuriken : UIScene
         m_corotine = StartCoroutine(nameof(IE_ShurikenGauge));
     }
 
-    private void OnTargetHit(object sender, float _time)
+    private void OnHackStarted(object sender, float _time)
     {
         //Get<Image, Images>(Images.ShurikenImage).gameObject.SetActive(false);
 

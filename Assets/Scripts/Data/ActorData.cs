@@ -8,6 +8,10 @@ public class ActorData : ScriptableObject
     public ActorType Type { get; private set; }
 
     [field: SerializeField]
+    [field: Tooltip("빙의 가능 여부")]
+    public bool CanHack { get; private set; } = true;
+
+    [field: SerializeField]
     [field: Tooltip("빙의에 걸리는 시간")]
     public float PossessionRequiredTime { get; private set; }
 
