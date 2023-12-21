@@ -1,6 +1,7 @@
 using BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject;
 using System;
 using System.Collections;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -107,6 +108,7 @@ public class BossStagePhase : MonoBehaviour
         
         if (m_spawnCoroutine != null)
             StopCoroutine(m_spawnCoroutine);
+        m_spawner.EndSpawn();
 
         StartCoroutine(IE_WaitEndEvent());
     }
@@ -180,10 +182,14 @@ public class BossStagePhase : MonoBehaviour
     private IEnumerator IE_WaitEndEvent()
     {
         // 폭발 실행
-        //Invoke(nameof(Explode), m_explosionDelay);
-
         yield return new WaitForSeconds(m_explosionDelay);
         Explode();
+
+        // 몬스터 사망 처리
+        foreach (var monster in m_spawner.Monsters.ToArray())
+        {
+            monster.Health.Kill();
+        }
 
         PhaseEnd?.Invoke(this, EventArgs.Empty);
     }

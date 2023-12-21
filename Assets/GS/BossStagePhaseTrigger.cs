@@ -37,8 +37,9 @@ public class BossStagePhaseTrigger : MonoBehaviour, IActivate
 
         if (other.gameObject.TryGetComponent<Monster>(out var montser) && montser.IsPossessed)
         {
-            // TODO : 메테리얼 변경되는 효과
+            Deactivate();
 
+            // TODO : 메테리얼 변경되는 효과
             foreach (var groundCollier in m_groundObjectList) 
             {
                 groundCollier.gameObject.SetActive(true);
