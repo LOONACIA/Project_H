@@ -53,15 +53,6 @@ public class HackingWall : HackingObject
         StartCoroutine(IE_Idle());
         col.isTrigger = true;
     }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha0))
-        {
-            ConvertMat();
-        }
-    }
-
     #endregion
 
     #region PrivateMethod
