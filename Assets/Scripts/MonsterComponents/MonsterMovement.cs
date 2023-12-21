@@ -122,15 +122,9 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         m_currentMoveToAccel = (m_data.AccelerationTime > 0f ? (1f / m_data.AccelerationTime) : (float.PositiveInfinity));
         m_lastPath = new NavMeshPath(); //네브매쉬패스는 Start, Awake에서 초기화되어야함.
     }
-    public Transform tr;
 
     private void Update()
     {
-        if (tr != null)
-        {
-            if (Vector3.Distance(tr.position, transform.position) > 0.5f)
-                MoveTo(tr.position);
-        }
         CheckJumping();
 
         UpdateAnimator();
