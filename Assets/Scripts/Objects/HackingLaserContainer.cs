@@ -95,7 +95,7 @@ public class HackingLaserContainer : MonoBehaviour
                 console.OnHacking += Hacking;
             }
         }
-
+        
         private void Hacking(object sender, EventArgs e)
         {
             foreach (var console in hackingConsoles)

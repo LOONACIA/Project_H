@@ -1,6 +1,11 @@
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject;
 using System;
 using System.Collections;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UIElements;
 
 public class BossStagePhase : MonoBehaviour
 {
@@ -8,7 +13,7 @@ public class BossStagePhase : MonoBehaviour
     [SerializeField]
     private BossStageSpawner m_spawner;
 
-    [SerializeField]
+    [SerializeField, Tooltip("몬스터 스폰 지연 시간")]
     private float m_spawnDelay;
 
     [Header("Objects Date")]
@@ -16,17 +21,41 @@ public class BossStagePhase : MonoBehaviour
     private BossStagePhaseTrigger m_phaseTrigger;
 
     [SerializeField, Tooltip("Phase 끝나면 끌 ground 객체")]
-    private GameObject m_ground;
+    private GameObject m_onEndDeactiveGround;
 
+    [SerializeField, Tooltip("Phase 시작하면 켤 객체")]
+    private GameObject[] m_onStartActiveObjects;
+
+    [Header("Explosion Data")]
+    [SerializeField, Tooltip("폭발의 지연 시간")]
+    private float m_explosionDelay;
+
+    [SerializeField, Tooltip("폭발 크기")]
+    private float m_explosionForce;
+
+    [SerializeField, Tooltip("폭발 시작점")]
+    private Transform m_explosionTransform;
+
+    [SerializeField, Tooltip("폭발 반지름")]
+    private float m_explosionRadius;
+
+    [SerializeField]
+    private ParticleSystem m_explosionParticle;
+
+    [SerializeField]
+    private Animator m_explosionAnimator;
+
+    [Tooltip("Phase 종료 이벤트를 발생시킬 오브젝트 리스트")]
     private BossStageMachine[] m_machineList;
 
-    private BossStageFallable[] m_fallableList;
-
-    private JumpPad[] m_jumpPadList;
+    [Tooltip("Phase 종료 시 날려버릴 오브젝트 리스트")]
+    private Explosive[] m_explosiveList;
 
     private Actor m_character;
 
     private bool m_active;
+
+    private Coroutine m_readyPhaseCoroutine;
 
     private Coroutine m_spawnCoroutine;
 
@@ -34,34 +63,45 @@ public class BossStagePhase : MonoBehaviour
 
     private void Start()
     {
-        m_machineList = GetComponentsInChildren<BossStageMachine>();
+        m_machineList = GetComponentsInChildren<BossStageMachine>(true);
         foreach (var machine in m_machineList)
         {
             machine.Interacted += EndPhase;
         }
 
-        m_jumpPadList = GetComponentsInChildren<JumpPad>();
-
         m_phaseTrigger = GetComponentInChildren<BossStagePhaseTrigger>();
 
-        m_fallableList = GetComponentsInChildren<BossStageFallable>(true);
+        m_explosiveList = GetComponentsInChildren<Explosive>(true);
 
         m_character = GameManager.Character.Controller.Character;
     }
 
-    public void StartPhase()
+    public void ReadyPhase()
     {
         if (m_active) return;
 
         m_active = true;
 
-        // 플레이어가 땅 위에 존재할 때부터 몬스터 생성
-        m_spawnCoroutine = StartCoroutine(IE_ReadySpawn());
+        // 플레이어가 특정 위치에 존재할 때 Phase 진행
+        m_readyPhaseCoroutine = StartCoroutine(IE_WaitForStageReady());
 
         // 스테이지 시작하면 groundTrigger 활성화
         // 플레이어가 Trigger에 검출되면 바닥 생성
         m_phaseTrigger?.Activate();
     }
+
+    private void StartPhase()
+    {
+        // 몬스터 스폰
+        m_spawnCoroutine = StartCoroutine(IE_WaitSpawnDelay());
+
+        // 객체 활성화
+        foreach (var activeObject in m_onStartActiveObjects)
+        {
+            activeObject.SetActive(true);
+        }
+    }
+
 
     private void EndPhase(object sender, EventArgs e)
     {
@@ -69,62 +109,105 @@ public class BossStagePhase : MonoBehaviour
 
         m_active = false;
 
+        if (m_readyPhaseCoroutine != null)
+            StopCoroutine(m_readyPhaseCoroutine);
+        
         if (m_spawnCoroutine != null)
-            StopCoroutine(IE_ReadySpawn());
+            StopCoroutine(m_spawnCoroutine);
+        m_spawner.EndSpawn();
 
-        // 페이즈 끝나면 윗층으로 점프 가능
-        foreach (var jumpPad in m_jumpPadList)
-        { 
-            jumpPad.Activate();
-        }
+        StartCoroutine(IE_WaitEndEvent());
+    }
 
-        // 페이즈 끝나면 기존 땅 끄고 무너지는 효과
-        if (m_ground != null)
-        { 
-            if (m_ground.TryGetComponent<Renderer>(out var renderer))
+    /// <summary>
+    /// Phase 끝나면 발생하는 폭발 효과
+    /// </summary>
+    private void Explode()
+    {
+        if (m_explosionTransform == null)
+            m_explosionTransform = transform;
+
+        if (m_onEndDeactiveGround != null)
+        {
+            if (m_onEndDeactiveGround.TryGetComponent<Renderer>(out var renderer))
                 renderer.enabled = false;
-
-            if (m_ground.TryGetComponent<Collider>(out var collider))
+            if (m_onEndDeactiveGround.TryGetComponent<Collider>(out var collider))
                 collider.enabled = false;
-
-            var children = m_ground.GetComponentsInChildren<Transform>(true);
-            foreach (var child in children)
-            { 
-                child.gameObject.SetActive(true);
-            }
         }
-        foreach (var fallDownGround in m_fallableList)
-        { 
-            fallDownGround.Activate();
+        
+        foreach (var explosive in m_explosiveList)
+        {
+            explosive.gameObject.SetActive(true);
+            explosive.Explode(m_explosionForce, m_explosionTransform.position, m_explosionRadius);
         }
+    }
 
-        // 보스 데미지 이벤트 
-        // temp
-        Debug.Log("보스 아프다!!");
-
-        PhaseEnd?.Invoke(this, EventArgs.Empty);
+    private void ExcuteExplodeEffect()
+    {
+        m_explosionParticle?.Play();
+        if (m_explosionAnimator != null)
+            m_explosionAnimator.enabled = true;
     }
 
     /// <summary>
     /// spawnDelay 이후에 플레이어가 PhaseTrigger 안에 존재하면 몬스터를 생성하기 시작
     /// </summary>
     /// <returns></returns>
-    private IEnumerator IE_ReadySpawn()
+    private IEnumerator IE_WaitForStageReady()
     {
-        yield return new WaitForSeconds(m_spawnDelay);
-
         var charater = m_character as Monster;
         if (charater == null)
             yield break;
 
         while (true)
         {
-            if (m_phaseTrigger.IsInArea(charater.transform.position) == true)
-                break;
+            if (m_phaseTrigger.IsInArea(charater.transform.position)
+                /*&& charater.Movement.IsOnGround*/)
+               break;
 
             yield return null;
         }
 
+        StartPhase();
+    }
+
+    private IEnumerator IE_WaitSpawnDelay()
+    { 
+        yield return new WaitForSeconds(m_spawnDelay);
+
+        //var charater = m_character as Monster;
+        //if (charater == null)
+        //    yield break;
+
+        //while (true)
+        //{
+        //    if (charater.Movement.IsOnGround)
+        //        break;
+
+        //    yield return null;
+        //}
+
         m_spawner.StartSpawn();
+    }
+
+    private IEnumerator IE_WaitEndEvent()
+    {
+        float explosionInterval = 1f;
+
+        // 폭발 이펙트 실행
+        yield return new WaitForSeconds(m_explosionDelay - explosionInterval);
+        ExcuteExplodeEffect();
+
+        // 폭발 실행
+        yield return new WaitForSeconds(explosionInterval);
+        Explode();
+
+        // 몬스터 사망 처리
+        foreach (var monster in m_spawner.Monsters.ToArray())
+        {
+            monster.Health.Kill();
+        }
+
+        PhaseEnd?.Invoke(this, EventArgs.Empty);
     }
 }

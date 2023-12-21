@@ -31,6 +31,10 @@ public class ActorStatus : MonoBehaviour
     [ReadOnly]
     [Tooltip("JumpPad로 인해 공중에 떠있는 상태")]
     private bool m_isFlying;
+    
+    [SerializeField]
+    [ReadOnly]
+    private float m_abilityRate;
 
     [SerializeField]
     [ReadOnly]
@@ -67,8 +71,18 @@ public class ActorStatus : MonoBehaviour
         set => m_canKnockDown = value;
     }
 
+    public float AbilityRate
+    {
+        get => m_abilityRate;
+        set
+        {
+            m_abilityRate = Mathf.Clamp(value, 0, 1);
+            AbilityRateChanged?.Invoke(this, m_abilityRate);
+        }
+    }
+
     [field: SerializeField]
-    [ReadOnly]
+    [field: ReadOnly]
     public bool IsStunned { get; set; }
 
     public bool IsBlocking
@@ -114,21 +128,10 @@ public class ActorStatus : MonoBehaviour
             // 기존에 생성한 오브젝트 제거
             if (m_shield != null)
             {
-                m_shield.ShieldChanged -= OnShieldChanged;
-                if (m_shield.ShieldObject != null)
-                {
-                    Destroy(m_shield.ShieldObject);
-                }
+                m_shield.Destroy();
             }
 
             m_shield = value;
-
-            if (m_shield != null)
-            {
-                m_shield.ShieldChanged += OnShieldChanged;
-            }
-
-            ShieldChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 
@@ -146,8 +149,8 @@ public class ActorStatus : MonoBehaviour
     }
     
     public event EventHandler<int> HpChanged;
-
-    public event EventHandler ShieldChanged;
+    
+    public event EventHandler<float> AbilityRateChanged;
 
     public event EventHandler<float> SkillCoolTimeChanged;
 
@@ -195,14 +198,9 @@ public class ActorStatus : MonoBehaviour
         // 쉴드가 더이상 유효하지 않으면 제거
         if (!Shield.IsValid)
         {
-            Destroy(Shield.ShieldObject);
+            Shield.Destroy();
 
             Shield = null;
         }
-    }
-
-    private void OnShieldChanged(object sender, EventArgs e)
-    {
-        ShieldChanged?.Invoke(this, EventArgs.Empty);
     }
 }

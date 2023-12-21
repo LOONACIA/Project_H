@@ -9,6 +9,14 @@ public class MonsterMovementData : ScriptableObject
     [SerializeField]
     [Tooltip("몬스터의 일반 이동 속도")]
     private float m_moveSpeed = 3f;
+
+    [SerializeField]
+    [Tooltip("몬스터 이동속도가 최고 속도가 되는 데 걸리는 시간")]
+    private float m_accelerationTime = 0.3f;
+
+    [SerializeField]
+    [Tooltip("몬스터의 각속도")]
+    private float m_angularSpeed = 300f;
     
     [Space]
     [Header("Player Movement")]
@@ -94,6 +102,10 @@ public class MonsterMovementData : ScriptableObject
     private int m_maxDashCount = 2;
 
     public float MoveSpeed => m_moveSpeed;
+
+    public float AccelerationTime => m_accelerationTime;
+
+    public float AngularSpeed => m_angularSpeed;
     
     public float DashMultiplier => m_dashMultiplier;
 

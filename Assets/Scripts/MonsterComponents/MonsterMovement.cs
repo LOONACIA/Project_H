@@ -26,11 +26,11 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
     //이동 관련
     private float m_movementRatio;
 
-    //MoveTo함수에서 사용되는 속도값.
+    //MoveTo함수에서 계산되는 속도값.
     private float m_currentMoveToSpeed = 0f;
 
-    //MoveTo함수에서 사용되는 가속도값
-    float m_currentMoveToAccel = 1f;
+    //MoveTo함수에서 계산되는 가속도값
+    private float m_currentMoveToAccel = 1f;
 
     private NavMeshPath m_lastPath;
 
@@ -119,6 +119,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         m_agent = GetComponent<NavMeshAgent>();
 
         m_dashCount = m_data.MaxDashCount;
+        m_currentMoveToAccel = (m_data.AccelerationTime > 0f ? (1f / m_data.AccelerationTime) : (float.PositiveInfinity));
         m_lastPath = new NavMeshPath(); //네브매쉬패스는 Start, Awake에서 초기화되어야함.
     }
     public Transform tr;
@@ -199,6 +200,14 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
 
     public void MoveTo(Vector3 destination)
     {
+        //3인칭인 경우 Avoidance값을 높임
+        m_agent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
+        //MoveToWithNavMove(destination);
+        MoveToWithNavSetDest(destination,true);
+    }
+
+    private void MoveToWithNavMove(Vector3 destination)
+    {
         if (m_agent.enabled)
         {
             //1. Path상 다음 목적지를 찾는다.
@@ -216,13 +225,6 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
 
             Vector3 navDest = m_lastPath.corners.Length > 1 ? m_lastPath.corners[1] : m_lastPath.corners[0];
 
-            //string log = "";
-            //foreach(var p in path.corners)
-            //{
-            //    log += $"{p}, ";
-            //}
-            //Debug.Log(log);
-
             //2. 목표 지점을 향한 방향 탐색
             Vector3 dir = (navDest - transform.position).normalized;
 
@@ -231,16 +233,14 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
             // - ObstacleAvoidance가 None이 아니면, Move하되 충돌검사는 해주는 것 같음
 
             //3.1. Rotate
-            float angularSpeed = 120f;
-
             //각속도 적용
             float angle = Vector3.SignedAngle(transform.forward.GetFlatVector(), dir.GetFlatVector(), Vector3.up);
-            if (Mathf.Abs(angle) > Mathf.Abs(angularSpeed * Time.deltaTime))
+            if (Mathf.Abs(angle) > Mathf.Abs(Data.AngularSpeed * Time.deltaTime))
             {
                 if (angle >= 0)
-                    angle = angularSpeed * Time.deltaTime;
+                    angle = Data.AngularSpeed * Time.deltaTime;
                 else
-                    angle = -angularSpeed * Time.deltaTime;
+                    angle = -Data.AngularSpeed * Time.deltaTime;
             }
             Vector3 nextDir = Quaternion.Euler(0f, angle, 0f) * transform.forward.GetFlatVector();
 
@@ -251,6 +251,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
             m_currentMoveToSpeed += m_currentMoveToAccel * Data.MoveSpeed * Time.deltaTime;
             if (m_currentMoveToSpeed > Data.MoveSpeed)
                 m_currentMoveToSpeed = Data.MoveSpeed;
+            Debug.Log($"속도: {m_currentMoveToSpeed}, 가속도{m_currentMoveToAccel}, 걸리는 시간{m_data.AccelerationTime}");
             m_agent.Move(nextDir * Time.deltaTime * m_currentMoveToSpeed);
 
             //4. 애니메이션 적용
@@ -265,6 +266,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
             else
             {
                 m_agent.speed = m_data.MoveSpeed;
+                m_agent.angularSpeed = m_data.AngularSpeed;
             }
 
             m_agent.autoTraverseOffMeshLink = false;
@@ -272,6 +274,56 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
             {
                 m_agent.CompleteOffMeshLink();
                 Debug.Log($"{gameObject.name}: OffMeshLink에잇슴");
+            }
+        }
+    }
+
+    Collider[] m_avoidanceTest = new Collider[3];
+
+    private void MoveToWithNavSetDest(Vector3 destination, bool useAdaptiveAvoidanceTest = true)
+    {
+        if (m_agent.enabled)
+        {
+            m_agent.isStopped = false;
+
+            if (useAdaptiveAvoidanceTest)
+            {
+                Physics.OverlapSphere(transform.position + m_collider.center, m_agent.radius + m_agent.velocity.magnitude * Time.deltaTime * 2f);
+                int amount = Physics.OverlapSphereNonAlloc(transform.position + m_collider.center, m_agent.radius + m_agent.velocity.magnitude * Time.deltaTime * 2f,m_avoidanceTest,LayerMask.GetMask("Monster"));
+                //자기 자신이 포함되었는지 확인
+                int max = amount<m_avoidanceTest.Length?amount:m_avoidanceTest.Length;
+                for(int i = 0; i < max; i++)
+                {
+                    if (m_avoidanceTest[i].gameObject.GetInstanceID() == gameObject.GetInstanceID())
+                    {
+                        //자기 자신일 경우 패스
+                        max -= 1;
+                        break;
+                    }
+                }
+                if (max > 0)
+                {
+                    //자기 자신을 제외하고 누군가 범위 내에 있다면, Quality를 높인다.
+                    m_agent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
+                }
+                else
+                {
+                    //아무도 없다면 None으로 진행(다른 Agent, Corner 무시)
+                    m_agent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance;
+                }
+            }
+
+            m_agent.SetDestination(destination);
+
+            if (!IsOnGround)
+            {
+                // 몬스터가 떨어지는 경우 중력 영향을 받음
+                m_agent.speed += Physics.gravity.y * Time.deltaTime * -1;
+                m_agent.speed = Mathf.Clamp(m_agent.speed, 0, 30);
+            }
+            else
+            {
+                m_agent.speed = m_data.MoveSpeed;
             }
         }
     }
@@ -362,6 +414,8 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         m_lastDashTime = Time.time;
         IsDashing = true;
         //gameObject.layer = m_data.DashLayer;
+
+        GameManager.Effect.ShowDashEffect();
     }
 
     public void TryKnockBack(Vector3 direction, float power, bool overwrite = true)

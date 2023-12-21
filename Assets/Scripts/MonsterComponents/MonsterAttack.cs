@@ -1,6 +1,7 @@
 using LOONACIA.Unity;
 using System;
 using UnityEngine;
+using UnityEngine.AI;
 
 /*
  * 1인칭, 3인칭 공격을 시전
@@ -20,6 +21,8 @@ public class MonsterAttack : MonoBehaviour
     private MonsterAttackData m_data;
 
     private Monster m_actor;
+
+    private NavMeshAgent m_agent;
     
     private Ability[] m_abilities;
     
@@ -32,7 +35,10 @@ public class MonsterAttack : MonoBehaviour
         set
         {
             m_target = value;
-            CurrentWeapon.Target = value;
+            if (CurrentWeapon != null)
+            {
+                CurrentWeapon.Target = value;
+            }
         }
     }
 
@@ -46,6 +52,7 @@ public class MonsterAttack : MonoBehaviour
     {
         m_actor = GetComponent<Monster>();
         m_abilities = GetComponentsInChildren<Ability>();
+        m_agent = GetComponent<NavMeshAgent>();
     }
 
     private void Start()
@@ -126,9 +133,10 @@ public class MonsterAttack : MonoBehaviour
             return;
         }
 
-        if (m_actor.IsPossessed)
+        if (!m_actor.IsPossessed)
         {
-            Target = default;
+            //3인칭인 경우 Avoidance값을 높임
+            m_agent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance;
         }
 
         m_actor.Animator.SetTrigger(s_attackAnimationKey);

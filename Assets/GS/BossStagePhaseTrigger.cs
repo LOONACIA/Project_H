@@ -7,9 +7,9 @@ using UnityEngine;
 public class BossStagePhaseTrigger : MonoBehaviour, IActivate
 {
     [SerializeField, Tooltip("BossPhase 시작되면 활성화 될 지면 오브젝트 목록")]
-    private GameObject[] m_groundObjectList;
+    private Collider[] m_groundObjectList;
 
-    private List<Collider> m_groundColliderList = new();
+    //private List<Collider> m_groundColliderList = new();
 
     private Collider m_collider;
 
@@ -20,15 +20,15 @@ public class BossStagePhaseTrigger : MonoBehaviour, IActivate
         TryGetComponent<Collider>(out m_collider);
         m_collider.enabled = false;
 
-        foreach (var groundObject in m_groundObjectList)
-        {
-            m_groundColliderList.AddRange(groundObject.GetComponentsInChildren<Collider>(true));
-        }
+        //foreach (var groundObject in m_groundObjectList)
+        //{
+        //    m_groundColliderList.AddRange(groundObject.GetComponentsInChildren<Collider>(true));
+        //}
 
-        foreach (var groundCollier in m_groundColliderList)
-        {
-            groundCollier.enabled = false;
-        }
+        //foreach (var groundCollier in m_groundColliderList)
+        //{
+        //    groundCollier.enabled = false;
+        //}
     }
 
     private void OnTriggerEnter(Collider other)
@@ -37,10 +37,12 @@ public class BossStagePhaseTrigger : MonoBehaviour, IActivate
 
         if (other.gameObject.TryGetComponent<Monster>(out var montser) && montser.IsPossessed)
         {
-            // TODO : 메테리얼 변경되는 효과
+            Deactivate();
 
-            foreach (var groundCollier in m_groundColliderList) 
+            // TODO : 메테리얼 변경되는 효과
+            foreach (var groundCollier in m_groundObjectList) 
             {
+                groundCollier.gameObject.SetActive(true);
                 groundCollier.enabled = true;
             }
         }
