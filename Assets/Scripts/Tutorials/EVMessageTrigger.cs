@@ -11,8 +11,6 @@ public class EVMessageTrigger : MonoBehaviour
     #region PrivateVariables
     [SerializeField]
     private InputActionReference m_inputDashAction;
-    [SerializeField] 
-    private InputActionReference m_inputSkillAction;
 
     private bool m_isTriggered;
     #endregion
@@ -46,11 +44,8 @@ public class EVMessageTrigger : MonoBehaviour
         string path1 = m_inputDashAction.action.bindings
             .SingleOrDefault(binding => binding.groups.Equals(ManagerRoot.Input.CurrentControlScheme))
             .ToDisplayString();
-        string path2 = m_inputSkillAction.action.bindings
-            .SingleOrDefault(binding => binding.groups.Equals(ManagerRoot.Input.CurrentControlScheme))
-            .ToDisplayString();
 
-        GameManager.UI.UpdateObject($"{path1}는 대쉬, {path2}는 스킬을 \n 사용할 수 있습니다.");
+        GameManager.UI.UpdateObject($"{path1}를 눌러 대쉬를 사용할 수 있습니다.");
 
         m_isTriggered = false;
     }

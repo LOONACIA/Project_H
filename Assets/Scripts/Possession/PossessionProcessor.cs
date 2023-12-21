@@ -74,8 +74,6 @@ public class PossessionProcessor : MonoBehaviour
             return;
         }
         
-        ClearTarget();
-        
         m_sender = sender;
         IAnimationEventReceiver receiver = m_sender.GetComponentInChildren<IAnimationEventReceiver>();
         receiver?.SetPossession(this);
@@ -136,6 +134,7 @@ public class PossessionProcessor : MonoBehaviour
     
     private void ThrowShuriken()
     {
+        ClearTarget();
         m_currentCoolTime = 0f;
         var cameraPivot = GameManager.Camera.CurrentCamera;
         var cameraTransform = cameraPivot.transform;
@@ -192,7 +191,7 @@ public class PossessionProcessor : MonoBehaviour
     private IEnumerator CoWaitForPossession(float seconds)
     {
         yield return new WaitForSeconds(seconds);
-
+        
         m_isPossessable = true;
         Possessable?.Invoke(this, EventArgs.Empty);
     }
@@ -202,8 +201,13 @@ public class PossessionProcessor : MonoBehaviour
         Possessed?.Invoke(this, actor);
     }
     
-    private void OnTargetHit(Actor target)
+    private void OnTargetHit(PossessionShuriken shuriken, Actor target)
     {
+        if (shuriken != m_shuriken)
+        {
+            return;
+        }
+        
         target.Dying += OnTargetDying;
         TargetHit?.Invoke(this, target.Data.PossessionRequiredTime);
         TryHacking(target);
