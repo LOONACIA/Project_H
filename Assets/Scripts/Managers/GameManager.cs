@@ -48,6 +48,7 @@ public class GameManager : MonoBehaviour
 
     public bool IsGameOver { get; private set; }
 
+    public Vector3 savePoint;
     public static GameManager Instance
     {
         get
@@ -191,5 +192,10 @@ public class GameManager : MonoBehaviour
         s_isApplicationQuitting = true;
         Application.logMessageReceived -= s_instance.OnLogMessageReceived;
         SceneManagerEx.SceneChanging -= s_instance.OnSceneChanging;
+    }
+
+    public void SetSavePoint(Vector3 savePosition)
+    {
+        savePoint = savePosition;
     }
 }
