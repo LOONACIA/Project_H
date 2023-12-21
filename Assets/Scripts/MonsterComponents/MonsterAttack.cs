@@ -35,7 +35,10 @@ public class MonsterAttack : MonoBehaviour
         set
         {
             m_target = value;
-            CurrentWeapon.Target = value;
+            if (CurrentWeapon != null)
+            {
+                CurrentWeapon.Target = value;
+            }
         }
     }
 
