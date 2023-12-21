@@ -75,12 +75,22 @@ public abstract class Weapon : MonoBehaviour
         IsEquipped = true;
         Owner = owner;
         RegisterEvents(m_eventProxy);
+        OnEquipped();
     }
     
     public void UnEquip()
     {
         IsEquipped = false;
         UnregisterEvents(m_eventProxy);
+        OnUnEquipped();
+    }
+    
+    protected virtual void OnEquipped()
+    {
+    }
+    
+    protected virtual void OnUnEquipped()
+    {
     }
 
     protected void Hit(IEnumerable<AttackInfo> e)

@@ -53,8 +53,15 @@ public class Sniper : Gun
         }
     }
 
+    protected override void OnEquipped()
+    {
+        Owner.Status.AbilityRate = Ammo / (float)m_maxAmmo;
+    }
+
     protected override void Fire()
     {
+        Owner.Status.AbilityRate = Ammo / (float)m_maxAmmo;
+        
         m_isAttacking = true;
         Ray ray = GetRay();
 

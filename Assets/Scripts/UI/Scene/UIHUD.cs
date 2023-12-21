@@ -3,22 +3,40 @@ using LOONACIA.Unity.Coroutines;
 using LOONACIA.Unity.Managers;
 using LOONACIA.Unity.UI;
 using Michsky.UI.Reach;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIHUD : UIScene
 {
-    private enum Canvases
+    // private enum Canvases
+    // {
+    //     BackLayerCanvas,
+    //     FrontLayerCanvas
+    // }
+
+    private enum Panels
     {
-        BackLayerCanvas,
-        FrontLayerCanvas
+        BackPanel,
+        FrontPanel,
     }
 
     private enum Texts
     {
         HpText
+    }
+
+    private enum Images
+    {
+        Crosshair
+    }
+
+    private enum Presenters
+    {
+        AbilityPresenter
     }
 
     private readonly List<RectTransform> m_backLayerHpBoxes = new();
@@ -37,9 +55,9 @@ public class UIHUD : UIScene
 
     private PlayerController m_controller;
 
-    private Canvas m_backLayerCanvas;
-
-    private Canvas m_frontLayerCanvas;
+    private GameObject m_backPanel;
+    
+    private GameObject m_frontPanel;
 
     private TextMeshProUGUI m_hpTextBox;
 
@@ -48,6 +66,10 @@ public class UIHUD : UIScene
     private GameObject m_backLayerRoot;
 
     private GameObject m_frontLayerRoot;
+    
+    private ProgressBar m_abilityPresenter;
+
+    private Image m_crosshair;
 
     private int m_hpBoxCursor;
 
@@ -69,6 +91,11 @@ public class UIHUD : UIScene
         m_hpChangingEffectCoroutine?.Abort();
     }
 
+    private void Update()
+    {
+        UpdateCrosshair();
+    }
+
     public void Register(PlayerController controller)
     {
         UnregisterEvents();
@@ -78,17 +105,23 @@ public class UIHUD : UIScene
 
     protected override void Init()
     {
-        Bind<Canvas, Canvases>();
+        Bind<GameObject, Panels>();
         Bind<TextMeshProUGUI, Texts>();
+        Bind<ProgressBar, Presenters>();
+        Bind<Image, Images>();
 
-        m_backLayerCanvas = Get<Canvas, Canvases>(Canvases.BackLayerCanvas);
-        m_frontLayerCanvas = Get<Canvas, Canvases>(Canvases.FrontLayerCanvas);
+        m_backPanel = Get<GameObject, Panels>(Panels.BackPanel);
+        m_frontPanel = Get<GameObject, Panels>(Panels.FrontPanel);
 
         m_hpTextBox = Get<TextMeshProUGUI, Texts>(Texts.HpText);
         m_hpText = m_hpTextBox.GetComponent<UIManagerText>();
+        
+        m_abilityPresenter = Get<ProgressBar, Presenters>(Presenters.AbilityPresenter);
+        
+        m_crosshair = Get<Image, Images>(Images.Crosshair);
 
-        m_backLayerRoot = m_backLayerCanvas.gameObject.FindChild("Root");
-        m_frontLayerRoot = m_frontLayerCanvas.gameObject.FindChild("Root");
+        m_backLayerRoot = m_backPanel.gameObject.FindChild("Root");
+        m_frontLayerRoot = m_frontPanel.gameObject.FindChild("Root");
     }
 
     private void RegisterEvents()
@@ -101,6 +134,7 @@ public class UIHUD : UIScene
         m_controller.CharacterChanged += OnCharacterChanged;
         m_controller.Damaged += OnDamaged;
         m_controller.HpChanged += OnHpChanged;
+        m_controller.AbilityRateChanged += OnAbilityRateChanged;
     }
 
     private void UnregisterEvents()
@@ -113,6 +147,7 @@ public class UIHUD : UIScene
         m_controller.CharacterChanged -= OnCharacterChanged;
         m_controller.Damaged -= OnDamaged;
         m_controller.HpChanged -= OnHpChanged;
+        m_controller.AbilityRateChanged -= OnAbilityRateChanged;
     }
 
     private void OnCharacterChanged(object sender, Actor e)
@@ -131,6 +166,24 @@ public class UIHUD : UIScene
         m_hpTextBox.enabled = e > 0;
 
         m_hpTextBox.text = e.ToString();
+    }
+    
+    private void OnAbilityRateChanged(object sender, float e)
+    {
+        m_abilityPresenter.currentValue = e;
+        m_abilityPresenter.UpdateUI();
+    }
+    
+    private void UpdateCrosshair()
+    {
+        if (m_controller.Character is Monster { Attack: { CurrentWeapon: Shotgun } })
+        {
+            m_crosshair.transform.localScale = Vector3.one * 2.5f;
+        }
+        else
+        {
+            m_crosshair.transform.localScale = Vector3.one * 0.7f;
+        }
     }
 
     private void ResetHpBoxes()
@@ -196,7 +249,7 @@ public class UIHUD : UIScene
             UpdateHpBox(m_frontLayerHpBoxes, ref m_hpBoxCursor, frontLayerScale, false);
 
             float backLayerScale = m_frontLayerHpBoxes[m_backLayerCursor].localScale.x;
-            UpdateHpBox(m_backLayerHpBoxes, ref m_backLayerCursor, backLayerScale, true);
+            UpdateHpBox(m_backLayerHpBoxes, ref m_backLayerCursor, backLayerScale, true, m_backLayerCursor - m_hpBoxCursor + 1);
             
             yield return m_waitForEndOfFrameCache;
         }
@@ -209,15 +262,13 @@ public class UIHUD : UIScene
         m_hpText.colorType = UIManagerText.ColorType.Secondary;
     }
 
-    private static void UpdateHpBox(IReadOnlyList<RectTransform> list, ref int cursor, float xScale, bool isLerp)
+    private static void UpdateHpBox(IReadOnlyList<RectTransform> list, ref int cursor, float xScale, bool isLerp, float lerpDelta = 1)
     {
-        const float scaleDelta = 1f;
-
         RectTransform rectTransform = list[cursor];
         float scale = xScale;
         if (isLerp)
         {
-            float delta = (1 - xScale) * (scaleDelta * Time.unscaledDeltaTime);
+            float delta = (1 - xScale) * (lerpDelta * Time.unscaledDeltaTime);
             scale = Mathf.Max(xScale, rectTransform.localScale.x - delta);
         }
 

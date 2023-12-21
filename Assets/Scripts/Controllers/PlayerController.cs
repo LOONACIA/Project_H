@@ -49,8 +49,8 @@ public partial class PlayerController : MonoBehaviour
     public event RefEventHandler<AttackInfo> Blocked;
 
     public event EventHandler<int> HpChanged;
-
-    public event EventHandler ShieldChanged;
+    
+    public event EventHandler<float> AbilityRateChanged;
 
     private void Awake()
     {
@@ -63,12 +63,10 @@ public partial class PlayerController : MonoBehaviour
         m_possession.Possessing += OnPossessing;
         m_possession.Possessed += OnPossessed;
         
-        GameManager.UI.ShowCrosshair();
-        GameManager.UI.ShowShieldIndicator(this);
-        GameManager.UI.ShowShurikenIndicator(m_possession);
+        //GameManager.UI.ShowShurikenIndicator(m_possession);
         GameManager.UI.ShowDamageIndicator();
         GameManager.UI.ShowObjects();
-        GameManager.UI.ShowSkillIndicator(this);
+        //GameManager.UI.ShowSkillIndicator(this);
     }
 
     private void Start()
@@ -261,7 +259,7 @@ public partial class PlayerController : MonoBehaviour
             m_character.Status.HpChanged += OnHpChanged;
             m_character.Health.Damaged += OnDamaged;
             m_character.Health.Blocked += OnBlocked;
-            m_character.Status.ShieldChanged += OnShieldChanged;
+            m_character.Status.AbilityRateChanged += OnAbilityRateChanged;
         }
     }
 
@@ -277,7 +275,7 @@ public partial class PlayerController : MonoBehaviour
         if (m_character.Status != null)
         {
             m_character.Status.HpChanged -= OnHpChanged;
-            m_character.Status.ShieldChanged -= OnShieldChanged;
+            m_character.Status.AbilityRateChanged -= OnAbilityRateChanged;
 
             m_character.Health.Damaged -= OnDamaged;
             m_character.Health.Blocked -= OnBlocked;
@@ -310,9 +308,9 @@ public partial class PlayerController : MonoBehaviour
         HpChanged?.Invoke(this, e);
     }
     
-    private void OnShieldChanged(object sender, EventArgs e)
+    private void OnAbilityRateChanged(object sender, float e)
     {
-        ShieldChanged?.Invoke(this, e);
+        AbilityRateChanged?.Invoke(this, e);
     }
 
     /// <summary>
@@ -358,9 +356,9 @@ public partial class PlayerController : MonoBehaviour
         m_character.IsPossessed = true;
         m_cameraHolder = m_character.FirstPersonCameraPivot.transform;
         
-        HpChanged?.Invoke(this, Character.Health.CurrentHp);
-        ShieldChanged?.Invoke(this, EventArgs.Empty);
         OnCharacterChanged();
+        HpChanged?.Invoke(this, Character.Health.CurrentHp);
+        AbilityRateChanged?.Invoke(this, Character.Status.AbilityRate);
     }
     
     private void OnCharacterChanged()
