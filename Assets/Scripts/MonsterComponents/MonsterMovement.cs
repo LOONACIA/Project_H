@@ -200,7 +200,10 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
 
     public void MoveTo(Vector3 destination)
     {
-        MoveToWithNavSetDest(destination);
+        //3인칭인 경우 Avoidance값을 높임
+        m_agent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
+        //MoveToWithNavMove(destination);
+        MoveToWithNavSetDest(destination,true);
     }
 
     private void MoveToWithNavMove(Vector3 destination)
@@ -221,13 +224,6 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
             }
 
             Vector3 navDest = m_lastPath.corners.Length > 1 ? m_lastPath.corners[1] : m_lastPath.corners[0];
-
-            //string log = "";
-            //foreach(var p in path.corners)
-            //{
-            //    log += $"{p}, ";
-            //}
-            //Debug.Log(log);
 
             //2. 목표 지점을 향한 방향 탐색
             Vector3 dir = (navDest - transform.position).normalized;
@@ -270,6 +266,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
             else
             {
                 m_agent.speed = m_data.MoveSpeed;
+                m_agent.angularSpeed = m_data.AngularSpeed;
             }
 
             m_agent.autoTraverseOffMeshLink = false;
@@ -281,11 +278,41 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         }
     }
 
-    private void MoveToWithNavSetDest(Vector3 destination)
+    Collider[] m_avoidanceTest = new Collider[3];
+
+    private void MoveToWithNavSetDest(Vector3 destination, bool useAdaptiveAvoidanceTest = true)
     {
         if (m_agent.enabled)
         {
             m_agent.isStopped = false;
+
+            if (useAdaptiveAvoidanceTest)
+            {
+                Physics.OverlapSphere(transform.position + m_collider.center, m_agent.radius + m_agent.velocity.magnitude * Time.deltaTime * 2f);
+                int amount = Physics.OverlapSphereNonAlloc(transform.position + m_collider.center, m_agent.radius + m_agent.velocity.magnitude * Time.deltaTime * 2f,m_avoidanceTest,LayerMask.GetMask("Monster"));
+                //자기 자신이 포함되었는지 확인
+                int max = amount<m_avoidanceTest.Length?amount:m_avoidanceTest.Length;
+                for(int i = 0; i < max; i++)
+                {
+                    if (m_avoidanceTest[i].gameObject.GetInstanceID() == gameObject.GetInstanceID())
+                    {
+                        //자기 자신일 경우 패스
+                        max -= 1;
+                        break;
+                    }
+                }
+                if (max > 0)
+                {
+                    //자기 자신을 제외하고 누군가 범위 내에 있다면, Quality를 높인다.
+                    m_agent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
+                }
+                else
+                {
+                    //아무도 없다면 None으로 진행(다른 Agent, Corner 무시)
+                    m_agent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance;
+                }
+            }
+
             m_agent.SetDestination(destination);
 
             if (!IsOnGround)
