@@ -65,12 +65,17 @@ public class BossStageSpawner : MonoBehaviour
         InvokeRepeating(nameof(Evaluate), 0, 0.5f);
     }
 
-    //public void EndSpawn()
-    //{
-    //    if (!m_active) return;
+    public void EndSpawn()
+    {
+        if (!m_active) return;
 
-    //    m_active = false;
-    //}
+        m_active = false;
+
+        if (m_spawnCoroutine != null)
+            StopCoroutine(m_spawnCoroutine);
+
+        CancelInvoke(nameof(Evaluate));
+    }
 
     private void OnMonsterCollectionChanged(object sender,
        System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -104,12 +109,6 @@ public class BossStageSpawner : MonoBehaviour
 
     private void Evaluate()
     {
-        if (!m_active)
-        { 
-            CancelInvoke(nameof(Evaluate));
-            return;
-        }
-
         // 이미 소환 대기 중이면 반환
         if (m_spawnCoroutine != null) return;
 

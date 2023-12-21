@@ -33,7 +33,7 @@ public class BossStageBreakGround : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         m_trigger.enabled = false;
-        ThrowPlayer(other.transform);
+        //ThrowPlayer(other.transform);
         BreakGround();
         m_bossStageRoot.StageStart();
 
@@ -43,12 +43,12 @@ public class BossStageBreakGround : MonoBehaviour
         }
     }
 
-    private void ThrowPlayer(Transform other)
-    {
-        Rigidbody rb = other.GetComponent<Rigidbody>();
+    //private void ThrowPlayer(Transform other)
+    //{
+    //    Rigidbody rb = other.GetComponent<Rigidbody>();
 
-        rb.AddForce(Vector3.up * 70f, ForceMode.Impulse);
-    }
+    //    rb.AddForce(Vector3.up * 70f, ForceMode.Impulse);
+    //}
 
     private void BreakGround()
     {
