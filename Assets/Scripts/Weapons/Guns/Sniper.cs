@@ -135,7 +135,14 @@ public class Sniper : Gun
         Vector3 end = Target;
         if (Physics.Raycast(m_virtualCamera.transform.position, direction, out var hit, m_maxDistance, m_aimLayers))
         {
-            end = hit.point;
+            if (hit.transform.gameObject.layer != m_damageLayer)
+            {
+                end = hit.point;
+            }
+        }
+        else
+        {
+            end = m_virtualCamera.transform.position + direction * m_maxDistance;
         }
         
         m_renderer.positionCount = 2;
