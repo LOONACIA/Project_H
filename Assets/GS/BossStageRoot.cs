@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class BossStageRoot : MonoBehaviour
 {
-    public GameObject boss;
+    public Boss boss;
 
     [SerializeField]
     private BossStagePhase[] m_bossStagePhaseList;
@@ -35,7 +35,7 @@ public class BossStageRoot : MonoBehaviour
         m_currentPhase = 0;
         m_lastPhase = m_bossStagePhaseList.Length - 1;
 
-        boss.SetActive(true);
+        boss.gameObject.SetActive(true);
 
         // Stage 시작하면 플레이어를 지정한 방향으로 날림
         ThrowPlayer();
@@ -60,6 +60,7 @@ public class BossStageRoot : MonoBehaviour
     private void StageClear()
     {
         // 클리어
+        boss.Kill();
         Debug.Log("game clear");
     }
 
@@ -76,6 +77,18 @@ public class BossStageRoot : MonoBehaviour
             var force = Vector3.Distance(m_throwPosition, transform.position);
 
             rigidbody.AddForce(direction * force, ForceMode.VelocityChange);
+        }
+    }
+
+    // test
+    private bool active;
+    private void Update()
+    {
+
+        if (Input.GetKey(KeyCode.Alpha0)) 
+        {
+            active = false;
+            boss.Kill();
         }
     }
 }
