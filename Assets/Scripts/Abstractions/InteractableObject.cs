@@ -12,7 +12,7 @@ public abstract class InteractableObject : MonoBehaviour, IInteractableObject
     
     public bool IsInteractable { get; protected set; } = true;
     
-    public event EventHandler Interacted;
+    public event EventHandler<Transform> Interacted;
 
     public void Interact(Actor actor, IProgress<float> progress, Action onComplete)
     {
@@ -60,7 +60,7 @@ public abstract class InteractableObject : MonoBehaviour, IInteractableObject
         progress?.Report(seconds);
         
         OnInteract(actor);
-        Interacted?.Invoke(this, EventArgs.Empty);
+        Interacted?.Invoke(this, transform);
         onComplete?.Invoke();
     }
 }

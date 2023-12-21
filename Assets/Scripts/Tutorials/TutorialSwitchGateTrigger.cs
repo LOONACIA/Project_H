@@ -50,7 +50,7 @@ public class TutorialSwitchGateTrigger : MonoBehaviour
 
     #region PrivateMethod
 
-    private void OnInteracted(object sender, EventArgs e)
+    private void OnInteracted(object sender, Transform e)
     {
         m_associatedObject.GetComponent<Collider>().enabled = true;
         m_associatedObject.enabled = true;
