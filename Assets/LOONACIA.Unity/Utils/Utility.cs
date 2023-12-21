@@ -17,6 +17,11 @@ namespace LOONACIA.Unity
         {
             return CoroutineEx.Create(ManagerRoot.Instance, LerpCoroutine(from, to, duration, action, callback, ignoreTimeScale));
         }
+        
+        public static CoroutineEx Lerp(Color from, Color to, float duration, System.Action<Color> action, System.Action callback = null, bool ignoreTimeScale = false)
+        {
+            return CoroutineEx.Create(ManagerRoot.Instance, LerpCoroutine(from, to, duration, action, callback, ignoreTimeScale));
+        }
 
         private static IEnumerator LerpCoroutine(float from, float to, float duration, System.Action<float> action, System.Action callback, bool ignoreTimeScale)
         {
@@ -42,6 +47,22 @@ namespace LOONACIA.Unity
                 float delta = ignoreTimeScale ? Time.unscaledDeltaTime : Time.deltaTime;
                 time += delta;
                 var value = Vector3.Lerp(from, to, time / duration);
+                action?.Invoke(value);
+                yield return null;
+            }
+            action?.Invoke(to);
+
+            callback?.Invoke();
+        }
+        
+        private static IEnumerator LerpCoroutine(Color from, Color to, float duration, System.Action<Color> action, System.Action callback, bool ignoreTimeScale)
+        {
+            float time = 0;
+            while (time < duration)
+            {
+                float delta = ignoreTimeScale ? Time.unscaledDeltaTime : Time.deltaTime;
+                time += delta;
+                var value = Color.Lerp(from, to, time / duration);
                 action?.Invoke(value);
                 yield return null;
             }

@@ -14,14 +14,28 @@ public class HUDSystem : MonoBehaviour
     private PlayerController m_controller;
 
     [SerializeField]
+    private PossessionProcessor m_processor;
+
+    [SerializeField]
     private HUDSettings m_settings;
 
     private Camera m_camera;
 
     private void Awake()
     {
+        if (m_controller == null)
+        {
+            m_controller = FindObjectOfType<PlayerController>();
+        }
+        
+        if (m_processor == null)
+        {
+            m_processor = FindObjectOfType<PossessionProcessor>();
+        }
+        
         ManagerRoot.UI.ShowSceneUI<UIHUD>().Init(m_settings)
-            .Register(m_controller);
+            .RegisterController(m_controller)
+            .RegisterProcessor(m_processor);
         m_camera = Camera.main;
     }
 
