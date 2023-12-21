@@ -34,7 +34,7 @@ public class Breakable : MonoBehaviour
         if (collision.gameObject.layer == layer)
         {
             if (m_coroutine != null)
-            { 
+            {
                 StopCoroutine(m_coroutine);
                 m_coroutine = StartCoroutine(DestroyPart(m_onGroundInterval));
             }
@@ -43,7 +43,7 @@ public class Breakable : MonoBehaviour
 
     public void ReplacePart(in AttackInfo info)
     {
-        if (m_rigidbody == null ||  m_collider == null) return;
+        if (m_rigidbody == null || m_collider == null) return;
 
         m_rigidbody.isKinematic = false;
         m_collider.enabled = true;
@@ -60,7 +60,7 @@ public class Breakable : MonoBehaviour
     private void ExplodePart(Vector3 attackDirection)
     {
         //m_rigidbody.AddExplosionForce(m_explosionForce, explosionPosition, m_explosionRadius);
-        m_rigidbody.AddForce(attackDirection*m_explosionForce,ForceMode.Impulse);
+        m_rigidbody.AddForce(attackDirection * m_explosionForce, ForceMode.Impulse);
     }
 
     private IEnumerator DestroyPart(float interval)

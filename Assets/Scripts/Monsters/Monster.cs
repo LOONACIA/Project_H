@@ -153,6 +153,7 @@ public class Monster : Actor
         base.OnPossessed();
         
         Attack.ChangeWeapon(Animator.GetComponent<Weapon>());
+        Attack.Target = Vector3.zero;
         m_directionInput = Vector3.zero;
     }
 
