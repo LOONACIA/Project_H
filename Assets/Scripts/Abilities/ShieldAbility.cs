@@ -1,4 +1,5 @@
 using LOONACIA.Unity;
+using System;
 using UnityEngine;
 
 public class ShieldAbility : Ability
@@ -45,8 +46,28 @@ public class ShieldAbility : Ability
         Shield shield = shieldObject.GetOrAddComponent<Shield>();
         if (shield != null)
         {
-            shield.Init(m_shieldAmount, m_shieldDuration, shieldObject);
+            Owner.Status.AbilityRate = 1;
+            shield.Init(m_shieldAmount, m_shieldDuration);
+            shield.ShieldChanged += OnShieldChanged;
+            shield.Destroyed += OnShieldDestroyed;
             Owner.Status.Shield = shield;
         }
+    }
+
+    private void OnShieldDestroyed(object sender, EventArgs e)
+    {
+        if (sender is not Shield shield)
+        {
+            return;
+        }
+        
+        Owner.Status.AbilityRate = 0;
+        shield.ShieldChanged -= OnShieldChanged;
+        shield.Destroyed -= OnShieldDestroyed;
+    }
+
+    private void OnShieldChanged(object sender, float e)
+    {
+        Owner.Status.AbilityRate = e;
     }
 }

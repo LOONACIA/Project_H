@@ -75,31 +75,6 @@ public class EffectManager
     }
 
     /// <summary>
-    /// 빙의 준비 시작 이펙트를 실행합니다.
-    /// </summary>
-	public void ShowPreparePossessionEffect()
-    {
-        GameManager.UI.ShowCrosshair();
-		m_colorAdjustments.saturation.Override(-100f);
-	}
-    
-    /// <summary>
-    /// 빙의 준비 완료 이펙트를 실행합니다.
-    /// </summary>
-    public void ShowBeginPossessionEffect()
-    {
-        GameManager.UI.HideCrosshair();
-    }
-    
-    /// <summary>
-    /// 빙의 실패 이펙트를 실행합니다.
-    /// </summary>
-    public void ShowPossessionFailEffect()
-    {
-        ClearColorAdjustments();
-    }
-
-    /// <summary>
     /// 빙의 시작 이펙트를 실행합니다.
     /// </summary>
 	public void ShowPossessionStartEffect()
