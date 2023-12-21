@@ -130,11 +130,7 @@ public class MonsterAttack : MonoBehaviour
             return;
         }
 
-        if (m_actor.IsPossessed)
-        {
-            Target = default;
-        }
-        else
+        if (!m_actor.IsPossessed)
         {
             //3인칭인 경우 Avoidance값을 높임
             m_agent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance;

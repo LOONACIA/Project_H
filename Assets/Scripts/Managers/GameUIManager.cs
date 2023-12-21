@@ -98,15 +98,6 @@ public class GameUIManager
         m_objects.UpdateObjectText(_text);
     }
 
-    public void ShowShieldIndicator(PlayerController player)
-    {
-        var ui = ManagerRoot.UI.ShowSceneUI<UIShieldIndicator>();
-        ui.SetPlayer(player);
-
-        ui.HideIndicator();
-        m_sceneUIs.Add(ui);
-    }
-
     public void ShowShurikenIndicator(PossessionProcessor processor)
     {
         var ui = ManagerRoot.UI.ShowSceneUI<UIShuriken>();

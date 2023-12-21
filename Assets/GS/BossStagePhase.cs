@@ -3,6 +3,8 @@ using System;
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UIElements;
 
 public class BossStagePhase : MonoBehaviour
 {
@@ -54,7 +56,7 @@ public class BossStagePhase : MonoBehaviour
 
     private void Start()
     {
-        m_machineList = GetComponentsInChildren<BossStageMachine>();
+        m_machineList = GetComponentsInChildren<BossStageMachine>(true);
         foreach (var machine in m_machineList)
         {
             machine.Interacted += EndPhase;
@@ -93,6 +95,7 @@ public class BossStagePhase : MonoBehaviour
         }
     }
 
+
     private void EndPhase(object sender, EventArgs e)
     {
         if (!m_active) return;
@@ -105,16 +108,13 @@ public class BossStagePhase : MonoBehaviour
         if (m_spawnCoroutine != null)
             StopCoroutine(m_spawnCoroutine);
 
-        // 폭발 이벤트 
-        Invoke(nameof(Explode), m_explosionDelay);
-
-        PhaseEnd?.Invoke(this, EventArgs.Empty);
+        StartCoroutine(IE_WaitEndEvent());
     }
 
     /// <summary>
     /// Phase 끝나면 발생하는 폭발 효과
     /// </summary>
-    private void Explode()
+    private bool Explode()
     {
         if (m_explosionTransform == null)
             m_explosionTransform = transform;
@@ -132,6 +132,8 @@ public class BossStagePhase : MonoBehaviour
             explosive.gameObject.SetActive(true);
             explosive.Explode(m_explosionForce, m_explosionTransform.position, m_explosionRadius);
         }
+
+        return true;
     }
 
     /// <summary>
@@ -146,8 +148,8 @@ public class BossStagePhase : MonoBehaviour
 
         while (true)
         {
-            if (m_phaseTrigger.IsInArea(charater.transform.position) == true
-                && charater.Movement.IsOnGround)
+            if (m_phaseTrigger.IsInArea(charater.transform.position)
+                /*&& charater.Movement.IsOnGround*/)
                break;
 
             yield return null;
@@ -160,18 +162,29 @@ public class BossStagePhase : MonoBehaviour
     { 
         yield return new WaitForSeconds(m_spawnDelay);
 
-        var charater = m_character as Monster;
-        if (charater == null)
-            yield break;
+        //var charater = m_character as Monster;
+        //if (charater == null)
+        //    yield break;
 
-        while (true)
-        {
-            if (charater.Movement.IsOnGround)
-                break;
+        //while (true)
+        //{
+        //    if (charater.Movement.IsOnGround)
+        //        break;
 
-            yield return null;
-        }
+        //    yield return null;
+        //}
 
         m_spawner.StartSpawn();
+    }
+
+    private IEnumerator IE_WaitEndEvent()
+    {
+        // 폭발 실행
+        //Invoke(nameof(Explode), m_explosionDelay);
+
+        yield return new WaitForSeconds(m_explosionDelay);
+        Explode();
+
+        PhaseEnd?.Invoke(this, EventArgs.Empty);
     }
 }
