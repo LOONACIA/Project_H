@@ -9,12 +9,16 @@ public class ObjectUITest : MonoBehaviour
     #endregion
 
     #region PublicMethod
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            GameManager.Effect.ShowDashEffect();
+        }
+    }
     #endregion
 
     #region PrivateMethod
-    private void OnCollisionEnter(Collision collision)
-    {
-        GameManager.UI.UpdateObject("오브젝트 업데이트!");
-    }
+
     #endregion
 }

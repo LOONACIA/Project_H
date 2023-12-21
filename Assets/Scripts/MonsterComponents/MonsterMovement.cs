@@ -387,6 +387,8 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         m_lastDashTime = Time.time;
         IsDashing = true;
         //gameObject.layer = m_data.DashLayer;
+
+        GameManager.Effect.ShowDashEffect();
     }
 
     public void TryKnockBack(Vector3 direction, float power, bool overwrite = true)

@@ -12,6 +12,10 @@ public class JumpPad : MonoBehaviour, IActivate
     [Tooltip("JumpPad로 점프하는 힘")]
     private float m_jumpPower = 10;
 
+    [SerializeField]
+    [Tooltip("날아가는 고정된 방향")]
+    private Transform m_jumpDir;
+
     [Tooltip("JumpPad가 사용 가능한지의 여부")]
     private bool m_isActive;
 
@@ -74,10 +78,13 @@ public class JumpPad : MonoBehaviour, IActivate
         switch (m_jumpType)
         {
             case JumpType.Reflection:
-                JumpUp(target);
+                JumpReflection(target);
                 break;
             case JumpType.Up:
                 JumpUp(target);
+                break;
+            case JumpType.Default:
+                JumpDefalut(target);
                 break;
         }
     }
@@ -109,6 +116,15 @@ public class JumpPad : MonoBehaviour, IActivate
             rigidbody.velocity = Vector3.zero;
 
             rigidbody.AddForce(targetVec * m_jumpPower, ForceMode.VelocityChange);
+        }
+    }
+
+    private void JumpDefalut(GameObject target)
+    {
+        if (target.TryGetComponent<Rigidbody>(out var rigidbody))
+        {
+            rigidbody.velocity = Vector3.zero;
+            rigidbody.AddForce(m_jumpDir.up * m_jumpPower, ForceMode.VelocityChange);
         }
     }
 
@@ -144,6 +160,7 @@ public class JumpPad : MonoBehaviour, IActivate
     private enum JumpType 
     {
         Reflection,
-        Up
+        Up,
+        Default
     }
 }
