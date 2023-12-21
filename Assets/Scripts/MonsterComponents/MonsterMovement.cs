@@ -372,7 +372,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         //TryDash에서는 대쉬 시작 명령을 내리고 방향을 정하며, 실제 대쉬 연산은 매 FixedUpdate의 ApplyDash에서 일어납니다.
 
         //이미 대쉬 중이거나, 대쉬 딜레이 중이거나, 남은 대쉬가 없다면 대쉬 불가능
-        if (IsDashing || m_lastDashTime + m_data.DashDelay > Time.time || m_dashCount <= 0)
+        if (IsDashing || m_lastDashTime + m_data.DashDelay > Time.time || m_dashCount <= 0 || m_actor.Status.IsKnockedDown)
         {
             if (m_dashCount <= 0)
                 Debug.Log("남은 대쉬 0, 차지까지 남은 시간: " + (m_dashCooldownStartTime + m_data.DashCoolTime - Time.time));

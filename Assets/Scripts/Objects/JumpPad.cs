@@ -5,12 +5,16 @@ using UnityEngine;
 public class JumpPad : MonoBehaviour, IActivate
 {
     [SerializeField]
-    [Tooltip("대상을 날리는 방향")]
+    [Tooltip("대상을 날리는 방향 종류")]
     private JumpType m_jumpType;
 
     [SerializeField]
     [Tooltip("JumpPad로 점프하는 힘")]
     private float m_jumpPower = 10;
+
+    [SerializeField]
+    [Tooltip("점프 시 이동, 대쉬 불가능하게 만드는 시간")]
+    private float m_knockDownTime = 0.1f;
 
     [SerializeField]
     [Tooltip("날아가는 고정된 방향")]
@@ -69,7 +73,7 @@ public class JumpPad : MonoBehaviour, IActivate
         if (target.TryGetComponent<ActorStatus>(out var status))
         {
             // 대상을 잠시 KnockDown 상태로 만듦 => 대쉬 상태를 끊음
-            status.SetKnockDown(0.1f);
+            status.SetKnockDown(m_knockDownTime);
 
             // 대상을 IsFlying 상태로 만듦
             //if (target.TryGetComponent<MonsterMovement>(out var movement))

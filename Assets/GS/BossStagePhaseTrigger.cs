@@ -9,6 +9,9 @@ public class BossStagePhaseTrigger : MonoBehaviour, IActivate
     [SerializeField, Tooltip("BossPhase 시작되면 활성화 될 지면 오브젝트 목록")]
     private Collider[] m_groundObjectList;
 
+    [SerializeField, Tooltip("플레이어가 착지할 곳을 보여줄 오브젝트의 목록")]
+    private Renderer[] m_landingPointList;
+
     //private List<Collider> m_groundColliderList = new();
 
     private Collider m_collider;
@@ -29,6 +32,12 @@ public class BossStagePhaseTrigger : MonoBehaviour, IActivate
         //{
         //    groundCollier.enabled = false;
         //}
+
+        foreach (var landingPoint in m_landingPointList) 
+        {
+            landingPoint.enabled = false;
+            landingPoint.material = new(landingPoint.material);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -39,7 +48,8 @@ public class BossStagePhaseTrigger : MonoBehaviour, IActivate
         {
             Deactivate();
 
-            // TODO : 메테리얼 변경되는 효과
+            StartCoroutine(Dissolve());
+            
             foreach (var groundCollier in m_groundObjectList) 
             {
                 groundCollier.gameObject.SetActive(true);
@@ -55,6 +65,11 @@ public class BossStagePhaseTrigger : MonoBehaviour, IActivate
         m_isActive = true;
 
         m_collider.enabled = true;
+
+        foreach (var landingPoint in m_landingPointList)
+        {
+            landingPoint.enabled = true;
+        }
     }
 
     public void Deactivate()
@@ -69,4 +84,21 @@ public class BossStagePhaseTrigger : MonoBehaviour, IActivate
         return m_collider.bounds.Contains(target);
     }
 
+    private IEnumerator Dissolve()
+    {
+        float progressTime = 0.5f;
+        float time = 0;
+
+        while (time < progressTime) 
+        {
+            time += Time.deltaTime;
+
+            foreach (var landingPoint in m_landingPointList)
+            {
+                landingPoint.material.SetFloat("_DissolveHide", Mathf.Lerp(-1, 1, time / progressTime));
+            }
+
+            yield return null;
+        }
+    }
 }
