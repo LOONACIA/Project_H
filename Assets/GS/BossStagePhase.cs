@@ -39,6 +39,12 @@ public class BossStagePhase : MonoBehaviour
     [SerializeField, Tooltip("폭발 반지름")]
     private float m_explosionRadius;
 
+    [SerializeField]
+    private ParticleSystem m_explosionParticle;
+
+    [SerializeField]
+    private Animator m_explosionAnimator;
+
     [Tooltip("Phase 종료 이벤트를 발생시킬 오브젝트 리스트")]
     private BossStageMachine[] m_machineList;
 
@@ -116,7 +122,7 @@ public class BossStagePhase : MonoBehaviour
     /// <summary>
     /// Phase 끝나면 발생하는 폭발 효과
     /// </summary>
-    private bool Explode()
+    private void Explode()
     {
         if (m_explosionTransform == null)
             m_explosionTransform = transform;
@@ -134,8 +140,13 @@ public class BossStagePhase : MonoBehaviour
             explosive.gameObject.SetActive(true);
             explosive.Explode(m_explosionForce, m_explosionTransform.position, m_explosionRadius);
         }
+    }
 
-        return true;
+    private void ExcuteExplodeEffect()
+    {
+        m_explosionParticle?.Play();
+        if (m_explosionAnimator != null)
+            m_explosionAnimator.enabled = true;
     }
 
     /// <summary>
@@ -181,8 +192,14 @@ public class BossStagePhase : MonoBehaviour
 
     private IEnumerator IE_WaitEndEvent()
     {
+        float explosionInterval = 1f;
+
+        // 폭발 이펙트 실행
+        yield return new WaitForSeconds(m_explosionDelay - explosionInterval);
+        ExcuteExplodeEffect();
+
         // 폭발 실행
-        yield return new WaitForSeconds(m_explosionDelay);
+        yield return new WaitForSeconds(explosionInterval);
         Explode();
 
         // 몬스터 사망 처리
