@@ -134,7 +134,9 @@ public class Monster : Actor
         }
         if (!IsPossessed)
         {
-            movementRatio = Movement.MovementRatio;
+            float movementValue = Movement.MovementRatio;
+            float agentValue = m_navMeshAgent.velocity.GetFlatMagnitude();
+            movementRatio = movementValue>agentValue?movementValue:agentValue;
         }
         m_movementAnimationRatio = Mathf.Lerp(m_movementAnimationRatio, movementRatio, Time.deltaTime * 5f);
 
