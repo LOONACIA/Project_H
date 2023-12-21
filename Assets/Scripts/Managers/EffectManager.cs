@@ -66,7 +66,12 @@ public class EffectManager
             return;
         }
         
-        m_volume = GameObject.Find("Global Volume").GetComponent<Volume>();
+        var volume = GameObject.Find("Global Volume");
+        if (volume == null)
+        {
+            return;
+        }
+        m_volume = volume.GetComponent<Volume>();
         m_volume.profile.TryGet(out m_colorAdjustments);
         m_volume.profile.TryGet(out m_vignette);
         m_volume.profile.TryGet(out m_analogGlitchVolume);
