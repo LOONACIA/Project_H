@@ -27,6 +27,7 @@ public class TitleScene : MonoBehaviour
         }
 
         Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
         //Application.targetFrameRate = 60;
         gameObject.SetActive(false);
     }

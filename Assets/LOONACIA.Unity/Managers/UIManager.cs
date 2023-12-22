@@ -14,7 +14,7 @@ namespace LOONACIA.Unity.Managers
 
         private int _order = 0;
 
-        private Transform Root
+        public Transform Root
         {
             get
             {

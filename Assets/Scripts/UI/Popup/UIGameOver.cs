@@ -1,3 +1,4 @@
+using LOONACIA.Unity.Managers;
 using LOONACIA.Unity.UI;
 using System;
 using UnityEngine.UI;
