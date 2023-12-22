@@ -21,13 +21,13 @@ public abstract class Gun : Weapon
     protected int m_maxAmmo = 5;
     
     protected CinemachineVirtualCamera m_virtualCamera;
+    
+    protected Vector3 m_target;
 
     [SerializeField]
     private int m_ammo;
 
     private Ray m_ray;
-
-    private Vector3 m_target;
 
     public int Ammo
     {

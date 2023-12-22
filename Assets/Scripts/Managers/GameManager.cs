@@ -1,5 +1,3 @@
-using LOONACIA.Unity;
-using LOONACIA.Unity.Diagnostics;
 using System;
 using System.IO;
 using LOONACIA.Unity.Managers;

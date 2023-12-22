@@ -87,7 +87,10 @@ namespace LOONACIA.Unity.Managers
             }
 
             popup = _popupStack.Pop();
-            ManagerRoot.Resource.Release(popup.gameObject);
+            if (popup != null)
+            {
+                ManagerRoot.Resource.Release(popup.gameObject);
+            }
 
             _order--;
         }
