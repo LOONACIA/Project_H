@@ -6,11 +6,9 @@ public class TransformCharacter : MonoBehaviour
 {
     [SerializeField]
     private Transform m_teleportPosition;
-    public CheckPointManager m_checkPointManager;
     // Start is called before the first frame update
     void Start()
     {
-        m_checkPointManager = GetComponent<CheckPointManager>();
 
     }
 
