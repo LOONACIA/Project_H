@@ -20,20 +20,19 @@ public class TitleScene : MonoBehaviour
         }
     }
 
-
     public void OnStartGameClicked(string sceneName)
     {
-        CoroutineEx.Create(this, WaitForLoadScene(sceneName));
-    }    
+        CoroutineEx.Create(GameManager.Instance, WaitForLoadScene(sceneName));
+    }
 
-    public IEnumerator WaitForLoadScene(string nextScene)
+    private IEnumerator WaitForLoadScene(string nextScene)
     {
         yield return new WaitForSeconds(0.5f);
 
         string oldScene = SceneManager.GetActiveScene().name;
 
         //2. 씬 로더를 DDOL
-        DontDestroyOnLoad(this.gameObject);
+        //DontDestroyOnLoad(gameObject);
 
         //1. 다음 씬 로드
         AsyncOperation loadInfo = SceneManagerEx.LoadSceneAsync(nextScene);
@@ -42,7 +41,7 @@ public class TitleScene : MonoBehaviour
             yield break;
         }
 
-        //loadInfo.allowSceneActivation = false;
+        loadInfo.allowSceneActivation = false;
 
         if (loadingBar != null)
         {
@@ -50,39 +49,25 @@ public class TitleScene : MonoBehaviour
             loadingBar.maxValue = 1f;
         }
 
-        while (true)
+        while (!loadInfo.isDone)
         {
-            if(loadingBar!=null)
+            if (loadingBar != null)
             {
                 loadingBar.SetValue(loadInfo.progress);
             }
-            if (loadInfo.isDone)
+            
+            if (loadInfo.progress >= 0.9f)
             {
-                break;
+                if (Input.anyKeyDown)
+                {
+                    loadInfo.allowSceneActivation = true;
+                }
             }
+            
             yield return null;
         }
-        //loadInfo.allowSceneActivation = true;
 
-
-        //3. 기존 씬 언로드
-        //loadInfo = SceneManager.UnloadSceneAsync(oldScene);
-        //while (true)
-        //{
-        //    if (loadingBar != null)
-        //    {
-        //        loadingBar.SetValue(0.45f + loadInfo.progress * 0.5f);
-        //    }
-        //    if (loadInfo.progress >= 0.9f)
-        //    {
-        //        break;
-        //    }
-        //    yield return null;
-        //}
-
-        //Loader 삭제
-        yield return new WaitForSeconds(1.0f);
-        //Destroy(this.gameObject);
+        loadingBar.SetValue(loadInfo.progress);
     }
 
 
