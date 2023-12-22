@@ -1,33 +1,54 @@
 using JetBrains.Annotations;
+using LOONACIA.Unity;
 using LOONACIA.Unity.Coroutines;
 using LOONACIA.Unity.Managers;
 using Michsky.UI.Reach;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class TitleScene : MonoBehaviour
 {
     [Tooltip("없으면 자식에서 찾습니다.")]
-    public ProgressBar loadingBar;
+    private ProgressBar loadingBar;
 
-    private void OnEnable()
+    private CanvasGroup canvasGroup;
+    public GameObject pressAnyKeyText;
+
+    private void Awake()
     {
         if (loadingBar == null)
         {
             loadingBar = GetComponentInChildren<ProgressBar>();
         }
+        if (canvasGroup == null)
+        {
+            canvasGroup = GetComponentInChildren<CanvasGroup>();
+        }
+        Application.targetFrameRate = 60;
+        gameObject.SetActive(false);
+    }
+
+    private void OnEnable()
+    {
+        canvasGroup.alpha = 0f;
     }
 
     public void OnStartGameClicked(string sceneName)
     {
+        gameObject.SetActive(true);
+        pressAnyKeyText.gameObject.SetActive(false);
         CoroutineEx.Create(GameManager.Instance, WaitForLoadScene(sceneName));
     }
 
     private IEnumerator WaitForLoadScene(string nextScene)
     {
-        yield return new WaitForSeconds(0.5f);
+        while (canvasGroup.alpha < 1f)
+        {
+            canvasGroup.alpha += Time.deltaTime * 2f;
+            yield return null;
+        }
+        yield return new WaitForSeconds(0.1f);
 
         string oldScene = SceneManager.GetActiveScene().name;
 
@@ -46,7 +67,7 @@ public class TitleScene : MonoBehaviour
         if (loadingBar != null)
         {
             loadingBar.minValue = 0f;
-            loadingBar.maxValue = 1f;
+            loadingBar.maxValue = 0.9f;
         }
 
         while (!loadInfo.isDone)
@@ -58,6 +79,7 @@ public class TitleScene : MonoBehaviour
             
             if (loadInfo.progress >= 0.9f)
             {
+                pressAnyKeyText.gameObject.SetActive(true);
                 if (Input.anyKeyDown)
                 {
                     loadInfo.allowSceneActivation = true;
