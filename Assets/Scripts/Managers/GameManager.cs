@@ -38,6 +38,10 @@ public class GameManager : MonoBehaviour
 
     private GameUIManager m_ui = new();
 
+#if PLATFORM_STANDALONE_WIN
+    private uint m_stickyKeysFlags;
+#endif
+
     public static ActorManager Actor => Instance.m_actor;
 
     public static CameraManager Camera => Instance.m_camera;
@@ -65,7 +69,9 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        Cursor.lockState = CursorLockMode.Locked;
+#if PLATFORM_STANDALONE_WIN
+        m_stickyKeysFlags = NativeMethods.DisableStickyKeys();
+#endif
 
         if (m_settings == null)
         {
@@ -89,6 +95,31 @@ public class GameManager : MonoBehaviour
             onExit: Application.Quit
 #endif
         );
+    }
+
+    public void Pause(Action onResume = null)
+    {
+        Time.timeScale = 0;
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        UI.ShowMenuUI(onResume: Resume,
+            onMenu: () => SceneManagerEx.LoadScene("TitleScene"),
+#if UNITY_EDITOR
+            onExit: () => UnityEditor.EditorApplication.isPlaying = false,
+#else
+            onExit: Application.Quit,
+#endif
+            text: "Menu"
+        );
+        return;
+        
+        void Resume()
+        {
+            Time.timeScale = 1;
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            onResume?.Invoke();
+        }
     }
 
     public void SetGameOver()
@@ -192,6 +223,9 @@ public class GameManager : MonoBehaviour
 
     private void OnDestroy()
     {
+#if PLATFORM_STANDALONE_WIN
+        NativeMethods.RestoreStickyKeys(m_stickyKeysFlags);
+#endif
         s_isApplicationQuitting = true;
         Application.logMessageReceived -= s_instance.OnLogMessageReceived;
         SceneManagerEx.SceneChanging -= s_instance.OnSceneChanging;
@@ -199,6 +233,9 @@ public class GameManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
+#if PLATFORM_STANDALONE_WIN
+        NativeMethods.RestoreStickyKeys(m_stickyKeysFlags);
+#endif
         s_isApplicationQuitting = true;
         Application.logMessageReceived -= s_instance.OnLogMessageReceived;
         SceneManagerEx.SceneChanging -= s_instance.OnSceneChanging;
