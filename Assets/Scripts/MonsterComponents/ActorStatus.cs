@@ -41,6 +41,7 @@ public class ActorStatus : MonoBehaviour
     private bool m_isKnockBack;
 
     [SerializeField]
+    [ReadOnly]
     private Shield m_shield;
 
     [SerializeField]

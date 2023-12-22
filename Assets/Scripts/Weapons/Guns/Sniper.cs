@@ -28,6 +28,8 @@ public class Sniper : Gun
 
     private float m_intensityMul = 0.2f;
 
+    private bool m_onShot;
+
     protected override void Awake()
     {
         base.Awake();
@@ -47,16 +49,15 @@ public class Sniper : Gun
 
     private void FixedUpdate()
     {
-        if (Target == default)
+        if (!m_onShot && Owner.Animator.GetCurrentAnimatorStateInfo(0).IsTag("Aim"))
         {
-            m_renderer.positionCount = 0;
+            Target = Vector3.zero;
         }
         
-        if (!IsAttacking)
+        if (State is not (WeaponState.Attack or WeaponState.Recovery))
         {
             UpdateLine();
         }
-        Debug.DrawRay(GetRay().origin, Vector3.forward * 100f, Color.red);
     }
 
     protected override void OnEquipped()
@@ -122,10 +123,12 @@ public class Sniper : Gun
         
         m_renderer.material.SetColor(s_emissionColorID, m_shootLineColor * 1500f);
 
+        m_onShot = true;
         m_drawLineCoroutine = Utility.Lerp(0.2f, 0f, 0.5f, value => m_renderer.startWidth = m_renderer.endWidth = value, () =>
         {
             m_isAttacking = false;
             m_intensity = 1f;
+            m_onShot = false;
         });
     }
     
