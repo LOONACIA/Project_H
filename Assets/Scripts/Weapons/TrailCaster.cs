@@ -9,6 +9,8 @@ public class TrailCaster : MonoBehaviour
     #region PublicVariables
 
     public bool useFixedUpdate = false;
+    public event EventHandler CheckStarted;
+    public event EventHandler CheckFinished;
 
     #endregion
 
@@ -100,11 +102,7 @@ public class TrailCaster : MonoBehaviour
     public void StartCheck()
     {
         //파티클 실행
-        if (m_useEffect && m_attackParticle != null)
-        {
-            m_attackParticle.SendEvent("OnPlay");
-            m_attackParticle.SetBool("IsAttacking", true);
-        }
+        CheckStarted.Invoke(this, null);
         //점들의 값 초기화
         for (int i = 0; i < m_thicknessX; i++)
         {
@@ -120,11 +118,7 @@ public class TrailCaster : MonoBehaviour
     public void EndCheck()
     {
         //파티클 종료
-        if (m_useEffect && m_attackParticle != null)
-        {
-            m_attackParticle.SendEvent("OnEnd");
-            m_attackParticle.SetBool("IsAttacking", false);
-        }
+        CheckFinished.Invoke(this, null);
         IsChecking = false;
         attackedList.Clear();
     }
