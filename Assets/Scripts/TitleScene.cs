@@ -25,7 +25,9 @@ public class TitleScene : MonoBehaviour
         {
             canvasGroup = GetComponentInChildren<CanvasGroup>();
         }
-        Application.targetFrameRate = 60;
+
+        Cursor.visible = true;
+        //Application.targetFrameRate = 60;
         gameObject.SetActive(false);
     }
 
