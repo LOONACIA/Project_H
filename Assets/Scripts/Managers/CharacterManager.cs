@@ -4,6 +4,8 @@ using UnityEngine.SceneManagement;
 
 public class CharacterManager
 {
+    private string m_savedSceneName;
+    
     private GameSettings m_settings;
 
     private ActorType m_actorType;
@@ -26,6 +28,8 @@ public class CharacterManager
         m_actorType = actor.Data.Type;
         m_respawnPosition = respawnPosition.position;
         m_respawnRotation = respawnPosition.rotation;
+        
+        m_savedSceneName = SceneManager.GetActiveScene().name;
     }
 
     private void RespawnPlayerCharacter()
@@ -49,6 +53,9 @@ public class CharacterManager
     private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
     {
         FindController();
-        RespawnPlayerCharacter();
+        if (arg0.name == m_savedSceneName)
+        {
+            RespawnPlayerCharacter();
+        }
     }
 }
