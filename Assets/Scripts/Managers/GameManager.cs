@@ -66,7 +66,6 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
 
         if (m_settings == null)
         {
@@ -83,6 +82,7 @@ public class GameManager : MonoBehaviour
 
         UI.ShowGameOverUI(text: "Game Clear",
             onRestart: () => SceneManagerEx.LoadScene(SceneManager.GetActiveScene().name),
+            onMenu: () => SceneManagerEx.LoadScene("TitleScene"),
 #if UNITY_EDITOR
             onExit: () => UnityEditor.EditorApplication.isPlaying = false
 #else
@@ -105,6 +105,7 @@ public class GameManager : MonoBehaviour
         {
             yield return new WaitForSecondsRealtime(2f);
             UI.ShowGameOverUI(onRestart: () => SceneManagerEx.LoadScene(SceneManager.GetActiveScene().name),
+                onMenu: () => SceneManagerEx.LoadScene("TitleScene"),
 #if UNITY_EDITOR
                 onExit: () => UnityEditor.EditorApplication.isPlaying = false
 #else

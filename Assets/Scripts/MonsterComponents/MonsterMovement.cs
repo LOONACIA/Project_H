@@ -8,9 +8,11 @@ using UnityEngine.AI;
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(CapsuleCollider))]
 [RequireComponent(typeof(NavMeshAgent))]
-public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
+public class MonsterMovement : MonoBehaviour
 {
     private static readonly int s_animatorKnockBack = Animator.StringToHash("KnockBack");
+    
+    private readonly Collider[] m_avoidanceCheckColliders = new Collider[3];
 
     [SerializeField]
     private MonsterMovementData m_data;
@@ -23,13 +25,13 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
 
     private NavMeshAgent m_agent;
 
-    //이동 관련
+    // 이동 관련
     private float m_movementRatio;
 
-    //MoveTo함수에서 계산되는 속도값.
-    private float m_currentMoveToSpeed = 0f;
+    // MoveTo함수에서 계산되는 속도값.
+    private float m_currentMoveToSpeed;
 
-    //MoveTo함수에서 계산되는 가속도값
+    // MoveTo함수에서 계산되는 가속도값
     private float m_currentMoveToAccel = 1f;
 
     private NavMeshPath m_lastPath;
@@ -41,33 +43,21 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
     [SerializeField]
     private bool m_isOnGround;
 
-    private GameObject m_standingGround;
-
     private float m_jumpVelocity;
 
-    //현재 점프속도가 즉시 적용되지 않음, 애니메이션 적용 시 해당 값을 기다림
+    // 현재 점프속도가 즉시 적용되지 않음, 애니메이션 적용 시 해당 값을 기다림
     private bool m_isJumped;
 
     private bool m_isJumpApplied;
 
-    //private float m_dashMultiplier = 1f; //대쉬가 돌진으로 바뀌면서 미사용
-
-    //대쉬 방향
+    // 대쉬 방향
     private Vector3 m_dashDirection = Vector3.zero;
 
-    private Vector3 m_lastDashVelocity = Vector3.zero;
+    // 대쉬 속도 (나눗셈 연산은 느리기 때문에 밖으로 분리함)
+    private float m_dashSpeed;
 
-    //대쉬 속도 (나눗셈 연산은 느리기 때문에 밖으로 분리함)
-    private float m_dashSpeed = 0f;
-
-    //마지막으로 대쉬를 누른 시간
+    // 마지막으로 대쉬를 누른 시간
     private float m_lastDashTime;
-
-    //대쉬 쿨타임이 체크되기 시작된 시간
-    private float m_dashCooldownStartTime;
-
-    //남은 대쉬 수
-    private int m_dashCount;
 
     // 넉백의 최소 지속시간
     private float m_minKnockBackTime = 1f;
@@ -82,43 +72,22 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
     public bool IsOnGround
     {
         get => m_isOnGround;
-        set => SetField(ref m_isOnGround, value);
+        private set => m_isOnGround = value;
     }
 
     public bool IsDashing { get; private set; }
-
-    public float CurrentDashCoolDown
-    {
-        get
-        {
-            if (m_dashCount == m_data.MaxDashCount)
-            {
-                return 1;
-            }
-
-            if (m_data.DashCoolTime <= 0)
-            {
-                return 1;
-            }
-
-            return Mathf.Clamp((Time.time - m_dashCooldownStartTime) / m_data.DashCoolTime, 0f, 1f);
-        }
-    }
-
-    public int DashCount => m_dashCount;
-
-    public event PropertyChangedEventHandler PropertyChanged;
-
+    
     private void Start()
     {
         m_actor = GetComponent<Monster>();
         m_rigidbody = GetComponent<Rigidbody>();
         m_collider = GetComponent<CapsuleCollider>();
         m_agent = GetComponent<NavMeshAgent>();
-
-        m_dashCount = m_data.MaxDashCount;
-        m_currentMoveToAccel = (m_data.AccelerationTime > 0f ? (1f / m_data.AccelerationTime) : (float.PositiveInfinity));
-        m_lastPath = new NavMeshPath(); //네브매쉬패스는 Start, Awake에서 초기화되어야함.
+        
+        m_actor.Status.MaxDashCount = m_actor.Status.CurrentDashCount = m_data.MaxDashCount;
+        m_actor.Status.DashCoolTime = m_data.DashCoolTime;
+        m_currentMoveToAccel = m_data.AccelerationTime > 0f ? 1f / m_data.AccelerationTime : float.PositiveInfinity;
+        m_lastPath = new(); //네브매쉬패스는 Start, Awake에서 초기화되어야함.
     }
 
     private void Update()
@@ -126,7 +95,6 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         CheckJumping();
 
         UpdateAnimator();
-        UpdateDashCoolDown();
     }
 
     private void FixedUpdate()
@@ -243,7 +211,6 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
             m_currentMoveToSpeed += m_currentMoveToAccel * Data.MoveSpeed * Time.deltaTime;
             if (m_currentMoveToSpeed > Data.MoveSpeed)
                 m_currentMoveToSpeed = Data.MoveSpeed;
-            Debug.Log($"속도: {m_currentMoveToSpeed}, 가속도{m_currentMoveToAccel}, 걸리는 시간{m_data.AccelerationTime}");
             m_agent.Move(nextDir * Time.deltaTime * m_currentMoveToSpeed);
 
             //4. 애니메이션 적용
@@ -270,8 +237,6 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         }
     }
 
-    Collider[] m_avoidanceTest = new Collider[3];
-
     private void MoveToWithNavSetDest(Vector3 destination, bool useAdaptiveAvoidanceTest = true)
     {
         if (m_agent.enabled)
@@ -280,13 +245,12 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
 
             if (useAdaptiveAvoidanceTest)
             {
-                Physics.OverlapSphere(transform.position + m_collider.center, m_agent.radius + m_agent.velocity.magnitude * Time.deltaTime * 2f);
-                int amount = Physics.OverlapSphereNonAlloc(transform.position + m_collider.center, m_agent.radius + m_agent.velocity.magnitude * Time.deltaTime * 2f, m_avoidanceTest, LayerMask.GetMask("Monster"));
+                int amount = Physics.OverlapSphereNonAlloc(transform.position + m_collider.center, m_agent.radius + m_agent.velocity.magnitude * Time.deltaTime * 2f, m_avoidanceCheckColliders, LayerMask.GetMask("Monster"));
                 //자기 자신이 포함되었는지 확인
-                int max = amount < m_avoidanceTest.Length ? amount : m_avoidanceTest.Length;
+                int max = amount < m_avoidanceCheckColliders.Length ? amount : m_avoidanceCheckColliders.Length;
                 for (int i = 0; i < max; i++)
                 {
-                    if (m_avoidanceTest[i].gameObject.GetInstanceID() == gameObject.GetInstanceID())
+                    if (m_avoidanceCheckColliders[i].gameObject.GetInstanceID() == gameObject.GetInstanceID())
                     {
                         //자기 자신일 경우 패스
                         max -= 1;
@@ -310,8 +274,8 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
             if (!IsOnGround)
             {
                 // 몬스터가 떨어지는 경우 중력 영향을 받음
-                m_agent.speed += Physics.gravity.y * Time.deltaTime * -1;
-                m_agent.speed = Mathf.Clamp(m_agent.speed, 0, 30);
+                float expectedSpeed = m_agent.speed + Physics.gravity.y * Time.deltaTime * -1;
+                m_agent.speed = Mathf.Clamp(expectedSpeed, 0, 30);
             }
             else
             {
@@ -364,22 +328,12 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         //TryDash에서는 대쉬 시작 명령을 내리고 방향을 정하며, 실제 대쉬 연산은 매 FixedUpdate의 ApplyDash에서 일어납니다.
 
         //이미 대쉬 중이거나, 대쉬 딜레이 중이거나, 남은 대쉬가 없다면 대쉬 불가능
-        if (IsDashing || m_lastDashTime + m_data.DashDelay > Time.time || m_dashCount <= 0 || m_actor.Status.IsKnockedDown || direction == Vector3.zero)
+        if (IsDashing || m_actor.Status.CurrentDashCount <= 0 || m_actor.Status.IsKnockedDown || direction == Vector3.zero)
         {
-            if (m_dashCount <= 0)
-                Debug.Log("남은 대쉬 0, 차지까지 남은 시간: " + (m_dashCooldownStartTime + m_data.DashCoolTime - Time.time));
-            if (IsDashing) Debug.Log("이미 대쉬 중");
-            if (m_lastDashTime + m_data.DashDelay > Time.time) Debug.Log("대쉬 딜레이중");
             return;
         }
 
-        //만약 대쉬가 꽉 차있었는데 대쉬를 시도했다면, 쿨타임을 세기 시작함.
-        if (m_dashCount == m_data.MaxDashCount)
-        {
-            m_dashCooldownStartTime = Time.time;
-        }
-
-        m_dashCount -= 1;
+        m_actor.Status.CurrentDashCount -= 1;
 
         //대쉬를 시도함.
         //1. 속도값을 지정 (나눗셈 연산을 줄이기 위해 한번만 수행)
@@ -428,24 +382,6 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         m_rigidbody.AddForce(direction * power, ForceMode.Impulse);
     }
 
-    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-    {
-        PropertyChanged?.Invoke(this, new(propertyName));
-    }
-
-    protected bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
-    {
-        if (EqualityComparer<T>.Default.Equals(field, value))
-        {
-            return false;
-        }
-
-        field = value;
-        OnPropertyChanged(propertyName);
-
-        return true;
-    }
-
     private static Vector3 TranslateBySurfaceNormal(Vector3 originalVector, Vector3 surfaceNormal)
     {
         return Vector3.ProjectOnPlane(originalVector, surfaceNormal);
@@ -476,15 +412,11 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
             radius + 0.2f, m_data.WhatIsGround);
         if (IsOnGround)
         {
-            m_standingGround = ground.collider.gameObject;
-
             // 착지시 IsFlying 상태이상 초기화
             m_actor.Status.IsFlying = false;
         }
         else
         {
-            m_standingGround = null;
-
             if (m_rigidbody.velocity.y < 0)
                 m_isJumped = false;
 
@@ -501,7 +433,6 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
             //대쉬 시간이 지났다면 대쉬 종료
             IsDashing = false;
             m_dashDirection = Vector3.zero;
-            m_lastDashVelocity = Vector3.zero;
             m_rigidbody.velocity = Vector3.zero;
             return;
         }
@@ -552,24 +483,6 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
 
         //강제로 속도를 대쉬값으로 만듭니다.
         m_rigidbody.AddForce(nextDirection * nextSpeed, ForceMode.VelocityChange);
-    }
-
-    private void UpdateDashCoolDown()
-    {
-        if (m_data.MaxDashCount > m_dashCount
-            && m_dashCooldownStartTime + m_data.DashCoolTime <= Time.time)
-        {
-            //최대 대쉬 카운트가 아니면서
-            //마지막 대쉬 시간부터 쿨타임이 지났다면 대쉬 카운트 +1
-            m_dashCount += 1;
-            Debug.Log($"대쉬 충전됨, 남은 대쉬 수: {m_dashCount}");
-
-            //만약 더해줬어도 최대 대쉬 수가 아니라면, 지금 시간부터 다시 대쉬 쿨타임 카운트 시작
-            if (m_dashCount != m_data.MaxDashCount)
-            {
-                m_dashCooldownStartTime = Time.time;
-            }
-        }
     }
 
     private void CheckKnockBackEnd()

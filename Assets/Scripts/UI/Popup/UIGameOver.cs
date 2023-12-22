@@ -11,7 +11,8 @@ public class UIGameOver : UIPopup
     
     private enum Buttons
     {
-        RestartButton,
+        ContinueButton,
+        MenuButton,
         ExitButton
     }
 
@@ -19,7 +20,9 @@ public class UIGameOver : UIPopup
     
     private string m_text;
 
-    private Action m_onRestart;
+    private Action m_onContinue;
+    
+    private Action m_onMenu;
     
     private Action m_onExit;
 
@@ -32,9 +35,10 @@ public class UIGameOver : UIPopup
         }
     }
 
-    public void SetButtonAction(Action restartAction, Action exitAction)
+    public void SetButtonAction(Action restartAction, Action onMenuAction, Action exitAction)
     {
-        m_onRestart = restartAction;
+        m_onContinue = restartAction;
+        m_onMenu = onMenuAction;
         m_onExit = exitAction;
     }
 
@@ -45,7 +49,8 @@ public class UIGameOver : UIPopup
         Bind<Text, Texts>();
         Bind<Button, Buttons>();
         
-        Get<Button, Buttons>(Buttons.RestartButton).onClick.AddListener(OnRestart);
+        Get<Button, Buttons>(Buttons.ContinueButton).onClick.AddListener(OnRestart);
+        Get<Button, Buttons>(Buttons.MenuButton).onClick.AddListener(OnMenu);
         Get<Button, Buttons>(Buttons.ExitButton).onClick.AddListener(OnExit);
         
         m_titleTextBox = Get<Text, Texts>(Texts.TitleLabel);
@@ -57,7 +62,12 @@ public class UIGameOver : UIPopup
     
     private void OnRestart()
     {
-        m_onRestart?.Invoke();
+        m_onContinue?.Invoke();
+    }
+    
+    private void OnMenu()
+    {
+        m_onMenu?.Invoke();
     }
     
     private void OnExit()
