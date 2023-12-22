@@ -2806,9 +2806,11 @@ MonoBehaviour:
   m_InputSlots: []
   m_OutputSlots: []
   m_Label: 
-  m_Data: {fileID: 8926484042661615416}
+  m_Data: {fileID: 8926484042661615418}
   m_InputFlowSlot:
-  - link: []
+  - link:
+    - context: {fileID: 8926484042661615417}
+      slotIndex: 0
   - link:
     - context: {fileID: 8926484042661615415}
       slotIndex: 0
@@ -4533,7 +4535,6 @@ MonoBehaviour:
   title: 
   m_Owners:
   - {fileID: 8926484042661615415}
-  - {fileID: 8926484042661615018}
 --- !u!114 &8926484042661615417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4562,6 +4563,8 @@ MonoBehaviour:
   - link:
     - context: {fileID: 8926484042661614608}
       slotIndex: 0
+    - context: {fileID: 8926484042661615018}
+      slotIndex: 0
   eventName: OnPlay
 --- !u!114 &8926484042661615418
 MonoBehaviour:
@@ -4585,6 +4588,7 @@ MonoBehaviour:
   m_Owners:
   - {fileID: 8926484042661615417}
   - {fileID: 8926484042661614608}
+  - {fileID: 8926484042661615018}
 --- !u!114 &8926484042661615419
 MonoBehaviour:
   m_ObjectHideFlags: 0
