@@ -1,6 +1,7 @@
 using LOONACIA.Unity;
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class ActorStatus : MonoBehaviour
 {
@@ -47,6 +48,13 @@ public class ActorStatus : MonoBehaviour
     [SerializeField]
     [ReadOnly]
     private float m_skillCoolTime = 1;
+    
+    [FormerlySerializedAs("m_dashCount")]
+    [SerializeField]
+    [ReadOnly]
+    private int m_currentDashCount;
+    
+    private float m_dashCooldownCounter;
 
     public int Hp
     {
@@ -149,11 +157,39 @@ public class ActorStatus : MonoBehaviour
         }
     }
     
+    public int MaxDashCount { get; set; }
+
+    public int CurrentDashCount
+    {
+        get => m_currentDashCount;
+        set
+        {
+            if (m_currentDashCount == value)
+            {
+                return;
+            }
+            
+            m_currentDashCount = Mathf.Clamp(value, 0, MaxDashCount);
+            if (m_currentDashCount == MaxDashCount - 1)
+            {
+                m_dashCooldownCounter = 0;
+            }
+            
+            DashCountChanged?.Invoke(this, m_currentDashCount);
+        }
+    }
+
+    public float DashCoolTime { get; set; }
+
     public event EventHandler<int> HpChanged;
     
     public event EventHandler<float> AbilityRateChanged;
 
     public event EventHandler<float> SkillCoolTimeChanged;
+    
+    public event EventHandler<int> DashCountChanged;
+    
+    public event EventHandler<float> DashCoolTimeChanged;
 
     public void SetKnockDown(float duration)
     {
@@ -169,6 +205,25 @@ public class ActorStatus : MonoBehaviour
     {
         UpdateKnockDownTime();
         UpdateShield();
+        UpdateDashCoolDown();
+    }
+    
+    private void UpdateDashCoolDown()
+    {
+        m_dashCooldownCounter = Mathf.Clamp(m_dashCooldownCounter + Time.deltaTime, 0, DashCoolTime);
+        if (MaxDashCount != CurrentDashCount)
+        {
+            DashCoolTimeChanged?.Invoke(this, m_dashCooldownCounter);
+        }
+
+        if (MaxDashCount > CurrentDashCount && m_dashCooldownCounter >= DashCoolTime)
+        {
+            //최대 대쉬 카운트가 아니면서
+            //마지막 대쉬 시간부터 쿨타임이 지났다면 대쉬 카운트 +1
+            CurrentDashCount += 1;
+            
+            m_dashCooldownCounter = 0;
+        }
     }
 
     /// <summary>
