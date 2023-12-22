@@ -262,6 +262,11 @@ public class UIHUD : UIScene
         m_actor = e;
         
         ResetHpBoxes();
+        m_dashIndicatorCursor = m_actor.Status.CurrentDashCount;
+        for (int index = 0; index < m_actor.Status.MaxDashCount; index++)
+        {
+            m_dashIndicators[index].fillAmount = index < m_dashIndicatorCursor ? 1 : 0;
+        }
 
         if (m_actor != null)
         {
@@ -458,27 +463,17 @@ public class UIHUD : UIScene
         m_hackingIndicatorManager.useCustomColor = true;
         m_hackingIndicator.fillAmount = 1;
         _ = CoImageHighlightEffect(m_hackingIndicator, m_centerLayerRoot.transform);
-        // Color from = m_hackingIndicator.color;
-        // Color to = from * 1.5f;// new(from.r, 0.85f, 0.85f, 1);
-        // Utility.Lerp(from, to, 0.1f, color => m_hackingIndicator.color = color,
-        //     () =>
-        //     {
-        //         Utility.Lerp(to, from, 0.1f, color => m_hackingIndicator.color = color);
-        //     });
-        //
-        // Vector3 scaleFrom = m_centerLayerRoot.transform.localScale;
-        // Vector3 scaleTo = scaleFrom * 1.05f;
-        // Utility.Lerp(scaleFrom, scaleTo, 0.1f, scale => m_centerLayerRoot.transform.localScale = scale,
-        //     () =>
-        //     {
-        //         Utility.Lerp(scaleTo, scaleFrom, 0.1f,
-        //             scale => m_centerLayerRoot.transform.localScale = scale);
-        //     });
     }
     
     private CoroutineEx CoImageHighlightEffect(Image image, Transform root)
     {
-        return CoroutineEx.Create(this, Core());
+        Color color = image.color;
+        Vector3 scale = root.transform.localScale;
+        return CoroutineEx.Create(this, Core(), () =>
+        {
+            image.color = color;
+            root.transform.localScale = scale;
+        });
 
         IEnumerator Core()
         {

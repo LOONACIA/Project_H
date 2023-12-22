@@ -67,12 +67,12 @@ public class Alarm : MonoBehaviour
             m_currentAlarmCharacter = target;
         }
 
-        if (m_lastAlarmCharacter == m_currentAlarmCharacter && m_useDelay && m_updateTargetDelay > Time.time - m_lastAlarmTime)
+        if (m_useDelay && m_lastAlarmCharacter == m_currentAlarmCharacter && m_updateTargetDelay > Time.time - m_lastAlarmTime)
         {
             return;
         }
 
-        if (target.IsPossessed && m_useDelay && target != m_lastAlarmCharacter)
+        if (m_useDelay && target.IsPossessed && target != m_lastAlarmCharacter)
         {
             m_lastAlarmCharacter = target;
             m_lastAlarmTime = Time.time;

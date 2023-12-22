@@ -15,9 +15,6 @@ public class BlockAbility : Ability
 
     protected override void OnIdleState()
     {
-        if (!m_defaultWeapon.IsEquipped)
-        {
-            Owner.Attack.ChangeWeapon(m_defaultWeapon);
-        }
+        Owner.Attack.ChangeWeapon(m_defaultWeapon);
     }
 }
