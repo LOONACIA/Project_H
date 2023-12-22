@@ -49,7 +49,7 @@ public class Sniper : Gun
 
     private void FixedUpdate()
     {
-        if (!m_onShot && Owner.Animator.GetCurrentAnimatorStateInfo(0).IsTag("Aim"))
+        if (!m_onShot && !Owner.Animator.GetCurrentAnimatorStateInfo(0).IsTag("Aim"))
         {
             Target = Vector3.zero;
         }
