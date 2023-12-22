@@ -16,6 +16,10 @@ public class Alarm : MonoBehaviour
     private Transform m_origin;
 
     [SerializeField]
+    [Tooltip("캐릭터 변경 시, 새로운 캐릭터를 추적할 때까지의 지연 여부")]
+    private bool m_useDelay;
+
+    [SerializeField]
     [Tooltip("캐릭터 변경 시, 새로운 캐릭터를 추적할 때까지의 지연 시간")]
     private float m_updateTargetDelay = 3;
 
