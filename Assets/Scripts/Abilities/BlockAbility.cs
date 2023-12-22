@@ -22,6 +22,14 @@ public class BlockAbility : Ability
         eventProxy.RemoveHandler(nameof(OnBlockExit), OnBlockExit);
     }
 
+    protected override void OnIdleState()
+    {
+        if (m_blockWeapon.IsEquipped)
+        {
+            Owner.Attack.ChangeWeapon(m_defaultWeapon);
+        }
+    }
+
     protected override void OnActivateState()
     {
         Owner.Attack.ChangeWeapon(m_blockWeapon);

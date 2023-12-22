@@ -67,13 +67,38 @@ public class GameUIManager
         m_damageIndicator = null;
     }
     
+    public void ShowMenuUI(Action onResume, Action onMenu, Action onExit, string text = "Game Over")
+    {
+        List<Transform> children = new();
+        var ui = ManagerRoot.UI.ShowPopupUI<UIGameOver>();
+        ui.SetButtonAction(Resume, onMenu, onExit);
+        ui.SetText(text);
+        
+        foreach (Transform child in ManagerRoot.UI.Root.transform)
+        {
+            if (child != ui.transform && child.gameObject.activeSelf)
+            {
+                child.gameObject.SetActive(false);
+                children.Add(child);
+            }
+        }
+        
+        void Resume()
+        {
+            foreach (Transform child in children)
+            {
+                child.gameObject.SetActive(true);
+            }
+            ManagerRoot.UI.ClosePopupUI(ui);
+            onResume?.Invoke();
+        }
+    }
+    
     public void ShowGameOverUI(Action onRestart, Action onMenu, Action onExit, string text = "Game Over")
-    {   
+    {
         CloseSceneUI();
         
-        var ui = ManagerRoot.UI.ShowPopupUI<UIGameOver>();
-        ui.SetButtonAction(onRestart, onMenu, onExit);
-        ui.SetText(text);
+        ShowMenuUI(onRestart, onMenu, onExit, text);
     }
 
     public void ShowHpIndicator(PlayerController player)
