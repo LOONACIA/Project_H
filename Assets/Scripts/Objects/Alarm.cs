@@ -72,7 +72,7 @@ public class Alarm : MonoBehaviour
             return;
         }
 
-        if (target.IsPossessed && target != m_lastAlarmCharacter)
+        if (target.IsPossessed && m_useDelay && target != m_lastAlarmCharacter)
         {
             m_lastAlarmCharacter = target;
             m_lastAlarmTime = Time.time;
