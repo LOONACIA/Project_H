@@ -105,6 +105,8 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         }
     }
 
+    public int DashCount => m_dashCount;
+
     public event PropertyChangedEventHandler PropertyChanged;
 
     private void Start()
