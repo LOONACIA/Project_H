@@ -33,28 +33,18 @@ public class BossStageBreakGround : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.TryGetComponent<Monster>(out var monster)
-            && !monster.IsPossessed)
+            && monster.IsPossessed)
         { 
-            return;
-        }
+            m_trigger.enabled = false;
+            BreakGround();
+            m_bossStageRoot.StageStart();
 
-        m_trigger.enabled = false;
-        //ThrowPlayer(other.transform);
-        BreakGround();
-        m_bossStageRoot.StageStart();
-
-        foreach (var child in m_childrenList)
-        {
-            child.gameObject.layer = LayerMask.NameToLayer("Default");
+            foreach (var child in m_childrenList)
+            {
+                child.gameObject.layer = LayerMask.NameToLayer("Default");
+            }
         }
     }
-
-    //private void ThrowPlayer(Transform other)
-    //{
-    //    Rigidbody rb = other.GetComponent<Rigidbody>();
-
-    //    rb.AddForce(Vector3.up * 70f, ForceMode.Impulse);
-    //}
 
     private void BreakGround()
     {

@@ -75,7 +75,10 @@ public static class ConstVariables
     public const string TUTORIAL_BROKENSHURIKEN_MATERIAL_PATH = "Materials/Monster/Shooter/BlackBody";
     public const string TUTORIAL_BROKENSHURIKEN_OUTLINEMATERIAL_PATH = "Materials/Monster/BrokenBody/BrokenBodyOutline Material";
 
-    [Header("MovementCollisionLayers")]
+    [Header("CollisionLayers")]
     [Layer]
     public static readonly string[] MOVEMENT_COLLISION_LAYERS = new[] { "Ground", "Wall", "Obstacle", "Gate", "BlockPlane", "Monster" };
+    public const string LAYER_MONSTER = "Monster";
+    public const string LAYER_GROUND = "Ground";
+    public const string LAYER_WALL = "Wall";
 }
