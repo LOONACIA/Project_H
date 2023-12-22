@@ -35,6 +35,9 @@ public class BossStageSpawner : MonoBehaviour
     [SerializeField, Tooltip("소환 후 일정 시간이 지나면 다시 소환")]
     private float m_spawnInterval;
 
+    [SerializeField, Tooltip("최대 소환 횟수")]
+    private int m_maxSpawnCount;
+
     [SerializeField, Tooltip("소환 위치에 해당 레이어의 오브젝트가 존재하면 소환하지 않음")]
     private LayerMask m_layerToNotSpawnOn;
 
@@ -45,6 +48,9 @@ public class BossStageSpawner : MonoBehaviour
     private bool m_active;
 
     private float m_lastSpawnTime;
+
+    [Tooltip("현재까지 스폰한 횟수")]
+    private int m_currentSpawnCount;
 
     private Coroutine m_spawnCoroutine;
 
@@ -132,6 +138,13 @@ public class BossStageSpawner : MonoBehaviour
         if (m_currentSpawnIndex >= m_waveInfoList.Length)
             m_currentSpawnIndex = 0;
 
+        if (m_maxSpawnCount != 0
+            && m_currentSpawnCount >= m_maxSpawnCount)
+        {
+            EndSpawn();
+            return;
+        }
+        
         // 마지막 스폰 시간 저장
         m_lastSpawnTime = Time.time;
 
@@ -157,7 +170,11 @@ public class BossStageSpawner : MonoBehaviour
                 }
             }
         }
+
+
+        m_spawnDelay++;
         m_currentSpawnIndex++;
+        m_currentSpawnCount++;
     }
 
     private Vector3 GetSpawnPos()
