@@ -6,11 +6,12 @@ public class TransformCharacter : MonoBehaviour
 {
     [SerializeField]
     private Transform m_teleportPosition;
-    private Vector3 m_position;
+    public CheckPointManager m_checkPointManager;
     // Start is called before the first frame update
     void Start()
     {
-        m_position = m_teleportPosition.position;
+        m_checkPointManager = GetComponent<CheckPointManager>();
+
     }
 
     // Update is called once per frame
@@ -25,7 +26,7 @@ public class TransformCharacter : MonoBehaviour
 
         if (actor.IsPossessed)
         {
-            other.transform.position = m_position;
+            GameManager.Instance.SetSavePoint(m_teleportPosition.position);
         }
     }
 }

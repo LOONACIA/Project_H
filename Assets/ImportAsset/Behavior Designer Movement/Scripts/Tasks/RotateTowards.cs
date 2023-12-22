@@ -48,6 +48,12 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
                 var angle = Mathf.Atan2(position.y, position.x) * Mathf.Rad2Deg;
                 return Quaternion.AngleAxis(angle, Vector3.forward);
             }
+
+            if (position == Vector3.zero)
+            {
+                return Quaternion.identity;
+            }
+            
             return Quaternion.LookRotation(position);
         }
 

@@ -85,27 +85,23 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         set => SetField(ref m_isOnGround, value);
     }
 
-    public bool IsDashing { get; private set; } = false;
+    public bool IsDashing { get; private set; }
 
     public float CurrentDashCoolDown
     {
         get
         {
-            if (m_data == null)
-            {
-                Debug.LogError("MonsterMovement에 Data가 없습니다.");
-                return 0;
-            }
-
             if (m_dashCount == m_data.MaxDashCount)
             {
                 return 1;
             }
-            else
+
+            if (m_data.DashCoolTime <= 0)
             {
-                if (m_data.DashCoolTime <= 0) return 1;
-                else return Mathf.Clamp((Time.time - m_dashCooldownStartTime) / m_data.DashCoolTime, 0f, 1f);
+                return 1;
             }
+            
+            return Mathf.Clamp((Time.time - m_dashCooldownStartTime) / m_data.DashCoolTime, 0f, 1f);
         }
     }
 

@@ -1,3 +1,5 @@
+using LOONACIA.Unity;
+using LOONACIA.Unity.Diagnostics;
 using System;
 using System.IO;
 using LOONACIA.Unity.Managers;
@@ -48,6 +50,7 @@ public class GameManager : MonoBehaviour
 
     public bool IsGameOver { get; private set; }
 
+    public Vector3 savePoint;
     public static GameManager Instance
     {
         get
@@ -59,6 +62,8 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        Application.targetFrameRate = 60;
+        
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
@@ -191,5 +196,10 @@ public class GameManager : MonoBehaviour
         s_isApplicationQuitting = true;
         Application.logMessageReceived -= s_instance.OnLogMessageReceived;
         SceneManagerEx.SceneChanging -= s_instance.OnSceneChanging;
+    }
+
+    public void SetSavePoint(Vector3 savePosition)
+    {
+        savePoint = savePosition;
     }
 }

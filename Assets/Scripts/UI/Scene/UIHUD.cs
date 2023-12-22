@@ -81,6 +81,8 @@ public class UIHUD : UIScene
     
     private Image m_hackingIndicator;
 
+    private UIManagerImage m_hackingIndicatorManager;
+
     private int m_hpBoxCursor;
 
     private int m_backLayerCursor;
@@ -149,6 +151,7 @@ public class UIHUD : UIScene
         
         m_crosshair = Get<Image, Images>(Images.Crosshair);
         m_hackingIndicator = Get<Image, Images>(Images.HackingIndicator);
+        m_hackingIndicatorManager = m_hackingIndicator.GetComponent<UIManagerImage>();
 
         m_backLayerRoot = m_backPanel.gameObject.FindChild("Root");
         m_frontLayerRoot = m_frontPanel.gameObject.FindChild("Root");
@@ -187,8 +190,11 @@ public class UIHUD : UIScene
             return;
         }
         
-        processor.TargetHit += OnTargetHit;
+        processor.ShurikenThrown += OnShurikenThrown;
+        processor.HackStarted += OnHackStarted;
         processor.Possessable += OnPossessable;
+        processor.Possessing += OnPossessing;
+        processor.Possessed += OnPossessed;
     }
 
     private void UnregisterEvents(PossessionProcessor processor)
@@ -198,8 +204,11 @@ public class UIHUD : UIScene
             return;
         }
         
-        processor.TargetHit -= OnTargetHit;
+        processor.ShurikenThrown -= OnShurikenThrown;
+        processor.HackStarted -= OnHackStarted;
         processor.Possessable -= OnPossessable;
+        processor.Possessing -= OnPossessing;
+        processor.Possessed -= OnPossessed;
     }
 
     private void UnregisterEvents(PlayerController controller)
@@ -263,6 +272,12 @@ public class UIHUD : UIScene
             Monster { Attack: { CurrentWeapon: Sniper } } => Vector3.one,
             _ => Vector3.one * 1.25f
         };
+    }
+    
+    private void ClearHackingIndicator()
+    {
+        m_hackingIndicatorCoroutine?.Abort();
+        m_hackingIndicator.fillAmount = 0;
     }
 
     private void ResetHpBoxes()
@@ -360,16 +375,26 @@ public class UIHUD : UIScene
         rectTransform.localScale = new(scale, 1, 1);
     }
     
+    private void OnPossessing(object sender, EventArgs e)
+    {
+        ClearHackingIndicator();
+    }
+    
+    private void OnPossessed(object sender, Actor e)
+    {
+        ClearHackingIndicator();
+    }
+    
     private void OnPossessable(object sender, EventArgs e)
     {
+        m_hackingIndicatorManager.useCustomColor = true;
         m_hackingIndicator.fillAmount = 1;
         Color from = m_hackingIndicator.color;
-        Color to = new(from.r, 0.85f, 0.85f, 1);
+        Color to = from * 1.5f;// new(from.r, 0.85f, 0.85f, 1);
         Utility.Lerp(from, to, 0.1f, color => m_hackingIndicator.color = color,
             () =>
             {
-                Utility.Lerp(to, from, 0.1f,
-                    color => m_hackingIndicator.color = color);
+                Utility.Lerp(to, from, 0.1f, color => m_hackingIndicator.color = color);
             });
         
         Vector3 scaleFrom = m_centerLayerRoot.transform.localScale;
@@ -381,8 +406,15 @@ public class UIHUD : UIScene
                     scale => m_centerLayerRoot.transform.localScale = scale);
             });
     }
+    
+    private void OnShurikenThrown(object sender, EventArgs e)
+    {
+        m_hackingIndicatorManager.useCustomColor = false;
+        m_hackingIndicatorManager.colorType = UIManagerImage.ColorType.Negative;
+        m_hackingIndicator.fillAmount = 0;
+    }
 
-    private void OnTargetHit(object sender, float e)
+    private void OnHackStarted(object sender, float e)
     {
         m_hackingIndicatorCoroutine?.Abort();
         m_hackingIndicatorCoroutine = CoroutineEx.Create(this, CoHackingIndicator(e));
@@ -399,5 +431,7 @@ public class UIHUD : UIScene
         }
 
         m_hackingIndicator.fillAmount = 1f;
+        m_hackingIndicatorManager.useCustomColor = false;
+        m_hackingIndicatorManager.colorType = UIManagerImage.ColorType.Accent;
     }
 }
