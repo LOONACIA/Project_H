@@ -526,13 +526,13 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
             {
                 continue;
             }
-            if (cols[i].gameObject.layer == LayerMask.NameToLayer("Monster"))
+            if (cols[i].gameObject.layer == LayerMask.NameToLayer(ConstVariables.LAYER_MONSTER))
             {
                 //몬스터와 만났을 경우 이동하지 않는다.
                 ArrayPool<Collider>.Shared.Return(cols);
                 return;
             }
-            if (cols[i].gameObject.layer == LayerMask.NameToLayer("Wall"))
+            if (cols[i].gameObject.layer == LayerMask.NameToLayer(ConstVariables.LAYER_WALL))
             {
                 //벽과 충돌했을 경우 속도 낮춤
                 nextSpeed = m_dashSpeed * 0.8f;
@@ -542,7 +542,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
 
         //2.2. 캡슐캐스트를 발사, 몬스터와 충돌 시 그 위치까지만 이동합니다.
         if (Physics.CapsuleCast(p1, p2, m_collider.radius - 0.01f, m_dashDirection, out var hit,
-                m_dashSpeed * Time.fixedDeltaTime, LayerMask.GetMask("Monster")))
+                m_dashSpeed * Time.fixedDeltaTime, LayerMask.GetMask(ConstVariables.LAYER_MONSTER)))
         {
             m_rigidbody.MovePosition(transform.position + m_dashDirection * hit.distance);
             return;
