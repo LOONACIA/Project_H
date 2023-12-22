@@ -67,7 +67,7 @@ public class Alarm : MonoBehaviour
             m_currentAlarmCharacter = target;
         }
 
-        if (m_lastAlarmCharacter == m_currentAlarmCharacter && m_updateTargetDelay > Time.time - m_lastAlarmTime)
+        if (m_lastAlarmCharacter == m_currentAlarmCharacter && m_useDelay && m_updateTargetDelay > Time.time - m_lastAlarmTime)
         {
             return;
         }
