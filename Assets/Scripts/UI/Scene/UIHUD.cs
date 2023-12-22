@@ -12,12 +12,19 @@ using UnityEngine.UI;
 
 public class UIHUD : UIScene
 {
+    private enum Canvases
+    {
+        BottomLayer,
+        CenterLayer,
+    }
+    
     private enum Panels
     {
         BackgroundPanel,
         BackPanel,
         FrontPanel,
-        CenterPanel
+        HackingPanel,
+        DashPanel
     }
 
     private enum Texts
@@ -28,7 +35,11 @@ public class UIHUD : UIScene
     private enum Images
     {
         Crosshair,
-        HackingIndicator
+        HackingIndicator,
+        
+        // 이 밑으로는 Dash Indicator만 사용
+        FirstDashIndicator,
+        SecondDashIndicator,
     }
 
     private enum Presenters
@@ -56,13 +67,15 @@ public class UIHUD : UIScene
 
     private PossessionProcessor m_processor;
     
+    private Actor m_actor;
+    
     private GameObject m_backgroundPanel;
 
     private GameObject m_backPanel;
     
     private GameObject m_frontPanel;
     
-    private GameObject m_centerPanel;
+    private GameObject m_hackingPanel;
 
     private TextMeshProUGUI m_hpTextBox;
 
@@ -72,7 +85,7 @@ public class UIHUD : UIScene
 
     private GameObject m_frontLayerRoot;
 
-    // Center Layer의 Scale을 조절하기 위한 객체
+    // Center Panel의 Scale을 조절하기 위한 객체
     private GameObject m_centerLayerRoot;
     
     private ProgressBar m_abilityPresenter;
@@ -82,16 +95,22 @@ public class UIHUD : UIScene
     private Image m_hackingIndicator;
 
     private UIManagerImage m_hackingIndicatorManager;
+    
+    private Image[] m_dashIndicators;
 
     private int m_hpBoxCursor;
 
     private int m_backLayerCursor;
+    
+    private int m_dashIndicatorCursor;
 
     private CoroutineEx m_hpChangingEffectCoroutine;
     
     private CoroutineEx m_colorChangeEffectCoroutine;
     
     private CoroutineEx m_hackingIndicatorCoroutine;
+    
+    private CoroutineEx m_dashIndicatorCoroutine;
 
     private void OnEnable()
     {
@@ -134,6 +153,7 @@ public class UIHUD : UIScene
 
     protected override void Init()
     {
+        Bind<Canvas, Canvases>();
         Bind<GameObject, Panels>();
         Bind<TextMeshProUGUI, Texts>();
         Bind<ProgressBar, Presenters>();
@@ -142,7 +162,7 @@ public class UIHUD : UIScene
         m_backgroundPanel = Get<GameObject, Panels>(Panels.BackgroundPanel);
         m_backPanel = Get<GameObject, Panels>(Panels.BackPanel);
         m_frontPanel = Get<GameObject, Panels>(Panels.FrontPanel);
-        m_centerPanel = Get<GameObject, Panels>(Panels.CenterPanel);
+        m_hackingPanel = Get<GameObject, Panels>(Panels.HackingPanel);
 
         m_hpTextBox = Get<TextMeshProUGUI, Texts>(Texts.HpText);
         m_hpText = m_hpTextBox.GetComponent<UIManagerText>();
@@ -155,7 +175,14 @@ public class UIHUD : UIScene
 
         m_backLayerRoot = m_backPanel.gameObject.FindChild("Root");
         m_frontLayerRoot = m_frontPanel.gameObject.FindChild("Root");
-        m_centerLayerRoot = m_centerPanel.gameObject.FindChild("Root");
+        m_centerLayerRoot = Get<Canvas, Canvases>(Canvases.CenterLayer).gameObject.FindChild("Root");
+
+        int childCount = Enum.GetValues(typeof(Images)).Length - (int)Images.FirstDashIndicator;
+        m_dashIndicators = new Image[childCount];
+        for (int index = 0; index < childCount; index++)
+        {
+            m_dashIndicators[index] = Get<Image, Images>(Images.FirstDashIndicator + index);
+        }
     }
 
     private void RegisterEvents(PlayerController controller)
@@ -226,9 +253,54 @@ public class UIHUD : UIScene
 
     private void OnCharacterChanged(object sender, Actor e)
     {
+        if (m_actor != null)
+        {
+            m_actor.Status.DashCountChanged -= OnDashCountChanged;
+            m_actor.Status.DashCoolTimeChanged -= OnDashCoolTimeChanged;
+        }
+        
+        m_actor = e;
+        
         ResetHpBoxes();
+        m_dashIndicatorCursor = m_actor.Status.CurrentDashCount;
+        for (int index = 0; index < m_actor.Status.MaxDashCount; index++)
+        {
+            m_dashIndicators[index].fillAmount = index < m_dashIndicatorCursor ? 1 : 0;
+        }
+
+        if (m_actor != null)
+        {
+            m_actor.Status.DashCountChanged += OnDashCountChanged;
+            m_actor.Status.DashCoolTimeChanged += OnDashCoolTimeChanged;
+        }
     }
-    
+
+    private void OnDashCoolTimeChanged(object sender, float e)
+    {
+        m_dashIndicators[m_dashIndicatorCursor].fillAmount = e;
+    }
+
+    private void OnDashCountChanged(object sender, int e)
+    {
+        m_dashIndicatorCoroutine?.Abort();
+        if (m_dashIndicatorCursor < m_dashIndicators.Length)
+        {
+            m_dashIndicatorCoroutine = CoImageHighlightEffect(m_dashIndicators[m_dashIndicatorCursor], m_dashIndicators[m_dashIndicatorCursor].transform.parent);
+        }
+        
+        m_dashIndicatorCursor = e;
+        
+        if (m_dashIndicatorCursor + 1 < m_dashIndicators.Length)
+        {
+            m_dashIndicators[m_dashIndicatorCursor + 1].fillAmount = 0;
+        }
+        
+        if (m_dashIndicatorCursor < m_dashIndicators.Length)
+        {
+            m_dashIndicators[m_dashIndicatorCursor].fillAmount = 0;
+        }
+    }
+
     private void OnDamaged(object sender, in AttackInfo e)
     {
         m_colorChangeEffectCoroutine?.Abort();
@@ -242,7 +314,8 @@ public class UIHUD : UIScene
         m_crosshair.gameObject.SetActive(isActive);
         m_hpText.gameObject.SetActive(isActive);
         m_backgroundPanel.SetActive(isActive);
-        m_centerPanel.SetActive(isActive);
+        m_hackingPanel.SetActive(isActive);
+        m_centerLayerRoot.SetActive(isActive);
 
         m_hpTextBox.text = e.ToString();
     }
@@ -389,22 +462,43 @@ public class UIHUD : UIScene
     {
         m_hackingIndicatorManager.useCustomColor = true;
         m_hackingIndicator.fillAmount = 1;
-        Color from = m_hackingIndicator.color;
-        Color to = from * 1.5f;// new(from.r, 0.85f, 0.85f, 1);
-        Utility.Lerp(from, to, 0.1f, color => m_hackingIndicator.color = color,
-            () =>
-            {
-                Utility.Lerp(to, from, 0.1f, color => m_hackingIndicator.color = color);
-            });
+        _ = CoImageHighlightEffect(m_hackingIndicator, m_centerLayerRoot.transform);
+    }
+    
+    private CoroutineEx CoImageHighlightEffect(Image image, Transform root)
+    {
+        Color color = image.color;
+        Vector3 scale = root.transform.localScale;
+        return CoroutineEx.Create(this, Core(), () =>
+        {
+            image.color = color;
+            root.transform.localScale = scale;
+        });
+
+        IEnumerator Core()
+        {
+            Color colorFrom = image.color;
+            Color colorTo = colorFrom * 1.5f;// new(from.r, 0.85f, 0.85f, 1);
+            Vector3 scaleFrom = root.transform.localScale;
+            Vector3 scaleTo = scaleFrom * 1.05f;
+            
+            yield return CoHighlightEffect(colorFrom, colorTo, scaleFrom, scaleTo);
+            yield return CoHighlightEffect(colorTo, colorFrom, scaleTo, scaleFrom);
+        }
         
-        Vector3 scaleFrom = m_centerLayerRoot.transform.localScale;
-        Vector3 scaleTo = scaleFrom * 1.05f;
-        Utility.Lerp(scaleFrom, scaleTo, 0.1f, scale => m_centerLayerRoot.transform.localScale = scale,
-            () =>
+        IEnumerator CoHighlightEffect(Color colorFrom, Color colorTo, Vector3 scaleFrom, Vector3 scaleTo)
+        {
+            float timer = 0;
+            while (timer < 0.1f)
             {
-                Utility.Lerp(scaleTo, scaleFrom, 0.1f,
-                    scale => m_centerLayerRoot.transform.localScale = scale);
-            });
+                image.color = Color.Lerp(colorFrom, colorTo, timer / 0.1f);
+                root.transform.localScale = Vector3.Lerp(scaleFrom, scaleTo, timer / 0.1f);
+                yield return m_waitForEndOfFrameCache;
+                timer += Time.deltaTime;
+            }
+            image.color = colorTo;
+            root.transform.localScale = scaleTo;
+        }
     }
     
     private void OnShurikenThrown(object sender, EventArgs e)

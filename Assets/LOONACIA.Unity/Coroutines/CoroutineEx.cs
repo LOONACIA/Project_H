@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -8,6 +9,8 @@ namespace LOONACIA.Unity.Coroutines
         private readonly MonoBehaviour _root;
 
         private Coroutine _handler;
+
+        private Action _callback;
 
         private CoroutineEx(MonoBehaviour root)
         {
@@ -22,6 +25,14 @@ namespace LOONACIA.Unity.Coroutines
             coroutineEx.Start(routine);
             return coroutineEx;
         }
+        
+        public static CoroutineEx Create(MonoBehaviour root, IEnumerator routine, Action callback)
+        {
+            CoroutineEx coroutineEx = new(root);
+            coroutineEx._callback = callback;
+            coroutineEx.Start(routine);
+            return coroutineEx;
+        }
 
         public void Abort()
         {
@@ -31,6 +42,7 @@ namespace LOONACIA.Unity.Coroutines
             }
 
             _root.StopCoroutine(_handler);
+            _callback?.Invoke();
             _handler = null;
             IsRunning = false;
         }
@@ -47,6 +59,7 @@ namespace LOONACIA.Unity.Coroutines
             yield return _handler;
             _handler = null;
             IsRunning = false;
+            _callback?.Invoke();
         }
     }
 }

@@ -15,9 +15,23 @@ public class Alarm : MonoBehaviour
     [Tooltip("수신자를 감지하는 원점")]
     private Transform m_origin;
 
+    [SerializeField]
+    [Tooltip("캐릭터 변경 시, 새로운 캐릭터를 추적할 때까지의 지연 여부")]
+    private bool m_useDelay;
+
+    [SerializeField]
+    [Tooltip("캐릭터 변경 시, 새로운 캐릭터를 추적할 때까지의 지연 시간")]
+    private float m_updateTargetDelay = 3;
+
     private BoxCollider m_collider;
 
     private bool m_hasBoxCollider;
+
+    private Actor m_lastAlarmCharacter;
+
+    private Actor m_currentAlarmCharacter;
+
+    private float m_lastAlarmTime;
 
     [field: SerializeField]
     [Tooltip("원점에 BoxCollider가 있을 경우 BoxCollider를 사용하여 수신자를 감지합니다.")]
@@ -48,6 +62,23 @@ public class Alarm : MonoBehaviour
 
     public void Trigger(Actor target)
     {
+        if (target.IsPossessed)
+        {
+            m_currentAlarmCharacter = target;
+        }
+
+        if (m_useDelay && m_lastAlarmCharacter == m_currentAlarmCharacter && m_updateTargetDelay > Time.time - m_lastAlarmTime)
+        {
+            return;
+        }
+
+        if (m_useDelay && target.IsPossessed && target != m_lastAlarmCharacter)
+        {
+            m_lastAlarmCharacter = target;
+            m_lastAlarmTime = Time.time;
+            return;
+        }
+
         PooledList<Monster> recipients;
 
         if (m_hasBoxCollider)

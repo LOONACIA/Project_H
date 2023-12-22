@@ -53,14 +53,7 @@ public class TrailCaster : MonoBehaviour
 
     [SerializeField]
     private float m_gizmoRadius = 0.05f;
-
-    [Header("파티클")]
-    [SerializeField]
-    private bool m_useEffect = false;
-
-    [SerializeField]
-    private VisualEffect m_attackParticle;
-
+    
     #endregion
 
     private void Awake()

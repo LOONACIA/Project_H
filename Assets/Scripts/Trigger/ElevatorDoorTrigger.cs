@@ -36,10 +36,6 @@ public class ElevatorDoorTrigger : MonoBehaviour
         {
             elevator.ElevatorMoveEnd += OnElevatorMoveEnd;
         }
-        else
-        {
-            m_isTriggered = true;
-        }
     }
 
     private void OnDisable()
