@@ -47,10 +47,16 @@ public class Sniper : Gun
 
     private void FixedUpdate()
     {
+        if (Target == default)
+        {
+            m_renderer.positionCount = 0;
+        }
+        
         if (!IsAttacking)
         {
             UpdateLine();
         }
+        Debug.DrawRay(GetRay().origin, Vector3.forward * 100f, Color.red);
     }
 
     protected override void OnEquipped()
@@ -85,7 +91,7 @@ public class Sniper : Gun
             target = ray.GetPoint(m_maxDistance);
         }
 
-        Target = Vector3.zero;
+        m_target = Vector3.zero;
         DrawLine(target);
     }
 
