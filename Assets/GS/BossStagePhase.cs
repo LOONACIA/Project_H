@@ -160,14 +160,7 @@ public class BossStagePhase : MonoBehaviour
         if (charater == null)
             yield break;
 
-        while (true)
-        {
-            if (m_phaseTrigger.IsInArea(charater.transform.position)
-                /*&& charater.Movement.IsOnGround*/)
-               break;
-
-            yield return null;
-        }
+        yield return new WaitUntil(() => m_phaseTrigger.IsInArea(charater.transform.position) == true);
 
         StartPhase();
     }
@@ -176,17 +169,11 @@ public class BossStagePhase : MonoBehaviour
     { 
         yield return new WaitForSeconds(m_spawnDelay);
 
-        //var charater = m_character as Monster;
-        //if (charater == null)
-        //    yield break;
+        var charater = m_character as Monster;
+        if (charater == null)
+            yield break;
 
-        //while (true)
-        //{
-        //    if (charater.Movement.IsOnGround)
-        //        break;
-
-        //    yield return null;
-        //}
+        yield return new WaitUntil(() => charater.Movement.IsOnGround == true);
 
         m_spawner.StartSpawn();
     }
