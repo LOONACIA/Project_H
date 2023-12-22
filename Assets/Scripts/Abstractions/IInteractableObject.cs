@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using static InteractableObject;
 
 public interface IInteractableObject
 {
@@ -7,7 +8,7 @@ public interface IInteractableObject
 
     bool IsInteractable { get; }
     
-    event EventHandler Interacted;
+    event EventHandler<Transform> Interacted;
     
     void Interact(Actor actor, IProgress<float> onProgress, Action onComplete);
     
