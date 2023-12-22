@@ -165,14 +165,13 @@ public class BossStageSpawner : MonoBehaviour
         // 도넛 형태에서 좌표 반환
         m_character = GameManager.Character.Controller.Character;
 
-        // temp
         float spawnHeight = 5;
         float constHeight = 2f;
         float constRadius = 0.5f;
 
         for (int i = 0; i < m_maxSpawnAttemp; i++)
         {
-            Vector2 randomXZPos = Random.insideUnitCircle * Random.Range(m_minSpawnRadius, m_maxSpawnRadius);
+            Vector2 randomXZPos = Random.insideUnitCircle.normalized * Random.Range(m_minSpawnRadius, m_maxSpawnRadius);
             Vector3 spawnPos = new Vector3(randomXZPos.x, 0, randomXZPos.y);
             spawnPos.y = spawnHeight;
             spawnPos += m_character.transform.position;

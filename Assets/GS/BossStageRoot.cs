@@ -1,4 +1,5 @@
 using System;
+using System.Transactions;
 using UnityEngine;
 
 public class BossStageRoot : MonoBehaviour
@@ -9,10 +10,16 @@ public class BossStageRoot : MonoBehaviour
     private BossStagePhase[] m_bossStagePhaseList;
 
     [SerializeField, Tooltip("플레이어를 날려버릴 위치")]
-    private Vector3 m_throwPosition;
+    private Transform m_throwPosition;
+
+    [SerializeField, Tooltip("플레이어를 날려버릴떄 이동, 대쉬 불가능하게 만드는 시간")]
+    private float m_throwKnockDownTime;
 
     [SerializeField]
     private GameObject m_fence;
+
+    [SerializeField]
+    private GameObject m_detectionLight;
 
     private Actor m_character;
 
@@ -41,9 +48,11 @@ public class BossStageRoot : MonoBehaviour
         ThrowPlayer();
         
         // Stage 주변을 감쌀 울타리 활성화
-        m_fence.SetActive(true);
+        m_fence?.SetActive(true);
 
-        m_bossStagePhaseList[m_currentPhase].ReadyPhase();
+        m_detectionLight?.SetActive(true);
+
+        m_bossStagePhaseList[m_currentPhase]?.ReadyPhase();
     }
 
     private void NextPhase(object sender, EventArgs e)
@@ -59,36 +68,24 @@ public class BossStageRoot : MonoBehaviour
 
     private void StageClear()
     {
-        // 클리어
         boss.Kill();
-        Debug.Log("game clear");
     }
 
     private void ThrowPlayer()
     {
         if (m_character.TryGetComponent<ActorStatus>(out var status))
         {
+            status.SetKnockDown(m_throwKnockDownTime);
             status.IsFlying = true;
         }
 
         if (m_character.TryGetComponent<Rigidbody>(out var rigidbody))
-        { 
-            var direction = (m_throwPosition - transform.position).normalized;
-            var force = Vector3.Distance(m_throwPosition, transform.position);
+        {
+            var targetVector = m_throwPosition.position - transform.position;
+            var direction = targetVector.normalized;
+            var force = targetVector.magnitude;
 
             rigidbody.AddForce(direction * force, ForceMode.VelocityChange);
-        }
-    }
-
-    // test
-    private bool active;
-    private void Update()
-    {
-
-        if (Input.GetKey(KeyCode.Alpha0)) 
-        {
-            active = false;
-            boss.Kill();
         }
     }
 }
