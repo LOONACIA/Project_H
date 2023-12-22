@@ -2,6 +2,7 @@ using System;
 using Cinemachine;
 using LOONACIA.Unity;
 using LOONACIA.Unity.Managers;
+using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(PossessionProcessor))]
@@ -111,7 +112,10 @@ public partial class PlayerController : MonoBehaviour
         m_interactableObject = m_character.GetClosestInteractableObject();
         if (m_interactableObject != null && m_interactableObject.IsInteractable)
         {
-            string text = m_inputActions.Character.Interact.activeControl?.displayName ?? string.Empty;
+            string text = m_inputActions.Character.Interact.bindings
+                .SingleOrDefault(binding => binding.groups.Equals(ManagerRoot.Input.CurrentControlScheme))
+                .ToDisplayString();
+            //string text = m_inputActions.Character.Interact.activeControl?.displayName ?? string.Empty;
             m_interactProgress ??= GameManager.UI.ShowProgressRing(UIProgressRing.TextDisplayMode.Text, text);
         }
         else if (!m_isOnInteracting)

@@ -38,6 +38,10 @@ public class GameManager : MonoBehaviour
 
     private GameUIManager m_ui = new();
 
+#if PLATFORM_STANDALONE_WIN
+    private uint m_stickyKeysFlags;
+#endif
+
     public static ActorManager Actor => Instance.m_actor;
 
     public static CameraManager Camera => Instance.m_camera;
@@ -65,6 +69,9 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+#if PLATFORM_STANDALONE_WIN
+        m_stickyKeysFlags = NativeMethods.DisableStickyKeys();
+#endif
         Cursor.lockState = CursorLockMode.Locked;
 
         if (m_settings == null)
@@ -192,6 +199,9 @@ public class GameManager : MonoBehaviour
 
     private void OnDestroy()
     {
+#if PLATFORM_STANDALONE_WIN
+        NativeMethods.RestoreStickyKeys(m_stickyKeysFlags);
+#endif
         s_isApplicationQuitting = true;
         Application.logMessageReceived -= s_instance.OnLogMessageReceived;
         SceneManagerEx.SceneChanging -= s_instance.OnSceneChanging;
@@ -199,6 +209,9 @@ public class GameManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
+#if PLATFORM_STANDALONE_WIN
+        NativeMethods.RestoreStickyKeys(m_stickyKeysFlags);
+#endif
         s_isApplicationQuitting = true;
         Application.logMessageReceived -= s_instance.OnLogMessageReceived;
         SceneManagerEx.SceneChanging -= s_instance.OnSceneChanging;

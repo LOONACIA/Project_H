@@ -245,7 +245,7 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
                 {
                     ""name"": """",
                     ""id"": ""a5b4a77b-ac09-48ec-afbc-25e23eb0577e"",
-                    ""path"": ""<Keyboard>/r"",
+                    ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
@@ -311,7 +311,7 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
                 {
                     ""name"": """",
                     ""id"": ""87bf689f-c7ab-4a09-998a-9002726b4b34"",
-                    ""path"": ""<Keyboard>/e"",
+                    ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
@@ -333,7 +333,7 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
                 {
                     ""name"": """",
                     ""id"": ""43d378d2-ab0c-419f-a943-971c4ab434db"",
-                    ""path"": ""<Keyboard>/t"",
+                    ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
