@@ -28,6 +28,11 @@ public class MovePlayer : MonoBehaviour
 
         if (actor.IsPossessed)
         {
+            if (actor.TryGetComponent<Rigidbody>(out var rigidbody))
+            {
+                rigidbody.velocity = Vector3.zero;
+            }
+
             other.transform.position = GameManager.Instance.savePoint;
         }
     }
