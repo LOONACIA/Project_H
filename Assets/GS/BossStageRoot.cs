@@ -71,8 +71,7 @@ public class BossStageRoot : MonoBehaviour
         boss.Kill();
     }
 
-    private void ThrowPlayer()
-    {
+    private void ThrowPlayer()    {
         if (m_character.TryGetComponent<ActorStatus>(out var status))
         {
             status.SetKnockDown(m_throwKnockDownTime);

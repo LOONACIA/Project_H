@@ -156,11 +156,11 @@ public class BossStagePhase : MonoBehaviour
     /// <returns></returns>
     private IEnumerator IE_WaitForStageReady()
     {
-        var charater = m_character as Monster;
+        var charater = GameManager.Character.Controller.Character as Monster;
         if (charater == null)
             yield break;
 
-        yield return new WaitUntil(() => m_phaseTrigger.IsInArea(charater.transform.position) == true);
+        yield return new WaitUntil(() => m_phaseTrigger?.IsInArea(charater.transform.position) == true);
 
         StartPhase();
     }
@@ -169,7 +169,7 @@ public class BossStagePhase : MonoBehaviour
     { 
         yield return new WaitForSeconds(m_spawnDelay);
 
-        var charater = m_character as Monster;
+        var charater = GameManager.Character.Controller.Character as Monster;
         if (charater == null)
             yield break;
 
@@ -191,7 +191,7 @@ public class BossStagePhase : MonoBehaviour
         Explode(interactedTransform);
 
         // 몬스터 사망 처리
-        foreach (var monster in m_spawner.Monsters.ToArray())
+        foreach (var monster in m_spawner.Monsters.Where((monster) => monster.IsPossessed == false).ToArray())
         {
             monster.Health.Kill();
         }
