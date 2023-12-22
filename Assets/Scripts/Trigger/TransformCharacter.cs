@@ -9,7 +9,8 @@ public class TransformCharacter : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        if (m_teleportPosition == null)
+            m_teleportPosition = transform;
     }
 
     // Update is called once per frame
