@@ -47,16 +47,14 @@ public class Sniper : Gun
 
     private void FixedUpdate()
     {
-        if (Target == default)
+        if (Owner.Animator.GetCurrentAnimatorStateInfo(0).IsTag("Aim"))
         {
-            m_renderer.positionCount = 0;
+            Target = Vector3.zero;
         }
-        
-        if (!IsAttacking)
+        if (State is not (WeaponState.Attack or WeaponState.Recovery))
         {
             UpdateLine();
         }
-        Debug.DrawRay(GetRay().origin, Vector3.forward * 100f, Color.red);
     }
 
     protected override void OnEquipped()
