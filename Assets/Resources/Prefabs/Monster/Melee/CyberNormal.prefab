@@ -3190,6 +3190,39 @@ Transform:
   m_Father: {fileID: 8158779624867886696}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7898310966031769824
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 2362090466680621552, guid: c2b5094ad6bd8a148b10d12e0d434598,
+    type: 3}
+  m_PrefabInstance: {fileID: 6359674721497114062}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8684574735050746943}
+  m_Layer: 0
+  m_Name: 'Weapon (Missing Prefab with guid: c2b5094ad6bd8a148b10d12e0d434598)'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8684574735050746943
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 2362090466680621553, guid: c2b5094ad6bd8a148b10d12e0d434598,
+    type: 3}
+  m_PrefabInstance: {fileID: 6359674721497114062}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7898310966031769824}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 587184760550423190}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7981616727642032819
 GameObject:
   m_ObjectHideFlags: 0
@@ -3690,6 +3723,7 @@ MonoBehaviour:
   m_isKnockBack: 0
   m_shield: {fileID: 0}
   m_skillCoolTime: 0
+  m_currentDashCount: 0
   <IsStunned>k__BackingField: 0
 --- !u!114 &301507556
 MonoBehaviour:
@@ -4273,12 +4307,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c2b5094ad6bd8a148b10d12e0d434598, type: 3}
---- !u!4 &8684574735050746943 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2362090466680621553, guid: c2b5094ad6bd8a148b10d12e0d434598,
-    type: 3}
-  m_PrefabInstance: {fileID: 6359674721497114062}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6655078458774948983
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6186,11 +6214,6 @@ PrefabInstance:
       propertyPath: m_trailCaster
       value: 
       objectReference: {fileID: 5839544505233474380}
-    - target: {fileID: 8987307335564648448, guid: 9b7536b24a4e48845b3235888a3218c3,
-        type: 3}
-      propertyPath: <Damage>k__BackingField
-      value: 7
-      objectReference: {fileID: 0}
     - target: {fileID: 9044294812066363644, guid: 9b7536b24a4e48845b3235888a3218c3,
         type: 3}
       propertyPath: m_LocalPosition.x
