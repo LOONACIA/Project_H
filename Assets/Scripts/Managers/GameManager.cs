@@ -1,3 +1,5 @@
+using LOONACIA.Unity;
+using LOONACIA.Unity.Diagnostics;
 using System;
 using System.IO;
 using LOONACIA.Unity.Managers;
@@ -60,6 +62,8 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        Application.targetFrameRate = 60;
+        
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 

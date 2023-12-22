@@ -30,6 +30,11 @@ public class PossessionProcessor : MonoBehaviour
     private CoroutineEx m_possessionCoroutine;
 
     public float CoolTime => Mathf.Min(m_currentCoolTime / ConstVariables.SHURIKEN_COOLTIME, 1f);
+    
+    /// <summary>
+    /// 표창을 던질 때 발생하는 이벤트.
+    /// </summary>
+    public event EventHandler ShurikenThrown;
 
     /// <summary>
     /// 빙의 타겟 선정에 성공할 경우, 빙의 시작 시 발생하는 이벤트.
@@ -47,7 +52,12 @@ public class PossessionProcessor : MonoBehaviour
     public event EventHandler<float> TargetHit;
 
     /// <summary>
-    /// 빙의 가능한 상태일 경우 발생하는 이벤트.
+    /// 해킹을 시작할 때 발생하는 이벤트. 해킹에 필요한 시간이 전달됨.
+    /// </summary>
+    public event EventHandler<float> HackStarted;
+
+    /// <summary>
+    /// 해킹이 완료되어 빙의가 가능할 때 발생하는 이벤트.
     /// </summary>
     public event EventHandler Possessable;
 
@@ -158,6 +168,8 @@ public class PossessionProcessor : MonoBehaviour
         {
             m_shuriken.InitSetting(cameraPivot.transform.forward, m_sender, OnTargetHit);
         }
+        
+        ShurikenThrown?.Invoke(this, EventArgs.Empty);
 
         #region Legacy
 
@@ -184,7 +196,16 @@ public class PossessionProcessor : MonoBehaviour
     private void TryHacking(Actor target)
     {
         target.Health.TakeDamage(new(m_sender.gameObject, target.Health, 0, Vector3.zero, Vector3.zero));
+        
+        // 해킹이 불가능한 Actor라면
+        if (!target.Data.CanHack)
+        {
+            // return
+            return;
+        }
+        
         target.PlayHackAnimation();
+        HackStarted?.Invoke(this, target.Data.PossessionRequiredTime);
         m_possessionCoroutine = CoroutineEx.Create(this, CoWaitForPossession(target.Data.PossessionRequiredTime));
     }
 
