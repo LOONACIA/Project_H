@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour
     private static string s_logFilePath;
     
     private static bool s_isApplicationQuitting;
+    
+    public Vector3 savePoint;
 
     private GameSettings m_settings;
 
@@ -49,8 +51,7 @@ public class GameManager : MonoBehaviour
     public static GameUIManager UI => Instance.m_ui;
 
     public bool IsGameOver { get; private set; }
-
-    public Vector3 savePoint;
+    
     public static GameManager Instance
     {
         get
@@ -62,8 +63,6 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        Application.targetFrameRate = 60;
-        
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
