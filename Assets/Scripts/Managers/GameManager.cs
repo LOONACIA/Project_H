@@ -72,7 +72,6 @@ public class GameManager : MonoBehaviour
 #if PLATFORM_STANDALONE_WIN
         m_stickyKeysFlags = NativeMethods.DisableStickyKeys();
 #endif
-        Cursor.lockState = CursorLockMode.Locked;
 
         if (m_settings == null)
         {
@@ -96,6 +95,31 @@ public class GameManager : MonoBehaviour
             onExit: Application.Quit
 #endif
         );
+    }
+
+    public void Pause(Action onResume = null)
+    {
+        Time.timeScale = 0;
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        UI.ShowMenuUI(onResume: Resume,
+            onMenu: () => SceneManagerEx.LoadScene("TitleScene"),
+#if UNITY_EDITOR
+            onExit: () => UnityEditor.EditorApplication.isPlaying = false,
+#else
+            onExit: Application.Quit,
+#endif
+            text: "Menu"
+        );
+        return;
+        
+        void Resume()
+        {
+            Time.timeScale = 1;
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            onResume?.Invoke();
+        }
     }
 
     public void SetGameOver()

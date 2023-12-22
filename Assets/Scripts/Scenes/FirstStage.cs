@@ -11,6 +11,7 @@ public class FirstStage : MonoBehaviour
     private void Awake()
     {
         Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void Start()
