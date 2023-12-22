@@ -38,11 +38,6 @@ public abstract class Weapon : MonoBehaviour
         get => m_state;
         private set
         {
-            if (m_state == value)
-            {
-                return;
-            }
-
             m_state = value;
             OnStateChanged(m_state);
         }
@@ -177,11 +172,6 @@ public abstract class Weapon : MonoBehaviour
 
     private void OnIdle()
     {
-        if (State == WeaponState.Idle)
-        {
-            return;
-        }
-        
         State = WeaponState.Idle;
         OnIdleState();
     }
