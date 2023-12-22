@@ -94,13 +94,5 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             targetDistPredictionMult = 20;
             target = null;
         }
-
-        protected override bool HasArrived()
-        {
-            //MoveTo가 SetDestination에서 Move로 변경됨에 따라 HasArrived 함수를 수정함.
-            float remainingDistance = Vector3.Distance(transform.position,m_lastTarget);
-
-            return remainingDistance <= arriveDistance.Value;
-        }
     }
 }
