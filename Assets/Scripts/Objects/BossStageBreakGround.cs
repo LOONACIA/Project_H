@@ -32,6 +32,12 @@ public class BossStageBreakGround : MonoBehaviour
     #region PrivateMethod
     private void OnTriggerEnter(Collider other)
     {
+        if (other.gameObject.TryGetComponent<Monster>(out var monster)
+            && !monster.IsPossessed)
+        { 
+            return;
+        }
+
         m_trigger.enabled = false;
         //ThrowPlayer(other.transform);
         BreakGround();

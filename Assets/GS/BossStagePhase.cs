@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
+using static InteractableObject;
 
 public class BossStagePhase : MonoBehaviour
 {
@@ -32,9 +33,6 @@ public class BossStagePhase : MonoBehaviour
 
     [SerializeField, Tooltip("폭발 크기")]
     private float m_explosionForce;
-
-    [SerializeField, Tooltip("폭발 시작점")]
-    private Transform m_explosionTransform;
 
     [SerializeField, Tooltip("폭발 반지름")]
     private float m_explosionRadius;
@@ -66,7 +64,7 @@ public class BossStagePhase : MonoBehaviour
         m_machineList = GetComponentsInChildren<BossStageMachine>(true);
         foreach (var machine in m_machineList)
         {
-            machine.Interacted += EndPhase;
+            machine.Interacted += OnInteracted;
         }
 
         m_phaseTrigger = GetComponentInChildren<BossStagePhaseTrigger>();
@@ -102,8 +100,7 @@ public class BossStagePhase : MonoBehaviour
         }
     }
 
-
-    private void EndPhase(object sender, EventArgs e)
+    private void EndPhase(Transform interactedTransform)
     {
         if (!m_active) return;
 
@@ -111,22 +108,24 @@ public class BossStagePhase : MonoBehaviour
 
         if (m_readyPhaseCoroutine != null)
             StopCoroutine(m_readyPhaseCoroutine);
-        
+
         if (m_spawnCoroutine != null)
             StopCoroutine(m_spawnCoroutine);
         m_spawner.EndSpawn();
 
-        StartCoroutine(IE_WaitEndEvent());
+        StartCoroutine(IE_WaitEndEvent(interactedTransform));
+    }
+
+    private void OnInteracted(object sender, Transform e)
+    {
+        EndPhase(e);
     }
 
     /// <summary>
     /// Phase 끝나면 발생하는 폭발 효과
     /// </summary>
-    private void Explode()
+    private void Explode(Transform interactedTransform)
     {
-        if (m_explosionTransform == null)
-            m_explosionTransform = transform;
-
         if (m_onEndDeactiveGround != null)
         {
             if (m_onEndDeactiveGround.TryGetComponent<Renderer>(out var renderer))
@@ -138,12 +137,14 @@ public class BossStagePhase : MonoBehaviour
         foreach (var explosive in m_explosiveList)
         {
             explosive.gameObject.SetActive(true);
-            explosive.Explode(m_explosionForce, m_explosionTransform.position, m_explosionRadius);
+            explosive.Explode(m_explosionForce, interactedTransform.transform.position, m_explosionRadius);
         }
     }
 
-    private void ExcuteExplodeEffect()
+    private void ExcuteExplodeEffect(Transform interactedTransform)
     {
+        m_explosionParticle.transform.position = interactedTransform.transform.position;
+
         m_explosionParticle?.Play();
         if (m_explosionAnimator != null)
             m_explosionAnimator.enabled = true;
@@ -190,17 +191,17 @@ public class BossStagePhase : MonoBehaviour
         m_spawner.StartSpawn();
     }
 
-    private IEnumerator IE_WaitEndEvent()
+    private IEnumerator IE_WaitEndEvent(Transform interactedTransform)
     {
         float explosionInterval = 1f;
 
         // 폭발 이펙트 실행
         yield return new WaitForSeconds(m_explosionDelay - explosionInterval);
-        ExcuteExplodeEffect();
+        ExcuteExplodeEffect(interactedTransform);
 
         // 폭발 실행
         yield return new WaitForSeconds(explosionInterval);
-        Explode();
+        Explode(interactedTransform);
 
         // 몬스터 사망 처리
         foreach (var monster in m_spawner.Monsters.ToArray())
