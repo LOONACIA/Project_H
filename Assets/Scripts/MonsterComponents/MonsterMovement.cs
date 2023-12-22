@@ -100,10 +100,12 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
             {
                 return 1;
             }
-            
+
             return Mathf.Clamp((Time.time - m_dashCooldownStartTime) / m_data.DashCoolTime, 0f, 1f);
         }
     }
+
+    public int DashCount => m_dashCount;
 
     public event PropertyChangedEventHandler PropertyChanged;
 
@@ -193,7 +195,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         //3인칭인 경우 Avoidance값을 높임
         m_agent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
         //MoveToWithNavMove(destination);
-        MoveToWithNavSetDest(destination,true);
+        MoveToWithNavSetDest(destination, true);
     }
 
     private void MoveToWithNavMove(Vector3 destination)
@@ -279,10 +281,10 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
             if (useAdaptiveAvoidanceTest)
             {
                 Physics.OverlapSphere(transform.position + m_collider.center, m_agent.radius + m_agent.velocity.magnitude * Time.deltaTime * 2f);
-                int amount = Physics.OverlapSphereNonAlloc(transform.position + m_collider.center, m_agent.radius + m_agent.velocity.magnitude * Time.deltaTime * 2f,m_avoidanceTest,LayerMask.GetMask("Monster"));
+                int amount = Physics.OverlapSphereNonAlloc(transform.position + m_collider.center, m_agent.radius + m_agent.velocity.magnitude * Time.deltaTime * 2f, m_avoidanceTest, LayerMask.GetMask("Monster"));
                 //자기 자신이 포함되었는지 확인
-                int max = amount<m_avoidanceTest.Length?amount:m_avoidanceTest.Length;
-                for(int i = 0; i < max; i++)
+                int max = amount < m_avoidanceTest.Length ? amount : m_avoidanceTest.Length;
+                for (int i = 0; i < max; i++)
                 {
                     if (m_avoidanceTest[i].gameObject.GetInstanceID() == gameObject.GetInstanceID())
                     {
@@ -362,7 +364,7 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
         //TryDash에서는 대쉬 시작 명령을 내리고 방향을 정하며, 실제 대쉬 연산은 매 FixedUpdate의 ApplyDash에서 일어납니다.
 
         //이미 대쉬 중이거나, 대쉬 딜레이 중이거나, 남은 대쉬가 없다면 대쉬 불가능
-        if (IsDashing || m_lastDashTime + m_data.DashDelay > Time.time || m_dashCount <= 0 || m_actor.Status.IsKnockedDown)
+        if (IsDashing || m_lastDashTime + m_data.DashDelay > Time.time || m_dashCount <= 0 || m_actor.Status.IsKnockedDown || direction == Vector3.zero)
         {
             if (m_dashCount <= 0)
                 Debug.Log("남은 대쉬 0, 차지까지 남은 시간: " + (m_dashCooldownStartTime + m_data.DashCoolTime - Time.time));
@@ -501,67 +503,55 @@ public class MonsterMovement : MonoBehaviour, INotifyPropertyChanged
             m_dashDirection = Vector3.zero;
             m_lastDashVelocity = Vector3.zero;
             m_rigidbody.velocity = Vector3.zero;
-            //gameObject.layer = LayerMask.NameToLayer("Monster");
             return;
         }
+        float nextSpeed = m_dashSpeed;
 
         //대쉬시 모든 물리 영향을 초기화함
         m_rigidbody.velocity = Vector3.zero;
 
         //1. 대쉬 방향을 지정. 땅위라면 땅과 평행, 땅 위가 아니라면 xz 평면과 평행
-        m_dashDirection = TranslateBySurfaceNormal(m_dashDirection, m_currentNormal).normalized;
+        Vector3 nextDirection = TranslateBySurfaceNormal(m_dashDirection, m_currentNormal).normalized;
 
-        //2. 캡슐캐스트 진행, 벽이나 땅을 만나는지 체크합니다. 이미 충돌중인 상태인 벽이나 땅은 체크하지 않기 때문에, 실제 콜라이더보다 약간 작은 radius로 검출합니다.
-        Vector3 p1 =
-            transform.TransformPoint(m_collider.center + Vector3.up * (0.5f * m_collider.height - m_collider.radius));
-        Vector3 p2 =
-            transform.TransformPoint(m_collider.center + Vector3.down * (0.5f * m_collider.height - m_collider.radius));
-        int mask = LayerMask.GetMask(ConstVariables.MOVEMENT_COLLISION_LAYERS);
-
+        //2. 캡슐캐스트 진행, 몬스터와 만나는지 체크합니다.
+        Vector3 p1 = transform.TransformPoint(m_collider.center + Vector3.up * (0.5f * m_collider.height - m_collider.radius));
+        Vector3 p2 = transform.TransformPoint(m_collider.center + Vector3.down * (0.5f * m_collider.height - m_collider.radius));
+        
         //2.1. 캡슐캐스트는 시작 위치는 체크하지 않기 때문에, 시작위치를 체크하기 위해 OverlapCapsule도 체크합니다.
-        //서있는 땅을 제외하고 다른 오브젝트와 충돌 시 이동하지 않습니다.
+        //     몬스터와 충돌 중일 시 이동하지 않음, 벽과 충돌 중일 경우
         Collider[] cols = ArrayPool<Collider>.Shared.Rent(100);
-        int count = Physics.OverlapCapsuleNonAlloc(p1, p2, m_collider.radius - 0.01f, cols, mask);
+        int count = Physics.OverlapCapsuleNonAlloc(p1, p2, m_collider.radius, cols, LayerMask.GetMask(ConstVariables.MOVEMENT_COLLISION_LAYERS));
         for (int i = 0; i < count; i++)
         {
-            //나 자신을 검사했거나, 밟고있는 땅을 검사할 경우 continue
-            if (cols[i].gameObject.GetInstanceID() != m_collider.gameObject.GetInstanceID()
-                && (m_standingGround == null ||
-                    cols[i].gameObject.GetInstanceID() != m_standingGround.gameObject.GetInstanceID()))
+            //자신은 제외하고 계산
+            if (cols[i].gameObject.GetInstanceID() == gameObject.GetInstanceID())
             {
-                //내가 서있는 땅과 다른 곳과 충돌했다면 이동하지 않음
-                //Debug.Log("Dash: 이상한 놈과 충돌 중...");
+                continue;
+            }
+            if (cols[i].gameObject.layer == LayerMask.NameToLayer(ConstVariables.LAYER_MONSTER))
+            {
+                //몬스터와 만났을 경우 이동하지 않는다.
                 ArrayPool<Collider>.Shared.Return(cols);
                 return;
             }
+            if (cols[i].gameObject.layer == LayerMask.NameToLayer(ConstVariables.LAYER_WALL))
+            {
+                //벽과 충돌했을 경우 속도 낮춤
+                nextSpeed = m_dashSpeed * 0.8f;
+            }
         }
-
         ArrayPool<Collider>.Shared.Return(cols);
 
-        //2.2. 오버랩캡슐에서 검출되지 않았다면, 캡슐캐스트로 체크합니다.
-        //만약 검출되었다면, 검출된 위치까지만 이동합니다.
+        //2.2. 캡슐캐스트를 발사, 몬스터와 충돌 시 그 위치까지만 이동합니다.
         if (Physics.CapsuleCast(p1, p2, m_collider.radius - 0.01f, m_dashDirection, out var hit,
-                m_dashSpeed * Time.fixedDeltaTime, mask))
+                m_dashSpeed * Time.fixedDeltaTime, LayerMask.GetMask(ConstVariables.LAYER_MONSTER)))
         {
-            //벽이나 땅을 만난다면, 해당 위치까지만 이동합니다.
-            //아래 주석은, MovePosition으로 로직을 변경할 가능성이 있어 남겨두었습니다.
-            //m_rigidbody.MovePosition(transform.position + m_dashDirection * hit.distance);
-            //Debug.DrawLine(transform.position + m_collider.center, hit.point);
-
-            //TODO: 충돌 예정 시 충돌 직전거리까지만 이동하게 로직 변경
+            m_rigidbody.MovePosition(transform.position + m_dashDirection * hit.distance);
             return;
         }
-        else
-        {
-            //아무것도 만나지 않는다면, 지정된 위치까지 이동합니다.
-            //Debug.Log("미충돌");
-            //m_rigidbody.MovePosition(transform.position + m_dashDirection * m_dashSpeed * Time.fixedDeltaTime);
-        }
-
-        //m_rigidbody.velocity = Vector3.zero;
 
         //강제로 속도를 대쉬값으로 만듭니다.
-        m_rigidbody.velocity = m_dashDirection * m_dashSpeed;
+        m_rigidbody.AddForce(nextDirection * nextSpeed, ForceMode.VelocityChange);
     }
 
     private void UpdateDashCoolDown()
