@@ -1,5 +1,6 @@
 using BehaviorDesigner.Runtime;
 using Cinemachine;
+using LOONACIA.Unity.Coroutines;
 using LOONACIA.Unity.Managers;
 using System;
 using System.Collections;
@@ -38,6 +39,8 @@ public abstract class Actor : MonoBehaviour
     private CinemachineVirtualCamera m_vcam;
 
     private bool m_isPossessed;
+    
+    private CoroutineEx m_stunCoroutine;
 
     public ActorData Data => m_data;
 
@@ -170,8 +173,10 @@ public abstract class Actor : MonoBehaviour
 
     protected virtual void OnPossessed()
     {
-        if (Status.IsStunned) 
+        if (Status.IsStunned)
+        {
             Status.IsStunned = false;
+        }
 
         DisableAIComponents();
     }
@@ -287,7 +292,8 @@ public abstract class Actor : MonoBehaviour
 
         GameManager.Effect.PlaySparkEffect(Animator.gameObject, m_collider.bounds.center, seconds);
         Animator.SetTrigger(ConstVariables.ANIMATOR_PARAMETER_STUN);
-        StartCoroutine(CoStun(seconds));
+        m_stunCoroutine?.Abort();
+        m_stunCoroutine = CoroutineEx.Create(this, CoStun(seconds));
     }
 
     private IEnumerator CoStun(float seconds)
