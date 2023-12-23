@@ -72,6 +72,12 @@ public class BossStagePhase : MonoBehaviour
         m_explosiveList = GetComponentsInChildren<Explosive>(true);
 
         m_character = GameManager.Character.Controller.Character;
+
+        // 객체 비활성화
+        foreach (var activeObject in m_onStartActiveObjects)
+        {
+            activeObject.SetActive(false);
+        }
     }
 
     public void ReadyPhase()
