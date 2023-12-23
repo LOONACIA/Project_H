@@ -179,6 +179,11 @@ public class Monster : Actor
         {
             foreach (Actor target in e.NewItems)
             {
+                if (target == this)
+                {
+                    Targets.Remove(target);
+                }
+
                 target.Dying += OnTargetDying;
             }
         }
