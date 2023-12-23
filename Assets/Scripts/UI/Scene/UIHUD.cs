@@ -6,6 +6,7 @@ using Michsky.UI.Reach;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -111,6 +112,8 @@ public class UIHUD : UIScene
     private CoroutineEx m_hackingIndicatorCoroutine;
     
     private CoroutineEx m_dashIndicatorCoroutine;
+    
+    private UIManagerImage m_dashIndicatorManager;
 
     private void OnEnable()
     {
@@ -183,6 +186,8 @@ public class UIHUD : UIScene
         {
             m_dashIndicators[index] = Get<Image, Images>(Images.FirstDashIndicator + index);
         }
+
+        m_dashIndicatorManager = m_dashIndicators.FirstOrDefault()?.GetComponent<UIManagerImage>();
     }
 
     private void RegisterEvents(PlayerController controller)
@@ -278,6 +283,10 @@ public class UIHUD : UIScene
     private void OnDashCoolTimeChanged(object sender, float e)
     {
         m_dashIndicators[m_dashIndicatorCursor].fillAmount = e;
+        if (m_dashIndicatorCursor == 0)
+        {
+            m_dashIndicatorManager.colorType = Mathf.Approximately(e, 1) ? UIManagerImage.ColorType.Accent : UIManagerImage.ColorType.Negative;
+        }
     }
 
     private void OnDashCountChanged(object sender, int e)
@@ -460,27 +469,37 @@ public class UIHUD : UIScene
     
     private void OnPossessable(object sender, EventArgs e)
     {
-        m_hackingIndicatorManager.useCustomColor = true;
         m_hackingIndicator.fillAmount = 1;
-        _ = CoImageHighlightEffect(m_hackingIndicator, m_centerLayerRoot.transform);
+        _ = CoImageHighlightEffect(m_hackingIndicator, m_hackingIndicator.transform.parent);
     }
     
     private CoroutineEx CoImageHighlightEffect(Image image, Transform root)
     {
+        bool hasManager = image.TryGetComponent<UIManagerImage>(out var manager);
+        
         Color color = image.color;
-        Vector3 scale = root.transform.localScale;
+        Vector3 scale = root.localScale;
         return CoroutineEx.Create(this, Core(), () =>
         {
             image.color = color;
             root.transform.localScale = scale;
+            if (hasManager)
+            {
+                manager.useCustomColor = false;
+            }
         });
 
         IEnumerator Core()
         {
             Color colorFrom = image.color;
             Color colorTo = colorFrom * 1.5f;// new(from.r, 0.85f, 0.85f, 1);
-            Vector3 scaleFrom = root.transform.localScale;
+            Vector3 scaleFrom = root.localScale;
             Vector3 scaleTo = scaleFrom * 1.05f;
+            
+            if (hasManager)
+            {
+                manager.useCustomColor = true;
+            }
             
             yield return CoHighlightEffect(colorFrom, colorTo, scaleFrom, scaleTo);
             yield return CoHighlightEffect(colorTo, colorFrom, scaleTo, scaleFrom);
@@ -492,18 +511,17 @@ public class UIHUD : UIScene
             while (timer < 0.1f)
             {
                 image.color = Color.Lerp(colorFrom, colorTo, timer / 0.1f);
-                root.transform.localScale = Vector3.Lerp(scaleFrom, scaleTo, timer / 0.1f);
+                root.localScale = Vector3.Lerp(scaleFrom, scaleTo, timer / 0.1f);
                 yield return m_waitForEndOfFrameCache;
                 timer += Time.deltaTime;
             }
             image.color = colorTo;
-            root.transform.localScale = scaleTo;
+            root.localScale = scaleTo;
         }
     }
     
     private void OnShurikenThrown(object sender, EventArgs e)
     {
-        m_hackingIndicatorManager.useCustomColor = false;
         m_hackingIndicatorManager.colorType = UIManagerImage.ColorType.Negative;
         m_hackingIndicator.fillAmount = 0;
     }
@@ -525,7 +543,6 @@ public class UIHUD : UIScene
         }
 
         m_hackingIndicator.fillAmount = 1f;
-        m_hackingIndicatorManager.useCustomColor = false;
         m_hackingIndicatorManager.colorType = UIManagerImage.ColorType.Accent;
     }
 }

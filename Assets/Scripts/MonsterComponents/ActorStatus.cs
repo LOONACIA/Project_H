@@ -213,7 +213,7 @@ public class ActorStatus : MonoBehaviour
         m_dashCooldownCounter = Mathf.Clamp(m_dashCooldownCounter + Time.deltaTime, 0, DashCoolTime);
         if (MaxDashCount != CurrentDashCount)
         {
-            DashCoolTimeChanged?.Invoke(this, m_dashCooldownCounter);
+            DashCoolTimeChanged?.Invoke(this, m_dashCooldownCounter / DashCoolTime);
         }
 
         if (MaxDashCount > CurrentDashCount && m_dashCooldownCounter >= DashCoolTime)
