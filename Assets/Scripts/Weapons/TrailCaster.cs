@@ -185,7 +185,7 @@ public class TrailCaster : MonoBehaviour
                     curPos[i, j],
                     curPos[i, j] - oldPos[i, j],
                     localDir.magnitude,
-                    LayerMask.GetMask("Monster"));
+                    LayerMask.GetMask("Monster", "Damageable"));
                 for (int k = 0; k < hits.Length; k++)
                 {
                     //딕셔너리에 등록되어있지 않다면, 등록 후 리스트에 추가

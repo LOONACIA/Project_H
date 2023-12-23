@@ -75,7 +75,7 @@ public class Shield : MonoBehaviour
     public void TakeDamage(float damage)
     {
         ShieldAmount -= damage;
-        if (ShieldAmount < 0)
+        if (ShieldAmount <= 0)
         {
             Destroy();
         }

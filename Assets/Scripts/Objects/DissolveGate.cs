@@ -1,6 +1,9 @@
+using DG.Tweening.Core.Easing;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.AI;
 
+[RequireComponent(typeof(NavMeshObstacle))]
 public class DissolveGate : MonoBehaviour, IGate
 {
     private enum GateState
@@ -26,9 +29,12 @@ public class DissolveGate : MonoBehaviour, IGate
     
     private Renderer m_gateRenderer;
 
+    private NavMeshObstacle m_obstacle;
 
     public IEnumerator Open()
     {
+        yield return null;
+
         if (m_gate == null) yield break;
 
         if (m_state == GateState.Open) yield break;
@@ -48,10 +54,13 @@ public class DissolveGate : MonoBehaviour, IGate
             yield return StartCoroutine(Dissolve(true));
         }
 
+        m_obstacle.enabled = false;
     }
 
     public IEnumerator Close()
     {
+        yield return null;
+
         if (m_gate == null) yield break;
 
         if (m_state == GateState.Close)
@@ -76,12 +85,14 @@ public class DissolveGate : MonoBehaviour, IGate
             yield return StartCoroutine(Dissolve(false));
         }
 
+        m_obstacle.enabled = true;
     }
 
     private void Start()
     {
         m_gateCollider = m_gate.GetComponent<Collider>();
         m_gateRenderer = m_gate.GetComponent<Renderer>();
+        TryGetComponent<NavMeshObstacle>(out m_obstacle);
 
         m_appearMaterial = Instantiate<Material>(Resources.Load<Material>(ConstVariables.GATE_APPEAR_MATERIAL_PATH));
         m_dissolveMaterial = Instantiate<Material>(Resources.Load<Material>(ConstVariables.GATE_DISSOLVE_MATERIAL_PATH));
@@ -102,6 +113,8 @@ public class DissolveGate : MonoBehaviour, IGate
 
     private IEnumerator Dissolve(bool value)
     {
+        yield return null;
+
         float time = 0;
 
         while (time < m_progressTime)
