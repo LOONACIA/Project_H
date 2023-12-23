@@ -18,6 +18,8 @@ public class QuestPresenter : UIBase
     [SerializeField]
     private QuestItem m_questItem;
 
+    private CanvasScaler m_canvasScaler;
+
     private Quest m_quest;
 
     private LayoutElement m_layoutElement;
@@ -36,6 +38,11 @@ public class QuestPresenter : UIBase
 
     protected override void Init()
     {
+        if (m_canvasScaler == null)
+        {
+            m_canvasScaler = GetComponentInParent<CanvasScaler>();
+        }
+
         m_layoutElement = GetComponent<LayoutElement>();
         m_questItem.minimizeAfter = 0;
         m_questItem.defaultState = QuestItem.DefaultState.Expanded;
@@ -55,6 +62,12 @@ public class QuestPresenter : UIBase
 
     private void SetQuestItem()
     {
+        if (m_canvasScaler == null)
+        {
+            m_canvasScaler = GetComponentInParent<CanvasScaler>();
+        }
+        
+        float reactiveXScale = m_canvasScaler.referenceResolution.x / Screen.width;
         m_questItem.questText = m_quest.Content;
         m_questItem.ExpandQuest();
 
@@ -69,7 +82,7 @@ public class QuestPresenter : UIBase
         {
             yield return new WaitUntil(() => rectTransform.sizeDelta.x != 0);
             
-            var from = point - Vector3.right * (m_layoutElement.preferredWidth / 2f);
+            var from = point - Vector3.right * (m_layoutElement.preferredWidth / reactiveXScale / 2f);
             from.y = -(from.y + myTransform.anchoredPosition.y);
             var to = new Vector3(from.x, 0, from.z);
             
