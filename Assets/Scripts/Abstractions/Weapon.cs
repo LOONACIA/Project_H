@@ -43,7 +43,7 @@ public abstract class Weapon : MonoBehaviour
         }
     }
     
-    public event EventHandler AttackHit;
+    public event EventHandler<IEnumerable<AttackInfo>> AttackHit;
     
     public event EventHandler<WeaponState> StateChanged;
 
@@ -91,7 +91,8 @@ public abstract class Weapon : MonoBehaviour
     protected void Hit(IEnumerable<AttackInfo> e)
     {
         bool isHit = false;
-        foreach (var attackInfo in e.Where(attackInfo => attackInfo.Victim.gameObject != Owner.gameObject))
+        var targets = e.Where(attackInfo => attackInfo.Victim.gameObject != Owner.gameObject);
+        foreach (var attackInfo in targets)
         {
             bool victimIsActor = attackInfo.Victim.gameObject.TryGetComponent<Actor>(out var victim);
             
@@ -117,20 +118,20 @@ public abstract class Weapon : MonoBehaviour
                     movement.TryKnockBack(attackInfo.AttackDirection, KnockBackPower);
                 }
             }
-            
+
             attackInfo.Victim.TakeDamage(attackInfo);
             isHit = true;
         }
 
         if (isHit)
         {
-            OnAttackHit();
+            OnAttackHit(targets);
         }
     }
 
-    protected virtual void OnAttackHit()
+    protected virtual void OnAttackHit(IEnumerable<AttackInfo> attacks)
     {
-        AttackHit?.Invoke(this, EventArgs.Empty);
+        AttackHit?.Invoke(this, attacks);
     }
     
     protected virtual void OnStateChanged(WeaponState state)
