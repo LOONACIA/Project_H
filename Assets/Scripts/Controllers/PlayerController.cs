@@ -133,7 +133,7 @@ public partial class PlayerController : MonoBehaviour
 
     private void Move()
     {
-        if (m_character != null)
+        if (m_character != null && !m_isOnInteracting)
         {
             m_character.Move(m_directionInput);
         }
@@ -141,7 +141,7 @@ public partial class PlayerController : MonoBehaviour
 
     private void Jump()
     {
-        if (m_character != null)
+        if (m_character != null && !m_isOnInteracting)
         {
             m_character.TryJump();
         }
@@ -149,7 +149,7 @@ public partial class PlayerController : MonoBehaviour
 
     private void Attack()
     {
-        if (m_character != null)
+        if (m_character != null && !m_isOnInteracting)
         {
             m_character.TryAttack();
         }
@@ -157,7 +157,7 @@ public partial class PlayerController : MonoBehaviour
 
     private void Dash()
     {
-        if (m_character != null)
+        if (m_character != null && !m_isOnInteracting)
         {
             m_character.Dash(m_directionInput);
         }
@@ -165,7 +165,7 @@ public partial class PlayerController : MonoBehaviour
 
     private void Hack()
     {
-        if (m_isOnPossessing)
+        if (m_isOnPossessing || m_isOnInteracting)
         {
             return;
         }
@@ -175,7 +175,7 @@ public partial class PlayerController : MonoBehaviour
 
     private void Possess()
     {
-        if (m_isOnPossessing)
+        if (m_isOnPossessing && !m_isOnInteracting)
         {
             return;
         }
@@ -185,7 +185,7 @@ public partial class PlayerController : MonoBehaviour
 
     private void Ability(bool isToggled)
     {
-        if (m_character != null)
+        if (m_character != null && !m_isOnInteracting)
         {
             m_character.Ability(isToggled);
         }
@@ -217,6 +217,11 @@ public partial class PlayerController : MonoBehaviour
 
     private void Look()
     {
+        if (m_isOnInteracting)
+        {
+            return;
+        }
+        
         float xDelta = m_lookDelta.x * m_data.CameraHorizontalSensitivity * Time.fixedUnscaledDeltaTime;
         float yDelta = m_lookDelta.y * m_data.CameraVerticalSensitivity * Time.fixedUnscaledDeltaTime;
 
