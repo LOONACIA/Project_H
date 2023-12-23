@@ -102,7 +102,7 @@ public class TrailCaster : MonoBehaviour
     public void StartCheck()
     {
         //파티클 실행
-        CheckStarted.Invoke(this, null);
+        CheckStarted?.Invoke(this, EventArgs.Empty);
         //점들의 값 초기화
         for (int i = 0; i < m_thicknessX; i++)
         {
@@ -118,7 +118,7 @@ public class TrailCaster : MonoBehaviour
     public void EndCheck()
     {
         //파티클 종료
-        CheckFinished.Invoke(this, null);
+        CheckFinished?.Invoke(this, EventArgs.Empty);
         IsChecking = false;
         attackedList.Clear();
     }

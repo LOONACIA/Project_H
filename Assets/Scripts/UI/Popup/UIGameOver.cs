@@ -36,11 +36,17 @@ public class UIGameOver : UIPopup
         }
     }
 
-    public void SetButtonAction(Action restartAction, Action onMenuAction, Action exitAction)
+    public void SetButtonAction(Action continueAction, Action onMenuAction, Action exitAction)
     {
-        m_onContinue = restartAction;
+        m_onContinue = continueAction;
         m_onMenu = onMenuAction;
         m_onExit = exitAction;
+    }
+    
+    public void Close()
+    {
+        m_onContinue?.Invoke();
+        ManagerRoot.UI.ClosePopupUI(this);
     }
 
     protected override void Init()
