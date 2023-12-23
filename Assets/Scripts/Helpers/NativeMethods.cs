@@ -7,22 +7,22 @@ public static class NativeMethods
 
     private const int SPI_SETSTICKYKEYS = 0x003B;
 
-    private const uint SKF_AVAILABLE = 0x00000002;
-
     private const uint SKF_HOTKEYACTIVE = 0x00000004;
+    
+    private const uint SKF_CONFIRMHOTKEY = 0x00000008;
 
-    public static uint DisableStickyKeys()
+    public static uint DisableStickyKeysActive()
     {
-        var skey = new SKEY { cbSize = (uint)Marshal.SizeOf(typeof(SKEY)), dwFlags = 0 };
-        var result = SystemParametersInfo(SPI_GETSTICKYKEYS, 0, ref skey, 0);
+        SKEY skey = new() { cbSize = (uint)Marshal.SizeOf(typeof(SKEY)), dwFlags = 0 };
+        bool result = SystemParametersInfo(SPI_GETSTICKYKEYS, 0, ref skey, 0);
         if (!result)
         {
             Debug.LogError("Failed to get sticky keys.");
             return 0;
         }
 
-        var oldFlags = skey.dwFlags;
-        skey.dwFlags &= ~(SKF_AVAILABLE | SKF_HOTKEYACTIVE);
+        uint oldFlags = skey.dwFlags;
+        skey.dwFlags &= ~(SKF_HOTKEYACTIVE | SKF_CONFIRMHOTKEY);
         result = SystemParametersInfo(SPI_SETSTICKYKEYS, 0, ref skey, 0);
         if (!result)
         {
@@ -33,16 +33,16 @@ public static class NativeMethods
         return oldFlags;
     }
 
-    public static void RestoreStickyKeys(uint oldFlags)
+    public static void RestoreStickyKeysActive(uint oldFlags)
     {
-        var skey = new SKEY { cbSize = (uint)Marshal.SizeOf(typeof(SKEY)), dwFlags = oldFlags };
-        var result = SystemParametersInfo(SPI_SETSTICKYKEYS, 0, ref skey, 0);
+        SKEY skey = new() { cbSize = (uint)Marshal.SizeOf(typeof(SKEY)), dwFlags = oldFlags };
+        bool result = SystemParametersInfo(SPI_SETSTICKYKEYS, 0, ref skey, 0);
         if (!result)
         {
             Debug.LogError("Failed to restore sticky keys.");
         }
     }
-
+    
     [DllImport("user32.dll", CharSet = CharSet.Auto)]
     private static extern bool SystemParametersInfo(int uiAction, int uiParam, ref SKEY pvParam, int fWinIni);
 

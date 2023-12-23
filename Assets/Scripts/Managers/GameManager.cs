@@ -33,6 +33,8 @@ public class GameManager : MonoBehaviour
     private CharacterManager m_character = new();
 
     private EffectManager m_effect = new();
+    
+    private QuestManager m_quest = new();
 
     private SoundManager m_sound = new();
 
@@ -49,6 +51,8 @@ public class GameManager : MonoBehaviour
     public static CharacterManager Character => Instance.m_character;
 
     public static EffectManager Effect => Instance.m_effect;
+    
+    public static QuestManager Quest => Instance.m_quest;
 
     public static GameSettings Settings => Instance.m_settings;
 
@@ -70,7 +74,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
 #if PLATFORM_STANDALONE_WIN
-        m_stickyKeysFlags = NativeMethods.DisableStickyKeys();
+        m_stickyKeysFlags = NativeMethods.DisableStickyKeysActive();
 #endif
 
         if (m_settings == null)
@@ -170,6 +174,7 @@ public class GameManager : MonoBehaviour
             s_instance.m_effect.Init();
             s_instance.m_sound.Init();
             s_instance.m_ui.Init();
+            s_instance.m_quest.Init();
 
             // 매니저가 Monobehaviour를 상속받는 경우 여기에서 초기화
             // Example:
@@ -224,7 +229,7 @@ public class GameManager : MonoBehaviour
     private void OnDestroy()
     {
 #if PLATFORM_STANDALONE_WIN
-        NativeMethods.RestoreStickyKeys(m_stickyKeysFlags);
+        NativeMethods.RestoreStickyKeysActive(m_stickyKeysFlags);
 #endif
         s_isApplicationQuitting = true;
         Application.logMessageReceived -= s_instance.OnLogMessageReceived;
@@ -234,7 +239,7 @@ public class GameManager : MonoBehaviour
     private void OnApplicationQuit()
     {
 #if PLATFORM_STANDALONE_WIN
-        NativeMethods.RestoreStickyKeys(m_stickyKeysFlags);
+        NativeMethods.RestoreStickyKeysActive(m_stickyKeysFlags);
 #endif
         s_isApplicationQuitting = true;
         Application.logMessageReceived -= s_instance.OnLogMessageReceived;

@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class FirstStage : MonoBehaviour
@@ -20,5 +17,5 @@ public class FirstStage : MonoBehaviour
         {
             GameManager.Sound.Play(m_bgm, SoundType.Bgm);
         }
-	}
+    }
 }
