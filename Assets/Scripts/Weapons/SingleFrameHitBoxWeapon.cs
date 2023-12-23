@@ -35,7 +35,7 @@ public class SingleFrameHitBoxWeapon : Weapon
         Vector3 dir = transform.TransformDirection(attackDirection).normalized;
 
         var attacks = hitBox.DetectHitBox(hitBoxBaseTransform)
-            .Select(info => new AttackInfo(Owner.gameObject, info.Health, Damage, default, dir));
+            .Select(info => new AttackInfo(Owner.gameObject, info, Damage, default, dir));
 
         Hit(attacks);
     }

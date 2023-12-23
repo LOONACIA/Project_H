@@ -28,14 +28,14 @@ public class HitBox
     public Quaternion Rotation => m_rotation;
 
     public Color GizmoColor => m_gizmoColor;
-    
-    public IEnumerable<Actor> DetectHitBox(Transform parent)
+
+    public IEnumerable<IHealth> DetectHitBox(Transform parent)
     {
         Quaternion rotation = Quaternion.Euler(parent.eulerAngles + Rotation.eulerAngles);
 
         return Physics.OverlapBox(parent.TransformPoint(Position),
-                                  HalfExtents, parent.rotation * Rotation, LayerMask.GetMask("Monster"))
-                      .Select(detectedObject => detectedObject.GetComponent<Actor>())
+                                  HalfExtents, parent.rotation * Rotation, LayerMask.GetMask("Monster", "Damageable"))
+                      .Select(detectedObject => detectedObject.GetComponent<IHealth>())
                       .Where(health => health != null);
     }
 
@@ -45,7 +45,7 @@ public class HitBox
         {
             return;
         }
-        
+
         Gizmos.color = GizmoColor;
         Matrix4x4 parentMat = Matrix4x4.TRS(parent.position, parent.rotation, Vector3.one);
         Matrix4x4 hitBoxMat = Matrix4x4.TRS(Position, Rotation, Vector3.one);

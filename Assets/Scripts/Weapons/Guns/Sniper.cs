@@ -76,9 +76,9 @@ public class Sniper : Gun
             .OrderBy(hit => hit.distance)
             .ToArray();
 
-        RaycastHit end = hits.FirstOrDefault(hit => hit.transform.gameObject.layer != m_damageLayer);
+        RaycastHit end = hits.FirstOrDefault(hit => ((1 << hit.transform.gameObject.layer) & m_damageLayer) != 0);
 
-        var targets = hits.TakeWhile(hit => hit.transform.gameObject.layer == m_damageLayer);
+        var targets = hits.TakeWhile(hit => ((1 << hit.transform.gameObject.layer) & m_damageLayer) != 0);
 
         Hit(ProcessHit(targets));
 
@@ -106,9 +106,9 @@ public class Sniper : Gun
     {
         foreach (var hit in hits)
         {
-            if (hit.transform.TryGetComponent(out Actor actor))
+            if (hit.transform.TryGetComponent(out IHealth health))
             {
-                yield return new(Owner.gameObject, actor.Health, Damage, hit.point, -hit.normal);
+                yield return new(Owner.gameObject, health, Damage, hit.point, -hit.normal);
             }
         }
     }
@@ -144,7 +144,7 @@ public class Sniper : Gun
         Vector3 end = Target;
         if (Physics.Raycast(m_virtualCamera.transform.position, direction, out var hit, m_maxDistance, m_aimLayers))
         {
-            if (hit.transform.gameObject.layer != m_damageLayer)
+            if (((1 << hit.transform.gameObject.layer) & m_damageLayer) != 0)
             {
                 end = hit.point;
             }

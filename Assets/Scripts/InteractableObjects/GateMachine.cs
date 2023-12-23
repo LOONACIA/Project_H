@@ -1,22 +1,72 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.Design;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(Alarm))]
-public class GateMachine : InteractableObject
+public class GateMachine : InteractableObject, IHealth
 {
     [SerializeField]
-    private GameObject m_gate;
+    private GameObject[] m_gate;
 
     [SerializeField]
     private bool m_alarmWhenOpen = true;
 
-    private IGate m_gateScript;
+    [SerializeField]
+    private bool m_useShield;
+
+    [SerializeField]
+    private Shield m_shield;
+
+    private List<IGate> m_gateScript = new();
     
     private Alarm m_alarm;
 
-    private void Awake()
+    public event RefEventHandler<AttackInfo> Damaged;
+    public event RefEventHandler<AttackInfo> Dying;
+    public event EventHandler Died;
+
+    public int CurrentHp => 1;
+
+    public int MaxHp => 1;
+
+    private void Start()
     {
-        m_gateScript = m_gate.GetComponent<IGate>();
+        foreach (var gate in m_gate)
+        {
+            if (gate.TryGetComponent<IGate>(out var gateScript))
+                m_gateScript.Add(gateScript);
+        }
+
         m_alarm = GetComponentInChildren<Alarm>();
+
+        if (m_useShield == true)
+        { 
+            m_shield = GetComponentInChildren<Shield>();
+
+            if (m_shield != null) 
+            {
+                IsInteractable = false;
+            }
+        }
+    }
+
+    public void Kill()
+    {
+    }
+
+    public void TakeDamage(in AttackInfo damageInfo)
+    {
+        if (m_useShield && m_shield != null && m_shield.IsValid) 
+        {
+            m_shield?.TakeDamage(damageInfo.Damage);
+
+            if (!m_shield.IsValid)
+            {
+                IsInteractable = true;
+            }
+        }
     }
 
     protected override void OnInteractStart(Actor actor)
@@ -31,9 +81,9 @@ public class GateMachine : InteractableObject
     {
         IsInteractable = false;
 
-        if (m_gate != null && m_gateScript != null)
+        foreach (var gate in m_gateScript) 
         {
-            StartCoroutine(m_gateScript.Open());
+            StartCoroutine(gate.Open());
         }
     }
 }

@@ -13,8 +13,7 @@ public abstract class Gun : Weapon
     protected LayerMask m_aimLayers;
 
     [SerializeField]
-    [Layer]
-    protected int m_damageLayer;
+    protected LayerMask m_damageLayer;
 
     [SerializeField]
     [Tooltip("장탄 수. -1이면 무한")]
