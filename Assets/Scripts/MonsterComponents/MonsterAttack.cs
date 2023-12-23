@@ -1,5 +1,6 @@
 using LOONACIA.Unity;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -27,7 +28,9 @@ public class MonsterAttack : MonoBehaviour
     private Ability[] m_abilities;
 
     private bool m_isAttackTriggered;
-    
+
+    private int m_diedVictimCount = 0;
+
     [field: SerializeField]
     public AbilityType AbilityType { get; private set; }
 
@@ -169,10 +172,16 @@ public class MonsterAttack : MonoBehaviour
                 return;
         }
     }
-    
+
     private void OnWeaponStateChanged(object sender, WeaponState e)
     {
         m_isAttackTriggered = false;
+
+        if(e == WeaponState.Attack)
+        {
+            //공격 스테이트로 진입 시, 타격 수 count 초기화
+            m_diedVictimCount = 0;
+        }
     }
     
     private void OnAbilityStateChanged(object sender, AbilityState e)
@@ -187,10 +196,24 @@ public class MonsterAttack : MonoBehaviour
             m_actor.Status.SkillCoolTime = 0f;
         }
     }
-    
-    private void OnAttackHit(object sender, EventArgs e)
+            
+    private void OnAttackHit(object sender, IEnumerable<AttackInfo> e)
     {
         m_actor.Animator.SetTrigger(s_targetCheckAnimationKey);
+
+        //타격 이펙트, 3명 이상이 죽었을 경우 흔듭니다.
+        foreach(var info in e)
+        {
+            if (info.Victim.CurrentHp <= 0f)
+            {
+                //Debug.Log("target count: " + targetCount);
+                m_diedVictimCount += 1;
+                if (m_diedVictimCount >= 3)
+                {
+                    GameManager.Effect.ChangeTimeScale(this, 0.3f, 0.5f);
+                }
+            }
+        }
     }
 
     private void OnValidate()

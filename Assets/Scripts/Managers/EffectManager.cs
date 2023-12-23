@@ -41,6 +41,14 @@ public class EffectManager
     
     private CoroutineEx m_hitVignetteCoroutine;
 
+
+    private float m_originalTimeScale;
+    private float m_originalFixedDeltaTime;
+
+    private CoroutineEx m_timeScaleUpdateCoroutine = null;
+    private float m_timeScaleUpdateEndTime;
+    private float m_minimumTimeScale = 1f;
+
     public void Init()
 	{
         m_sparkEffect = GameManager.Settings.SparkEffect;
@@ -48,6 +56,9 @@ public class EffectManager
         m_dashEffect = GameManager.Settings.DashEffect;
         //m_dashEffect = GameObject.Find("DashEffect");
         m_dashEffect.SetActive(false);
+
+        m_originalTimeScale = Time.timeScale;
+        m_originalFixedDeltaTime = Time.fixedDeltaTime;
 
         InitComponents();
         SceneManager.sceneLoaded -= OnSceneLoaded;
@@ -255,6 +266,62 @@ public class EffectManager
     public void CameraShakeSkillStart()
     {
         GameManager.Camera.Animator.Play(ConstVariables.CAMERASHAKE_GOBLINNORMALSKILLSTART_ANIMATION_NAME);
+    }
+
+    public void ChangeTimeScale(MonoBehaviour caller, float targetTimeScale, float duration)
+    {
+        this.m_minimumTimeScale = targetTimeScale;
+        m_timeScaleUpdateEndTime = Time.unscaledTime + duration;
+        if (m_timeScaleUpdateCoroutine == null)
+        {
+            //TODO: Coroutine 동작 중 해킹을 하자마자 원래 몸이 죽으면 TimeScale이 초기화되지 않을 가능성이 있음
+            m_timeScaleUpdateCoroutine = CoroutineEx.Create(caller, IE_UpdateTimeScale());
+        }
+    }
+
+    public IEnumerator IE_UpdateTimeScale()
+    {
+        //TimeScale 변화 속도
+        float ascendingSpeed = 10f;
+        float descendingSpeed = 15f;
+
+        //fixed delta time과 timescale간 비율
+        float fdtRatio = m_originalFixedDeltaTime / m_originalTimeScale;
+
+        while (true)
+        {
+            //현재 타임스케일이 목표보다 크다면, 타임스케일을 줄여줍니다.
+            if (Time.timeScale > m_minimumTimeScale)
+            {
+                //타임스케일을 정해진 속도에 맞게 줄여줍니다. fixedDeltaTime도 함께 줄입니다.
+                float temp = Time.timeScale - descendingSpeed * Time.unscaledDeltaTime;
+                Time.timeScale = Mathf.Clamp(temp, m_minimumTimeScale, m_originalTimeScale);
+                Time.fixedDeltaTime = Time.timeScale * fdtRatio;
+            }
+            //현재 타임스케일이 목표보다 작다면, 타임스케일을 늘려줍니다.
+            if (Time.timeScale < m_minimumTimeScale)
+            {
+                //타임스케일을 정해진 속도에 맞게 줄여줍니다. fixedDeltaTime도 함께 줄입니다.
+                float temp = Time.timeScale + ascendingSpeed * Time.unscaledDeltaTime;
+                Time.timeScale = Mathf.Clamp(temp, 0f, m_minimumTimeScale);
+                Time.fixedDeltaTime = Time.timeScale * fdtRatio;
+            }
+
+            //목표한 종료시간이 왔다면 종료
+            if (m_timeScaleUpdateEndTime <= Time.unscaledTime)
+            {
+                m_minimumTimeScale = m_originalTimeScale;
+                if(Time.timeScale == m_originalTimeScale)
+                {
+                    Debug.Log($"시간 정지 종료");
+                    Time.timeScale = m_originalTimeScale;
+                    Time.fixedDeltaTime = m_originalFixedDeltaTime;
+                    m_timeScaleUpdateCoroutine = null;
+                    break;
+                }
+            }
+            yield return null;
+        }
     }
     #endregion
 }
