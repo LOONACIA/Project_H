@@ -25,6 +25,8 @@ public class GameUIManager
     private CoroutineEx m_showDialogCoroutine;
 
     private UISensedWarning m_warningUI;
+    
+    private UIGameOver m_menuUI;
 
     public void Init()
     {
@@ -69,27 +71,35 @@ public class GameUIManager
     
     public void ShowMenuUI(Action onResume, Action onMenu, Action onExit, string text = "Game Over")
     {
+        if (m_menuUI != null && m_menuUI.gameObject.activeSelf)
+        {
+            m_menuUI.Close();
+            return;
+        }
+        
         List<Transform> children = new();
-        var ui = ManagerRoot.UI.ShowPopupUI<UIGameOver>();
-        ui.SetButtonAction(Resume, onMenu, onExit);
-        ui.SetText(text);
+        m_menuUI = ManagerRoot.UI.ShowPopupUI<UIGameOver>();
+        m_menuUI.SetButtonAction(Resume, onMenu, onExit);
+        m_menuUI.SetText(text);
         
         foreach (Transform child in ManagerRoot.UI.Root.transform)
         {
-            if (child != ui.transform && child.gameObject.activeSelf)
+            if (child != m_menuUI.transform && child.gameObject.activeSelf)
             {
                 child.gameObject.SetActive(false);
                 children.Add(child);
             }
         }
-        
+
+        return;
+
         void Resume()
         {
             foreach (Transform child in children)
             {
                 child.gameObject.SetActive(true);
             }
-            ManagerRoot.UI.ClosePopupUI(ui);
+            ManagerRoot.UI.ClosePopupUI(m_menuUI);
             onResume?.Invoke();
         }
     }
