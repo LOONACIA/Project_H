@@ -81,7 +81,7 @@ public class TutorialShowSuriken : MonoBehaviour
         }
         
         string path = m_inputAction.action.bindings
-            .SingleOrDefault(binding => binding.groups.Equals(ManagerRoot.Input.CurrentControlScheme))
+            .SingleOrDefault(binding => binding.groups.Equals(ManagerRoot.Input.GetCurrentControlScheme<CharacterInputActions>()))
             .ToDisplayString();
         GameManager.UI.UpdateObject($"{path}키를 눌러서 표창을 날린 다음, 다시 눌러 이동하세요!");
     }
