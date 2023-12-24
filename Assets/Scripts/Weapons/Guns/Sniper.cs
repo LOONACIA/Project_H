@@ -130,6 +130,11 @@ public class Sniper : Gun
             m_intensity = 1f;
             m_onShot = false;
         });
+
+        // 총 사운드
+        var sfx = GetComponent<MonsterSFXPlayer>();
+        var sound = GameManager.Sound.PlayClipAt(sfx.monsterSFX.Attack2, transform.position);
+        
     }
     
     private void UpdateLine()

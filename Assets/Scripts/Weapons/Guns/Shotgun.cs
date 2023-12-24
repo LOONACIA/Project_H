@@ -44,6 +44,10 @@ public class Shotgun : Gun
             projectile.Init(Owner.gameObject, Damage, m_shotgunRange, m_aimLayers, info => Hit(Enumerable.Repeat(info, 1)));
             projectile.Rigidbody.AddForce(coneDirection * m_shootForce, ForceMode.VelocityChange);
         }
+
+        //사운드
+        var sfx = GetComponent<MonsterSFXPlayer>();
+        var sound = GameManager.Sound.PlayClipAt(sfx.monsterSFX.Attack1, transform.position);
     }
     
     private static Vector3 GetRandomConeDirection(Vector3 coneDirection, float maxAngle)

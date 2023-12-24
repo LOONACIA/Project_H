@@ -11,6 +11,8 @@ public class PossessionShuriken : MonoBehaviour
 
     // 던진 객체
     public Actor throwActor;
+
+    public SFXObjectData objectSFX;
     #endregion
 
     #region PrivateVariables
@@ -136,10 +138,11 @@ public class PossessionShuriken : MonoBehaviour
             if (m_isTargetWall)
             {
                 transform.position = m_targetPosition;
-                transform.SetParent(other.transform);
+                //transform.SetParent(other.transform);
             }
 
 
+            PlayTargetHackingSFX();
             m_rb.isKinematic = true;
             TryHackingObject(other.transform);
             GetComponent<Collider>().enabled = false;
@@ -167,6 +170,8 @@ public class PossessionShuriken : MonoBehaviour
 
         transform.SetParent(targetActor.transform);
         OnTargetHit(targetActor);
+
+        PlayTargetHackingSFX();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -228,6 +233,11 @@ public class PossessionShuriken : MonoBehaviour
         yield return new WaitForSeconds(5f);
 
         DestroySelf();
+    }
+
+    private void PlayTargetHackingSFX()
+    {
+        GameManager.Sound.PlayClipAt(objectSFX.ShurikenTargetHit, transform.position);
     }
     #endregion
 }
