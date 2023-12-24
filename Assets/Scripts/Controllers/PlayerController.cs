@@ -4,6 +4,7 @@ using LOONACIA.Unity;
 using LOONACIA.Unity.Managers;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(PossessionProcessor))]
 public partial class PlayerController : MonoBehaviour
@@ -113,10 +114,10 @@ public partial class PlayerController : MonoBehaviour
         if (m_interactableObject != null && m_interactableObject.IsInteractable)
         {
             string text = m_inputActions.Character.Interact.bindings
-                .SingleOrDefault(binding => binding.groups.Equals(ManagerRoot.Input.CurrentControlScheme))
+                .SingleOrDefault(binding => binding.groups.Equals(ManagerRoot.Input.GetCurrentControlScheme<CharacterInputActions>()))
                 .ToDisplayString();
             //string text = m_inputActions.Character.Interact.activeControl?.displayName ?? string.Empty;
-            m_interactProgress ??= GameManager.UI.ShowProgressRing(UIProgressRing.TextDisplayMode.Text, text);
+            m_interactProgress = GameManager.UI.ShowProgressRing(UIProgressRing.TextDisplayMode.Text, text);
         }
         else if (!m_isOnInteracting)
         {

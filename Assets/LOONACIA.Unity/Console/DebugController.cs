@@ -94,6 +94,13 @@ namespace LOONACIA.Unity.Console
             _commands = new()
             {
                 new DebugCommand<string>(
+                    id: "load",
+                    description: "Load the specified scene",
+                    format: "load <scene name>",
+                    execute: input => SceneManagerEx.LoadScene(input),
+                    parser: ArgumentParserBag.TryGetString),
+                
+                new DebugCommand<string>(
                     id: "kill",
                     description: "Kill the specified GameObject",
                     format: "kill <name>",

@@ -42,7 +42,7 @@ public class EVMessageTrigger : MonoBehaviour
         }
 
         string path1 = m_inputDashAction.action.bindings
-            .SingleOrDefault(binding => binding.groups.Equals(ManagerRoot.Input.CurrentControlScheme))
+            .SingleOrDefault(binding => binding.groups.Equals(ManagerRoot.Input.GetCurrentControlScheme<CharacterInputActions>()))
             .ToDisplayString();
 
         GameManager.UI.UpdateObject($"{path1}를 눌러 대쉬를 사용할 수 있습니다.");
