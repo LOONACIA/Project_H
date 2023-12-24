@@ -39,7 +39,7 @@ public class HUDSystem : MonoBehaviour
         m_camera = Camera.main;
     }
 
-    public void FixedUpdate()
+    private void FixedUpdate()
     {
         var hits = ArrayPool<RaycastHit>.Shared.Rent(16);
         Transform cameraTransform = m_camera.transform;
