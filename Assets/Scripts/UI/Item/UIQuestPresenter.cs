@@ -8,7 +8,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class QuestPresenter : UIBase
+public class UIQuestPresenter : UIBase
 {
     private readonly WaitForSeconds m_waitForSecondsCache = new(0.5f);
     
@@ -69,11 +69,13 @@ public class QuestPresenter : UIBase
         
         float reactiveXScale = m_canvasScaler.referenceResolution.x / Screen.width;
         m_questItem.questText = m_quest.Content;
+        m_questItem.UpdateUI();
         m_questItem.ExpandQuest();
 
         var point = Camera.main.ViewportToScreenPoint(new(0.5f, 0.4f, 0f));
         var rectTransform = m_questItem.GetComponent<RectTransform>();
-        var myTransform = transform as RectTransform;
+        
+        var myTransform = transform.GetComponent<RectTransform>();
         
         StartCoroutine(CoWait());
         return;
@@ -81,15 +83,19 @@ public class QuestPresenter : UIBase
         IEnumerator CoWait()
         {
             yield return new WaitUntil(() => rectTransform.sizeDelta.x != 0);
-            
-            var from = point - Vector3.right * (m_layoutElement.preferredWidth / reactiveXScale / 2f);
-            from.y = -(from.y + myTransform.anchoredPosition.y);
-            var to = new Vector3(from.x, 0, from.z);
+
+            var anchoredPosition = myTransform.anchoredPosition;
+            Vector3 from = point - Vector3.right * (anchoredPosition.x + m_layoutElement.preferredWidth / reactiveXScale / 2f);
+            from.y = -(from.y + anchoredPosition.y);
+            Vector3 to = from.GetFlatVector();
             
             rectTransform.anchoredPosition = from;
-            var animator = m_questItem.GetComponent<Animator>();
+            Animator animator = m_questItem.Animator;
             yield return new WaitUntil(() => !animator.enabled);
-            yield return new WaitForSeconds(0.25f);
+            Color color = m_questItem.AlarmText.color;
+            color.a = 0;
+            m_questItem.AlarmText.DOColor(color, 0.5f).SetEase(Ease.InCubic);
+            yield return new WaitForSeconds(0.5f);
             rectTransform.DOAnchorPos(to, 0.25f).SetEase(m_curve);
             yield return m_waitForSecondsCache;
             rectTransform.DOAnchorPos(Vector3.zero, 0.25f).SetEase(m_curve);
