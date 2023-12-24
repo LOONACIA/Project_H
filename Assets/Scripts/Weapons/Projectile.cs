@@ -60,18 +60,21 @@ public class Projectile : MonoBehaviour
         {
             return;
         }
-
-        DisableComponents();
-        transform.SetParent(other.transform);
-
+        
         if (other.gameObject.TryGetComponent<IHealth>(out var health))
         {
             Vector3 hitPoint = other.ClosestPoint(transform.position);
             Vector3 direction = (hitPoint - m_initialPosition).normalized;
             AttackInfo attackInfo = new(m_owner, health, m_damage, hitPoint, direction);
             m_onHit(attackInfo);
+            
+            if (health.CurrentHp <= 0)
+            {
+                return;
+            }
         }
         
+        DisableComponents();
         ManagerRoot.Resource.Release(gameObject);
     }
 

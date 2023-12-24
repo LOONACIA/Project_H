@@ -207,6 +207,8 @@ public class GameUIManager
     
     public int ShowDialog(string text)
     {
+        return -1;
+
         if (m_dialog == null)
         {
             m_dialog = ManagerRoot.UI.ShowPopupUI<UIMessageDialog>();            
@@ -219,6 +221,8 @@ public class GameUIManager
 
     public int ShowDialog(MessageDialogInfo[] texts, float interval = 1f)
     {
+        return -1;
+
         if (m_dialog == null)
         {
             m_dialog = ManagerRoot.UI.ShowPopupUI<UIMessageDialog>();
