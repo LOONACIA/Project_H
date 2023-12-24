@@ -10,24 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a5bbf7118b1ae63459e6ec871661ed01, type: 3}
-  m_Name: FPMeleeSFXData
+  m_Name: UnarmedSFXData
   m_EditorClassIdentifier: 
-  <Type>k__BackingField: 1
+  <Type>k__BackingField: 4
   <Attack1>k__BackingField:
-    audio: {fileID: 8300000, guid: 9abbc43e9c6c5de40a2f6170d586219c, type: 3}
+    audio: {fileID: 8300000, guid: db9053c61d5ed734d807ee49226e98fd, type: 3}
     type: 1
-    volume: 0.5
+    volume: 1
     pitch: 1
     priority: 128
     blend: 0
     loop: 0
   <Attack2>k__BackingField:
-    audio: {fileID: 8300000, guid: 2ee4ecd6dceb3034f95694cb07befdec, type: 3}
+    audio: {fileID: 8300000, guid: f6a5ba3f0c4701944936c7372dba24ee, type: 3}
     type: 1
-    volume: 0.5
+    volume: 1
     pitch: 1
     priority: 128
-    blend: 0
+    blend: 0.9
     loop: 0
   <Attack3>k__BackingField:
     audio: {fileID: 0}
@@ -62,17 +62,33 @@ MonoBehaviour:
     blend: 0
     loop: 0
   <Skill>k__BackingField:
-    audio: {fileID: 8300000, guid: 79de256383fc3d54499e16a90fedd7e7, type: 3}
+    audio: {fileID: 8300000, guid: e51bfbe6103ccc949b1471ff1372f696, type: 3}
     type: 1
     volume: 0.5
-    pitch: 0.8
+    pitch: 1.5
     priority: 128
     blend: 0
     loop: 0
-  <Shield>k__BackingField:
-    audio: {fileID: 8300000, guid: d70571328b9f0fa4d8bc2d0bdc7e6686, type: 3}
-    type: 1
-    volume: 0.8
+  <Shield1>k__BackingField:
+    audio: {fileID: 0}
+    type: 0
+    volume: 0.5
+    pitch: 1
+    priority: 128
+    blend: 0
+    loop: 0
+  <Shield2>k__BackingField:
+    audio: {fileID: 0}
+    type: 0
+    volume: 0.5
+    pitch: 1
+    priority: 128
+    blend: 0
+    loop: 0
+  <Shield3>k__BackingField:
+    audio: {fileID: 0}
+    type: 0
+    volume: 1
     pitch: 1
     priority: 128
     blend: 0
@@ -105,7 +121,7 @@ MonoBehaviour:
     audio: {fileID: 8300000, guid: ef72376bf554b2243a8a22494d0bb1f8, type: 3}
     type: 1
     volume: 0.5
-    pitch: 0.8
+    pitch: 1
     priority: 128
     blend: 1
     loop: 0
@@ -113,7 +129,7 @@ MonoBehaviour:
     audio: {fileID: 8300000, guid: 342d4902db58d8a47a9f0665aeda8179, type: 3}
     type: 1
     volume: 0.5
-    pitch: 0.8
+    pitch: 1
     priority: 128
     blend: 1
     loop: 0
@@ -121,15 +137,39 @@ MonoBehaviour:
     audio: {fileID: 8300000, guid: 80d77b46dbed265409fff63dda02f0e2, type: 3}
     type: 1
     volume: 0.5
-    pitch: 0.8
+    pitch: 1
     priority: 128
     blend: 1
     loop: 0
-  <Death>k__BackingField:
+  <FPDeath>k__BackingField:
     audio: {fileID: 0}
     type: 0
     volume: 1
     pitch: 1
     priority: 128
     blend: 0
+    loop: 0
+  <TPDeath1>k__BackingField:
+    audio: {fileID: 8300000, guid: ae0cc068ff742d14cac7a33ade36cc24, type: 3}
+    type: 1
+    volume: 1
+    pitch: 1
+    priority: 128
+    blend: 0.8
+    loop: 0
+  <TPDeath2>k__BackingField:
+    audio: {fileID: 8300000, guid: 33b35cbf7033a064b9132e746885b030, type: 3}
+    type: 1
+    volume: 1
+    pitch: 1
+    priority: 128
+    blend: 0.8
+    loop: 0
+  <TPDeath3>k__BackingField:
+    audio: {fileID: 8300000, guid: 8b0d0c199a71e1845a2ba46f8de8a090, type: 3}
+    type: 1
+    volume: 1
+    pitch: 1
+    priority: 128
+    blend: 0.8
     loop: 0

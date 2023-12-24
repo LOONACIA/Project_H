@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a5bbf7118b1ae63459e6ec871661ed01, type: 3}
-  m_Name: FPEliteBossSFXData
+  m_Name: EliteBossSFXData
   m_EditorClassIdentifier: 
   <Type>k__BackingField: 3
   <Attack1>k__BackingField:
@@ -64,15 +64,31 @@ MonoBehaviour:
   <Skill>k__BackingField:
     audio: {fileID: 8300000, guid: e51bfbe6103ccc949b1471ff1372f696, type: 3}
     type: 1
-    volume: 1
+    volume: 0.5
     pitch: 1.5
     priority: 128
     blend: 0
     loop: 0
-  <Shield>k__BackingField:
-    audio: {fileID: 8300000, guid: d70571328b9f0fa4d8bc2d0bdc7e6686, type: 3}
-    type: 1
-    volume: 0.8
+  <Shield1>k__BackingField:
+    audio: {fileID: 0}
+    type: 0
+    volume: 0.5
+    pitch: 1
+    priority: 128
+    blend: 0
+    loop: 0
+  <Shield2>k__BackingField:
+    audio: {fileID: 0}
+    type: 0
+    volume: 0.5
+    pitch: 1
+    priority: 128
+    blend: 0
+    loop: 0
+  <Shield3>k__BackingField:
+    audio: {fileID: 0}
+    type: 0
+    volume: 1
     pitch: 1
     priority: 128
     blend: 0
@@ -103,33 +119,57 @@ MonoBehaviour:
     loop: 0
   <Hit1>k__BackingField:
     audio: {fileID: 8300000, guid: ef72376bf554b2243a8a22494d0bb1f8, type: 3}
-    type: 0
-    volume: 1
+    type: 1
+    volume: 0.5
     pitch: 1
     priority: 128
-    blend: 0
+    blend: 1
     loop: 0
   <Hit2>k__BackingField:
     audio: {fileID: 8300000, guid: 342d4902db58d8a47a9f0665aeda8179, type: 3}
-    type: 0
-    volume: 1
+    type: 1
+    volume: 0.5
     pitch: 1
     priority: 128
-    blend: 0
+    blend: 1
     loop: 0
   <Hit3>k__BackingField:
     audio: {fileID: 8300000, guid: 80d77b46dbed265409fff63dda02f0e2, type: 3}
-    type: 0
-    volume: 1
+    type: 1
+    volume: 0.5
     pitch: 1
     priority: 128
-    blend: 0
+    blend: 1
     loop: 0
-  <Death>k__BackingField:
+  <FPDeath>k__BackingField:
     audio: {fileID: 0}
     type: 0
     volume: 1
     pitch: 1
     priority: 128
     blend: 0
+    loop: 0
+  <TPDeath1>k__BackingField:
+    audio: {fileID: 8300000, guid: ae0cc068ff742d14cac7a33ade36cc24, type: 3}
+    type: 1
+    volume: 1
+    pitch: 1
+    priority: 128
+    blend: 0.8
+    loop: 0
+  <TPDeath2>k__BackingField:
+    audio: {fileID: 8300000, guid: 33b35cbf7033a064b9132e746885b030, type: 3}
+    type: 1
+    volume: 1
+    pitch: 1
+    priority: 128
+    blend: 0.8
+    loop: 0
+  <TPDeath3>k__BackingField:
+    audio: {fileID: 8300000, guid: 8b0d0c199a71e1845a2ba46f8de8a090, type: 3}
+    type: 1
+    volume: 1
+    pitch: 1
+    priority: 128
+    blend: 0.8
     loop: 0

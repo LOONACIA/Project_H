@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -57,6 +58,9 @@ public class ActorHealth : MonoBehaviour, IHealth
         {
             PlayBlockAnimation();
             Blocked?.Invoke(this, info);
+
+            //사운드 출력
+            PlayShieldSound();
             return;
         }
 
@@ -100,13 +104,15 @@ public class ActorHealth : MonoBehaviour, IHealth
         PlayVfx(info);
         if (IsDead)
         {
-            Dying?.Invoke(this, info);
+            OnDying(info);
             bool hasAnimation = m_actor.Animator.parameters.Any(param => param.name == "Dead");
             if (hasAnimation)
             {
                 m_actor.Animator.SetTrigger(ConstVariables.ANIMATOR_PARAMETER_DEAD);
             }
-            OnDying(info);
+            // Dead 사운드출력
+            PlayDeadSound();
+
             OnDied();
         }
     }
@@ -185,11 +191,15 @@ public class ActorHealth : MonoBehaviour, IHealth
     }
 
     #region 사운드 출력
+    private MonsterSFXPlayer GetSFX()
+    {
+        return GetComponent<Monster>().m_thirdPersonAnimator.GetComponent<MonsterSFXPlayer>(); ;
+    }
     private void PlayHitSound()
     {
         int num = UnityEngine.Random.Range(0, 3);
 
-        MonsterSFXPlayer sfx = GetComponent<Monster>().m_thirdPersonAnimator.GetComponent<MonsterSFXPlayer>();  
+        MonsterSFXPlayer sfx = GetSFX();
 
         switch (num) 
         {
@@ -203,6 +213,65 @@ public class ActorHealth : MonoBehaviour, IHealth
 
             case 2:
                 GameManager.Sound.PlayClipAt(sfx.monsterSFX.Hit3, transform.position);
+                break;
+        }
+    }
+
+    private void PlayShieldSound()
+    {
+        int num = UnityEngine.Random.Range(0, 3);
+
+        MonsterSFXPlayer sfx = GetSFX();
+
+        switch (num)
+        {
+            case 0:
+                sfx.OnPlayShield1();
+                break;
+
+            case 1:
+                sfx.OnPlayShield2();
+                break;
+
+            case 2:
+                sfx.OnPlayShield3();
+                break;
+        }   
+    }
+
+    private void PlayDeadSound()
+    {
+        if (m_actor.IsPossessed)
+            PlayFPDeadSound();
+        else
+            PlayerTPDeadSound();
+    }
+
+    private void PlayFPDeadSound()
+    {
+        MonsterSFXPlayer sfx = GetSFX();
+
+        sfx.OnPlayFPDeath();
+    }
+
+    private void PlayerTPDeadSound()
+    {
+        MonsterSFXPlayer sfx = GetSFX();
+
+        int num = UnityEngine.Random.Range(0, 3);
+
+        switch (num)
+        {
+            case 0:
+                GameManager.Sound.PlayClipAt(sfx.monsterSFX.TPDeath1, transform.position);
+                break;
+
+            case 1:
+                GameManager.Sound.PlayClipAt(sfx.monsterSFX.TPDeath2, transform.position);
+                break;
+
+            case 2:
+                GameManager.Sound.PlayClipAt(sfx.monsterSFX.TPDeath3, transform.position);
                 break;
         }
     }
