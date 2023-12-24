@@ -1,13 +1,26 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Utilities;
 
 namespace LOONACIA.Unity.Managers
 {
-	public class InputManager
+	public class InputManager : IDisposable
 	{
 		private readonly Dictionary<string, IInputActionCollection2> _inputActions = new();
+        
+        private readonly Dictionary<string, InputControlScheme> _controlSchemes = new();
 
-		public string CurrentControlScheme { get; private set; }
+        private InputDevice _currentDevice;
+        
+        private IDisposable _handler;
+        
+        ~InputManager()
+        {
+            Dispose();
+        }
 
 		public void RegisterInputActions<T>(T inputActions)
 			where T : class, IInputActionCollection2
@@ -69,29 +82,44 @@ namespace LOONACIA.Unity.Managers
 				inputActions.Disable();
 			}
 		}
+        
+        public string GetCurrentControlScheme<T>()
+            where T : class, IInputActionCollection2
+        {
+            return GetCurrentControlScheme(typeof(T).Name);
+        }
+        
+        public string GetCurrentControlScheme(string key)
+        {
+            if (_controlSchemes.TryGetValue(key, out var controlScheme) && controlScheme.SupportsDevice(_currentDevice))
+            {
+                return controlScheme.name;
+            }
+            
+            controlScheme = _inputActions[key].controlSchemes.FirstOrDefault(x => x.SupportsDevice(_currentDevice));
+            if (controlScheme == default)
+            {
+                controlScheme = _inputActions[key].controlSchemes.FirstOrDefault();
+            }
+            
+            _controlSchemes[key] = controlScheme;
+            return controlScheme.name;
+        }
+        
+        public void Dispose()
+        {
+            _handler?.Dispose();
+            GC.SuppressFinalize(this);
+        }
 
 		internal void Init()
-		{
-			InputSystem.onActionChange -= OnActionChange;
-			InputSystem.onActionChange += OnActionChange;
+        {
+            _handler = InputSystem.onAnyButtonPress.Call(OnAnyButtonPress);
 		}
-
-		private void OnActionChange(object arg, InputActionChange phase)
-		{
-			if (phase != InputActionChange.ActionPerformed)
-			{
-				return;
-			}
-
-			if (arg is not InputAction inputAction)
-			{
-				return;
-			}
-
-			if (inputAction.GetBindingForControl(inputAction.activeControl) is { } binding)
-			{
-				CurrentControlScheme = binding.groups;
-			}
-		}
-	}
+        
+        private void OnAnyButtonPress(InputControl inputControl)
+        {
+            _currentDevice = inputControl.device;
+        }
+    }
 }

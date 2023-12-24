@@ -49,7 +49,7 @@ public class UIMessageDialog : UIPopup
             // }
 
             string path = action.bindings
-                .SingleOrDefault(binding => binding.groups.Equals(ManagerRoot.Input.CurrentControlScheme))
+                .SingleOrDefault(binding => binding.groups.Equals(ManagerRoot.Input.GetCurrentControlScheme<CharacterInputActions>()))
                 .ToDisplayString();
             text = string.Format(text, path);
         }

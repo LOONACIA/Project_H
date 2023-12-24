@@ -76,7 +76,7 @@ public class Sniper : Gun
             .OrderBy(hit => hit.distance)
             .ToArray();
 
-        RaycastHit end = hits.FirstOrDefault(hit => ((1 << hit.transform.gameObject.layer) & m_damageLayer) != 0);
+        RaycastHit end = hits.FirstOrDefault(hit => ((1 << hit.transform.gameObject.layer) & m_damageLayer) == 0);
 
         var targets = hits.TakeWhile(hit => ((1 << hit.transform.gameObject.layer) & m_damageLayer) != 0);
 
@@ -144,10 +144,7 @@ public class Sniper : Gun
         Vector3 end = Target;
         if (Physics.Raycast(m_virtualCamera.transform.position, direction, out var hit, m_maxDistance, m_aimLayers))
         {
-            if (((1 << hit.transform.gameObject.layer) & m_damageLayer) != 0)
-            {
-                end = hit.point;
-            }
+            end = hit.point;
         }
         else
         {
