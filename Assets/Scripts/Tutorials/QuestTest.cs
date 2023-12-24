@@ -20,7 +20,7 @@ public class QuestTest : MonoBehaviour
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Monster"))
         {
-            GameManager.Quest.Complete(m_questId);
+            //GameManager.Quest.Complete(m_questId);
         }
     }
 }

@@ -243,34 +243,9 @@ public class EffectManager
         m_hitVignetteCoroutine = Utility.Lerp(0.5f, 0, 1f, value => m_vignette.intensity.Override(value), ignoreTimeScale: true);
     }
 
-    #region Camera
-    /// <summary>
-    /// 공격 시작에 따른 카메라 쉐이크 이펙트를 실행합니다.
-    /// </summary>
-    public void CameraShakeAttackStart()
-    {
-        //GameManager.Camera.Animator.Play(ConstVariables.CAMERASHAKE_GOBLINNORMALATTACKSTART_ANIMATION_NAME);
-    }
-
-    /// <summary>
-    /// 공격 적중에 따른 카메라 쉐이크 이펙트를 실행합니다.
-    /// </summary>ssss
-    public void CameraShakeAttackStop()
-    {
-        GameManager.Camera.Animator.SetTrigger("AttackHit");
-    }
-
-    /// <summary>
-    /// 스킬 시작에 따른 카메라 쉐이크 이펙트를 실행합니다.
-    /// </summary>
-    public void CameraShakeSkillStart()
-    {
-        GameManager.Camera.Animator.Play(ConstVariables.CAMERASHAKE_GOBLINNORMALSKILLSTART_ANIMATION_NAME);
-    }
-
     public void ChangeTimeScale(MonoBehaviour caller, float targetTimeScale, float duration)
     {
-        this.m_minimumTimeScale = targetTimeScale;
+        m_minimumTimeScale = targetTimeScale;
         m_timeScaleUpdateEndTime = Time.unscaledTime + duration;
         if (m_timeScaleUpdateCoroutine == null)
         {
@@ -279,7 +254,7 @@ public class EffectManager
         }
     }
 
-    public IEnumerator IE_UpdateTimeScale()
+    private IEnumerator IE_UpdateTimeScale()
     {
         //TimeScale 변화 속도
         float ascendingSpeed = 10f;
@@ -299,7 +274,7 @@ public class EffectManager
                 Time.fixedDeltaTime = Time.timeScale * fdtRatio;
             }
             //현재 타임스케일이 목표보다 작다면, 타임스케일을 늘려줍니다.
-            if (Time.timeScale < m_minimumTimeScale)
+            else if (Time.timeScale < m_minimumTimeScale)
             {
                 //타임스케일을 정해진 속도에 맞게 줄여줍니다. fixedDeltaTime도 함께 줄입니다.
                 float temp = Time.timeScale + ascendingSpeed * Time.unscaledDeltaTime;
@@ -311,10 +286,8 @@ public class EffectManager
             if (m_timeScaleUpdateEndTime <= Time.unscaledTime)
             {
                 m_minimumTimeScale = m_originalTimeScale;
-                if(Time.timeScale == m_originalTimeScale)
+                if (Mathf.Approximately(Time.timeScale, m_originalTimeScale))
                 {
-                    Debug.Log($"시간 정지 종료");
-                    Time.timeScale = m_originalTimeScale;
                     Time.fixedDeltaTime = m_originalFixedDeltaTime;
                     m_timeScaleUpdateCoroutine = null;
                     break;
@@ -323,5 +296,4 @@ public class EffectManager
             yield return null;
         }
     }
-    #endregion
 }
