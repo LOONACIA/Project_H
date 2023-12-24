@@ -61,7 +61,7 @@ public class Monster : Actor
             return;
         }
         
-        if (((1 << other.gameObject.layer) & Movement.Data.WhatIsGround) != 0 && Movement.IsOnGround)
+        if (((1 << other.gameObject.layer) & Movement.Data.WhatIsGround) != 0 && Movement.IsOnGround && !Status.IsKnockBack)
         {
             m_rigidbody.isKinematic = true;
             m_navMeshAgent.enabled = true;
