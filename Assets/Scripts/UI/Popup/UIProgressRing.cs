@@ -78,8 +78,8 @@ public class UIProgressRing : UIPopup
             return;
         }
         
-        DisplayMode = TextDisplayMode.Text;
         m_text.text = text;
+        DisplayMode = TextDisplayMode.Text;
     }
 
     public void UpdateProgress(float progress)
