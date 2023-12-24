@@ -29,7 +29,13 @@ public class MeleeWeapon : Weapon
     {
         m_trailCaster.EndCheck();
     }
-    
+
+    protected override void OnIdleState()
+    {
+        //애니메이터 단에서 Recovery를 거치지 않고 Idle로 들어가는 상황이 발생할 수 있어 Idle에도 EndCheck을 실행합니다.
+        m_trailCaster.EndCheck();
+    }
+
     // ReSharper disable Unity.PerformanceAnalysis
     private void TrailCast()
     {
