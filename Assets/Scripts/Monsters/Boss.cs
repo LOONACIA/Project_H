@@ -13,9 +13,9 @@ public class Boss : MonoBehaviour, IHealth
 
     public int MaxHp => m_maxHp;
 
-    public event RefEventHandler<AttackInfo> Damaged;
+    public event RefEventHandler<AttackInfo> Damaged { add { } remove { } }
     public event RefEventHandler<AttackInfo> Dying;
-    public event EventHandler Died;
+    public event EventHandler Died { add { } remove { } }
 
     // 보스 강제 사망 처리
     public void Kill()
