@@ -11,9 +11,6 @@ using static InteractableObject;
 public class BossStagePhase : MonoBehaviour
 {
     [Header("Spawn Date")]
-    [SerializeField]
-    private BossStageSpawner m_spawner;
-
     [SerializeField, Tooltip("몬스터 스폰 지연 시간")]
     private float m_spawnDelay;
 
@@ -26,6 +23,9 @@ public class BossStagePhase : MonoBehaviour
 
     [SerializeField, Tooltip("Phase 시작하면 켤 객체")]
     private GameObject[] m_onStartActiveObjects;
+
+    [SerializeField, Tooltip("Phase 끝나면 끌 객체")]
+    private GameObject[] m_onEndDeactiveObjects;
 
     [Header("Explosion Data")]
     [SerializeField, Tooltip("폭발의 지연 시간")]
@@ -49,9 +49,13 @@ public class BossStagePhase : MonoBehaviour
     [Tooltip("Phase 종료 시 날려버릴 오브젝트 리스트")]
     private Explosive[] m_explosiveList;
 
+    private ISpawn[] m_spawnerList;
+
     private Actor m_character;
 
     private bool m_active;
+
+    private PossessionProcessor m_processor;
 
     private Coroutine m_readyPhaseCoroutine;
 
@@ -71,7 +75,11 @@ public class BossStagePhase : MonoBehaviour
 
         m_explosiveList = GetComponentsInChildren<Explosive>(true);
 
+        m_spawnerList = GetComponentsInChildren<ISpawn>(true);
+
         m_character = GameManager.Character.Controller.Character;
+
+        m_processor = FindObjectOfType<PossessionProcessor>();
 
         // 객체 비활성화
         foreach (var activeObject in m_onStartActiveObjects)
@@ -117,7 +125,17 @@ public class BossStagePhase : MonoBehaviour
 
         if (m_spawnCoroutine != null)
             StopCoroutine(m_spawnCoroutine);
-        m_spawner.EndSpawn();
+
+        foreach (var spawner in m_spawnerList)
+        {
+            spawner.EndSpawn();
+        }
+
+        // 객체 비활성화
+        foreach (var deactiveObject in m_onEndDeactiveObjects)
+        {
+            deactiveObject.SetActive(false);
+        }
 
         StartCoroutine(IE_WaitEndEvent(interactedTransform));
     }
@@ -181,7 +199,10 @@ public class BossStagePhase : MonoBehaviour
 
         yield return new WaitUntil(() => charater.Movement.IsOnGround == true);
 
-        m_spawner.StartSpawn();
+        foreach (var spawner in m_spawnerList)
+        { 
+            spawner.StartSpawn();
+        }
     }
 
     private IEnumerator IE_WaitEndEvent(Transform interactedTransform)
@@ -197,7 +218,9 @@ public class BossStagePhase : MonoBehaviour
         Explode(interactedTransform);
 
         // 몬스터 사망 처리
-        foreach (var monster in m_spawner.Monsters.Where((monster) => monster.IsPossessed == false).ToArray())
+        m_processor.ClearTarget();
+        var monsterList = GameObject.FindObjectsOfType<Monster>().Where(x => x.IsPossessed == false);
+        foreach (var monster in monsterList)
         {
             monster.Health.Kill();
         }

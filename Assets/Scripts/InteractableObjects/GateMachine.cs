@@ -23,9 +23,9 @@ public class GateMachine : InteractableObject, IHealth
     
     private Alarm m_alarm;
 
-    public event RefEventHandler<AttackInfo> Damaged;
-    public event RefEventHandler<AttackInfo> Dying;
-    public event EventHandler Died;
+    public event RefEventHandler<AttackInfo> Damaged { add { } remove { } }
+    public event RefEventHandler<AttackInfo> Dying { add { } remove { } }
+    public event EventHandler Died { add { } remove { } }
 
     public int CurrentHp => 1;
 
