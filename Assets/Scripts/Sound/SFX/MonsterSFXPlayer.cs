@@ -86,7 +86,7 @@ public class MonsterSFXPlayer : MonoBehaviour
         float speed = ani.GetFloat("MovementRatio");
 
         bool isGround = false;
-        if (transform.parent.parent != null)
+        if (transform.parent.parent != null && transform.parent.parent.GetComponent<MonsterMovement>() != null)
             isGround = transform.parent.parent.GetComponent<MonsterMovement>().IsOnGround;
 
         if(speed > 0.1f && isGround)
@@ -99,7 +99,7 @@ public class MonsterSFXPlayer : MonoBehaviour
             return;
         }
 
-        audioSource.Stop();
+        audioSource?.Stop();
         isWalkSoundPlaying = false;
     }
 
