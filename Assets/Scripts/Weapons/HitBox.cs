@@ -31,12 +31,11 @@ public class HitBox
 
     public IEnumerable<IHealth> DetectHitBox(Transform parent)
     {
-        Quaternion rotation = Quaternion.Euler(parent.eulerAngles + Rotation.eulerAngles);
-
+        Debug.Log($"forward: {parent.forward} rotation: {parent.rotation * Rotation}");
         return Physics.OverlapBox(parent.TransformPoint(Position),
-                                  HalfExtents, parent.rotation * Rotation, LayerMask.GetMask("Monster", "Damageable"))
-                      .Select(detectedObject => detectedObject.GetComponent<IHealth>())
-                      .Where(health => health != null);
+                HalfExtents, parent.rotation * Rotation, LayerMask.GetMask("Monster", "Damageable"))
+            .Select(detectedObject => detectedObject.GetComponent<IHealth>())
+            .Where(health => health != null);
     }
 
     public void DrawGizmo(Transform parent)
