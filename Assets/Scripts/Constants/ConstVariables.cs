@@ -81,4 +81,7 @@ public static class ConstVariables
     public const string LAYER_MONSTER = "Monster";
     public const string LAYER_GROUND = "Ground";
     public const string LAYER_WALL = "Wall";
+
+    [Header("Sound")]
+    public static readonly string SOUNDBOX = "Prefabs/Objects/SoundBox";
 }

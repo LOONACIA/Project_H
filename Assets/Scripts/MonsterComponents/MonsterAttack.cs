@@ -171,6 +171,9 @@ public class MonsterAttack : MonoBehaviour
             default:
                 return;
         }
+
+        //스킬 사운드
+        //gameObject.FindChild<MonsterSFXPlayer>().OnPlaySkill();
     }
 
     private void OnWeaponStateChanged(object sender, WeaponState e)
