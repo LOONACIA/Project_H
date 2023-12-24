@@ -37,7 +37,7 @@ public class BlockAbility : Ability
 
     private void OnBlockExit()
     {
-        if (m_blockWeapon.IsEquipped)
+        if (!Owner.Status.IsBlocking && m_blockWeapon.IsEquipped)
         {
             Owner.Attack.ChangeWeapon(m_defaultWeapon);
         }
