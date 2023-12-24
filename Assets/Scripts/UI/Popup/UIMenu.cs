@@ -3,7 +3,7 @@ using LOONACIA.Unity.UI;
 using System;
 using UnityEngine.UI;
 
-public class UIGameOver : UIPopup
+public class UIMenu : UIPopup
 {
     private enum Texts
     {
@@ -43,10 +43,10 @@ public class UIGameOver : UIPopup
         m_onExit = exitAction;
     }
     
-    public void Close()
+    public override void Close()
     {
         m_onContinue?.Invoke();
-        ManagerRoot.UI.ClosePopupUI(this);
+        base.Close();
     }
 
     protected override void Init()

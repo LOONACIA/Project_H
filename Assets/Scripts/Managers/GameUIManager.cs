@@ -26,7 +26,7 @@ public class GameUIManager
 
     private UISensedWarning m_warningUI;
     
-    private UIGameOver m_menuUI;
+    private UIMenu m_menuUI;
 
     public void Init()
     {
@@ -78,7 +78,7 @@ public class GameUIManager
         }
         
         List<Transform> children = new();
-        m_menuUI = ManagerRoot.UI.ShowPopupUI<UIGameOver>();
+        m_menuUI = ManagerRoot.UI.ShowPopupUI<UIMenu>();
         m_menuUI.SetButtonAction(Resume, onMenu, onExit);
         m_menuUI.SetText(text);
         

@@ -9,8 +9,6 @@ public class TrailCaster : MonoBehaviour
     #region PublicVariables
 
     public bool useFixedUpdate = false;
-    public event EventHandler CheckStarted;
-    public event EventHandler CheckFinished;
 
     #endregion
 
@@ -22,8 +20,7 @@ public class TrailCaster : MonoBehaviour
 
     [SerializeField]
     private float m_trailEnd;
-
-
+    
     [Header("TrailCast 점의 기준 각도")]
     [SerializeField]
     private Quaternion m_trailRotation = Quaternion.identity;
@@ -38,7 +35,6 @@ public class TrailCaster : MonoBehaviour
 
     [SerializeField]
     private float m_thicknessInterval = 0.2f;
-
 
     //Cast 위치 체크용 변수
     private Vector3[,] oldPos;
@@ -57,6 +53,10 @@ public class TrailCaster : MonoBehaviour
     private float m_gizmoRadius = 0.05f;
     
     #endregion
+    
+    public event EventHandler CheckStarted;
+    
+    public event EventHandler CheckFinished;
 
     private void Awake()
     {
