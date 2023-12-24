@@ -1,10 +1,13 @@
 using System.Buffers;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class FirstStage : MonoBehaviour
 {
     [SerializeField]
     private AudioClip m_bgm;
+
+    public AudioMixer audioMixer;
 
     private void Awake()
     {
@@ -28,6 +31,6 @@ public class FirstStage : MonoBehaviour
         info.type = SoundType.Bgm;
         info.loop = true;
 
-        GameManager.Sound.Play(info);
+        GameManager.Sound.Play(info).outputAudioMixerGroup = audioMixer.FindMatchingGroups("BGM")[0];
     }
 }
