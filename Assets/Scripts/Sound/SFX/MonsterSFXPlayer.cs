@@ -59,9 +59,17 @@ public class MonsterSFXPlayer : MonoBehaviour
     {
         SendSFXData(monsterSFX.Landing);
     }
-    public void OnPlayHit()
+    public void OnPlayHit1()
     {
-        SendSFXData(monsterSFX.Hit);
+        SendSFXData(monsterSFX.Hit1);
+    }
+    public void OnPlayHit2()
+    {
+        SendSFXData(monsterSFX.Hit1);
+    }
+    public void OnPlayHit3()
+    {
+        SendSFXData(monsterSFX.Hit1);
     }
     public void OnPlayDeath()
     {

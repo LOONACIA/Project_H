@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -70,6 +71,9 @@ public class ActorHealth : MonoBehaviour, IHealth
         if (!m_actor.IsPossessed)
         {
             PlayHitAnimation(info.AttackDirection, info.Attacker);
+
+            //Sound 출력
+            PlayHitSound();
         } 
         else
         {
@@ -179,4 +183,28 @@ public class ActorHealth : MonoBehaviour, IHealth
         //front 벡터와 공격받은 벡터가 지정한 각도값 내에 있을경우 Block
         return Vector3.Angle(front, dir) < m_blockAngle * 0.5f;
     }
+
+    #region 사운드 출력
+    private void PlayHitSound()
+    {
+        int num = UnityEngine.Random.Range(0, 3);
+
+        MonsterSFXPlayer sfx = GetComponent<Monster>().m_thirdPersonAnimator.GetComponent<MonsterSFXPlayer>();  
+
+        switch (num) 
+        {
+            case 0:
+                GameManager.Sound.PlayClipAt(sfx.monsterSFX.Hit1, transform.position);
+                break;
+
+            case 1:
+                GameManager.Sound.PlayClipAt(sfx.monsterSFX.Hit2, transform.position);
+                break;
+
+            case 2:
+                GameManager.Sound.PlayClipAt(sfx.monsterSFX.Hit3, transform.position);
+                break;
+        }
+    }
+    #endregion
 }

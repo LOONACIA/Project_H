@@ -52,8 +52,16 @@ public class SFXMonsterData : ScriptableObject
     public SFXInfo Landing { get; private set; }
 
     [field: SerializeField]
-    [field: Tooltip("피격 소리")]
-    public SFXInfo Hit { get; private set; }
+    [field: Tooltip("피격 소리1")]
+    public SFXInfo Hit1 { get; private set; }
+
+    [field: SerializeField]
+    [field: Tooltip("피격 소리2")]
+    public SFXInfo Hit2 { get; private set; }
+
+    [field: SerializeField]
+    [field: Tooltip("피격 소리3")]
+    public SFXInfo Hit3 { get; private set; }
 
     [field: SerializeField]
     [field: Tooltip("죽음")]

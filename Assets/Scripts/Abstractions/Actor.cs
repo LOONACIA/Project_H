@@ -30,11 +30,9 @@ public abstract class Actor : MonoBehaviour
     [SerializeField]
     private GameObject m_firstPersonCameraPivot;
 
-    [SerializeField]
-    private Animator m_firstPersonAnimator;
-
-    [SerializeField]
-    private Animator m_thirdPersonAnimator;
+    public Animator m_firstPersonAnimator;
+    
+    public Animator m_thirdPersonAnimator;
 
     private CinemachineVirtualCamera m_vcam;
 
