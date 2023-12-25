@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour
 
     private EffectManager m_effect = new();
     
-    private QuestManager m_quest = new();
+    private NotificationManager m_notification = new();
 
     private SoundManager m_sound = new();
 
@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour
 
     public static EffectManager Effect => Instance.m_effect;
     
-    public static QuestManager Quest => Instance.m_quest;
+    public static NotificationManager Notification => Instance.m_notification;
 
     public static GameSettings Settings => Instance.m_settings;
 
@@ -172,9 +172,9 @@ public class GameManager : MonoBehaviour
             // 매니저 클래스 초기화
             s_instance.m_character.Init(s_instance.m_settings);
             s_instance.m_effect.Init();
+            s_instance.m_notification.Init();
             s_instance.m_sound.Init();
             s_instance.m_ui.Init();
-            s_instance.m_quest.Init();
 
             // 매니저가 Monobehaviour를 상속받는 경우 여기에서 초기화
             // Example:
@@ -195,6 +195,7 @@ public class GameManager : MonoBehaviour
     {
         // 씬이 변경될 때 별도 처리가 필요한 경우 여기에 작성
         m_actor.Clear();
+        m_notification.Clear();
         m_sound.Clear();
         m_ui.Clear();
 

@@ -7,39 +7,44 @@ using UnityEngine;
 public class UIQuestHolder : UIBase
 {
     private readonly Dictionary<int, UIQuestPresenter> m_presenters = new();
-    
+
     private void OnEnable()
     {
-        GameManager.Quest.QuestActivated += OnQuestActivated;
-        GameManager.Quest.QuestCompleted += OnQuestCompleted;
+        GameManager.Notification.Activated += OnNotificationActivated;
+        GameManager.Notification.QuestCompleted += OnNotificationCompleted;
     }
 
     private void OnDisable()
     {
-        GameManager.Quest.QuestActivated -= OnQuestActivated;
-        GameManager.Quest.QuestCompleted -= OnQuestCompleted;
+        GameManager.Notification.Activated -= OnNotificationActivated;
+        GameManager.Notification.QuestCompleted -= OnNotificationCompleted;
     }
 
     protected override void Init()
     {
     }
-    
-    private void OnQuestActivated(object sender, Quest e)
+
+    private void OnNotificationActivated(object sender, Notification e)
     {
         int id = e.Id;
         if (m_presenters.TryGetValue(id, out var presenter))
         {
             return;
         }
-        
+
+        if (e is not Quest quest)
+        {
+            return;
+        }
+
         var go = ManagerRoot.Resource.Instantiate($"UI/Item/{nameof(UIQuestPresenter)}");
         go.transform.SetParent(transform);
         presenter = go.GetOrAddComponent<UIQuestPresenter>();
-        presenter.SetQuest(e);
+        presenter.SetQuest(quest);
         m_presenters.Add(id, presenter);
     }
 
-    private void OnQuestCompleted(object sender, Quest e)
+    private void OnNotificationCompleted(object sender, Quest e)
     {
         int id = e.Id;
         if (!m_presenters.TryGetValue(id, out var presenter))
@@ -47,9 +52,8 @@ public class UIQuestHolder : UIBase
             Debug.LogError($"[QuestHolder] {id} is not activated");
             return;
         }
-        
+
         presenter.Complete();
         m_presenters.Remove(id);
-        ManagerRoot.Resource.Release(presenter.gameObject);
     }
 }

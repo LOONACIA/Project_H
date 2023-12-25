@@ -1,5 +1,4 @@
 using LOONACIA.Unity;
-using System;
 using UnityEngine;
 
 public class Quest : Notification
