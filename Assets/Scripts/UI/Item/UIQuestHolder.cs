@@ -50,6 +50,5 @@ public class UIQuestHolder : UIBase
         
         presenter.Complete();
         m_presenters.Remove(id);
-        ManagerRoot.Resource.Release(presenter.gameObject);
     }
 }

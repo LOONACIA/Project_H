@@ -57,5 +57,10 @@ public class CharacterManager
         {
             RespawnPlayerCharacter();
         }
+        else
+        {
+            // 다른 씬으로 이동했을 때 초기화
+            m_savedSceneName = string.Empty;
+        }
     }
 }

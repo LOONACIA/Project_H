@@ -34,10 +34,14 @@ public class QuestManager
             Debug.LogError($"[QuestManager] {id} is not registered");
             return;
         }
+
+        if (quest.IsCompleted)
+        {
+            return;
+        }
         
         if (!m_activatedQuests.Add(quest))
         {
-            Debug.LogError($"[QuestManager] {id} is already activated");
             return;
         }
         
