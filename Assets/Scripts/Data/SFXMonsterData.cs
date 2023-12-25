@@ -36,8 +36,16 @@ public class SFXMonsterData : ScriptableObject
     public SFXInfo Skill { get; private set; }
 
     [field: SerializeField]
-    [field: Tooltip("Melee일 시, 막을 때 소리 - Elite 일 시, 방어막 있을 시 맞는 소리")]
-    public SFXInfo Shield { get; private set; }
+    [field: Tooltip("Melee일 시, 막을 때 소리 - Elite 일 시, 방어막 있을 시 맞는 소리1")]
+    public SFXInfo Shield1 { get; private set; }
+
+    [field: SerializeField]
+    [field: Tooltip("Melee일 시, 막을 때 소리 - Elite 일 시, 방어막 있을 시 맞는 소리2")]
+    public SFXInfo Shield2{ get; private set; }
+
+    [field: SerializeField]
+    [field: Tooltip("Melee일 시, 막을 때 소리 - Elite 일 시, 방어막 있을 시 맞는 소리3")]
+    public SFXInfo Shield3 { get; private set; }
 
     [field: SerializeField]
     [field: Tooltip("Melee일 시, 막기 자세에서 미는 소리")]
@@ -52,10 +60,30 @@ public class SFXMonsterData : ScriptableObject
     public SFXInfo Landing { get; private set; }
 
     [field: SerializeField]
-    [field: Tooltip("피격 소리")]
-    public SFXInfo Hit { get; private set; }
+    [field: Tooltip("피격 소리1")]
+    public SFXInfo Hit1 { get; private set; }
 
     [field: SerializeField]
-    [field: Tooltip("죽음")]
-    public SFXInfo Death { get; private set; }
+    [field: Tooltip("피격 소리2")]
+    public SFXInfo Hit2 { get; private set; }
+
+    [field: SerializeField]
+    [field: Tooltip("피격 소리3")]
+    public SFXInfo Hit3 { get; private set; }
+
+    [field: SerializeField]
+    [field: Tooltip("1인칭 죽음")]
+    public SFXInfo FPDeath { get; private set; }
+
+    [field: SerializeField]
+    [field: Tooltip("3인칭 죽음1")]
+    public SFXInfo TPDeath1 { get; private set; }
+
+    [field: SerializeField]
+    [field: Tooltip("3인칭 죽음2")]
+    public SFXInfo TPDeath2 { get; private set; }
+
+    [field: SerializeField]
+    [field: Tooltip("3인칭 죽음3")]
+    public SFXInfo TPDeath3 { get; private set; }
 }
