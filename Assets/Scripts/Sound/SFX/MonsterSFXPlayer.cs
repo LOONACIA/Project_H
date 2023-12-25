@@ -43,9 +43,17 @@ public class MonsterSFXPlayer : MonoBehaviour
     {
         SendSFXData(monsterSFX.Skill);
     }
-    public void OnPlayShield()
+    public void OnPlayShield1()
     {
-        SendSFXData(monsterSFX.Shield);
+        SendSFXData(monsterSFX.Shield1);
+    }
+    public void OnPlayShield2()
+    {
+        SendSFXData(monsterSFX.Shield2);
+    }
+    public void OnPlayShield3()
+    {
+        SendSFXData(monsterSFX.Shield3);
     }
     public void OnPlayShieldPush()
     {
@@ -59,13 +67,33 @@ public class MonsterSFXPlayer : MonoBehaviour
     {
         SendSFXData(monsterSFX.Landing);
     }
-    public void OnPlayHit()
+    public void OnPlayHit1()
     {
-        SendSFXData(monsterSFX.Hit);
+        SendSFXData(monsterSFX.Hit1);
     }
-    public void OnPlayDeath()
+    public void OnPlayHit2()
     {
-        SendSFXData(monsterSFX.Death);
+        SendSFXData(monsterSFX.Hit1);
+    }
+    public void OnPlayHit3()
+    {
+        SendSFXData(monsterSFX.Hit1);
+    }
+    public void OnPlayFPDeath()
+    {
+        SendSFXData(monsterSFX.FPDeath);
+    }
+    public void OnPlayTPDeath1()
+    {
+        SendSFXData(monsterSFX.TPDeath1);
+    }
+    public void OnPlayTPDeath2()
+    {
+        SendSFXData(monsterSFX.TPDeath2);
+    }
+    public void OnPlayTPDeat3()
+    {
+        SendSFXData(monsterSFX.TPDeath3);
     }
     #endregion
 

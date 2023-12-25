@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.Networking;
 
 public class SoundManager
@@ -50,16 +51,16 @@ public class SoundManager
         Play(audioClip, type, volume, pitch, priority);
     }
 
-    public void Play(SFXInfo _info)
+    public AudioSource Play(SFXInfo _info)
     {
-        Play(_info.audio, _info.type, _info.volume, _info.pitch, _info.priority, _info.blend, _info.loop);
+        return Play(_info.audio, _info.type, _info.volume, _info.pitch, _info.priority, _info.blend, _info.loop);
     }
 
-    public void Play(AudioClip audioClip, SoundType type = SoundType.Sfx, float volume = 1.0f, float pitch = 1.0f, int priority = 128, float blend = 0f, bool loop = false)
+    public AudioSource Play(AudioClip audioClip, SoundType type = SoundType.Sfx, float volume = 1.0f, float pitch = 1.0f, int priority = 128, float blend = 0f, bool loop = false)
     {
         if (audioClip == null)
         {
-            return;
+            return null;
         }
 
         AudioSource audioSource = m_audioSources[(int)type];
@@ -78,6 +79,8 @@ public class SoundManager
         {
             audioSource.PlayOneShot(audioClip);
         }
+
+        return audioSource;
     }
 
     public AudioSource PlayClipAt(SFXInfo _info, Vector3 pos)
