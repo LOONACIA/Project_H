@@ -3,6 +3,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = nameof(GameSettings), menuName = "Settings/" + nameof(GameSettings))]
 public class GameSettings : ScriptableObject
 {
+    [field: Header("Quest")]
+    [field: SerializeField]
+    public QuestData QuestData { get; private set; }
+    
     [field: Header("Effect")]
     [field: SerializeField]
     public GameObject SparkEffect { get; private set; }

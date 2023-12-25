@@ -12,8 +12,6 @@ public class BossStagePhaseTrigger : MonoBehaviour, IActivate
     [SerializeField, Tooltip("플레이어가 착지할 곳을 보여줄 오브젝트의 목록")]
     private Renderer[] m_landingPointList;
 
-    //private List<Collider> m_groundColliderList = new();
-
     private Collider m_collider;
 
     private bool m_isActive;
@@ -23,20 +21,16 @@ public class BossStagePhaseTrigger : MonoBehaviour, IActivate
         TryGetComponent<Collider>(out m_collider);
         m_collider.enabled = false;
 
-        //foreach (var groundObject in m_groundObjectList)
-        //{
-        //    m_groundColliderList.AddRange(groundObject.GetComponentsInChildren<Collider>(true));
-        //}
-
-        //foreach (var groundCollier in m_groundColliderList)
-        //{
-        //    groundCollier.enabled = false;
-        //}
-
         foreach (var landingPoint in m_landingPointList) 
         {
             landingPoint.enabled = false;
             landingPoint.material = new(landingPoint.material);
+        }
+
+        foreach (var groundCollier in m_groundObjectList)
+        { 
+            groundCollier.gameObject.SetActive(false);
+            groundCollier.enabled = false;
         }
     }
 
