@@ -142,10 +142,8 @@ public class BossStageSpawner : MonoBehaviour, ISpawn
             m_currentSpawnIndex = 0;
 
         if (m_useSpawnCountLimit
-            && m_maxSpawnCount != 0
             && m_currentSpawnCount >= m_maxSpawnCount)
         {
-            EndSpawn();
             return;
         }
         
@@ -175,8 +173,6 @@ public class BossStageSpawner : MonoBehaviour, ISpawn
             }
         }
 
-
-        m_spawnDelay++;
         m_currentSpawnIndex++;
         m_currentSpawnCount++;
     }
