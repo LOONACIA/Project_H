@@ -14,6 +14,10 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         public SharedFloat targetDistPredictionMult = 20;
         [Tooltip("The GameObject that the agent is pursuing")]
         public SharedTransform target;
+
+        [Tooltip("공격 사거리, 해당 값까지 가서 멈춥니다. 값이 0.5 미만이거나 null이라면 arriveDistance가 적용됩니다.")]
+        public SharedFloat attackDistance;
+
         private MonsterMovement m_monsterMovement;
         private Vector3 m_lastTarget;
 
@@ -37,6 +41,12 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         // Return running if the agent hasn't reached the destination yet
         public override TaskStatus OnUpdate()
         {
+            //TargetDistance 로직이 포지션보다 (Vector3.up/2) 높은 위치에서 판별하므로, 해당 값을 갱신해줌
+            if (attackDistance != null||attackDistance.Value<0.3f)
+            {
+                arriveDistance.Value = attackDistance.Value - 0.3f;
+            }
+
             if (HasArrived()) {
                 m_monsterMovement.StopAgentMove();
                 return TaskStatus.Success;

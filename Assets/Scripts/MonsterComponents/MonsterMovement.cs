@@ -363,7 +363,6 @@ public class MonsterMovement : MonoBehaviour
 
         m_lastDashTime = Time.time;
         IsDashing = true;
-        //gameObject.layer = m_data.DashLayer;
 
         GameManager.Effect.ShowDashEffect();
         gameObject.FindChild<MonsterSFXPlayer>().OnPlayDash();
@@ -452,39 +451,37 @@ public class MonsterMovement : MonoBehaviour
         //2. 캡슐캐스트 진행, 몬스터와 만나는지 체크합니다.
         Vector3 p1 = transform.TransformPoint(m_collider.center + Vector3.up * (0.5f * m_collider.height - m_collider.radius));
         Vector3 p2 = transform.TransformPoint(m_collider.center + Vector3.down * (0.5f * m_collider.height - m_collider.radius));
-        
-        //2.1. 캡슐캐스트는 시작 위치는 체크하지 않기 때문에, 시작위치를 체크하기 위해 OverlapCapsule도 체크합니다.
-        //     몬스터와 충돌 중일 시 이동하지 않음, 벽과 충돌 중일 경우
-        Collider[] cols = ArrayPool<Collider>.Shared.Rent(100);
-        int count = Physics.OverlapCapsuleNonAlloc(p1, p2, m_collider.radius, cols, LayerMask.GetMask(ConstVariables.MOVEMENT_COLLISION_LAYERS));
-        for (int i = 0; i < count; i++)
-        {
-            //자신은 제외하고 계산
-            if (cols[i].gameObject.GetInstanceID() == gameObject.GetInstanceID())
-            {
-                continue;
-            }
-            if (cols[i].gameObject.layer == LayerMask.NameToLayer(ConstVariables.LAYER_MONSTER))
-            {
-                //몬스터와 만났을 경우 이동하지 않는다.
-                ArrayPool<Collider>.Shared.Return(cols);
-                return;
-            }
-            if (cols[i].gameObject.layer == LayerMask.NameToLayer(ConstVariables.LAYER_WALL))
-            {
-                //벽과 충돌했을 경우 속도 낮춤
-                nextSpeed = m_dashSpeed * 0.8f;
-            }
-        }
-        ArrayPool<Collider>.Shared.Return(cols);
 
-        //2.2. 캡슐캐스트를 발사, 몬스터와 충돌 시 그 위치까지만 이동합니다.
         if (Physics.CapsuleCast(p1, p2, m_collider.radius - 0.01f, m_dashDirection, out var hit,
-                m_dashSpeed * Time.fixedDeltaTime, LayerMask.GetMask(ConstVariables.LAYER_MONSTER)))
+                m_dashSpeed * Time.fixedDeltaTime, LayerMask.GetMask(ConstVariables.MOVEMENT_COLLISION_LAYERS)))
         {
+            //부딪힐 대상이 있다면, 해당 위치까지만 이동.
             m_rigidbody.MovePosition(transform.position + m_dashDirection * hit.distance);
+
+            if (hit.transform.gameObject.layer != LayerMask.NameToLayer(ConstVariables.LAYER_MONSTER))
+            {
+                //몬스터가 아닌 대상과 충돌 시 이동 방향을 바꿔서 한번 더 테스트
+                Vector3 nextDir = Vector3.ProjectOnPlane(m_dashDirection, hit.normal);
+                Vector3 nextPos = transform.position + m_dashDirection * hit.distance;
+                float nextDist = m_dashSpeed * Time.fixedDeltaTime - hit.distance;
+                Vector3 np1 = nextPos + (m_collider.center + Vector3.up * (0.5f * m_collider.height - m_collider.radius));
+                Vector3 np2 = nextPos + (m_collider.center + Vector3.down * (0.5f * m_collider.height - m_collider.radius));
+
+                if (Physics.CapsuleCast(np1, np2, m_collider.radius - 0.01f, nextDir, out var nhit,
+                nextDist, LayerMask.GetMask(ConstVariables.MOVEMENT_COLLISION_LAYERS)))
+                {
+                    //그래도 충돌할 경우 거기까지만 이동.
+                    m_rigidbody.MovePosition(nextPos + nextDir * nhit.distance);
+                }
+                else
+                {
+                    //충돌 대상이 없다면 최대 사거리까지 이동
+                    m_rigidbody.MovePosition(nextPos + nextDir * nextDist);
+                }
+            }
             return;
         }
+
 
         //강제로 속도를 대쉬값으로 만듭니다.
         m_rigidbody.AddForce(nextDirection * nextSpeed, ForceMode.VelocityChange);
