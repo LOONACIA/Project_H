@@ -27,6 +27,18 @@ public class MonsterSFXPlayer : MonoBehaviour
     {
         SendSFXData(monsterSFX.Attack3);
     }
+    public void OnPlayAttack1TP()
+    {   
+        SendSFXDataAtPoint(GameManager.Sound.ChangeBlend(monsterSFX.Attack1), transform.position);
+    }
+    public void OnPlayAttack2TP()
+    {
+        SendSFXDataAtPoint(GameManager.Sound.ChangeBlend(monsterSFX.Attack2), transform.position);
+    }
+    public void OnPlayAttack3TP()
+    {
+        SendSFXDataAtPoint(GameManager.Sound.ChangeBlend(monsterSFX.Attack3), transform.position);
+    }
     public void OnPlayJump()
     {
         SendSFXData(monsterSFX.Jump);
@@ -105,7 +117,12 @@ public class MonsterSFXPlayer : MonoBehaviour
 
     private void SendSFXData(SFXInfo _info)
     {
-        GameManager.Sound.Play(_info.audio, _info.type, _info.volume, _info.pitch, _info.priority);
+        GameManager.Sound.Play(_info);
+    }
+
+    private void SendSFXDataAtPoint(SFXInfo _info, Vector3 _pos)
+    {
+        GameManager.Sound.PlayClipAt(_info, _pos);
     }
 
     private void FixedUpdate()
