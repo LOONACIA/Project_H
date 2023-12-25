@@ -16,8 +16,19 @@ public class BossStage : MonoBehaviour
 	private void Start()
 	{
 		if (m_bgm != null)
-		{
-			GameManager.Sound.Play(m_bgm, SoundType.Bgm);
+		{   
+            ChangeBgm(m_bgm);
 		}
 	}
+
+    public void ChangeBgm(AudioClip _audio)
+    {
+        SFXInfo info = new SFXInfo();
+
+        info.audio = _audio;
+        info.type = SoundType.Bgm;
+        info.loop = true;
+
+        GameManager.Sound.Play(info);
+    }
 }
