@@ -193,7 +193,7 @@ public class ActorHealth : MonoBehaviour, IHealth
     #region 사운드 출력
     private MonsterSFXPlayer GetSFX()
     {
-        return GetComponent<Monster>().m_thirdPersonAnimator.GetComponent<MonsterSFXPlayer>(); ;
+        return GetComponent<Monster>().m_thirdPersonAnimator.GetComponent<MonsterSFXPlayer>();
     }
     private void PlayHitSound()
     {

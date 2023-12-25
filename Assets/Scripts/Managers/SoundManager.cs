@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
 using UnityEngine.Audio;
 using UnityEngine.Networking;
 
@@ -134,10 +135,18 @@ public class SoundManager
 
 		return audioClip;
     }
+
+    public SFXInfo ChangeBlend(SFXInfo _info, float value = 1.0f)
+    {   
+        SFXInfo audioInfo = (SFXInfo)_info.Clone();
+        audioInfo.blend = value;
+
+        return audioInfo;
+    }
 }
 
 [System.Serializable]
-public class SFXInfo
+public class SFXInfo : System.ICloneable
 {
     public AudioClip audio;
     public SoundType type;
@@ -146,4 +155,18 @@ public class SFXInfo
     public int priority = 128;
     public float blend = 0f;
     public bool loop = false;
+
+    public object Clone()
+    {
+        return new SFXInfo()
+        {
+            audio = audio,
+            type = type,
+            volume = volume,
+            pitch = pitch,
+            priority = priority,
+            blend = blend,
+            loop = loop,
+        };
+    }
 }
