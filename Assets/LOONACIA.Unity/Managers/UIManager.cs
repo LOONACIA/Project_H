@@ -12,7 +12,7 @@ namespace LOONACIA.Unity.Managers
 
         private UIScene _sceneUI;
 
-        private int _order = 0;
+        private int _order = 1;
 
         public Transform Root
         {
