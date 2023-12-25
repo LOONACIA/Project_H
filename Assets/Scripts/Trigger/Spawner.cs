@@ -79,11 +79,10 @@ public class Spawner : MonoBehaviour
         int layerToNotSpawnOn = LayerMask.GetMask("Obstacle", "Wall", "Ground", "Monster");
         while (!isSpawnPosValid && attemptCount < maxAttempts)
         {
-            float constHeight = 0.5f;
             spawnPosition = GetRandomPointInCollider(spawnableAreaCollider);
-            Vector3 pos1 = new Vector3(spawnPosition.x, spawnPosition.y - constHeight, spawnPosition.z);
-            Vector3 pos2 = new Vector3(spawnPosition.x, spawnPosition.y + constHeight, spawnPosition.z);
-            Collider[] colliders = Physics.OverlapCapsule(pos1, pos2, constHeight);
+            Vector3 pos1 = new Vector3(spawnPosition.x, spawnPosition.y - ConstVariables.MONSTER_HEIGHT, spawnPosition.z);
+            Vector3 pos2 = new Vector3(spawnPosition.x, spawnPosition.y + ConstVariables.MONSTER_HEIGHT, spawnPosition.z);
+            Collider[] colliders = Physics.OverlapCapsule(pos1, pos2, ConstVariables.MONSTER_HEIGHT);
 
             bool isInvalidCollision = false;
             foreach (Collider collider in colliders)

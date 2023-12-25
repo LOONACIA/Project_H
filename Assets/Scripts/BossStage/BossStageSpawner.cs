@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
-public class BossStageSpawner : MonoBehaviour
+public class BossStageSpawner : MonoBehaviour, ISpawn
 {
     [SerializeField]
     private WaveInfoList[] m_waveInfoList;
@@ -23,10 +23,10 @@ public class BossStageSpawner : MonoBehaviour
     [SerializeField, Tooltip("소환 최대 시도 횟수")]
     private float m_maxSpawnAttemp = 10;
 
-    [SerializeField, Tooltip("남은 몬스터 수가 m_minEncounterCount 작으면 다음 소환 준비")]
+    [SerializeField, Tooltip("남은 몬스터 수가 minEncounterCount보다 작으면 다음 소환 준비")]
     private float m_minEncounterCount;    
     
-    [SerializeField, Tooltip("남은 몬스터 수가 m_maxEncounterCount 크면 소환 하지 않음")]
+    [SerializeField, Tooltip("남은 몬스터 수가 maxEncounterCount보다 크면 소환 하지 않음")]
     private float m_maxEncounterCount;
 
     [SerializeField, Tooltip("다음 소환까지의 지연 시간")]
@@ -34,6 +34,9 @@ public class BossStageSpawner : MonoBehaviour
 
     [SerializeField, Tooltip("소환 후 일정 시간이 지나면 다시 소환")]
     private float m_spawnInterval;
+
+    [SerializeField, Tooltip("최대 소환 횟수 적용 여부")]
+    private bool m_useSpawnCountLimit;
 
     [SerializeField, Tooltip("최대 소환 횟수")]
     private int m_maxSpawnCount;
@@ -138,7 +141,8 @@ public class BossStageSpawner : MonoBehaviour
         if (m_currentSpawnIndex >= m_waveInfoList.Length)
             m_currentSpawnIndex = 0;
 
-        if (m_maxSpawnCount != 0
+        if (m_useSpawnCountLimit
+            && m_maxSpawnCount != 0
             && m_currentSpawnCount >= m_maxSpawnCount)
         {
             EndSpawn();
@@ -182,18 +186,14 @@ public class BossStageSpawner : MonoBehaviour
         // 도넛 형태에서 좌표 반환
         m_character = GameManager.Character.Controller.Character;
 
-        float spawnHeight = 5;
-        float constHeight = 2f;
-        float constRadius = 0.5f;
-
         for (int i = 0; i < m_maxSpawnAttemp; i++)
         {
             Vector2 randomXZPos = Random.insideUnitCircle.normalized * Random.Range(m_minSpawnRadius, m_maxSpawnRadius);
             Vector3 spawnPos = new Vector3(randomXZPos.x, 0, randomXZPos.y);
-            spawnPos.y = spawnHeight;
+            spawnPos.y = ConstVariables.MONSTER_SPAWN_HEIGHT;
             spawnPos += m_character.transform.position;
 
-            var obstacleColliders = Physics.OverlapCapsule(spawnPos, spawnPos + new Vector3(0, constHeight, 0), constRadius, m_layerToNotSpawnOn);
+            var obstacleColliders = Physics.OverlapCapsule(spawnPos, spawnPos + new Vector3(0, ConstVariables.MONSTER_HEIGHT, 0), ConstVariables.MONSTER_RADIUS, m_layerToNotSpawnOn);
             if (obstacleColliders.Length == 0)
             {
                 var groundCollier = Physics.Raycast(spawnPos, Vector3.down, out var hit, 50, LayerMask.GetMask("Ground"));
