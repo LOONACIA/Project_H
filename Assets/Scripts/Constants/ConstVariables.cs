@@ -8,7 +8,10 @@ public static class ConstVariables
     
     [Header("Monster")]
     public const float MONSTER_DESTROY_WAIT_TIME = 1f;
-    
+    public const float MONSTER_SPAWN_HEIGHT = 5;
+    public const float MONSTER_HEIGHT = 2f;
+    public const float MONSTER_RADIUS = 0.5f;
+
     [Header("Logging")]
     public const string LOG_PATH = "Logs";
     public const string LOG_FILE_FORMAT = "log-{0}.txt";

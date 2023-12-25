@@ -1,6 +1,7 @@
 using LOONACIA.Unity;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -205,17 +206,11 @@ public class MonsterAttack : MonoBehaviour
         m_actor.Animator.SetTrigger(s_targetCheckAnimationKey);
 
         //타격 이펙트, 3명 이상이 죽었을 경우 흔듭니다.
-        foreach(var info in e)
+        m_diedVictimCount += e.Count(info => info.Victim.CurrentHp <= 0f);
+        
+        if (m_diedVictimCount >= 3)
         {
-            if (info.Victim.CurrentHp <= 0f)
-            {
-                //Debug.Log("target count: " + targetCount);
-                m_diedVictimCount += 1;
-                if (m_diedVictimCount >= 3)
-                {
-                    GameManager.Effect.ChangeTimeScale(this, 0.3f, 0.5f);
-                }
-            }
+            GameManager.Effect.ChangeTimeScale(this, 0.3f, 0.5f);
         }
     }
 
