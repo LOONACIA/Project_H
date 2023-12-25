@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
 using UnityEngine.Audio;
 using UnityEngine.Networking;
 
@@ -133,6 +134,14 @@ public class SoundManager
         }
 
 		return audioClip;
+    }
+
+    public SFXInfo ChangeBlend(SFXInfo _info, float value = 1.0f)
+    {   
+        SFXInfo audioInfo = _info;
+        audioInfo.blend = value;
+
+        return audioInfo;
     }
 }
 
