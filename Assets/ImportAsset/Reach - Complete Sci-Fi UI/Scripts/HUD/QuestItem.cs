@@ -15,7 +15,6 @@ namespace Michsky.UI.Reach
         // Resources
         [SerializeField] private Animator questAnimator;
         [SerializeField] private TextMeshProUGUI questTextObj;
-        private TextMeshProUGUI questAlarmTextObj;
 
         // Settings
         public bool useLocalization = true;
@@ -33,18 +32,11 @@ namespace Michsky.UI.Reach
         
         public Animator Animator => questAnimator;
 
-        public TextMeshProUGUI AlarmText => questAlarmTextObj;
-
         public enum DefaultState { Minimized, Expanded }
         public enum AfterMinimize { Disable, Destroy }
 
         void Start()
         {
-            if (questAlarmTextObj == null)
-            {
-                questAlarmTextObj = transform.Find("Alarm Text").GetComponent<TextMeshProUGUI>();
-            }
-
             if (questAnimator == null) { questAnimator = GetComponent<Animator>(); }
             if (useLocalization == true)
             {
