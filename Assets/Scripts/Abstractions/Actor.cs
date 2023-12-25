@@ -1,5 +1,6 @@
 using BehaviorDesigner.Runtime;
 using Cinemachine;
+using DG.Tweening;
 using LOONACIA.Unity.Coroutines;
 using LOONACIA.Unity.Managers;
 using System;
@@ -280,7 +281,7 @@ public abstract class Actor : MonoBehaviour
             Debug.LogWarning($"{name}: {nameof(m_data)} is null");
         }
     }
-
+    
     private void Stun(float seconds)
     {
         if (seconds <= 0f)
