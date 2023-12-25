@@ -117,6 +117,10 @@ public class DissolveGate : MonoBehaviour, IGate
 
         float time = 0;
 
+        //사운드 재생
+        GetComponent<AudioSource>().Stop();
+        GameManager.Sound.PlayClipAt(GameManager.Sound.SFXObjectData.GateOpen, transform.position);
+
         while (time < m_progressTime)
         {
             time += Time.deltaTime;

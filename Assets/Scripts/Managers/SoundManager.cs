@@ -2,12 +2,8 @@ using LOONACIA.Unity;
 using LOONACIA.Unity.Managers;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Assertions.Must;
-using UnityEngine.Audio;
-using UnityEngine.Networking;
+
 
 public class SoundManager
 {
@@ -15,6 +11,7 @@ public class SoundManager
 
     private readonly Dictionary<string, AudioClip> m_audioClips = new();
 
+    public SFXObjectData SFXObjectData;
 
     public void Init()
     {
