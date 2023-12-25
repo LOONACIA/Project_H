@@ -17,4 +17,8 @@ public class GameSettings : ScriptableObject
     [field: Header("Actor Prefabs")]
     [field: SerializeField]
     public ActorPrefabMap[] ActorPrefabs { get; private set; }
+
+    [field: Header("SFX Object ScriptableObject")]
+    [field: SerializeField]
+    public SFXObjectData SFXObjectDatas { get; private set; }
 }

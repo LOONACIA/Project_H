@@ -2,12 +2,9 @@ using LOONACIA.Unity;
 using LOONACIA.Unity.Managers;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
-using UnityEngine.Assertions.Must;
-using UnityEngine.Audio;
-using UnityEngine.Networking;
+
 
 public class SoundManager
 {
@@ -15,6 +12,7 @@ public class SoundManager
 
     private readonly Dictionary<string, AudioClip> m_audioClips = new();
 
+    public SFXObjectData ObjectDataSounds;
 
     public void Init()
     {
@@ -34,6 +32,8 @@ public class SoundManager
 
             m_audioSources[(int)SoundType.Bgm].loop = true;
         }
+
+        ObjectDataSounds = GameManager.Settings.SFXObjectDatas;
     }
 
     public void Clear()

@@ -29,6 +29,7 @@ public class NotificationManager
         foreach (var notification in span)
         {
             m_registeredNotifications.Add(notification.Id, notification);
+            notification.IsNotified = false;
             if (notification is Quest quest)
             {
                 quest.IsCompleted = false;
@@ -41,6 +42,7 @@ public class NotificationManager
         foreach (var quest in m_activatedQuests)
         {
             quest.IsCompleted = false;
+            quest.IsNotified = false;
         }
         
         m_activatedQuests.Clear();
@@ -54,6 +56,11 @@ public class NotificationManager
             return;
         }
 
+        if (notification.IsNotified)
+        {
+            return;
+        }
+
         if (notification is Quest quest)
         {
             // 이미 완료되거나 활성화된 퀘스트는 무시
@@ -64,6 +71,7 @@ public class NotificationManager
         }
 
         Activated?.Invoke(this, notification);
+        notification.IsNotified = true;
     }
 
     public void Complete(int id)

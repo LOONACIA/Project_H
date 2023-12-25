@@ -214,8 +214,8 @@ public class MonsterAttack : MonoBehaviour
             //GameManager.Effect.ChangeTimeScale(this, 0.3f, 0.5f);
 
             //0.03초간 속도 0, Bloom
-            GameManager.Effect.ChangeTimeScale(this, 0f, 0.5f, 1000f, 1000f);
-            GameManager.Effect.SetBloomIntensityInTime(this, 15f, 0.5f);
+            //GameManager.Effect.ChangeTimeScale(this, 0f, 0.5f, 1000f, 1000f);
+            //GameManager.Effect.SetBloomIntensityInTime(this, 15f, 0.5f);
         }
     }
 
