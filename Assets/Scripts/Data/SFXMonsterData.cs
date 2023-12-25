@@ -86,4 +86,8 @@ public class SFXMonsterData : ScriptableObject
     [field: SerializeField]
     [field: Tooltip("3인칭 죽음3")]
     public SFXInfo TPDeath3 { get; private set; }
+
+    [field: SerializeField]
+    [field: Tooltip("해킹 이동 시")]
+    public SFXInfo ChangeBody { get; private set; }
 }
