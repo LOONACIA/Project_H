@@ -38,6 +38,8 @@ public class EffectManager
     private DigitalGlitchVolume m_digitalGlithVolume;
 
     private ChromaticAberration m_chromaticAberration;
+
+    private Bloom m_bloom;
     
     private CoroutineEx m_hitVignetteCoroutine;
 
@@ -88,6 +90,7 @@ public class EffectManager
         m_volume.profile.TryGet(out m_analogGlitchVolume);
         m_volume.profile.TryGet(out m_digitalGlithVolume);
         m_volume.profile.TryGet(out m_chromaticAberration);
+        m_volume.profile.TryGet(out m_bloom);
     }
 
     /// <summary>
@@ -243,7 +246,7 @@ public class EffectManager
         m_hitVignetteCoroutine = Utility.Lerp(0.5f, 0, 1f, value => m_vignette.intensity.Override(value), ignoreTimeScale: true);
     }
 
-    public void ChangeTimeScale(MonoBehaviour caller, float targetTimeScale, float duration)
+    public void ChangeTimeScale(MonoBehaviour caller, float targetTimeScale, float duration, float timeAscendingSpeed = 10f, float timeDescendingSpeed = 15f)
     {
         m_minimumTimeScale = targetTimeScale;
         m_timeScaleUpdateEndTime = Time.unscaledTime + duration;
@@ -295,5 +298,32 @@ public class EffectManager
             }
             yield return null;
         }
+    }
+
+    private float bloomIntensity = 0f;
+    private float bloomEndTime = 0f;
+    private CoroutineEx bloomCoroutine = null;
+    public void SetBloomIntensityInTime(MonoBehaviour caller, float intensity, float duration)
+    {
+        bloomIntensity = intensity;
+        bloomEndTime = Time.unscaledTime + duration;
+        if (bloomCoroutine == null)
+        {
+            bloomCoroutine = CoroutineEx.Create(caller, IE_BloomCoroutine());
+        }
+    }
+
+    private IEnumerator IE_BloomCoroutine()
+    {
+        float orgIntensity = m_bloom.intensity.value;
+        while(Time.unscaledTime<bloomEndTime)
+        {
+            m_bloom.intensity.value = bloomIntensity;
+            yield return null;
+        }
+
+        bloomCoroutine = null;
+        m_bloom.intensity.value = orgIntensity;
+        yield break;
     }
 }
