@@ -16,6 +16,12 @@ public class Explosive : MonoBehaviour
         if (TryGetComponent<Collider>(out m_collider)
             && TryGetComponent<Rigidbody>(out m_rigidBody))
         { 
+            var meshCollider = m_collider as MeshCollider;
+            if (meshCollider != null)
+            {
+                meshCollider.convex = true;
+            }
+
             m_collider.isTrigger = true;
             m_rigidBody.isKinematic = false;
 

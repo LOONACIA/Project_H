@@ -87,4 +87,5 @@ public static class ConstVariables
 
     [Header("Sound")]
     public static readonly string SOUNDBOX = "Prefabs/Objects/SoundBox";
+    public static readonly string SFXOBJECT_SRITABLEOBJECT = "Data/SFXOjbectData";
 }

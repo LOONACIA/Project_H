@@ -11,7 +11,7 @@ public readonly struct AttackInfo
         Victim = victim;
         Damage = damage;
         HitPoint = hitPoint;
-        AttackDirection = attackDirection;
+        AttackDirection = attackDirection.normalized;
     }
     
     /// <summary>

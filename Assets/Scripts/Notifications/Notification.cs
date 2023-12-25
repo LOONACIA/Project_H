@@ -9,4 +9,6 @@ public abstract class Notification
     
     [field: SerializeField]
     public string Content { get; set; }
+    
+    public bool IsNotified { get; set; }
 }
