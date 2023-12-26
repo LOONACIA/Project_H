@@ -1,8 +1,9 @@
-using BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject;
+using Cinemachine;
 using LOONACIA.Unity;
 using LOONACIA.Unity.Coroutines;
 using LOONACIA.Unity.Managers;
 using System.Collections;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 using UnityEngine.Rendering;
@@ -254,6 +255,24 @@ public class EffectManager
         {
             //TODO: Coroutine 동작 중 해킹을 하자마자 원래 몸이 죽으면 TimeScale이 초기화되지 않을 가능성이 있음
             m_timeScaleUpdateCoroutine = CoroutineEx.Create(caller, IE_UpdateTimeScale());
+        }
+    }
+
+    public void ShakeCamera(float _intensity = 1f, float _time = 1f)
+    {
+        var vcam = Camera.main.GetComponent<CinemachineBrain>().ActiveVirtualCamera.VirtualCameraGameObject.GetComponent<CinemachineVirtualCamera>();
+
+        CinemachineBasicMultiChannelPerlin mulPerlin = vcam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+
+        mulPerlin.m_AmplitudeGain = _intensity;
+
+        GameManager.Instance.StartCoroutine(IE_OffShake(_time));
+
+        IEnumerator IE_OffShake(float _time)
+        {
+            yield return new WaitForSeconds(_time);
+
+            mulPerlin.m_AmplitudeGain = 0f;
         }
     }
 

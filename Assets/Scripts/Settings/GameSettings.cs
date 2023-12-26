@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Audio;
 
 [CreateAssetMenu(fileName = nameof(GameSettings), menuName = "Settings/" + nameof(GameSettings))]
 public class GameSettings : ScriptableObject
@@ -21,4 +22,12 @@ public class GameSettings : ScriptableObject
     [field: Header("SFX Object ScriptableObject")]
     [field: SerializeField]
     public SFXObjectData SFXObjectDatas { get; private set; }
+
+    [field: Header("Audio Mixer")]
+    [field: SerializeField]
+    public AudioMixer AudioMixer { get; private set; }
+
+    [field: Header("Attack Light")]
+    [field: SerializeField]
+    public GameObject AttackLight { get; private set; }
 }
