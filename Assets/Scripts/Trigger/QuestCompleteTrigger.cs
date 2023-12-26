@@ -17,15 +17,15 @@ public class QuestCompleteTrigger : MonoBehaviour
     private CompleteType m_type;
 
     [SerializeField]
-    private IInteractableObject m_assoicatedObject;
+    private InteractableObject m_associatedObject;
 
     private bool m_isTriggered;
 
     private void Start()
     {
-        if (m_type == CompleteType.Interaction && m_assoicatedObject != null)
+        if (m_type == CompleteType.Interaction && m_associatedObject != null)
         {
-            m_assoicatedObject.Interacted += OnInteracted;
+            m_associatedObject.Interacted += OnInteracted;
         }
     }
 
@@ -51,9 +51,10 @@ public class QuestCompleteTrigger : MonoBehaviour
         {
             return;
         }
-
+        Debug.Log("Interacted");
         m_isTriggered = true;
         Complete();
+        GameManager.Notification.Activate(m_questId + 1);
     }
 
     private void Complete()
