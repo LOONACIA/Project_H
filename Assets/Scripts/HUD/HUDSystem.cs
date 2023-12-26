@@ -43,16 +43,29 @@ public class HUDSystem : MonoBehaviour
     {
         var hits = ArrayPool<RaycastHit>.Shared.Rent(16);
         Transform cameraTransform = m_camera.transform;
-        int length = Physics.SphereCastNonAlloc(cameraTransform.position, m_settings.CheckRadius, cameraTransform.forward, hits,
+        Vector3 origin = cameraTransform.position;
+        int length = Physics.SphereCastNonAlloc(origin, m_settings.CheckRadius, cameraTransform.forward, hits,
             m_settings.MaxDistance, m_settings.AimLayers);
 
+        float sqrMinDistance = m_settings.MinDistance * m_settings.MinDistance;
         if (length > 0)
         {
             foreach (var hit in hits.AsSpan(0, length))
             {
-                if (hit.distance < m_settings.MinDistance)
+                Vector3 direction = hit.transform.position - origin;
+                if (direction.sqrMagnitude < sqrMinDistance)
                 {
                     continue;
+                }
+
+                // 장애물이 있으면 무시
+                if (Physics.Raycast(origin, (hit.transform.position - origin).normalized, out var hit2, direction.magnitude,
+                        m_settings.AimLayers | m_settings.ObstacleLayers))
+                {
+                    if (((1 << hit2.transform.gameObject.layer) & m_settings.ObstacleLayers.value) != 0)
+                    {
+                        continue;
+                    }
                 }
 
                 TryAdd(hit.transform);
