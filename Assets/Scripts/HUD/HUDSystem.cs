@@ -131,7 +131,7 @@ public class HUDSystem : MonoBehaviour
 
     private void TryAdd(Transform target)
     {
-        if (!target.TryGetComponent<IARObject>(out var arObject))
+        if (!target.TryGetComponent<IARObject>(out var arObject) || !arObject.IsActivated)
         {
             return;
         }
