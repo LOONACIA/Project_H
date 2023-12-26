@@ -172,18 +172,17 @@ public abstract class Actor : MonoBehaviour
 
     protected virtual void OnPossessed()
     {
+        DisableAIComponents();
         if (Status.IsStunned)
         {
             Status.IsStunned = false;
         }
-
-        DisableAIComponents();
     }
 
     protected virtual void OnUnPossessed()
     {
-        Stun(m_data.UnpossessionStunTime);
         EnableAIComponents();
+        Stun(m_data.UnpossessionStunTime);
     }
 
     protected virtual void OnIsPossessedChanged(bool value)
