@@ -15,10 +15,7 @@ public class TestAudio : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            AudioSource ss;
-            ss = transform.GetComponent<AudioSource>();
-
-            ss.Play();
+            GameManager.Sound.OffInGame();
         }
     }
     #endregion

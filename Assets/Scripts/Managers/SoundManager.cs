@@ -2,9 +2,8 @@ using LOONACIA.Unity;
 using LOONACIA.Unity.Managers;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
-
+using UnityEngine.Audio;
 
 public class SoundManager
 {
@@ -14,6 +13,7 @@ public class SoundManager
 
     public SFXObjectData ObjectDataSounds;
 
+    public AudioMixer AUdioMixer;
     public void Init()
     {
         GameObject root = GameObject.Find("@Sound");
@@ -34,6 +34,7 @@ public class SoundManager
         }
 
         ObjectDataSounds = GameManager.Settings.SFXObjectDatas;
+        AUdioMixer = GameManager.Settings.AudioMixer;
     }
 
     public void Clear()
@@ -110,8 +111,21 @@ public class SoundManager
         }
     }
 
+    public void OffInGame()
+    {
+        m_audioSources[(int)SoundType.Bgm].Stop();
 
-	private AudioClip GetOrAddAudioClip(string path, SoundType type = SoundType.Sfx)
+        AUdioMixer.SetFloat("InGame", -80f);
+    }
+
+    public void OnInGame()
+    {
+        m_audioSources[(int)SoundType.Bgm].Play();
+
+        AUdioMixer.SetFloat("InGame", 0f);
+    }
+
+    private AudioClip GetOrAddAudioClip(string path, SoundType type = SoundType.Sfx)
     {
         if (!path.Contains("Sounds/"))
         {
