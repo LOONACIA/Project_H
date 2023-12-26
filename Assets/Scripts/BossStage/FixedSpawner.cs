@@ -16,6 +16,9 @@ public class FixedSpawner : MonoBehaviour, ISpawn
     [SerializeField, Tooltip("첫 소환 지연 시간")]
     private float m_firstSpawnDelay;
 
+    [SerializeField, Tooltip("반복해서 소환하는지 여부")]
+    private bool m_useRepeat;
+
     [SerializeField, Tooltip("다음 소환까지의 지연 시간")]
     private float m_repeatSpawnDelay;
 
