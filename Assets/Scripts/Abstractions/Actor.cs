@@ -86,7 +86,10 @@ public abstract class Actor : MonoBehaviour
             Status.CanKnockBack = Data.CanKnockBack;
             Status.CanKnockDown = Data.CanKnockDown;
         }
+    }
 
+    protected virtual void Start()
+    {
         EnableAIComponents();
     }
 
@@ -207,11 +210,6 @@ public abstract class Actor : MonoBehaviour
         if (m_behaviorTree != null)
         {
             m_behaviorTree.enabled = true;
-        }
-
-        if (Animator != null)
-        {
-            m_firstPersonAnimator.gameObject.SetActive(false);
         }
     }
 

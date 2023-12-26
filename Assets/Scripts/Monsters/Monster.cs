@@ -102,11 +102,14 @@ public class Monster : Actor
     protected override void EnableAIComponents()
     {
         base.EnableAIComponents();
-
-        m_rigidbody.isKinematic = false;
+        
         if (Movement != null && Movement.IsOnGround)
         {
             m_navMeshAgent.enabled = true;
+        }
+        else
+        {
+            m_rigidbody.isKinematic = false;
         }
     }
 
