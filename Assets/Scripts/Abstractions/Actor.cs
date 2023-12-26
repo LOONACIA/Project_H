@@ -86,7 +86,10 @@ public abstract class Actor : MonoBehaviour
             Status.CanKnockBack = Data.CanKnockBack;
             Status.CanKnockDown = Data.CanKnockDown;
         }
+    }
 
+    protected virtual void Start()
+    {
         EnableAIComponents();
     }
 

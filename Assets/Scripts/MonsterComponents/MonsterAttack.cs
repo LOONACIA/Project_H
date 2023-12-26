@@ -221,14 +221,10 @@ public class MonsterAttack : MonoBehaviour
             {
                 GameManager.Effect.ShakeCamera(3, 0.5f);
             }
+
             //빛
             GameObject light = ManagerRoot.Resource.Instantiate(GameManager.Settings.AttackLight);
-            
-            foreach(var tmp in e)
-            {
-                light.transform.position = tmp.HitPoint;
-                break;
-            }
+            light.transform.position = Camera.main.transform.position + transform.forward * 2f;
             
 
             m_bool = false;
