@@ -28,7 +28,7 @@ namespace LOONACIA.Unity.Console
         {
             Init();
             EnableInput();
-            }
+        }
 
         private void OnGUI()
         {
@@ -49,8 +49,10 @@ namespace LOONACIA.Unity.Console
                 GUI.Box(new(0, y, Screen.width, helpBoxHeight), string.Empty);
                 Rect viewport = new(0, 0, Screen.width - 30, fontSize * _commands.Count);
 
-                _scrollView = GUI.BeginScrollView(new(0, y + 5f, Screen.width, helpBoxHeight - 10f), _scrollView, viewport);
-                foreach ((DebugCommandBase command, int index) in _commands.Select((command, index) => (command, index)))
+                _scrollView = GUI.BeginScrollView(new(0, y + 5f, Screen.width, helpBoxHeight - 10f), _scrollView,
+                    viewport);
+                foreach ((DebugCommandBase command, int index) in
+                         _commands.Select((command, index) => (command, index)))
                 {
                     Rect labelRect = new(5, (fontSize * 1.5f) * index, viewport.width - 100, fontSize * 1.5f);
                     GUI.Label(labelRect, $"{command.Format} - {command.Description}");
@@ -64,7 +66,8 @@ namespace LOONACIA.Unity.Console
             GUI.Box(new(0, y, Screen.width, fontSize * 2f), string.Empty);
             GUI.backgroundColor = new();
             GUI.SetNextControlName("DebugConsole");
-            _commandString = GUI.TextField(new(10f, y + (fontSize / 2f), Screen.width - 20f, fontSize * 1.5f), _commandString);
+            _commandString = GUI.TextField(new(10f, y + (fontSize / 2f), Screen.width - 20f, fontSize * 1.5f),
+                _commandString);
             GUI.FocusControl("DebugConsole");
         }
 
@@ -73,7 +76,8 @@ namespace LOONACIA.Unity.Console
             _showHelp = false;
 
             (string id, string parameter) = ParseCommandString();
-            foreach (var command in _commands.Where(command => command.Id.Equals(id, StringComparison.OrdinalIgnoreCase)))
+            foreach (var command in _commands.Where(
+                         command => command.Id.Equals(id, StringComparison.OrdinalIgnoreCase)))
             {
                 command.Execute(parameter);
             }
@@ -99,33 +103,28 @@ namespace LOONACIA.Unity.Console
                     format: "load <scene name>",
                     execute: input => SceneManagerEx.LoadScene(input),
                     parser: ArgumentParserBag.TryGetString),
-                
                 new DebugCommand<string>(
                     id: "kill",
                     description: "Kill the specified GameObject",
                     format: "kill <name>",
-                    execute: input => GameObject.Find(input).GetComponent<ActorHealth>().Kill(),
+                    execute: input => GameObject.Find(input).GetComponent<IHealth>().Kill(),
                     parser: ArgumentParserBag.TryGetString),
-
                 new TransformObjectCommand(
                     id: "move",
                     description: "Move the position of specified GameObject",
                     format: "move <name> <position>",
                     type: TransformObjectCommand.TransformType.Position),
-
                 new TransformObjectCommand(
                     id: "rotate",
                     description: "Rotate the specified GameObject",
                     format: "rotate <name> <rotation>",
                     type: TransformObjectCommand.TransformType.Rotation),
-
                 new DebugCommand<float>(
                     id: "time_scale",
                     description: "Change the time scale",
                     format: "time_scale <scale>",
                     execute: scale => Time.timeScale = scale,
                     parser: float.TryParse),
-                
                 new DebugCommand(
                     id: "show_fps",
                     description: "Show the FPS counter",
@@ -137,9 +136,9 @@ namespace LOONACIA.Unity.Console
                         {
                             counter = gameObject.GetOrAddComponent<FpsCounter>();
                         }
+
                         counter.gameObject.SetActive(true);
                     }),
-                
                 new DebugCommand(
                     id: "hide_fps",
                     description: "Hide the FPS counter",
@@ -152,13 +151,11 @@ namespace LOONACIA.Unity.Console
                             counter.gameObject.SetActive(false);
                         }
                     }),
-
                 new DebugCommand(
                     id: "reload",
                     description: "Reload the current scene",
                     format: "reload",
                     execute: () => SceneManagerEx.LoadScene(SceneManager.GetActiveScene().name)),
-
                 new DebugCommand(
                     id: "exit",
                     description: "Exit the game",
@@ -171,7 +168,6 @@ namespace LOONACIA.Unity.Console
 					Application.Quit();
 #endif
                     }),
-
                 new DebugCommand("help", "Shows a list of commands", "help", () => _showHelp = true),
             };
         }

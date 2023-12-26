@@ -40,6 +40,8 @@ public class UIQuestPresenter : UIBase
 
     private LayoutElement m_layoutElement;
 
+    private RectTransform m_questItemRectTransform;
+
     public void SetQuest(Quest quest)
     {
         m_quest = quest;
@@ -48,6 +50,7 @@ public class UIQuestPresenter : UIBase
 
     public void Complete()
     {
+        m_layoutElement.ignoreLayout = true;
         m_questItem.MinimizeQuest();
         StartCoroutine(CoWaitForDisable());
     }
@@ -63,21 +66,21 @@ public class UIQuestPresenter : UIBase
         m_questItem.minimizeAfter = 0;
         m_questItem.defaultState = QuestItem.DefaultState.Expanded;
         m_questItem.gameObject.SetActive(false);
-        var rectTransform = m_questItem.GetComponent<RectTransform>();
+        m_questItemRectTransform = m_questItem.GetComponent<RectTransform>();
         StartCoroutine(FitSize());
-        return;
-
-        IEnumerator FitSize()
-        {
-            yield return new WaitUntil(() => rectTransform.sizeDelta.y != 0);
-            Vector2 sizeDelta = rectTransform.sizeDelta;
-            m_layoutElement.preferredWidth = sizeDelta.x;
-            m_layoutElement.preferredHeight = sizeDelta.y;
-        }
+    }
+    
+    private IEnumerator FitSize()
+    {
+        yield return new WaitUntil(() => m_questItemRectTransform.sizeDelta.y != 0);
+        Vector2 sizeDelta = m_questItemRectTransform.sizeDelta;
+        m_layoutElement.preferredWidth = sizeDelta.x;
+        m_layoutElement.preferredHeight = sizeDelta.y;
     }
 
     private void SetQuestItem()
     {
+        StartCoroutine(FitSize());
         if (m_canvasScaler == null)
         {
             m_canvasScaler = GetComponentInParent<CanvasScaler>();
@@ -106,7 +109,6 @@ public class UIQuestPresenter : UIBase
         m_questItem.ExpandQuest();
 
         var point = Camera.main.ViewportToScreenPoint(new(0.5f, 0.4f, 0f));
-        var rectTransform = m_questItem.GetComponent<RectTransform>();
         
         var myTransform = transform.GetComponent<RectTransform>();
         
@@ -115,7 +117,7 @@ public class UIQuestPresenter : UIBase
 
         IEnumerator CoWait()
         {
-            yield return new WaitUntil(() => rectTransform.sizeDelta.x != 0);
+            yield return new WaitUntil(() => m_questItemRectTransform.sizeDelta.x != 0);
             Vector3 final = new(xOffset, 0, 0);
 
             var anchoredPosition = myTransform.anchoredPosition;
@@ -123,7 +125,7 @@ public class UIQuestPresenter : UIBase
             from.y = -(from.y + anchoredPosition.y);
             Vector3 to = from.GetFlatVector() + final;
             
-            rectTransform.anchoredPosition = from;
+            m_questItemRectTransform.anchoredPosition = from;
             Animator animator = m_questItem.Animator;
             yield return new WaitUntil(() => !animator.enabled);
             Color color = m_alarmText.color;
@@ -131,9 +133,9 @@ public class UIQuestPresenter : UIBase
             
             DOTween.Sequence()
                 .Join(m_alarmText.DOColor(color, 0.5f).SetEase(Ease.InCubic))
-                .Append(rectTransform.DOAnchorPos(to, 0.25f).SetEase(m_curve))
+                .Append(m_questItemRectTransform.DOAnchorPos(to, 0.25f).SetEase(m_curve))
                 .AppendInterval(0.25f)
-                .Append(rectTransform.DOAnchorPos(final, 0.25f).SetEase(m_curve));
+                .Append(m_questItemRectTransform.DOAnchorPos(final, 0.25f).SetEase(m_curve));
         }
     }
 
@@ -144,6 +146,8 @@ public class UIQuestPresenter : UIBase
         {
             yield return m_waitForSecondsCache;
         }
+
+        m_layoutElement.ignoreLayout = false;
 
         ManagerRoot.Resource.Release(gameObject);
     }

@@ -39,6 +39,7 @@ public class NotificationManager
 
     public void Clear()
     {
+        // 활성화된 퀘스트 초기화. 만약 전체 알림을 초기화하고 싶다면 이 부분을 수정할 것
         foreach (var quest in m_activatedQuests)
         {
             quest.IsCompleted = false;
@@ -48,6 +49,7 @@ public class NotificationManager
         m_activatedQuests.Clear();
     }
 
+    // ReSharper disable Unity.PerformanceAnalysis
     public void Activate(int id)
     {
         if (!m_registeredNotifications.TryGetValue(id, out var notification))

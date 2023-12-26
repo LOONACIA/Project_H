@@ -39,6 +39,22 @@ public class HUDSystem : MonoBehaviour
         m_camera = Camera.main;
     }
 
+    private void OnEnable()
+    {
+        if (m_processor != null)
+        {
+            m_processor.Possessing += OnPossessing;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (m_processor != null)
+        {
+            m_processor.Possessing -= OnPossessing;
+        }
+    }
+
     private void FixedUpdate()
     {
         var hits = ArrayPool<RaycastHit>.Shared.Rent(16);
@@ -56,16 +72,6 @@ public class HUDSystem : MonoBehaviour
                 if (direction.sqrMagnitude < sqrMinDistance)
                 {
                     continue;
-                }
-
-                // 장애물이 있으면 무시
-                if (Physics.Raycast(origin, (hit.transform.position - origin).normalized, out var hit2, direction.magnitude,
-                        m_settings.AimLayers | m_settings.ObstacleLayers))
-                {
-                    if (((1 << hit2.transform.gameObject.layer) & m_settings.ObstacleLayers.value) != 0)
-                    {
-                        continue;
-                    }
                 }
 
                 TryAdd(hit.transform);
@@ -107,6 +113,16 @@ public class HUDSystem : MonoBehaviour
             ManagerRoot.Resource.Release(card.Value.gameObject);
         }
     }
+    
+    private void Clear()
+    {
+        foreach (var card in m_cards.Values)
+        {
+            ManagerRoot.Resource.Release(card.gameObject);
+        }
+        
+        m_cards.Clear();
+    }
 
     private bool IsNeedToRemove(Transform target)
     {
@@ -115,15 +131,25 @@ public class HUDSystem : MonoBehaviour
             return true;
         }
 
-        Vector3 targetPosition = target.position.GetFlatVector();
-        Vector3 cameraPosition = m_camera.transform.position.GetFlatVector();
-        Vector3 direction = targetPosition - cameraPosition;
+        Vector3 targetPosition = target.position;
+        Vector3 cameraPosition = m_camera.transform.position;
+        Vector3 direction = targetPosition.GetFlatVector() - cameraPosition.GetFlatVector();
         float sqrDistance = direction.sqrMagnitude;
         float sqrMinDistance = m_settings.MinDistance * m_settings.MinDistance;
         float sqrMaxDistance = m_settings.MaxDistance * m_settings.MaxDistance;
         if (sqrDistance < sqrMinDistance || sqrDistance > sqrMaxDistance)
         {
             return true;
+        }
+        
+        // 사이에 장애물이 있으면 무시
+        if (Physics.Raycast(cameraPosition, (targetPosition - cameraPosition).normalized, out var hit, direction.magnitude,
+                m_settings.AimLayers | m_settings.ObstacleLayers))
+        {
+            if (hit.transform != target)
+            {
+                return true;
+            }
         }
 
         return Vector3.Dot(direction.normalized, m_camera.transform.forward) < m_settings.DotProductSensitivity;
@@ -161,5 +187,10 @@ public class HUDSystem : MonoBehaviour
         (float yMin, float yMax) = leftTop.y < rightBottom.y ? (rightBottom.y, leftTop.y) : (leftTop.y, rightBottom.y);
 
         card.UpdatePosition(xMin, xMax, yMin, yMax);
+    }
+    
+    private void OnPossessing(object sender, EventArgs e)
+    {
+        Clear();
     }
 }
