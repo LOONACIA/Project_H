@@ -47,7 +47,7 @@ public class QuestCompleteTrigger : MonoBehaviour
 
     private void OnInteracted(object sender, Transform e)
     {
-        if (!m_isTriggered)
+        if (m_isTriggered)
         {
             return;
         }
