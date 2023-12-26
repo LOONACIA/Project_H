@@ -2,6 +2,7 @@ using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using Cinemachine;
 using UnityEngine;
+using UnityEngine.AI;
 using Tooltip = BehaviorDesigner.Runtime.Tasks.TooltipAttribute;
 
 // Shooter BT에서 타겟을 조준하는데 사용
@@ -36,6 +37,8 @@ public class AimTarget : Action
     private Monster m_owner;
     
     private CapsuleCollider m_collider;
+
+    private NavMeshAgent m_agent;
     
     private Vector3 m_previousTargetPosition;
 
@@ -49,9 +52,14 @@ public class AimTarget : Action
 
     private Transform m_targetActor;
 
+    //NavMeshAgent의 공격 전 Priority, ObstacleAvoidance
+    private int m_orgPriority;
+    private ObstacleAvoidanceType m_orgAvoidance;
+
     public override void OnAwake()
     {
         m_owner = GetComponent<Monster>();
+        m_agent = GetComponent<NavMeshAgent>();
     }
 
     public override void OnStart()
@@ -72,6 +80,12 @@ public class AimTarget : Action
             Vector3 target = m_targetIsActor ? m_targetActor.position : m_target.Value.position + offset;
             m_previousTargetPosition = target + (Random.insideUnitSphere * m_randomRange.Value);
         }
+
+        //조준 중일 때 다른 적이 막히지 않게 하기 위함
+        m_orgAvoidance = m_agent.obstacleAvoidanceType;
+        m_orgPriority = m_agent.avoidancePriority;
+        m_agent.avoidancePriority = 99;
+        m_agent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
 
         m_aimDuration = m_aimSeconds.Value;
         m_waitDuration = m_aimDuration + m_holdSeconds.Value;
@@ -123,6 +137,10 @@ public class AimTarget : Action
         m_isAiming.Value = false;
         m_owner.Animator.SetBool(s_isAiming, false);
         m_previousTargetPosition = Vector3.zero;
+
+        //조준 종료, 기존 Agent 값으로 돌아감
+        m_agent.obstacleAvoidanceType = m_orgAvoidance;
+        m_agent.avoidancePriority = m_orgPriority;
     }
 
     public override void OnReset()
