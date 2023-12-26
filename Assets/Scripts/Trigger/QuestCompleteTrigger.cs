@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 public class QuestCompleteTrigger : MonoBehaviour
 {
@@ -15,6 +17,9 @@ public class QuestCompleteTrigger : MonoBehaviour
     private int m_questId;
 
     [SerializeField]
+    private int m_nextQuestId;
+
+    [SerializeField]
     private CompleteType m_type;
 
     [SerializeField]
@@ -24,6 +29,7 @@ public class QuestCompleteTrigger : MonoBehaviour
     private UnityEvent m_onComplete;
 
     private bool m_isTriggered;
+    
 
     private void Start()
     {
@@ -58,7 +64,15 @@ public class QuestCompleteTrigger : MonoBehaviour
         Debug.Log("Interacted");
         m_isTriggered = true;
         Complete();
-        GameManager.Notification.Activate(m_questId + 1);
+        if(m_nextQuestId != 0)
+        {
+            GameManager.Notification.Activate(m_nextQuestId);
+        }
+        else
+        {
+            GameManager.Notification.Activate(m_questId + 1);
+        }
+
     }
 
     private void Complete()
