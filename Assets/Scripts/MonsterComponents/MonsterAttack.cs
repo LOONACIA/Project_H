@@ -1,4 +1,5 @@
 using LOONACIA.Unity;
+using LOONACIA.Unity.Managers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -185,6 +186,7 @@ public class MonsterAttack : MonoBehaviour
         {
             //공격 스테이트로 진입 시, 타격 수 count 초기화
             m_diedVictimCount = 0;
+            m_bool = true;
         }
     }
     
@@ -200,18 +202,36 @@ public class MonsterAttack : MonoBehaviour
             m_actor.Status.SkillCoolTime = 0f;
         }
     }
+
+    private bool m_bool;
             
     private void OnAttackHit(object sender, IEnumerable<AttackInfo> e)
     {
         m_actor.Animator.SetTrigger(s_targetCheckAnimationKey);
 
-        //타격 이펙트, 3명 이상이 죽었을 경우 흔듭니다.
+        // 죽은 몬스터 수 체크
         m_diedVictimCount += e.Count(info => info.Victim.CurrentHp <= 0f);
         
-        if (m_diedVictimCount >= 3)
+        if (m_diedVictimCount >= 3 && m_bool)
         {
-            //0.5초간 슬로우모션
-            //GameManager.Effect.ChangeTimeScale(this, 0.3f, 0.5f);
+            //시간 조절
+            GameManager.Effect.ChangeTimeScale(this, 0f, 0.1f, 1000f, 1000f);
+            //카메라 쉐이크
+            if (m_actor is not Shooter)
+            {
+                GameManager.Effect.ShakeCamera(3, 0.5f);
+            }
+            //빛
+            GameObject light = ManagerRoot.Resource.Instantiate(GameManager.Settings.AttackLight);
+            
+            foreach(var tmp in e)
+            {
+                light.transform.position = tmp.HitPoint;
+                break;
+            }
+            
+
+            m_bool = false;
 
             //0.03초간 속도 0, Bloom
             //GameManager.Effect.ChangeTimeScale(this, 0f, 0.5f, 1000f, 1000f);

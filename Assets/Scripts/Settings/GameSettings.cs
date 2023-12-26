@@ -26,4 +26,8 @@ public class GameSettings : ScriptableObject
     [field: Header("Audio Mixer")]
     [field: SerializeField]
     public AudioMixer AudioMixer { get; private set; }
+
+    [field: Header("Attack Light")]
+    [field: SerializeField]
+    public GameObject AttackLight { get; private set; }
 }
