@@ -71,7 +71,7 @@ public class HUDSystem : MonoBehaviour
         }
 
         using ValueList<int> toRemove = new(stackalloc int[m_cards.Count]);
-        foreach ((var root, var card) in m_cards)
+        foreach (var (root, card) in m_cards)
         {
             if (IsNeedToRemove(root))
             {
