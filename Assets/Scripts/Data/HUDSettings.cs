@@ -14,6 +14,9 @@ public class HUDSettings : ScriptableObject
 
     [field: SerializeField]
     public float MaxDistance { get; private set; } = 30f;
+    
+    [field: SerializeField]
+    public float DotProductSensitivity { get; private set; } = 0.9f;
 
     [field: SerializeField]
     public SerializableDictionary<ActorType, Sprite> CrosshairSprites { get; private set; }
