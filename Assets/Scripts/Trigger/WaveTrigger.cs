@@ -205,13 +205,13 @@ public class WaveTrigger : MonoBehaviour
         if (actor.IsPossessed)
         {
             m_isTriggered = true;
-            AddInitialMontsers();
+            AddInitialMonsters();
             Triggered?.Invoke(this, EventArgs.Empty);
             StartCoroutine(CoWaitSpawn());
         }
     }
 
-    private void AddInitialMontsers()
+    private void AddInitialMonsters()
     {
         if (m_collider == null)
             return;
