@@ -4,6 +4,9 @@ using UnityEngine;
 public class HackingLaserContainer : MonoBehaviour
 {
     [Header("Move")]
+    [SerializeField, Tooltip("레이저가 이동하는지 여부")]
+    private bool m_canMove;
+
     [SerializeField, Tooltip("편도로 가는지, 왕복하는지 여부")]
     private bool m_isOneWay = true;
 
@@ -44,7 +47,8 @@ public class HackingLaserContainer : MonoBehaviour
 
     private void Update()
     {
-        Move();
+        if (m_canMove)
+            Move();
 
         if (m_canRotate)
             Rotate();
