@@ -75,7 +75,7 @@ public class BossStagePhase : MonoBehaviour
 
         m_explosiveList = GetComponentsInChildren<Explosive>(true);
 
-        m_spawnerList = GetComponentsInChildren<ISpawn>(true);
+        m_spawnerList = GetComponentsInChildren<ISpawn>();
 
         m_character = GameManager.Character.Controller.Character;
 
