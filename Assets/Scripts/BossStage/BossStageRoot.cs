@@ -1,4 +1,7 @@
+using LOONACIA.Unity.Coroutines;
+using LOONACIA.Unity.Managers;
 using System;
+using System.Collections;
 using System.Transactions;
 using UnityEngine;
 
@@ -9,6 +12,7 @@ public class BossStageRoot : MonoBehaviour
     [SerializeField]
     private BossStagePhase[] m_bossStagePhaseList;
 
+    [Header("Start Event")]
     [SerializeField, Tooltip("플레이어를 날려버릴 위치")]
     private Transform m_throwPosition;
 
@@ -21,11 +25,16 @@ public class BossStageRoot : MonoBehaviour
     [SerializeField]
     private GameObject m_detectionLight;
 
+    [Header("End Event")]
+    [SerializeField, Tooltip("플레이어가 마지막 상호작용한 후, 게임이 끝날 때까지의 지연 시간")]
+    private float m_clearDelayTime;
+
     private Actor m_character;
 
     private int m_currentPhase;
 
     private int m_lastPhase;
+
 
     private void Start()
     {
@@ -69,6 +78,7 @@ public class BossStageRoot : MonoBehaviour
     private void StageClear()
     {
         boss.Kill();
+        CoroutineEx.Create(this, Co_StageClear());
     }
 
     private void ThrowPlayer()    {
@@ -86,5 +96,12 @@ public class BossStageRoot : MonoBehaviour
 
             rigidbody.AddForce(direction * force, ForceMode.VelocityChange);
         }
+    }
+
+    private IEnumerator Co_StageClear()
+    { 
+        yield return new WaitForSeconds(m_clearDelayTime);
+
+        GameManager.Instance.SetGameClear();
     }
 }
