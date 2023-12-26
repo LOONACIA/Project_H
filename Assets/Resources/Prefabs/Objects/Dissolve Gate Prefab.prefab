@@ -50,6 +50,7 @@ GameObject:
   - component: {fileID: 4262841493631245576}
   - component: {fileID: 8719868137895990451}
   - component: {fileID: 3599253758932927467}
+  - component: {fileID: 2528654062265661119}
   m_Layer: 8
   m_Name: Gate
   m_TagString: Untagged
@@ -206,6 +207,103 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
+--- !u!82 &2528654062265661119
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1932787601869007984}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: -3984429117347998451, guid: 9c6bf5f559159ac4d99f09b061111d9a,
+    type: 2}
+  m_audioClip: {fileID: 8300000, guid: 578d5d7af2649a74f989b23db2f0644b, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 0.5
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 30
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1932787602160461016
 GameObject:
   m_ObjectHideFlags: 0
@@ -222,7 +320,8 @@ GameObject:
   - component: {fileID: 8907718513105711426}
   - component: {fileID: 7309061103222925549}
   - component: {fileID: 2959481515560928922}
-  m_Layer: 0
+  - component: {fileID: 5916549393209674659}
+  m_Layer: 18
   m_Name: GateDissolveMachine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -307,8 +406,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1.7693558, z: 1.3522993}
-  m_Center: {x: 7.2688175e-16, y: 0.3846779, z: 0.17614973}
+  m_Size: {x: 1, y: 1.7693558, z: 1.2401972}
+  m_Center: {x: -9.164367e-17, y: 0.3846779, z: 0.056051135}
 --- !u!114 &1932787602160461018
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -376,6 +475,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bac02a394e6409438c3e86c683456f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5916549393209674659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1932787602160461016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32993ff7aa7a5c14bb183facd9f79758, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Info>k__BackingField: {fileID: 11400000, guid: 7fabe61ea9a6e584f9b899c3bb636a6d,
+    type: 2}
 --- !u!1001 &5413445461262938672
 PrefabInstance:
   m_ObjectHideFlags: 0
