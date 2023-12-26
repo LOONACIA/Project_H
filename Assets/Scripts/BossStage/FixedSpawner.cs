@@ -31,6 +31,8 @@ public class FixedSpawner : MonoBehaviour, ISpawn
     [SerializeField, Tooltip("소환 최대 시도 횟수")]
     private float m_maxSpawnAttemp = 10;
 
+    private int m_currentSpawnCount;
+
     private bool m_active;
 
     private bool m_isFirstSpawn;
@@ -53,6 +55,12 @@ public class FixedSpawner : MonoBehaviour, ISpawn
         if (!m_isFirstSpawn) 
         {
             Spawn();    
+        }
+
+        if (m_useRepeat && m_currentSpawnCount > 0)
+        { 
+            EndSpawn();
+            return;
         }
 
         // m_collider 안에 몬스터 있는지 확인 
@@ -105,6 +113,8 @@ public class FixedSpawner : MonoBehaviour, ISpawn
             return;
 
         var monster = Instantiate(m_monster, spawnPosition, transform.rotation);
+
+        m_currentSpawnCount++;
     }
 
     private Vector3 GetSpawnPos()
