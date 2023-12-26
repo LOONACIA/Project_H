@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshObstacle))]
+[RequireComponent(typeof(DissolveGateSizeSetting))]
 public class DissolveGate : MonoBehaviour, IGate
 {
     private enum GateState
@@ -30,6 +31,8 @@ public class DissolveGate : MonoBehaviour, IGate
     private Renderer m_gateRenderer;
 
     private NavMeshObstacle m_obstacle;
+
+    private DissolveGateSizeSetting m_sizeSetting;
 
     public IEnumerator Open()
     {
@@ -93,8 +96,10 @@ public class DissolveGate : MonoBehaviour, IGate
         m_gateCollider = m_gate.GetComponent<Collider>();
         m_gateRenderer = m_gate.GetComponent<Renderer>();
         TryGetComponent<NavMeshObstacle>(out m_obstacle);
+        TryGetComponent<DissolveGateSizeSetting>(out m_sizeSetting);
 
-        m_appearMaterial = Instantiate<Material>(Resources.Load<Material>(ConstVariables.GATE_APPEAR_MATERIAL_PATH));
+        //m_appearMaterial = Instantiate<Material>(Resources.Load<Material>(ConstVariables.GATE_APPEAR_MATERIAL_PATH));
+        m_appearMaterial = Instantiate<Material>(m_gateRenderer.material);
         m_dissolveMaterial = Instantiate<Material>(Resources.Load<Material>(ConstVariables.GATE_DISSOLVE_MATERIAL_PATH));
 
         if (m_state == GateState.Open)
@@ -116,6 +121,12 @@ public class DissolveGate : MonoBehaviour, IGate
         yield return null;
 
         float time = 0;
+
+        // 메테리얼 크기 조절
+        if (m_sizeSetting != null) 
+        {
+            m_sizeSetting.InitSetting();
+        }
 
         //사운드 재생
         GetComponent<AudioSource>().Stop();

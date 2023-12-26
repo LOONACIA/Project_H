@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 4415403225488909515}
   - component: {fileID: 1919200428498718721}
   - component: {fileID: 7538450647347971283}
-  m_Layer: 0
+  - component: {fileID: 6877276077686390060}
+  m_Layer: 18
   m_Name: security_camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -98,6 +99,20 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -1269010569567516206, guid: 8ecbf668e1e803b4ca2d1ae1b2a1589a, type: 3}
+--- !u!114 &6877276077686390060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 117835688314810836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32993ff7aa7a5c14bb183facd9f79758, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Info>k__BackingField: {fileID: 11400000, guid: 4e7b524d6dab3684b863ba42bd8bb984,
+    type: 2}
 --- !u!1 &5043891488001581347
 GameObject:
   m_ObjectHideFlags: 0
@@ -257,6 +272,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_origin: {fileID: 5043891488001581351}
+  m_useDelay: 0
+  m_updateTargetDelay: 1.5
+  <UseBoxCollider>k__BackingField: 0
+  <RecipientLayers>k__BackingField:
+    serializedVersion: 2
+    m_Bits: 0
   <AlertRange>k__BackingField: 10
 --- !u!1 &6059236981349896095
 GameObject:
