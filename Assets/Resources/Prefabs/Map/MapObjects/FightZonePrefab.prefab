@@ -137,6 +137,8 @@ GameObject:
   - component: {fileID: 1921516140613216350}
   - component: {fileID: 1921516140613216349}
   - component: {fileID: 1921516140613216344}
+  - component: {fileID: 7738811657152021713}
+  - component: {fileID: 1089206348050837724}
   m_Layer: 8
   m_Name: Gate 2
   m_TagString: Untagged
@@ -237,6 +239,34 @@ MonoBehaviour:
   m_state: 1
   m_gate: {fileID: 1921516140613216323}
   m_progressTime: 3
+--- !u!208 &7738811657152021713
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1921516140613216323}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
+--- !u!114 &1089206348050837724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1921516140613216323}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64dd0dedcb76b5343aa16978b70abec1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6163096234342256617
 GameObject:
   m_ObjectHideFlags: 0
@@ -293,6 +323,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6163096234555088553}
+  - component: {fileID: 5811602946689107317}
   m_Layer: 0
   m_Name: FightZonePrefab
   m_TagString: Untagged
@@ -317,6 +348,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5811602946689107317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6163096234555088558}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64dd0dedcb76b5343aa16978b70abec1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6163096235372135128
 GameObject:
   m_ObjectHideFlags: 0
@@ -330,6 +373,8 @@ GameObject:
   - component: {fileID: 6163096235372135124}
   - component: {fileID: 6163096235372135125}
   - component: {fileID: 6163096235372135120}
+  - component: {fileID: 1981312926072336986}
+  - component: {fileID: 8308857758362168890}
   m_Layer: 8
   m_Name: Gate 1
   m_TagString: Untagged
@@ -430,6 +475,34 @@ MonoBehaviour:
   m_state: 1
   m_gate: {fileID: 6163096235372135128}
   m_progressTime: 3
+--- !u!208 &1981312926072336986
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6163096235372135128}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
+--- !u!114 &8308857758362168890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6163096235372135128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64dd0dedcb76b5343aa16978b70abec1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8471150153553137083
 GameObject:
   m_ObjectHideFlags: 0

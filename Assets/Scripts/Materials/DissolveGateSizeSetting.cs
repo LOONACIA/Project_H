@@ -9,15 +9,15 @@ public class DissolveGateSizeSetting : MonoBehaviour
 
     private void Start()
     {
-        Init();
+        InitSetting();
     }
 
     private void OnEnable()
     {
-        Init();
+        InitSetting();
     }
 
-    private void Init()
+    public void InitSetting()
     {
         if (m_renderer == null)
             TryGetComponent<Renderer>(out m_renderer);

@@ -101,7 +101,8 @@ public class ActorHealth : MonoBehaviour, IHealth
     {
         Damaged?.Invoke(this, info);
 
-        PlayVfx(info);
+        PlayHitVfx(info);
+
         if (IsDead)
         {
             OnDying(info);
@@ -164,7 +165,7 @@ public class ActorHealth : MonoBehaviour, IHealth
         m_actor.Animator.SetFloat(ConstVariables.ANIMATOR_PARAMETER_BLOCK_IMPACK_INDEX, UnityEngine.Random.Range(0, 3));
     }
 
-    private void PlayVfx(in AttackInfo damage)
+    private void PlayHitVfx(in AttackInfo damage)
     {
         if (hitVfx != null)
         {
