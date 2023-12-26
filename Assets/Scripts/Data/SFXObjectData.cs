@@ -20,7 +20,7 @@ public class SFXObjectData : ScriptableObject
     public SFXInfo GateOpen { get; private set; }
 
     [field: SerializeField]
-    [field: Tooltip("해킹 성공 됐을 때 UI 사운드")]
+    [field: Tooltip("해킹 완료됐을 때 UI 사운드")]
     public SFXInfo HackingComplete { get; private set; }
 
     [field: SerializeField]

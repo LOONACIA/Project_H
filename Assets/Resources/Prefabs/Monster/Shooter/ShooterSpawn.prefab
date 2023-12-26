@@ -1029,6 +1029,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2313510924476542205}
     m_Modifications:
+    - target: {fileID: 2245176560481998638, guid: ff90c82a7b2d46f40a06ca5d1f62b7b6,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2245176560484256238, guid: ff90c82a7b2d46f40a06ca5d1f62b7b6,
         type: 3}
       propertyPath: m_Name
@@ -1400,6 +1405,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: -1050847991092109404, guid: 480fb4c58cf4a064d8c3c54708c4742b,
         type: 3}
+    - target: {fileID: 2020910695593498423, guid: 54d40161d16ca8642929e01e97b258ef,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2020910695593498423, guid: 54d40161d16ca8642929e01e97b258ef,
         type: 3}
       propertyPath: m_Materials.Array.size
@@ -3234,121 +3244,6 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
---- !u!114 &740188235035784833
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7849759692700693373}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fff0960ef4ea6e04eac66b4a7fd2189d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_RigLayers:
-  - m_Rig: {fileID: 4682423554431619181}
-    m_Active: 1
-  m_Effectors: []
---- !u!114 &2168657935617138424
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7849759692700693373}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c6811900c878b449a844e3520cf0988, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <Damage>k__BackingField: 1
-  <KnockDownTime>k__BackingField: 0
-  <KnockBackPower>k__BackingField: 0
-  m_spawnPosition: {fileID: 4623728794879833331}
-  m_aimLayers:
-    serializedVersion: 2
-    m_Bits: 2496
-  m_damageLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  m_maxAmmo: -1
-  m_ammo: 0
-  m_projectilePrefab: {fileID: 4293170359346217614, guid: 5ae863600b2b34144bfabcf9b6eade54,
-    type: 3}
-  m_shootForce: 50
-  m_shotgunSpreadAngle: 2.5
-  m_shotgunBulletCount: 5
-  m_shotgunRange: 10
---- !u!114 &5317265299443347642
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7849759692700693373}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a0a1e7dd0f4ea9c438362975e36344ae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_primaryWeapon: {fileID: 7004101214533928200}
-  m_secondaryWeapon: {fileID: 2168657935617138424}
---- !u!114 &5931500231964823860
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7849759692700693373}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25c7319190c6f2946b9d5b5530d35c27, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  monsterSFX: {fileID: 11400000, guid: c558c866955eb93409cf5458600081ab, type: 2}
-  audioSource: {fileID: 0}
---- !u!114 &7004101214533928200
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7849759692700693373}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4bad1e9c7d21fa941a5c1ab18539e13a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <Damage>k__BackingField: 30
-  <KnockDownTime>k__BackingField: 0
-  <KnockBackPower>k__BackingField: 0
-  m_spawnPosition: {fileID: 4623728794879833331}
-  m_aimLayers:
-    serializedVersion: 2
-    m_Bits: 2496
-  m_damageLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  m_maxAmmo: -1
-  m_ammo: 0
-  m_maxDistance: 100
-  m_shootLineColor: {r: 1, g: 0.57254905, b: 0.38039216, a: 1}
-  m_laserColor: {r: 1, g: 0, b: 0, a: 0}
---- !u!114 &1094457128815823748
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7849759692700693373}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25c7319190c6f2946b9d5b5530d35c27, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  monsterSFX: {fileID: 11400000, guid: c558c866955eb93409cf5458600081ab, type: 2}
-  audioSource: {fileID: 0}
 --- !u!82 &7952033165578627036
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3446,6 +3341,121 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &740188235035784833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7849759692700693373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fff0960ef4ea6e04eac66b4a7fd2189d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RigLayers:
+  - m_Rig: {fileID: 4682423554431619181}
+    m_Active: 1
+  m_Effectors: []
+--- !u!114 &1094457128815823748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7849759692700693373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25c7319190c6f2946b9d5b5530d35c27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monsterSFX: {fileID: 11400000, guid: c558c866955eb93409cf5458600081ab, type: 2}
+  audioSource: {fileID: 0}
+--- !u!114 &2168657935617138424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7849759692700693373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c6811900c878b449a844e3520cf0988, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Damage>k__BackingField: 1
+  <KnockDownTime>k__BackingField: 0
+  <KnockBackPower>k__BackingField: 0
+  m_spawnPosition: {fileID: 4623728794879833331}
+  m_aimLayers:
+    serializedVersion: 2
+    m_Bits: 2496
+  m_damageLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  m_maxAmmo: -1
+  m_ammo: 0
+  m_projectilePrefab: {fileID: 4293170359346217614, guid: 5ae863600b2b34144bfabcf9b6eade54,
+    type: 3}
+  m_shootForce: 50
+  m_shotgunSpreadAngle: 2.5
+  m_shotgunBulletCount: 5
+  m_shotgunRange: 10
+--- !u!114 &5317265299443347642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7849759692700693373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0a1e7dd0f4ea9c438362975e36344ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_primaryWeapon: {fileID: 7004101214533928200}
+  m_secondaryWeapon: {fileID: 2168657935617138424}
+--- !u!114 &5931500231964823860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7849759692700693373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25c7319190c6f2946b9d5b5530d35c27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monsterSFX: {fileID: 11400000, guid: c558c866955eb93409cf5458600081ab, type: 2}
+  audioSource: {fileID: 0}
+--- !u!114 &7004101214533928200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7849759692700693373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bad1e9c7d21fa941a5c1ab18539e13a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Damage>k__BackingField: 30
+  <KnockDownTime>k__BackingField: 0
+  <KnockBackPower>k__BackingField: 0
+  m_spawnPosition: {fileID: 4623728794879833331}
+  m_aimLayers:
+    serializedVersion: 2
+    m_Bits: 2496
+  m_damageLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  m_maxAmmo: -1
+  m_ammo: 0
+  m_maxDistance: 100
+  m_shootLineColor: {r: 1, g: 0.57254905, b: 0.38039216, a: 1}
+  m_laserColor: {r: 1, g: 0, b: 0, a: 0}
 --- !u!4 &8924132754581885877 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 561580101780447931, guid: d4c5ea9dbe85b9e45be3932eb81e2144,
