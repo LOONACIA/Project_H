@@ -113,7 +113,7 @@ public class HUDSystem : MonoBehaviour
             return true;
         }
 
-        return Vector3.Dot(direction.normalized, m_camera.transform.forward) < 0.975f;
+        return Vector3.Dot(direction.normalized, m_camera.transform.forward) < m_settings.DotProductSensitivity;
     }
 
     private void TryAdd(Transform target)
