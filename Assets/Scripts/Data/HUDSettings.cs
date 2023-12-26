@@ -5,6 +5,9 @@ public class HUDSettings : ScriptableObject
 {
     [field: SerializeField]
     public LayerMask AimLayers { get; private set; }
+    
+    [field: SerializeField]
+    public LayerMask ObstacleLayers { get; private set; }
 
     [field: SerializeField]
     public float CheckRadius { get; private set; } = 0.5f;

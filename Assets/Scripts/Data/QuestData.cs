@@ -1,12 +1,13 @@
 using LOONACIA.Unity;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.Video;
 
 [CreateAssetMenu(fileName = nameof(QuestData), menuName = "Data/" + nameof(QuestData))]
-public class QuestData : ScriptableObject
+public class QuestData : ScriptableObject, ISerializationCallbackReceiver
 {
     private static readonly Regex s_csvRegex = new(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
 
@@ -117,6 +118,15 @@ public class QuestData : ScriptableObject
         }
 
         Notifications = new(notifications.Values);
+    }
+    
+    public void OnBeforeSerialize()
+    {
+        Parse(m_questData.text);
+    }
+
+    public void OnAfterDeserialize()
+    {
     }
 
     private void OnTextAssetChanged()

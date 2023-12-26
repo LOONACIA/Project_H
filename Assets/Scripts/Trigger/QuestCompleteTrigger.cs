@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class QuestCompleteTrigger : MonoBehaviour
 {
@@ -18,6 +19,9 @@ public class QuestCompleteTrigger : MonoBehaviour
 
     [SerializeField]
     private InteractableObject m_associatedObject;
+    
+    [SerializeField]
+    private UnityEvent m_onComplete;
 
     private bool m_isTriggered;
 
@@ -60,5 +64,6 @@ public class QuestCompleteTrigger : MonoBehaviour
     private void Complete()
     {
         GameManager.Notification.Complete(m_questId);
+        m_onComplete?.Invoke();
     }
 }
