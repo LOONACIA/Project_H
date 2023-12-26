@@ -521,6 +521,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3590052775493217741}
     m_Modifications:
+    - target: {fileID: 2790462457516204870, guid: 93f3a93bd61d2c142ac714f98fb36ee8,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2790462457518472582, guid: 93f3a93bd61d2c142ac714f98fb36ee8,
         type: 3}
       propertyPath: m_Name
@@ -1296,6 +1301,11 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 4317216769646788327, guid: afa057bc0540ac741bb5b6dfda58c025,
         type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4317216769646788327, guid: afa057bc0540ac741bb5b6dfda58c025,
+        type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 5547c9106904e3f4ab3a1d814e6df394, type: 2}
@@ -1628,20 +1638,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 8021699848314855766}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &3522481765908763515
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4636026940924360165}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25c7319190c6f2946b9d5b5530d35c27, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  monsterSFX: {fileID: 11400000, guid: cc8b0c1cc5a168547b959d7742e3ebcf, type: 2}
-  audioSource: {fileID: 0}
 --- !u!82 &5343259432219694509
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1739,6 +1735,20 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &3522481765908763515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4636026940924360165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25c7319190c6f2946b9d5b5530d35c27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monsterSFX: {fileID: 11400000, guid: cc8b0c1cc5a168547b959d7742e3ebcf, type: 2}
+  audioSource: {fileID: 0}
 --- !u!4 &5412668540784193375 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2616420816891612681, guid: afa057bc0540ac741bb5b6dfda58c025,
