@@ -3,6 +3,7 @@ using System.Buffers;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Unity.XR.Oculus.Input;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -66,6 +67,11 @@ public class MonsterMovement : MonoBehaviour
     // 마지막 넉백 시간
     private float m_lastKnockBackTime;
 
+    // 걷는 사운드 출력 체크
+    private bool m_isWalkSoundPlaying = false;
+
+    private AudioSource m_audioSource;
+
     public MonsterMovementData Data => m_data;
 
     public float MovementRatio => m_movementRatio;
@@ -84,7 +90,8 @@ public class MonsterMovement : MonoBehaviour
         m_rigidbody = GetComponent<Rigidbody>();
         m_collider = GetComponent<CapsuleCollider>();
         m_agent = GetComponent<NavMeshAgent>();
-        
+        m_audioSource = GetComponent<AudioSource>();    
+
         m_actor.Status.CurrentDashCount = m_actor.Status.MaxDashCount = m_data.MaxDashCount;
         m_actor.Status.DashCoolTime = m_data.DashCoolTime;
         m_currentMoveToAccel = m_data.AccelerationTime > 0f ? 1f / m_data.AccelerationTime : float.PositiveInfinity;
@@ -118,6 +125,9 @@ public class MonsterMovement : MonoBehaviour
         CheckGround();
         CheckKnockBackEnd();
         CheckCanUseNavMesh();
+
+        //사운드 관련
+        CheckWalk();
     }
 
     public void Move(Vector3 directionInput)
@@ -157,6 +167,10 @@ public class MonsterMovement : MonoBehaviour
             m_data.ThirdMoveSpeedThreshold);
 
         m_rigidbody.AddRelativeForce((forwardForce + strafeForce), ForceMode.VelocityChange);
+
+        // 사운드
+        if(directionInput != default)
+            PlayWalkSound();
     }
 
     public void MoveTo(Vector3 destination)
@@ -165,8 +179,18 @@ public class MonsterMovement : MonoBehaviour
         m_agent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
         //MoveToWithNavMove(destination);
         MoveToWithNavSetDest(destination, true);
+        //MoveToWithNavSetPath(destination, true);
+
+        //사운드
+        PlayWalkSound();
     }
 
+    #region LegacyMoveToFunctions
+    /// <summary>
+    /// NavMesh의 Move를 통한 이동을 구현
+    /// 현재 사용하지 않으나, 후에 다른 로직 구현에 사용될 수 있는 코드가 있어 남겨둠
+    /// </summary>
+    /// <param name="destination"></param>
     private void MoveToWithNavMove(Vector3 destination)
     {
         if (m_agent.enabled)
@@ -238,6 +262,74 @@ public class MonsterMovement : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// SetPath를 통한 이동을 구현
+    /// 현재 사용하지 않으나, 후에 다른 로직 구현에 사용될 수 있는 코드가 있어 남겨둠
+    /// </summary>
+    /// <param name="destination"></param>
+    /// <param name="useAdaptiveAvoidanceTest"></param>
+    private void MoveToWithNavSetPath(Vector3 destination, bool useAdaptiveAvoidanceTest = true)
+    {
+        if (m_agent.enabled)
+        {
+            m_agent.isStopped = false;
+
+            //1. Path상 다음 목적지를 찾는다.
+            if (!NavMesh.CalculatePath(transform.position, destination, m_agent.areaMask, m_lastPath))
+            {
+                //만약 Invalid한 위치(공중 or Navmesh가 없는 곳)에 있다면, 가장 가까운 NavMesh위치로 이동합니다.
+                if (!(NavMesh.SamplePosition(destination, out var hit, float.PositiveInfinity, m_agent.areaMask)
+                    && NavMesh.CalculatePath(transform.position, hit.position, m_agent.areaMask, m_lastPath)))
+                {
+                    //가장 가까운 NavMesh가 없다면, return합니다.
+                    Debug.LogWarning($"{gameObject.name}: destination에 인접한 NavMesh가 없어 길찾기 실패.");
+                    return;
+                }
+            }
+
+            //주변에 다른 대상이 있는지 찾는다.
+            if (useAdaptiveAvoidanceTest)
+            {
+                int amount = Physics.OverlapSphereNonAlloc(transform.position + m_collider.center, m_agent.radius + m_agent.velocity.magnitude * Time.deltaTime * 2f, m_avoidanceCheckColliders, LayerMask.GetMask("Monster"));
+                //자기 자신이 포함되었는지 확인
+                int max = amount < m_avoidanceCheckColliders.Length ? amount : m_avoidanceCheckColliders.Length;
+                for (int i = 0; i < max; i++)
+                {
+                    if (m_avoidanceCheckColliders[i].gameObject.GetInstanceID() == gameObject.GetInstanceID())
+                    {
+                        //자기 자신일 경우 패스
+                        max -= 1;
+                        break;
+                    }
+                }
+                if (max > 0)
+                {
+                    //자기 자신을 제외하고 누군가 범위 내에 있다면, Quality를 높인다.
+                    m_agent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
+                }
+                else
+                {
+                    //아무도 없다면 None으로 진행(다른 Agent, Corner 무시)
+                    m_agent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance;
+                }
+            }
+
+            m_agent.SetPath(m_lastPath);
+
+            if (!IsOnGround)
+            {
+                // 몬스터가 떨어지는 경우 중력 영향을 받음
+                float expectedSpeed = m_agent.speed + Physics.gravity.y * Time.deltaTime * -1;
+                m_agent.speed = Mathf.Clamp(expectedSpeed, 0, 30);
+            }
+            else
+            {
+                m_agent.speed = m_data.MoveSpeed;
+            }
+        }
+    }
+    #endregion
+
     private void MoveToWithNavSetDest(Vector3 destination, bool useAdaptiveAvoidanceTest = true)
     {
         if (m_agent.enabled)
@@ -306,8 +398,8 @@ public class MonsterMovement : MonoBehaviour
 
     public void TryJump()
     {
-        // 지상에 있지 않은 경우
-        if (!IsOnGround)
+        // 지상에 있지 않은 경우 또는 CanJump가 false라면
+        if (!IsOnGround || !m_data.CanJump)
         {
             // 아무 것도 하지 않음
             return;
@@ -616,4 +708,35 @@ public class MonsterMovement : MonoBehaviour
         bool jump = m_actor.IsPossessed ? !m_isOnGround : !m_isOnGround;
         m_actor.Animator.SetBool(ConstVariables.ANIMATOR_PARAMETER_JUMP, jump);
     }
+
+
+    #region 사운드 관련
+    private void PlayWalkSound()
+    {
+        //땅 위가 아니면 return
+        if (!IsOnGround)
+        {
+            m_isWalkSoundPlaying = false;
+            m_audioSource.Stop();
+            return;
+        }
+            
+
+        //걷는 사운드가 이미 출력되고 있으면 return
+        if (m_isWalkSoundPlaying)
+            return;
+
+        m_audioSource.Play();
+        m_isWalkSoundPlaying = true;
+    }
+
+    private void CheckWalk()
+    {
+        if (m_actor.Animator.GetFloat(ConstVariables.ANIMATOR_PARAMETER_MOVEMENT_RATIO) >= 0.1f)
+            return;
+
+        m_isWalkSoundPlaying = false;
+        m_audioSource.Stop();
+    }
+    #endregion
 }

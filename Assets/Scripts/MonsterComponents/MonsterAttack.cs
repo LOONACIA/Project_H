@@ -182,8 +182,13 @@ public class MonsterAttack : MonoBehaviour
     {
         m_isAttackTriggered = false;
 
-        if(e == WeaponState.Attack)
+        if (e == WeaponState.Attack)
         {
+            if (m_actor.IsPossessed)
+            {
+                Target = default;
+            }
+            
             //공격 스테이트로 진입 시, 타격 수 count 초기화
             m_diedVictimCount = 0;
             m_bool = true;
@@ -212,19 +217,19 @@ public class MonsterAttack : MonoBehaviour
         // 죽은 몬스터 수 체크
         m_diedVictimCount += e.Count(info => info.Victim.CurrentHp <= 0f);
         
-        if (m_diedVictimCount >= 3 && m_bool)
+        if (m_diedVictimCount >= 2 && m_bool)
         {
             //시간 조절
             GameManager.Effect.ChangeTimeScale(this, 0f, 0.1f, 1000f, 1000f);
             //카메라 쉐이크
             if (m_actor is not Shooter)
             {
-                GameManager.Effect.ShakeCamera(3, 0.5f);
+                GameManager.Effect.ShakeCamera(10, 0.6f);
             }
 
             //빛
             GameObject light = ManagerRoot.Resource.Instantiate(GameManager.Settings.AttackLight);
-            light.transform.position = Camera.main.transform.position + transform.forward * 2f;
+            light.transform.position = Camera.main.transform.position + transform.forward * 0.5f;
             
 
             m_bool = false;

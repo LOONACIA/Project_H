@@ -28,6 +28,10 @@ public class SFXMonsterData : ScriptableObject
     public SFXInfo Walk { get; private set; }
 
     [field: SerializeField]
+    [field: Tooltip("걷기2")]
+    public SFXInfo Walk2 { get; private set; }
+
+    [field: SerializeField]
     [field: Tooltip("대쉬")]
     public SFXInfo Dash { get; private set; }
 

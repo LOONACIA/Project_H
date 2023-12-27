@@ -107,7 +107,7 @@ namespace Michsky.UI.Reach
             if (!Application.isPlaying)
                 return;
 #endif
-
+            if (ControllerManager.instance != null) { ControllerManager.instance.buttons.Add(this); }
             if (UIManagerAudio.instance == null) { useSounds = false; }
             if (normalCG == null) { normalCG = new GameObject().AddComponent<CanvasGroup>(); normalCG.gameObject.AddComponent<RectTransform>(); normalCG.transform.SetParent(transform); normalCG.gameObject.name = "Normal"; }
             if (highlightCG == null) { highlightCG = new GameObject().AddComponent<CanvasGroup>(); highlightCG.gameObject.AddComponent<RectTransform>(); highlightCG.transform.SetParent(transform); highlightCG.gameObject.name = "Highlight"; }

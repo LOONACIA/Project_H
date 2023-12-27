@@ -8,6 +8,8 @@ public class MonsterSFXPlayer : MonoBehaviour
     #region PublicVariables
     public SFXMonsterData monsterSFX;
     public AudioSource audioSource;
+
+    public MonsterMovement monsterMovement;
     #endregion
 
     #region PrivateVariables
@@ -45,8 +47,14 @@ public class MonsterSFXPlayer : MonoBehaviour
     }
     public void OnPlayWalk()
     {
-        SendSFXData(monsterSFX.Walk);
+
     }
+
+    public void OnPlayWalk2()
+    {
+
+    }
+
     public void OnPlayDash()
     {
         SendSFXData(monsterSFX.Dash);
@@ -93,7 +101,7 @@ public class MonsterSFXPlayer : MonoBehaviour
     }
     public void OnPlayFPDeath()
     {
-        SendSFXData(monsterSFX.FPDeath);
+        GameManager.Sound.ChangeBGMDirectly(monsterSFX.FPDeath);
     }
     public void OnPlayTPDeath1()
     {
@@ -125,34 +133,9 @@ public class MonsterSFXPlayer : MonoBehaviour
         GameManager.Sound.PlayClipAt(_info, _pos);
     }
 
-    private void FixedUpdate()
+    private bool CheckIsGround()
     {
-        Animator ani = GetComponent<Animator>();
-        float speed = ani.GetFloat("MovementRatio");
-
-        bool isGround = false;
-        if (transform.parent.parent != null && transform.parent.parent.GetComponent<MonsterMovement>() != null)
-            isGround = transform.parent.parent.GetComponent<MonsterMovement>().IsOnGround;
-
-        if(speed > 0.1f && isGround)
-        {
-            if (!isWalkSoundPlaying)
-            {
-                PlayWalkSound();
-                isWalkSoundPlaying = true;
-            }
-            return;
-        }
-
-        audioSource?.Stop();
-        isWalkSoundPlaying = false;
-    }
-
-    private void PlayWalkSound()
-    {
-        audioSource.clip = monsterSFX.Walk.audio;
-        audioSource.loop = true;
-        audioSource.Play();
+        return monsterMovement.IsOnGround;
     }
     #endregion
 }

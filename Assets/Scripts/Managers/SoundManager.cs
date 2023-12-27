@@ -1,8 +1,11 @@
+using DG.Tweening;
 using LOONACIA.Unity.Managers;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.Rendering;
 
 public class SoundManager
 {
@@ -12,7 +15,7 @@ public class SoundManager
 
     public SFXObjectData ObjectDataSounds;
 
-    public AudioMixer AudioMixer;
+    public AudioMixer audioMixer;
 
     public bool isPlayingDetectionSound = false;
 
@@ -36,7 +39,7 @@ public class SoundManager
         }
 
         ObjectDataSounds = GameManager.Settings.SFXObjectDatas;
-        AudioMixer = GameManager.Settings.AudioMixer;
+        audioMixer = GameManager.Settings.AudioMixer;
     }
 
     public void Clear()
@@ -56,7 +59,7 @@ public class SoundManager
     }
 
     public AudioSource Play(SFXInfo _info)
-    {
+    {   
         return Play(_info.audio, _info.type, _info.volume, _info.pitch, _info.priority, _info.blend, _info.loop);
     }
 
@@ -75,9 +78,7 @@ public class SoundManager
         audioSource.loop = loop;
         if (type == SoundType.Bgm)
         {
-            audioSource.Stop();
-            audioSource.clip = audioClip;
-            audioSource.Play();
+            ChangeBGM(audioSource, audioClip);
         }
         else
         {
@@ -117,14 +118,16 @@ public class SoundManager
     {
         m_audioSources[(int)SoundType.Bgm].Stop();
 
-        AudioMixer.SetFloat("InGame", -80f);
+        //AudioMixer.SetFloat("InGame", -80f);
+        audioMixer.DOSetFloat("InGame", -40f, 1.5f);
     }
 
     public void OnInGame()
     {
         m_audioSources[(int)SoundType.Bgm].Play();
 
-        AudioMixer.SetFloat("InGame", 0f);
+        //AudioMixer.SetFloat("InGame", 0f);
+        audioMixer.DOSetFloat("InGame", 0f, 1.5f);
     }
 
     private AudioClip GetOrAddAudioClip(string path, SoundType type = SoundType.Sfx)
@@ -159,6 +162,43 @@ public class SoundManager
 
         return audioInfo;
     }
+
+    public AudioClip GetCureentBGM()
+    {
+        return m_audioSources[(int)SoundType.Bgm].clip;
+    }
+
+    public void ChangeBGMDirectly(SFXInfo _info)
+    {
+        if (_info.audio == null)
+        {
+            return;
+        }
+
+        AudioSource audioSource = m_audioSources[(int)_info.type];
+        audioSource.pitch = _info.pitch;
+        audioSource.volume = _info.volume;
+        audioSource.priority = _info.priority;
+        audioSource.spatialBlend = _info.blend;
+        audioSource.loop = _info.loop;
+
+        audioSource.Stop();
+        audioSource.clip = _info.audio;
+        audioSource.Play();
+    }
+
+    private void ChangeBGM(AudioSource audioSource, AudioClip audioClip) 
+    {
+        audioMixer.DOSetFloat("BGM", -40f, 2f).onComplete = () =>
+        {
+            audioSource.Stop();
+            audioSource.clip = audioClip;
+            audioSource.Play();
+            audioMixer.DOSetFloat("BGM", 0f, 3f);
+        };
+    }
+
+    
 }
 
 [System.Serializable]

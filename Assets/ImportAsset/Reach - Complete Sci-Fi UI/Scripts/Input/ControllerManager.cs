@@ -8,6 +8,8 @@ using UnityEngine.InputSystem.XInput;
 
 namespace Michsky.UI.Reach
 {
+    [DefaultExecutionOrder(-100)]
+    [DisallowMultipleComponent]
     public class ControllerManager : MonoBehaviour
     {
         // Static Instance
@@ -55,32 +57,16 @@ namespace Michsky.UI.Reach
 
         void Start()
         {
-            InitObjects();
             InitInput();
         }
 
         void Update()
         {
-            if (alwaysUpdate == false)
+            if (!alwaysUpdate)
                 return;
 
             CheckForController();
             CheckForEmptyObject();
-        }
-
-        void InitObjects()
-        {
-            foreach (ButtonManager bm in Resources.FindObjectsOfTypeAll(typeof(ButtonManager)) as ButtonManager[]) { if (bm.gameObject.scene.name != null) { buttons.Add(bm); } }
-            foreach (SettingsElement se in Resources.FindObjectsOfTypeAll(typeof(SettingsElement)) as SettingsElement[]) { if (se.gameObject.scene.name != null) { settingsElements.Add(se); } }
-            foreach (ModeSelector ms in Resources.FindObjectsOfTypeAll(typeof(ModeSelector)) as ModeSelector[]) { if (ms.gameObject.scene.name != null) { modeSelectors.Add(ms); } }
-            foreach (PanelManager pm in Resources.FindObjectsOfTypeAll(typeof(PanelManager)) as PanelManager[])
-            {
-                if (pm.gameObject.scene.name == null)
-                    continue;
-
-                pm.managerIndex = panels.Count;
-                panels.Add(pm);
-            }
         }
 
         void InitInput()
@@ -93,7 +79,7 @@ namespace Michsky.UI.Reach
 
         void CheckForEmptyObject()
         {
-            if (gamepadEnabled == false) { return; }
+            if (!gamepadEnabled) { return; }
             else if (EventSystem.current.currentSelectedGameObject != null && EventSystem.current.currentSelectedGameObject.gameObject.activeInHierarchy == true) { return; }
 
             if (gamepadHotkey.triggered && panels.Count != 0)
@@ -114,9 +100,9 @@ namespace Michsky.UI.Reach
 
             cursorPos = Mouse.current.position.ReadValue();
 
-            if (gamepadConnected == true && gamepadEnabled == true && keyboardEnabled == false && cursorPos != lastCursorPos) { SwitchToKeyboard(); }
-            else if (gamepadConnected == true && gamepadEnabled == false && keyboardEnabled == true && gamepadHotkey.triggered) { SwitchToGamepad(); }
-            else if (gamepadConnected == false && keyboardEnabled == false) { SwitchToKeyboard(); }
+            if (gamepadConnected && gamepadEnabled && !keyboardEnabled && cursorPos != lastCursorPos) { SwitchToKeyboard(); }
+            else if (gamepadConnected && !gamepadEnabled && keyboardEnabled && gamepadHotkey.triggered) { SwitchToGamepad(); }
+            else if (!gamepadConnected && !keyboardEnabled) { SwitchToKeyboard(); }
         }
 
         void CheckForCurrentObject()
@@ -129,7 +115,7 @@ namespace Michsky.UI.Reach
 
         public void SwitchToGamepad()
         {
-            if (affectCursor == true) { Cursor.visible = false; }
+            if (affectCursor) { Cursor.visible = false; }
           
             for (int i = 0; i < keyboardObjects.Count; i++) 
             {
@@ -183,8 +169,11 @@ namespace Michsky.UI.Reach
                 }
             }
 
-            foreach (HotkeyEvent he in hotkeyObjects) 
-            { 
+            foreach (HotkeyEvent he in hotkeyObjects.ToArray()) 
+            {
+                if (he == null)
+                    continue;
+          
                 he.controllerPreset = currentControllerPreset;
                 he.UpdateUI();
             }
@@ -192,12 +181,16 @@ namespace Michsky.UI.Reach
 
         public void SwitchToKeyboard()
         {
-            if (affectCursor == true) { Cursor.visible = true; }
+            if (affectCursor) { Cursor.visible = true; }
             if (presetManager != null && presetManager.keyboardPreset != null) 
             {
                 currentControllerPreset = presetManager.keyboardPreset;
-                foreach (HotkeyEvent he in hotkeyObjects)
+
+                foreach (HotkeyEvent he in hotkeyObjects.ToArray())
                 {
+                    if (he == null)
+                        continue;
+
                     he.controllerPreset = currentControllerPreset;
                     he.UpdateUI();
                 }
@@ -232,45 +225,10 @@ namespace Michsky.UI.Reach
 
         public void SelectUIObject(GameObject tempObj)
         {
-            if (gamepadEnabled == false)
+            if (!gamepadEnabled)
                 return;
 
             EventSystem.current.SetSelectedGameObject(tempObj.gameObject);
-        }
-
-        public void AddButton(ButtonManager btn)
-        {
-            buttons.Add(btn);
-
-            if (gamepadEnabled == true && btn.useUINavigation == false)
-            {
-                btn.AddUINavigation();
-            }
-        }
-
-        public void AddSettingsElement(SettingsElement se)
-        {
-            settingsElements.Add(se);
-
-            if (gamepadEnabled == true && se.useUINavigation == false)
-            {
-                se.AddUINavigation();
-            }
-        }
-
-        public void AddModeSelector(ModeSelector ms)
-        {
-            modeSelectors.Add(ms);
-
-            if (gamepadEnabled == true && ms.useUINavigation == false)
-            {
-                ms.AddUINavigation();
-            }
-        }
-
-        public void AddPanelManager(PanelManager pm)
-        {
-            panels.Add(pm);
         }
     }
 }

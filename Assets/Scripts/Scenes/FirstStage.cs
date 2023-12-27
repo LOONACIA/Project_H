@@ -25,6 +25,6 @@ public class FirstStage : MonoBehaviour
 
     public void ChangeBgm(int _index)
     {
-        GameManager.Sound.Play(BGMS[_index]).outputAudioMixerGroup = audioMixer.FindMatchingGroups("BGM")[0];
+        //GameManager.Sound.Play(BGMS[_index]).outputAudioMixerGroup = audioMixer.FindMatchingGroups("BGM")[0];
     }
 }

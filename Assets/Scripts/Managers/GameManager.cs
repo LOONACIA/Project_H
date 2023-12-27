@@ -70,6 +70,12 @@ public class GameManager : MonoBehaviour
             return s_instance;
         }
     }
+    
+    public event EventHandler GameOver;
+
+    public event EventHandler Pause;
+    
+    public event EventHandler Resume;
 
     private void Awake()
     {
@@ -89,41 +95,22 @@ public class GameManager : MonoBehaviour
         IsGameOver = true;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
-
-        UI.ShowGameOverUI(text: "Game Clear",
-            onRestart: () => SceneManagerEx.LoadScene(SceneManager.GetActiveScene().name),
-            onMenu: () => SceneManagerEx.LoadScene("TitleScene"),
-#if UNITY_EDITOR
-            onExit: () => UnityEditor.EditorApplication.isPlaying = false
-#else
-            onExit: Application.Quit
-#endif
-        );
     }
 
-    public void Pause(Action onResume = null)
+    public void SetPause()
     {
         Time.timeScale = 0;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
-        UI.ShowMenuUI(onResume: Resume,
-            onMenu: () => SceneManagerEx.LoadScene("TitleScene"),
-#if UNITY_EDITOR
-            onExit: () => UnityEditor.EditorApplication.isPlaying = false,
-#else
-            onExit: Application.Quit,
-#endif
-            text: "Menu"
-        );
-        return;
-        
-        void Resume()
-        {
-            Time.timeScale = 1;
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
-            onResume?.Invoke();
-        }
+        Pause?.Invoke(this, EventArgs.Empty);
+    }
+    
+    public void SetResume()
+    {
+        Time.timeScale = 1;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        Resume?.Invoke(this, EventArgs.Empty);
     }
 
     public void SetGameOver()
@@ -133,21 +120,7 @@ public class GameManager : MonoBehaviour
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         m_effect.ShowGameOverEffect();
-        StartCoroutine(ShowUI());
-        return;
-
-        IEnumerator ShowUI()
-        {
-            yield return new WaitForSecondsRealtime(2f);
-            UI.ShowGameOverUI(onRestart: () => SceneManagerEx.LoadScene(SceneManager.GetActiveScene().name),
-                onMenu: () => SceneManagerEx.LoadScene("TitleScene"),
-#if UNITY_EDITOR
-                onExit: () => UnityEditor.EditorApplication.isPlaying = false
-#else
-            onExit: Application.Quit
-#endif
-            );
-        }
+        GameOver?.Invoke(this, EventArgs.Empty);
     }
 
     // ReSharper disable Unity.PerformanceAnalysis

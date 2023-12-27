@@ -29,9 +29,8 @@ namespace Michsky.UI.Reach
         // Helpers
         bool isOn;
         LocalizedObject localizedObject;
-        
-        public Animator Animator => questAnimator;
 
+        public Animator Animator => questAnimator;
         public enum DefaultState { Minimized, Expanded }
         public enum AfterMinimize { Disable, Destroy }
 

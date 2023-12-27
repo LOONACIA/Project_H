@@ -43,6 +43,7 @@ namespace Michsky.UI.Reach
             var onPanelChanged = serializedObject.FindProperty("onPanelChanged");
             var initializeButtons = serializedObject.FindProperty("initializeButtons");
             var bypassAnimationOnEnable = serializedObject.FindProperty("bypassAnimationOnEnable");
+            var updateMode = serializedObject.FindProperty("updateMode");
             var panelMode = serializedObject.FindProperty("panelMode");
             var animationSpeed = serializedObject.FindProperty("animationSpeed");
 
@@ -112,6 +113,7 @@ namespace Michsky.UI.Reach
                     cullPanels.boolValue = ReachUIEditorHandler.DrawToggle(cullPanels.boolValue, customSkin, "Cull Panels", "Disables unused panels.");
                     initializeButtons.boolValue = ReachUIEditorHandler.DrawToggle(initializeButtons.boolValue, customSkin, "Initialize Buttons", "Automatically adds necessary events to buttons.");
                     bypassAnimationOnEnable.boolValue = ReachUIEditorHandler.DrawToggle(bypassAnimationOnEnable.boolValue, customSkin, "Bypass Animation On Enable");
+                    ReachUIEditorHandler.DrawProperty(updateMode, customSkin, "Update Mode");
                     ReachUIEditorHandler.DrawProperty(panelMode, customSkin, "Panel Mode");
                     ReachUIEditorHandler.DrawProperty(animationSpeed, customSkin, "Animation Speed");
                     break;
