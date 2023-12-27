@@ -1,3 +1,4 @@
+using DG.Tweening;
 using JetBrains.Annotations;
 using LOONACIA.Unity;
 using LOONACIA.Unity.Coroutines;
@@ -9,95 +10,69 @@ using UnityEngine.SceneManagement;
 
 public class TitleScene : MonoBehaviour
 {
-    [Tooltip("없으면 자식에서 찾습니다.")]
-    private ProgressBar loadingBar;
+    [SerializeField]
+    private string m_gameSceneName;
+    
+    [SerializeField]
+    private Animator m_animator;
 
-    private CanvasGroup canvasGroup;
-    public GameObject pressAnyKeyText;
+    [SerializeField]
+    private GameObject m_pressAnyKeyLabel;
+    
+    private CanvasGroup m_canvasGroup;
 
     private void Awake()
     {
-        if (loadingBar == null)
-        {
-            loadingBar = GetComponentInChildren<ProgressBar>();
-        }
-        if (canvasGroup == null)
-        {
-            canvasGroup = GetComponentInChildren<CanvasGroup>();
-        }
-
         Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
-        //Application.targetFrameRate = 60;
-        gameObject.SetActive(false);
+        Cursor.lockState = CursorLockMode.Confined;
+        m_canvasGroup = m_pressAnyKeyLabel.GetComponent<CanvasGroup>();
     }
 
-    private void OnEnable()
+    public void OnPlayButtonClick()
     {
-        canvasGroup.alpha = 0f;
+        m_animator.Play("TitleMenu_Out");
+        CoroutineEx.Create(GameManager.Instance, WaitForLoadScene(m_gameSceneName));
+    }
+    
+    public void OnExitButtonClick()
+    {
+        Application.Quit();
     }
 
-    public void OnStartGameClicked(string sceneName)
+    private IEnumerator WaitForLoadScene(string sceneName)
     {
-        gameObject.SetActive(true);
-        pressAnyKeyText.gameObject.SetActive(false);
-        CoroutineEx.Create(GameManager.Instance, WaitForLoadScene(sceneName));
-    }
-
-    private IEnumerator WaitForLoadScene(string nextScene)
-    {
-        while (canvasGroup.alpha < 1f)
+        yield return new WaitForSeconds(ReachUIInternalTools.GetAnimatorClipLength(m_animator, "TitleMenu_Out"));
+        AsyncOperation task = SceneManagerEx.LoadSceneAsync(sceneName);
+        if (task == null)
         {
-            canvasGroup.alpha += Time.deltaTime * 2f;
-            yield return null;
-        }
-        yield return new WaitForSeconds(0.1f);
-
-        string oldScene = SceneManager.GetActiveScene().name;
-
-        //2. 씬 로더를 DDOL
-        //DontDestroyOnLoad(gameObject);
-
-        //1. 다음 씬 로드
-        AsyncOperation loadInfo = SceneManagerEx.LoadSceneAsync(nextScene);
-        if (loadInfo == null)
-        {
+            Debug.LogError($"Failed to load scene: {sceneName}");
             yield break;
         }
 
-        loadInfo.allowSceneActivation = false;
+        task.allowSceneActivation = false;
+        yield return new WaitForSeconds(3f);
 
-        if (loadingBar != null)
+        bool canPressAnyKey = false;
+        Tween tween = null;
+        while (!task.isDone)
         {
-            loadingBar.minValue = 0f;
-            loadingBar.maxValue = 0.9f;
-        }
+            if (task.progress >= 0.9f)
+            {
+                if (!canPressAnyKey)
+                {
+                    canPressAnyKey = true;
+                    tween = m_canvasGroup.DOFade(1f, 0.2f).SetEase(Ease.InCubic);
+                    m_pressAnyKeyLabel.gameObject.SetActive(true);
+                }
 
-        while (!loadInfo.isDone)
-        {
-            if (loadingBar != null)
-            {
-                loadingBar.SetValue(loadInfo.progress);
-            }
-            
-            if (loadInfo.progress >= 0.9f)
-            {
-                pressAnyKeyText.gameObject.SetActive(true);
                 if (Input.anyKeyDown)
                 {
-                    loadInfo.allowSceneActivation = true;
+                    tween?.Kill();
+                    task.allowSceneActivation = true;
                 }
             }
             
             yield return null;
         }
-
-        loadingBar.SetValue(loadInfo.progress);
-    }
-
-
-    public void OnExitClicked()
-    {
-        Application.Quit();
     }
 }

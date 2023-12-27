@@ -15,18 +15,15 @@ namespace Michsky.UI.Reach
         public HorizontalSelector languageSelector;
 
         // Settings
-        public UpdateMode updateMode;
         public bool setLanguageOnAwake = true;
         public bool updateItemsOnSet = true;
         public bool saveLanguageChanges = true;
-        public static bool enableLogs = true;
+        public static bool enableLogs = true; 
 
         // Helpers
         public string currentLanguage;
         public LocalizationLanguage currentLanguageAsset;
         public List<LocalizedObject> localizedItems = new List<LocalizedObject>();
-
-        public enum UpdateMode { Realtime, Baked }
 
         void Awake()
         {
@@ -35,18 +32,6 @@ namespace Michsky.UI.Reach
             if (UIManagerAsset == null) { UIManagerAsset = (UIManager)Resources.FindObjectsOfTypeAll(typeof(UIManager))[0]; }
             if (UIManagerAsset == null || !UIManagerAsset.enableLocalization) { return; }
             if (setLanguageOnAwake) { InitializeLanguage(); }
-            if (updateMode == UpdateMode.Realtime)
-            {
-                localizedItems.Clear();
-
-                foreach (LocalizedObject go in Resources.FindObjectsOfTypeAll(typeof(LocalizedObject)) as LocalizedObject[])
-                {
-                    if (go.gameObject.scene.name != null)
-                    {
-                        localizedItems.Add(go);
-                    }
-                }
-            }
 
             // Populate language selector
             if (languageSelector != null)
