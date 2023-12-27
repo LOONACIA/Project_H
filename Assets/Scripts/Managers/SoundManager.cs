@@ -19,8 +19,13 @@ public class SoundManager
 
     public bool isPlayingDetectionSound = false;
 
+    private Tween m_BGMSettingTween;
+
     public void Init()
     {
+        ObjectDataSounds = GameManager.Settings.SFXObjectDatas;
+        audioMixer = GameManager.Settings.AudioMixer;
+
         GameObject root = GameObject.Find("@Sound");
         if (root == null)
         {
@@ -36,10 +41,14 @@ public class SoundManager
             }
 
             m_audioSources[(int)SoundType.Bgm].loop = true;
+            m_audioSources[(int)SoundType.Bgm].outputAudioMixerGroup = audioMixer.FindMatchingGroups("BGM")[1];
+
+            m_audioSources[(int)SoundType.UI].outputAudioMixerGroup = audioMixer.FindMatchingGroups("UI")[0];
+
+            m_audioSources[(int)SoundType.Sfx].outputAudioMixerGroup = audioMixer.FindMatchingGroups("SFX")[1];
         }
 
-        ObjectDataSounds = GameManager.Settings.SFXObjectDatas;
-        audioMixer = GameManager.Settings.AudioMixer;
+        
     }
 
     public void Clear()
@@ -119,7 +128,8 @@ public class SoundManager
         m_audioSources[(int)SoundType.Bgm].Stop();
 
         //AudioMixer.SetFloat("InGame", -80f);
-        audioMixer.DOSetFloat("InGame", -40f, 1.5f);
+        m_BGMSettingTween?.Kill();
+        m_BGMSettingTween = audioMixer.DOSetFloat("InGame", -20f, 2f);
     }
 
     public void OnInGame()
@@ -127,7 +137,8 @@ public class SoundManager
         m_audioSources[(int)SoundType.Bgm].Play();
 
         //AudioMixer.SetFloat("InGame", 0f);
-        audioMixer.DOSetFloat("InGame", 0f, 1.5f);
+        m_BGMSettingTween?.Kill();
+        m_BGMSettingTween = audioMixer.DOSetFloat("InGame", 0f, 1.5f);
     }
 
     private AudioClip GetOrAddAudioClip(string path, SoundType type = SoundType.Sfx)

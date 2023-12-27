@@ -43,8 +43,6 @@ public class UIMenu : UIPopup
     private CoroutineEx m_coroutine;
 
     private Animator m_animator;
-    
-    private AudioSource m_audioSource;
 
     private void OnEnable()
     {
@@ -105,40 +103,12 @@ public class UIMenu : UIPopup
         m_firstButton.onClick.AddListener(OnFirstButtonClick);
         m_secondButton.onClick.AddListener(OnSecondButtonClick);
         m_thirdButton.onClick.AddListener(OnThirdButtonClick);
-
-        RegisterButtonEvents(m_firstButton);
-        RegisterButtonEvents(m_secondButton);
-        RegisterButtonEvents(m_thirdButton);
         
         m_titleTextBox = Get<TextMeshProUGUI, Texts>(Texts.Title);
         if (!string.IsNullOrEmpty(m_title))
         {
             m_titleTextBox.text = m_title;
         }
-    }
-
-    private void RegisterButtonEvents(ButtonManager button)
-    {
-        button.onSelect.AddListener(() => OnHover(button));
-        button.onHover.AddListener(() => OnHover(button));
-        button.onLeave.AddListener(() => OnLeave(button));
-        button.onDeselect.AddListener(() => OnLeave(button));
-    }
-    
-    private void OnHover(ButtonManager buttonManager)
-    {
-        buttonManager.transform.localScale = Vector3.one * 1.05f;
-        if (m_audioSource != null && m_audioSource.isPlaying)
-        {
-            m_audioSource.Stop();
-        }
-        
-        m_audioSource = GameManager.Sound.Play(GameManager.Sound.ObjectDataSounds.ObjectUpdate);
-    }
-    
-    private void OnLeave(ButtonManager buttonManager)
-    {
-        buttonManager.transform.localScale = Vector3.one;
     }
     
     private void OnFirstButtonClick()
