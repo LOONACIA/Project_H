@@ -90,7 +90,11 @@ public abstract class Actor : MonoBehaviour
 
     protected virtual void Start()
     {
-        EnableAIComponents();
+        if (!IsPossessed)
+        {
+            m_firstPersonAnimator.gameObject.SetActive(false);
+            EnableAIComponents();
+        }
     }
 
     protected virtual void OnEnable()
