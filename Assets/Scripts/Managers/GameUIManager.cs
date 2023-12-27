@@ -69,18 +69,20 @@ public class GameUIManager
         m_damageIndicator = null;
     }
     
-    public void ShowMenuUI(Action onResume, Action onMenu, Action onExit, string text = "Game Over")
+    public void ShowMenuUI(MenuInfo first, MenuInfo second, MenuInfo third, string text = "Game Over")
     {
         if (m_menuUI != null && m_menuUI.gameObject.activeSelf)
         {
             m_menuUI.Close();
             return;
         }
-        
+
         List<Transform> children = new();
+        MenuInfo resume = new(first.Text, Resume);
+        
         m_menuUI = ManagerRoot.UI.ShowPopupUI<UIMenu>();
-        m_menuUI.SetButtonAction(Resume, onMenu, onExit);
-        m_menuUI.SetText(text);
+        m_menuUI.SetButtonContent(resume, second, third);
+        m_menuUI.SetTitle(text);
         
         foreach (Transform child in ManagerRoot.UI.Root.transform)
         {
@@ -100,15 +102,8 @@ public class GameUIManager
                 child.gameObject.SetActive(true);
             }
             ManagerRoot.UI.ClosePopupUI(m_menuUI);
-            onResume?.Invoke();
+            first?.OnClick?.Invoke();
         }
-    }
-    
-    public void ShowGameOverUI(Action onRestart, Action onMenu, Action onExit, string text = "Game Over")
-    {
-        CloseSceneUI();
-        
-        ShowMenuUI(onRestart, onMenu, onExit, text);
     }
 
     public void ShowHpIndicator(PlayerController player)
@@ -136,7 +131,6 @@ public class GameUIManager
     public void ShowShurikenIndicator(PossessionProcessor processor)
     {
         var ui = ManagerRoot.UI.ShowSceneUI<UIShuriken>();
-        //ui.GetComponent<Canvas>().sortingOrder = -2;
         ui.SetPossessionProcessor(processor);
         m_sceneUIs.Add(ui);
     }
@@ -144,7 +138,6 @@ public class GameUIManager
     public void ShowSkillIndicator(PlayerController player)
     { 
         var ui = ManagerRoot.UI.ShowSceneUI<UISkill>();
-        //ui.GetComponent<Canvas>().sortingOrder = -2;
         ui.SetActorStatus(player);
         m_sceneUIs.Add(ui);
     }
