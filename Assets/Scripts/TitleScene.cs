@@ -53,6 +53,7 @@ public class TitleScene : MonoBehaviour
         yield return new WaitForSeconds(3f);
 
         bool canPressAnyKey = false;
+        Tween tween = null;
         while (!task.isDone)
         {
             if (task.progress >= 0.9f)
@@ -60,12 +61,13 @@ public class TitleScene : MonoBehaviour
                 if (!canPressAnyKey)
                 {
                     canPressAnyKey = true;
-                    m_canvasGroup.DOFade(1f, 0.3f).SetEase(Ease.InCubic);
+                    tween = m_canvasGroup.DOFade(1f, 0.2f).SetEase(Ease.InCubic);
                     m_pressAnyKeyLabel.gameObject.SetActive(true);
                 }
 
                 if (Input.anyKeyDown)
                 {
+                    tween?.Kill();
                     task.allowSceneActivation = true;
                 }
             }
