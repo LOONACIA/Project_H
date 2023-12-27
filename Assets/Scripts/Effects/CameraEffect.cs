@@ -8,16 +8,28 @@ public class CameraEffect : MonoBehaviour
     #endregion
 
     #region PrivateVariables
-    private CinemachineBasicMultiChannelPerlin vcam;
+
+    private CinemachineVirtualCamera m_vcam;
+    
+    private CinemachineBasicMultiChannelPerlin m_perlin;
 
     private void Start()
     {
-        vcam = GameManager.Camera.CurrentCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+        var parent = transform.parent;
+        m_vcam = parent.GetComponentInChildren<CinemachineVirtualCamera>();
+        if (m_vcam != null)
+        {
+            m_perlin = m_vcam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+        }
+        else
+        {
+            Debug.Log("vcam is null", gameObject);
+        }
     }
 
     private void Update()
     {
-        GameManager.Camera.CurrentCamera.transform.localRotation = Quaternion.Euler(cameraRotation);
+        m_vcam.transform.localRotation = Quaternion.Euler(cameraRotation);
     }
     #endregion
 
@@ -39,12 +51,12 @@ public class CameraEffect : MonoBehaviour
 
     public void OnCameraShake()
     {
-        vcam.m_AmplitudeGain = 0.3f;
+        m_perlin.m_AmplitudeGain = 0.3f;
     }
 
     public void OffCameraShake()
     {
-        vcam.m_AmplitudeGain = 0f;
+        m_perlin.m_AmplitudeGain = 0f;
     }
     #endregion
 
