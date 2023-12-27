@@ -77,30 +77,16 @@ public class GameUIManager
             return;
         }
 
-        List<Transform> children = new();
         MenuInfo resume = new(first.Text, Resume);
         
         m_menuUI = ManagerRoot.UI.ShowPopupUI<UIMenu>();
         m_menuUI.SetButtonContent(resume, second, third);
         m_menuUI.SetTitle(text);
-        
-        foreach (Transform child in ManagerRoot.UI.Root.transform)
-        {
-            if (child != m_menuUI.transform && child.gameObject.activeSelf)
-            {
-                child.gameObject.SetActive(false);
-                children.Add(child);
-            }
-        }
 
         return;
 
         void Resume()
         {
-            foreach (Transform child in children)
-            {
-                child.gameObject.SetActive(true);
-            }
             ManagerRoot.UI.ClosePopupUI(m_menuUI);
             first?.OnClick?.Invoke();
         }

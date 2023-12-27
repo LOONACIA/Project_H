@@ -18,6 +18,8 @@ public partial class UIController : MonoBehaviour
     private float m_timeScale;
     
     private CoroutineEx m_dialogCloseCoroutine;
+    
+    private bool m_isMenuShown;
 
     private void Start()
     {
@@ -56,11 +58,6 @@ public partial class UIController : MonoBehaviour
         m_inputActions.Character.Disable();
         GameManager.Instance.SetPause();
     }
-    
-    private void OnResume(object sender, EventArgs e)
-    {
-        m_inputActions.Character.Enable();
-    }
 
     // ReSharper disable Unity.PerformanceAnalysis
     private void OnGameOver(object sender, EventArgs e)
@@ -77,6 +74,13 @@ public partial class UIController : MonoBehaviour
     private void OnPause(object sender, EventArgs e)
     {
         GameManager.UI.ShowMenuUI(MenuInfoBag.Continue, MenuInfoBag.Menu, MenuInfoBag.Exit, MenuInfoBag.PausedText);
+        m_isMenuShown = true;
+    }
+    
+    private void OnResume(object sender, EventArgs e)
+    {
+        m_inputActions.Character.Enable();
+        m_isMenuShown = false;
     }
 
     private void OnNotificationActivated(object sender, Notification e)
@@ -111,6 +115,8 @@ public partial class UIController : MonoBehaviour
         {
             yield return new WaitUntil(() => !m_dialogPresenter.IsOpen);
             ManagerRoot.UI.ClosePopupUI(m_dialogPresenter);
+
+            yield return new WaitUntil(() => !m_isMenuShown);
 
             if (dialog.RelatedDialog == null)
             {
