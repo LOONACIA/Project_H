@@ -3,6 +3,7 @@ using System.Buffers;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Unity.XR.Oculus.Input;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -66,6 +67,11 @@ public class MonsterMovement : MonoBehaviour
     // 마지막 넉백 시간
     private float m_lastKnockBackTime;
 
+    // 걷는 사운드 출력 체크
+    private bool m_isWalkSoundPlaying = false;
+
+    private AudioSource m_audioSource;
+
     public MonsterMovementData Data => m_data;
 
     public float MovementRatio => m_movementRatio;
@@ -84,7 +90,8 @@ public class MonsterMovement : MonoBehaviour
         m_rigidbody = GetComponent<Rigidbody>();
         m_collider = GetComponent<CapsuleCollider>();
         m_agent = GetComponent<NavMeshAgent>();
-        
+        m_audioSource = GetComponent<AudioSource>();    
+
         m_actor.Status.CurrentDashCount = m_actor.Status.MaxDashCount = m_data.MaxDashCount;
         m_actor.Status.DashCoolTime = m_data.DashCoolTime;
         m_currentMoveToAccel = m_data.AccelerationTime > 0f ? 1f / m_data.AccelerationTime : float.PositiveInfinity;
@@ -118,6 +125,9 @@ public class MonsterMovement : MonoBehaviour
         CheckGround();
         CheckKnockBackEnd();
         CheckCanUseNavMesh();
+
+        //사운드 관련
+        CheckWalk();
     }
 
     public void Move(Vector3 directionInput)
@@ -157,6 +167,10 @@ public class MonsterMovement : MonoBehaviour
             m_data.ThirdMoveSpeedThreshold);
 
         m_rigidbody.AddRelativeForce((forwardForce + strafeForce), ForceMode.VelocityChange);
+
+        // 사운드
+        if(directionInput != default)
+            PlayWalkSound();
     }
 
     public void MoveTo(Vector3 destination)
@@ -165,6 +179,9 @@ public class MonsterMovement : MonoBehaviour
         m_agent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
         //MoveToWithNavMove(destination);
         MoveToWithNavSetDest(destination, true);
+
+        //사운드
+        PlayWalkSound();
     }
 
     private void MoveToWithNavMove(Vector3 destination)
@@ -616,4 +633,35 @@ public class MonsterMovement : MonoBehaviour
         bool jump = m_actor.IsPossessed ? !m_isOnGround : !m_isOnGround;
         m_actor.Animator.SetBool(ConstVariables.ANIMATOR_PARAMETER_JUMP, jump);
     }
+
+
+    #region 사운드 관련
+    private void PlayWalkSound()
+    {
+        //땅 위가 아니면 return
+        if (!IsOnGround)
+        {
+            m_isWalkSoundPlaying = false;
+            m_audioSource.Stop();
+            return;
+        }
+            
+
+        //걷는 사운드가 이미 출력되고 있으면 return
+        if (m_isWalkSoundPlaying)
+            return;
+
+        m_audioSource.Play();
+        m_isWalkSoundPlaying = true;
+    }
+
+    private void CheckWalk()
+    {
+        if (m_actor.Animator.GetFloat(ConstVariables.ANIMATOR_PARAMETER_MOVEMENT_RATIO) >= 0.1f)
+            return;
+
+        m_isWalkSoundPlaying = false;
+        m_audioSource.Stop();
+    }
+    #endregion
 }

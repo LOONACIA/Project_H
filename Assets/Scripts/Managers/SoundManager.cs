@@ -159,6 +159,11 @@ public class SoundManager
 
         return audioInfo;
     }
+
+    public AudioClip GetCureentBGM()
+    {
+        return m_audioSources[(int)SoundType.Bgm].clip;
+    }
 }
 
 [System.Serializable]
