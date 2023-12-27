@@ -130,6 +130,7 @@ public class UIMenu : UIPopup
         {
             m_audioSource.Stop();
         }
+        
         m_audioSource = GameManager.Sound.Play(GameManager.Sound.ObjectDataSounds.ObjectUpdate);
     }
     

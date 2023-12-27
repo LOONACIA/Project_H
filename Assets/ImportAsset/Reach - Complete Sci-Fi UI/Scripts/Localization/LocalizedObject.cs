@@ -79,6 +79,7 @@ namespace Michsky.UI.Reach
             else if (objectType == ObjectType.Audio && audioObj == null) { audioObj = gameObject.GetComponent<AudioSource>(); }
             else if (objectType == ObjectType.Image && imageObj == null) { imageObj = gameObject.GetComponent<Image>(); }
 
+            LocalizationManager.instance.localizedItems.Add(this);
             isInitialized = true;
         }
 
