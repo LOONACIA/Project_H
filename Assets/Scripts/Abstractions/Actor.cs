@@ -92,7 +92,10 @@ public abstract class Actor : MonoBehaviour
     {
         if (!IsPossessed)
         {
-            m_firstPersonAnimator.gameObject.SetActive(false);
+            if (m_firstPersonAnimator != null)
+            {
+                m_firstPersonAnimator.gameObject.SetActive(false);
+            }
             EnableAIComponents();
         }
     }
