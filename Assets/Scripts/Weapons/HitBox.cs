@@ -31,7 +31,7 @@ public class HitBox
 
     public IEnumerable<IHealth> DetectHitBox(Transform parent)
     {
-        Debug.Log($"forward: {parent.forward} rotation: {parent.rotation * Rotation}");
+        //Debug.Log($"forward: {parent.forward} rotation: {parent.rotation * Rotation}");
         return Physics.OverlapBox(parent.TransformPoint(Position),
                 HalfExtents, parent.rotation * Rotation, LayerMask.GetMask("Monster", "Damageable"))
             .Select(detectedObject => detectedObject.GetComponent<IHealth>())
