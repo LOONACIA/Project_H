@@ -211,6 +211,11 @@ public abstract class Actor : MonoBehaviour
         {
             m_behaviorTree.enabled = true;
         }
+
+        if (Animator != null)
+        {
+            m_firstPersonAnimator.gameObject.SetActive(false);
+        }
     }
 
     protected virtual void DisableAIComponents()

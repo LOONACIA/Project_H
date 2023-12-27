@@ -107,6 +107,7 @@ public class UIQuestPresenter : UIBase
         m_questItem.questText = m_quest.Content;
         m_questItem.UpdateUI();
         m_questItem.ExpandQuest();
+        GameManager.Sound.Play(GameManager.Sound.ObjectDataSounds.ObjectUpdate);
 
         var point = Camera.main.ViewportToScreenPoint(new(0.5f, 0.4f, 0f));
         
