@@ -10,7 +10,8 @@ public class QuestCompleteTrigger : MonoBehaviour
     public enum CompleteType
     {
         Interaction,
-        Trigger
+        Trigger,
+        Horde
     }
 
     [SerializeField]
@@ -24,7 +25,10 @@ public class QuestCompleteTrigger : MonoBehaviour
 
     [SerializeField]
     private InteractableObject m_associatedObject;
-    
+
+    [SerializeField]
+    private WaveTrigger m_waveTrigger;
+
     [SerializeField]
     private UnityEvent m_onComplete;
 
@@ -36,6 +40,11 @@ public class QuestCompleteTrigger : MonoBehaviour
         if (m_type == CompleteType.Interaction && m_associatedObject != null)
         {
             m_associatedObject.Interacted += OnInteracted;
+        }
+
+        if(m_type == CompleteType.Horde && m_waveTrigger != null)
+        {
+            m_waveTrigger.WaveEnd += OnWaveEnd;
         }
     }
 
@@ -75,6 +84,23 @@ public class QuestCompleteTrigger : MonoBehaviour
 
     }
 
+    private void OnWaveEnd(object sender, EventArgs e)
+    {
+        if(m_waveTrigger == null)
+        {
+            return;
+        }
+
+        Complete();
+        if (m_nextQuestId != 0)
+        {
+            GameManager.Notification.Activate(m_nextQuestId);
+        }
+        else
+        {
+            GameManager.Notification.Activate(m_questId + 1);
+        }
+    }
     private void Complete()
     {
         GameManager.Notification.Complete(m_questId);
