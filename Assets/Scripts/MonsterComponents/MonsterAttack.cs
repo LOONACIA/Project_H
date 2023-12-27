@@ -182,8 +182,12 @@ public class MonsterAttack : MonoBehaviour
     {
         m_isAttackTriggered = false;
 
-        if(e == WeaponState.Attack)
+        if (e == WeaponState.Attack)
         {
+            if (m_actor.IsPossessed)
+            {
+                Target = default;
+            }
             //공격 스테이트로 진입 시, 타격 수 count 초기화
             m_diedVictimCount = 0;
             m_bool = true;
