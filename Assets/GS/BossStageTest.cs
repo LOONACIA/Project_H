@@ -10,6 +10,7 @@ public class BossStageTest : MonoBehaviour
     public Transform position1;
     public Transform position2;
     public Transform position3;
+    public Transform position4;
 
     private void Update()
     {
@@ -32,6 +33,11 @@ public class BossStageTest : MonoBehaviour
             Stop();
         }
 
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            GameManager.Character.Controller.Character.transform.position = position4.position;
+            Stop();
+        }
     }
 
     private void Stop()
