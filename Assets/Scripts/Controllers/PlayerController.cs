@@ -196,7 +196,7 @@ public partial class PlayerController : MonoBehaviour
             return;
         }
 
-        if (m_interactableObject == null)
+        if (m_interactableObject == null || !m_interactableObject.IsInteractable)
         {
             return;
         }

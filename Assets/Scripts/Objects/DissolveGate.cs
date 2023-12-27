@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshObstacle))]
 [RequireComponent(typeof(DissolveGateSizeSetting))]
+[RequireComponent(typeof(AudioSource))]
 public class DissolveGate : MonoBehaviour, IGate
 {
     private enum GateState

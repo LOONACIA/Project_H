@@ -21,6 +21,7 @@ public class BossStageBreakGround : MonoBehaviour
     #region PublicMethod
     private void Start()
     {
+
         m_mr = GetComponent<MeshRenderer>();
         m_col = GetComponent<MeshCollider>();
         m_trigger = GetComponent<BoxCollider>();
@@ -62,6 +63,7 @@ public class BossStageBreakGround : MonoBehaviour
     private void SetForce(Rigidbody rb)
     {   
         rb.gameObject.SetActive(true);
+        rb.isKinematic = false;
         float x = Random.Range(-0.5f, 0.5f);
         float z = Random.Range(-0.5f, 0.5f);
 

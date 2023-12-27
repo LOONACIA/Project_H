@@ -57,12 +57,6 @@ public class FixedSpawner : MonoBehaviour, ISpawn
             Spawn();    
         }
 
-        if (m_useRepeat && m_currentSpawnCount > 0)
-        { 
-            EndSpawn();
-            return;
-        }
-
         // m_collider 안에 몬스터 있는지 확인 
         var monster = Physics.OverlapBox(m_collider.bounds.center, m_collider.bounds.extents, Quaternion.identity, LayerMask.GetMask("Monster"));
 
@@ -105,6 +99,12 @@ public class FixedSpawner : MonoBehaviour, ISpawn
 
         if (!m_isFirstSpawn) 
             m_isFirstSpawn = true;
+
+        if (!m_useRepeat && m_currentSpawnCount > 0)
+        {
+            EndSpawn();
+            return;
+        }
 
         m_spawnCoroutine = null;
 
