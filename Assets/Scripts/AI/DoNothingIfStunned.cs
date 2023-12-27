@@ -34,6 +34,7 @@ public class DoNothingIfStunned : Action
             }
             m_navMeshAgent.isStopped = m_isAborted;
         }
+        
         return m_status.IsStunned ? TaskStatus.Running : TaskStatus.Failure;
     }
 
