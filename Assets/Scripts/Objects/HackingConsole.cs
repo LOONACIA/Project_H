@@ -22,6 +22,8 @@ public class HackingConsole : HackingObject
 
     private Renderer m_renderer;
 
+    private Collider m_collider;
+
     private Coroutine m_coolTimeCoroutine;
 
     private Coroutine m_materialCoroutine;
@@ -36,7 +38,9 @@ public class HackingConsole : HackingObject
     {
         m_hackable = GetComponentsInChildren<IActivate>();
 
-        m_renderer = GetComponent<Renderer>();
+        TryGetComponent<Renderer>(out m_renderer);
+        TryGetComponent<Collider>(out m_collider);
+
         m_idleMaterial = Instantiate(m_renderer.material);
         m_HackingMaterial = Instantiate(m_HackingMaterial);
     }
@@ -63,6 +67,8 @@ public class HackingConsole : HackingObject
 
         m_isHacking = true;
 
+        m_collider.isTrigger = true;
+
         ConvertMaterial(m_idleMaterial, m_HackingMaterial);
 
         foreach (var hackable in m_hackable)
@@ -77,6 +83,8 @@ public class HackingConsole : HackingObject
     private void Recovery()
     {
         m_isHacking = false;
+
+        m_collider.isTrigger = false;
 
         ConvertMaterial(m_HackingMaterial, m_idleMaterial);
 
