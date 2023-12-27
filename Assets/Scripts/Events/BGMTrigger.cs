@@ -15,6 +15,13 @@ public class BGMTrigger : MonoBehaviour
     #region PublicMethod
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log(!other.TryGetComponent<Actor>(out var actor));
+
+        if(!other.TryGetComponent<Actor>(out var actor1) || !actor1.IsPossessed)
+        {
+            return;
+        }
+
         if (bgm.audio == GameManager.Sound.GetCureentBGM())
             return;
 
