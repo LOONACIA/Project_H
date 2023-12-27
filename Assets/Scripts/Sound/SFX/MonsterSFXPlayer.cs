@@ -101,7 +101,7 @@ public class MonsterSFXPlayer : MonoBehaviour
     }
     public void OnPlayFPDeath()
     {
-        SendSFXData(monsterSFX.FPDeath);
+        GameManager.Sound.ChangeBGMDirectly(monsterSFX.FPDeath);
     }
     public void OnPlayTPDeath1()
     {
