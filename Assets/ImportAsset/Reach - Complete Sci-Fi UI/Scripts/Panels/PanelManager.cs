@@ -18,7 +18,8 @@ namespace Michsky.UI.Reach
         public bool cullPanels = true;
         [SerializeField] private bool initializeButtons = true;
         [SerializeField] private bool bypassAnimationOnEnable = false;
-        [SerializeField] private PanelMode panelMode = PanelMode.Custom;
+        [SerializeField] private UpdateMode updateMode = UpdateMode.UnscaledTime;
+        [SerializeField] private PanelMode panelMode = PanelMode.SubPanel;
         [Range(0.75f, 2)] public float animationSpeed = 1;
 
         // Events
@@ -37,7 +38,8 @@ namespace Michsky.UI.Reach
         public float cachedStateLength = 1;
         [HideInInspector] public int managerIndex;
 
-        public enum PanelMode { MainPanel, SubPanel, Custom }
+        public enum PanelMode { MainPanel, SubPanel }
+        public enum UpdateMode { DeltaTime, UnscaledTime }
 
         [System.Serializable]
         public class PanelItem
@@ -65,13 +67,12 @@ namespace Michsky.UI.Reach
 
             if (panelMode == PanelMode.MainPanel) { cachedStateLength = ReachUIInternalTools.GetAnimatorClipLength(panels[currentPanelIndex].panelObject, "MainPanel_In"); }
             else if (panelMode == PanelMode.SubPanel) { cachedStateLength = ReachUIInternalTools.GetAnimatorClipLength(panels[currentPanelIndex].panelObject, "SubPanel_In"); }
-            else if (panelMode == PanelMode.Custom) { cachedStateLength = 1f; }
         }
 
         void Start()
         {
-            if (panels.Count == 0)
-                return;
+            if (ControllerManager.instance != null) { managerIndex = ControllerManager.instance.panels.Count; ControllerManager.instance.panels.Add(this); }
+            if (panels.Count == 0) { return; }
 
             InitializePanels();
         }
@@ -83,7 +84,7 @@ namespace Michsky.UI.Reach
                 ControllerManager.instance.currentManagerIndex = managerIndex; 
             }
 
-            if (bypassAnimationOnEnable == true)
+            if (bypassAnimationOnEnable)
             {
                 for (int i = 0; i < panels.Count; i++)
                 {
@@ -104,7 +105,7 @@ namespace Michsky.UI.Reach
                 }
             }
 
-            else if (isInitialized == true && bypassAnimationOnEnable == false && nextPanel == null)
+            else if (isInitialized && !bypassAnimationOnEnable && nextPanel == null)
             {
                 currentPanel.enabled = true;
                 currentPanel.SetFloat(animSpeedKey, animationSpeed);
@@ -112,7 +113,7 @@ namespace Michsky.UI.Reach
                 if (currentButton != null) { currentButton.SetSelected(true); }
             }
 
-            else if (isInitialized == true && bypassAnimationOnEnable == false && nextPanel != null)
+            else if (isInitialized && !bypassAnimationOnEnable && nextPanel != null)
             {
                 nextPanel.enabled = true;
                 nextPanel.SetFloat(animSpeedKey, animationSpeed);
@@ -147,8 +148,8 @@ namespace Michsky.UI.Reach
             {
                 if (panels[i].panelObject == null) { continue; }
                 if (panels[i].hotkeyParent != null) { panels[i].hotkeys = panels[i].hotkeyParent.GetComponentsInChildren<HotkeyEvent>(); }
-                if (i != currentPanelIndex && cullPanels == true) { panels[i].panelObject.gameObject.SetActive(false); }
-                if (initializeButtons == true)
+                if (i != currentPanelIndex && cullPanels) { panels[i].panelObject.gameObject.SetActive(false); }
+                if (initializeButtons)
                 {
                     string tempName = panels[i].panelName;
                     if (panels[i].panelButton != null) { panels[i].panelButton.onClick.AddListener(() => OpenPanel(tempName)); }
@@ -160,7 +161,11 @@ namespace Michsky.UI.Reach
             StartCoroutine("DisableAnimators");
         }
 
-        public void OpenFirstPanel() { OpenPanelByIndex(0); }
+        public void OpenFirstPanel()
+        { 
+            OpenPanelByIndex(0); 
+        }
+
         public void OpenPanel(string newPanel)
         {
             bool catchedPanel = false;
@@ -175,7 +180,7 @@ namespace Michsky.UI.Reach
                 }
             }
 
-            if (catchedPanel == false)
+            if (!catchedPanel)
             {
                 Debug.LogWarning("There is no panel named '" + newPanel + "' in the panel list.", this);
                 return;
@@ -183,7 +188,7 @@ namespace Michsky.UI.Reach
 
             if (newPanelIndex != currentPanelIndex)
             {
-                if (cullPanels == true) { StopCoroutine("DisablePreviousPanel"); }
+                if (cullPanels) { StopCoroutine("DisablePreviousPanel"); }
                 if (ControllerManager.instance != null) { ControllerManager.instance.currentManagerIndex = managerIndex; }
 
                 currentPanel = panels[currentPanelIndex].panelObject;
@@ -205,7 +210,7 @@ namespace Michsky.UI.Reach
                 currentPanel.Play(panelFadeOut);
                 nextPanel.Play(panelFadeIn);
 
-                if (cullPanels == true) { StartCoroutine("DisablePreviousPanel"); }
+                if (cullPanels) { StartCoroutine("DisablePreviousPanel"); }
                 if (panels[currentPanelIndex].hotkeyParent != null) { foreach (HotkeyEvent he in panels[currentPanelIndex].hotkeys) { he.enabled = true; } }
 
                 currentButtonIndex = newPanelIndex;
@@ -213,10 +218,10 @@ namespace Michsky.UI.Reach
                 if (ControllerManager.instance != null && panels[currentPanelIndex].latestSelected != null) { ControllerManager.instance.SelectUIObject(panels[currentPanelIndex].latestSelected); }
                 else if (ControllerManager.instance != null && panels[currentPanelIndex].latestSelected == null) { ControllerManager.instance.SelectUIObject(panels[currentPanelIndex].firstSelected); }
 
+                if (currentButton != null) { currentButton.SetSelected(false); }
                 if (panels[currentButtonIndex].panelButton != null)
                 {
                     nextButton = panels[currentButtonIndex].panelButton;
-                    currentButton.SetSelected(false);
                     nextButton.SetSelected(true);
                 }
 
@@ -364,7 +369,8 @@ namespace Michsky.UI.Reach
 
         IEnumerator DisablePreviousPanel()
         {
-            yield return new WaitForSecondsRealtime(cachedStateLength * animationSpeed);
+            if (updateMode == UpdateMode.UnscaledTime) { yield return new WaitForSecondsRealtime(cachedStateLength * animationSpeed); }
+            else { yield return new WaitForSeconds(cachedStateLength * animationSpeed); }
 
             for (int i = 0; i < panels.Count; i++)
             {
@@ -377,7 +383,9 @@ namespace Michsky.UI.Reach
 
         IEnumerator DisableAnimators()
         {
-            yield return new WaitForSecondsRealtime(cachedStateLength * animationSpeed);
+            if (updateMode == UpdateMode.UnscaledTime) { yield return new WaitForSecondsRealtime(cachedStateLength * animationSpeed); }
+            else { yield return new WaitForSeconds(cachedStateLength * animationSpeed); }
+
             if (currentPanel != null) { currentPanel.enabled = false; }
             if (nextPanel != null) { nextPanel.enabled = false; }
         }

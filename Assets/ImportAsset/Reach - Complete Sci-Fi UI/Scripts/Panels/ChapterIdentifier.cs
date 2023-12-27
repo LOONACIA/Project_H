@@ -23,16 +23,6 @@ namespace Michsky.UI.Reach
         [HideInInspector] public bool isLocked;
         [HideInInspector] public bool isCurrent;
 
-        void Awake()
-        {
-            if (ControllerManager.instance != null)
-            {
-                if (continueButton != null) { ControllerManager.instance.AddButton(continueButton); }
-                if (playButton != null) { ControllerManager.instance.AddButton(playButton); }
-                if (replayButton != null) { ControllerManager.instance.AddButton(replayButton); }
-            }
-        }
-
         public void UpdateBackgroundRect() 
         { 
             chapterManager.currentBackgroundRect = backgroundRect;
