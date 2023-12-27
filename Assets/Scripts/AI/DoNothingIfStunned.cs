@@ -1,4 +1,5 @@
 using BehaviorDesigner.Runtime.Tasks;
+using UnityEngine;
 using UnityEngine.AI;
 
 public class DoNothingIfStunned : Action
@@ -26,6 +27,11 @@ public class DoNothingIfStunned : Action
     {
         if (m_navMeshAgent.enabled)
         {
+            if (m_isAborted)
+            {
+                m_navMeshAgent.ResetPath();
+                m_navMeshAgent.velocity = Vector3.zero;
+            }
             m_navMeshAgent.isStopped = m_isAborted;
         }
         return m_status.IsStunned ? TaskStatus.Running : TaskStatus.Failure;
