@@ -48,6 +48,11 @@ public partial class UIController : MonoBehaviour
             return;
         }
 
+        if (GameManager.Instance.IsGameOver)
+        {
+            return;
+        }
+
         m_inputActions.Character.Disable();
         GameManager.Instance.SetPause();
     }
@@ -89,6 +94,7 @@ public partial class UIController : MonoBehaviour
             m_timeScale = Time.timeScale;
             Time.timeScale = 0f;
             Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.Confined;
             m_inputActions.Character.Disable();
         }
 
@@ -111,6 +117,7 @@ public partial class UIController : MonoBehaviour
                 m_inputActions.Character.Enable();
                 Time.timeScale = m_timeScale;
                 Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
                 m_isDialogShown = false;
             }
             else
@@ -122,17 +129,17 @@ public partial class UIController : MonoBehaviour
 
     private static class MenuInfoBag
     {
-        public static readonly MenuInfo Restart = new("Restart", () => SceneManagerEx.LoadScene(SceneManager.GetActiveScene().name));
+        public static readonly MenuInfo Restart = new("Restart from checkpoint", () => SceneManagerEx.LoadScene(SceneManager.GetActiveScene().name));
     
-        public static readonly MenuInfo Continue = new("Continue", () => GameManager.Instance.SetResume());
+        public static readonly MenuInfo Continue = new("Resume", () => GameManager.Instance.SetResume());
     
-        public static readonly MenuInfo Menu = new("Menu", () => SceneManagerEx.LoadScene("TitleScene"));
+        public static readonly MenuInfo Menu = new("Exit to main menu", () => SceneManagerEx.LoadScene("TitleScene"));
     
         public static readonly MenuInfo Exit =
 #if UNITY_EDITOR
-            new("Exit", () => UnityEditor.EditorApplication.isPlaying = false);
+            new("Exit the game", () => UnityEditor.EditorApplication.isPlaying = false);
 #else
-        new("Exit", Application.Quit);
+        new("Exit the game", Application.Quit);
 #endif
         public static readonly string GameOverText = "Game Over";
         

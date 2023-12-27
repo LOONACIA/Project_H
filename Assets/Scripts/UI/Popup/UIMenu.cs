@@ -43,6 +43,8 @@ public class UIMenu : UIPopup
     private CoroutineEx m_coroutine;
 
     private Animator m_animator;
+    
+    private AudioSource m_audioSource;
 
     private void OnEnable()
     {
@@ -117,17 +119,21 @@ public class UIMenu : UIPopup
     {
         button.onSelect.AddListener(() => OnHover(button));
         button.onHover.AddListener(() => OnHover(button));
-        button.onLeave.AddListener(() => OnMouseLeave(button));
-        button.onDeselect.AddListener(() => OnMouseLeave(button));
+        button.onLeave.AddListener(() => OnLeave(button));
+        button.onDeselect.AddListener(() => OnLeave(button));
     }
     
     private void OnHover(ButtonManager buttonManager)
     {
         buttonManager.transform.localScale = Vector3.one * 1.05f;
-        GameManager.Sound.Play(GameManager.Sound.ObjectDataSounds.ObjectUpdate);
+        if (m_audioSource != null && m_audioSource.isPlaying)
+        {
+            m_audioSource.Stop();
+        }
+        m_audioSource = GameManager.Sound.Play(GameManager.Sound.ObjectDataSounds.ObjectUpdate);
     }
     
-    private void OnMouseLeave(ButtonManager buttonManager)
+    private void OnLeave(ButtonManager buttonManager)
     {
         buttonManager.transform.localScale = Vector3.one;
     }
