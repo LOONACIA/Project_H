@@ -1,4 +1,6 @@
+using LOONACIA.Unity.Coroutines;
 using System;
+using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
@@ -10,12 +12,16 @@ using UnityEngine.AI;
 [RequireComponent(typeof(MonsterMovement))]
 public class Monster : Actor
 {
+    private WaitUntil m_waitUntilNavMeshAgentEnableCache;
+    
     private NavMeshAgent m_navMeshAgent;
 
     // Movement animation ratio (for lerp)
     private float m_movementAnimationRatio;
 
     private Vector3 m_directionInput;
+    
+    private CoroutineEx m_waitUntilNavMeshAgentEnableCoroutine;
 
     public MonsterAttack Attack { get; private set; }
 
@@ -37,6 +43,7 @@ public class Monster : Actor
         //MonsterMovement의 FixedUpdate 또는 Monster의 OnCollisionEnter에서 판정하여 On/Off됨
         m_navMeshAgent.enabled = false;
         m_rigidbody.isKinematic = false;
+        m_waitUntilNavMeshAgentEnableCache = new(() => m_navMeshAgent!.enabled);
     }
 
     protected override void OnEnable()
@@ -109,6 +116,12 @@ public class Monster : Actor
     {
         base.EnableAIComponents();
 
+        if (m_behaviorTree != null)
+        {
+            m_behaviorTree.enabled = false;
+            m_waitUntilNavMeshAgentEnableCoroutine = CoroutineEx.Create(this, CoWaitUntilNavMeshAgentEnable());
+        }
+
         if (Movement != null && Movement.IsOnGround)
         {
             m_navMeshAgent.enabled = true;
@@ -119,12 +132,20 @@ public class Monster : Actor
             m_navMeshAgent.enabled = false;
             m_rigidbody.isKinematic = false;
         }
+        return;
+        
+        IEnumerator CoWaitUntilNavMeshAgentEnable()
+        {
+            yield return m_waitUntilNavMeshAgentEnableCache;
+            m_behaviorTree.enabled = true;
+        }
     }
 
     protected override void DisableAIComponents()
     {
         base.DisableAIComponents();
 
+        m_waitUntilNavMeshAgentEnableCoroutine?.Abort();
         m_navMeshAgent.enabled = false;
     }
 
