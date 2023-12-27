@@ -398,8 +398,8 @@ public class MonsterMovement : MonoBehaviour
 
     public void TryJump()
     {
-        // 지상에 있지 않은 경우
-        if (!IsOnGround)
+        // 지상에 있지 않은 경우 또는 CanJump가 false라면
+        if (!IsOnGround || !m_data.CanJump)
         {
             // 아무 것도 하지 않음
             return;
