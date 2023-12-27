@@ -1,4 +1,6 @@
+using LOONACIA.Unity.Coroutines;
 using System;
+using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
@@ -16,6 +18,8 @@ public class Monster : Actor
     private float m_movementAnimationRatio;
 
     private Vector3 m_directionInput;
+    
+    private CoroutineEx m_waitUntilNavMeshAgentEnableCoroutine;
 
     public MonsterAttack Attack { get; private set; }
 
@@ -109,6 +113,12 @@ public class Monster : Actor
     {
         base.EnableAIComponents();
 
+        if (m_behaviorTree != null)
+        {
+            m_behaviorTree.enabled = false;
+            m_waitUntilNavMeshAgentEnableCoroutine = CoroutineEx.Create(this, CoWaitUntilNavMeshAgentEnable());
+        }
+
         if (Movement != null && Movement.IsOnGround)
         {
             m_navMeshAgent.enabled = true;
@@ -119,12 +129,20 @@ public class Monster : Actor
             m_navMeshAgent.enabled = false;
             m_rigidbody.isKinematic = false;
         }
+        return;
+        
+        IEnumerator CoWaitUntilNavMeshAgentEnable()
+        {
+            yield return new WaitUntil(() => m_navMeshAgent.enabled);
+            m_behaviorTree.enabled = true;
+        }
     }
 
     protected override void DisableAIComponents()
     {
         base.DisableAIComponents();
 
+        m_waitUntilNavMeshAgentEnableCoroutine?.Abort();
         m_navMeshAgent.enabled = false;
     }
 

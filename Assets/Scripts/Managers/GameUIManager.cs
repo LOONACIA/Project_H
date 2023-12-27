@@ -69,13 +69,10 @@ public class GameUIManager
         m_damageIndicator = null;
     }
     
+    // ReSharper disable Unity.PerformanceAnalysis
     public void ShowMenuUI(MenuInfo first, MenuInfo second, MenuInfo third, string text = "Game Over")
     {
-        if (m_menuUI != null && m_menuUI.gameObject.activeSelf)
-        {
-            m_menuUI.Close();
-            return;
-        }
+        HideMenuUI();
 
         MenuInfo resume = new(first.Text, Resume);
         
@@ -89,6 +86,15 @@ public class GameUIManager
         {
             ManagerRoot.UI.ClosePopupUI(m_menuUI);
             first?.OnClick?.Invoke();
+        }
+    }
+
+    public void HideMenuUI()
+    {
+        if (m_menuUI != null)
+        {
+            m_menuUI.Close();
+            m_menuUI = null;
         }
     }
 
