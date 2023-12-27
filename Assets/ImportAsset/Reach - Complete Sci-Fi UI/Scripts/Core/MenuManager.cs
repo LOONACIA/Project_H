@@ -102,7 +102,7 @@ namespace Michsky.UI.Reach
 
         IEnumerator StartInitialize()
         {
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(0.5f);
             if (initPanel != null) { initPanel.FadeOut(); }
             Initialize();
         }
@@ -117,16 +117,19 @@ namespace Michsky.UI.Reach
         {
             yield return new WaitForSeconds(splashOutTime + 0.1f);
            
-            if (UIManagerAsset != null && UIManagerAsset.enableSplashScreen == true) 
+            if (UIManagerAsset != null && UIManagerAsset.enableSplashScreen) 
             {
                 splashScreen.gameObject.SetActive(false); 
             }
 
             mainContent.gameObject.SetActive(true);
 
-            if (ControllerManager.instance != null && ControllerManager.instance.gamepadEnabled == true && ControllerManager.instance.firstSelected.activeInHierarchy == true)
-            { 
-                EventSystem.current.SetSelectedGameObject(ControllerManager.instance.firstSelected); 
+            if (ControllerManager.instance != null
+             && ControllerManager.instance.gamepadEnabled
+             && ControllerManager.instance.firstSelected != null
+             && ControllerManager.instance.firstSelected.activeInHierarchy)
+            {
+                EventSystem.current.SetSelectedGameObject(ControllerManager.instance.firstSelected);
             }
         }
     }

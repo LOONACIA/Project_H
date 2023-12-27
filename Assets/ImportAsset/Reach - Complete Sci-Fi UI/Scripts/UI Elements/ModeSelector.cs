@@ -114,6 +114,7 @@ namespace Michsky.UI.Reach
                 return;
 
             #region Core Init
+            if (ControllerManager.instance != null) { ControllerManager.instance.modeSelectors.Add(this); }
             if (UIManagerAudio.instance == null) { useSounds = false; }
             if (useUINavigation) { AddUINavigation(); }
             if (normalCG == null) { normalCG = new GameObject().AddComponent<CanvasGroup>(); normalCG.gameObject.AddComponent<RectTransform>(); normalCG.transform.SetParent(transform); normalCG.gameObject.name = "Normal"; }

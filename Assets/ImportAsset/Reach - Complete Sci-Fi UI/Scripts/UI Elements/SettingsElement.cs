@@ -34,11 +34,9 @@ namespace Michsky.UI.Reach
 
         void Start()
         {
-            if (UIManagerAudio.instance == null) 
-            { 
-                useSounds = false; 
-            }
-           
+            if (ControllerManager.instance != null) { ControllerManager.instance.settingsElements.Add(this); }
+            if (UIManagerAudio.instance == null) { useSounds = false; }
+
             if (highlightCG == null) 
             { 
                 highlightCG = new GameObject().AddComponent<CanvasGroup>();

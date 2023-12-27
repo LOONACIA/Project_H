@@ -179,11 +179,18 @@ public class MonsterMovement : MonoBehaviour
         m_agent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
         //MoveToWithNavMove(destination);
         MoveToWithNavSetDest(destination, true);
+        //MoveToWithNavSetPath(destination, true);
 
         //사운드
         PlayWalkSound();
     }
 
+    #region LegacyMoveToFunctions
+    /// <summary>
+    /// NavMesh의 Move를 통한 이동을 구현
+    /// 현재 사용하지 않으나, 후에 다른 로직 구현에 사용될 수 있는 코드가 있어 남겨둠
+    /// </summary>
+    /// <param name="destination"></param>
     private void MoveToWithNavMove(Vector3 destination)
     {
         if (m_agent.enabled)
@@ -255,6 +262,74 @@ public class MonsterMovement : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// SetPath를 통한 이동을 구현
+    /// 현재 사용하지 않으나, 후에 다른 로직 구현에 사용될 수 있는 코드가 있어 남겨둠
+    /// </summary>
+    /// <param name="destination"></param>
+    /// <param name="useAdaptiveAvoidanceTest"></param>
+    private void MoveToWithNavSetPath(Vector3 destination, bool useAdaptiveAvoidanceTest = true)
+    {
+        if (m_agent.enabled)
+        {
+            m_agent.isStopped = false;
+
+            //1. Path상 다음 목적지를 찾는다.
+            if (!NavMesh.CalculatePath(transform.position, destination, m_agent.areaMask, m_lastPath))
+            {
+                //만약 Invalid한 위치(공중 or Navmesh가 없는 곳)에 있다면, 가장 가까운 NavMesh위치로 이동합니다.
+                if (!(NavMesh.SamplePosition(destination, out var hit, float.PositiveInfinity, m_agent.areaMask)
+                    && NavMesh.CalculatePath(transform.position, hit.position, m_agent.areaMask, m_lastPath)))
+                {
+                    //가장 가까운 NavMesh가 없다면, return합니다.
+                    Debug.LogWarning($"{gameObject.name}: destination에 인접한 NavMesh가 없어 길찾기 실패.");
+                    return;
+                }
+            }
+
+            //주변에 다른 대상이 있는지 찾는다.
+            if (useAdaptiveAvoidanceTest)
+            {
+                int amount = Physics.OverlapSphereNonAlloc(transform.position + m_collider.center, m_agent.radius + m_agent.velocity.magnitude * Time.deltaTime * 2f, m_avoidanceCheckColliders, LayerMask.GetMask("Monster"));
+                //자기 자신이 포함되었는지 확인
+                int max = amount < m_avoidanceCheckColliders.Length ? amount : m_avoidanceCheckColliders.Length;
+                for (int i = 0; i < max; i++)
+                {
+                    if (m_avoidanceCheckColliders[i].gameObject.GetInstanceID() == gameObject.GetInstanceID())
+                    {
+                        //자기 자신일 경우 패스
+                        max -= 1;
+                        break;
+                    }
+                }
+                if (max > 0)
+                {
+                    //자기 자신을 제외하고 누군가 범위 내에 있다면, Quality를 높인다.
+                    m_agent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
+                }
+                else
+                {
+                    //아무도 없다면 None으로 진행(다른 Agent, Corner 무시)
+                    m_agent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance;
+                }
+            }
+
+            m_agent.SetPath(m_lastPath);
+
+            if (!IsOnGround)
+            {
+                // 몬스터가 떨어지는 경우 중력 영향을 받음
+                float expectedSpeed = m_agent.speed + Physics.gravity.y * Time.deltaTime * -1;
+                m_agent.speed = Mathf.Clamp(expectedSpeed, 0, 30);
+            }
+            else
+            {
+                m_agent.speed = m_data.MoveSpeed;
+            }
+        }
+    }
+    #endregion
+
     private void MoveToWithNavSetDest(Vector3 destination, bool useAdaptiveAvoidanceTest = true)
     {
         if (m_agent.enabled)
@@ -323,8 +398,8 @@ public class MonsterMovement : MonoBehaviour
 
     public void TryJump()
     {
-        // 지상에 있지 않은 경우
-        if (!IsOnGround)
+        // 지상에 있지 않은 경우 또는 CanJump가 false라면
+        if (!IsOnGround || !m_data.CanJump)
         {
             // 아무 것도 하지 않음
             return;
