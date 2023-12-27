@@ -54,7 +54,6 @@ public class UIMenu : UIPopup
     {
         m_coroutine?.Abort();
         m_firstButton.transform.localScale = m_secondButton.transform.localScale = m_thirdButton.transform.localScale = Vector3.one;
-        GameManager.Sound.OnInGame();
     }
 
     public void SetTitle(string text)
@@ -115,16 +114,19 @@ public class UIMenu : UIPopup
     private void OnFirstButtonClick()
     {
         m_firstButtonAction?.Invoke();
+        GameManager.Sound.OnInGame();
     }
     
     private void OnSecondButtonClick()
     {
         m_secondButtonAction?.Invoke();
+        GameManager.Sound.OnInGame();
     }
     
     private void OnThirdButtonClick()
     {
         m_thirdButtonAction?.Invoke();
+        GameManager.Sound.OnInGame();;
     }
     
     private IEnumerator CoDisableAnimator()

@@ -1,5 +1,3 @@
-using DG.Tweening;
-using LOONACIA.Unity;
 using LOONACIA.Unity.Coroutines;
 using LOONACIA.Unity.Managers;
 using System;
@@ -11,15 +9,17 @@ public partial class UIController : MonoBehaviour
 {
     private static readonly WaitForSecondsRealtime m_gameOverYieldInstructionCache = new(2f);
     
-    private bool m_isDialogShown;
+    private float m_timeScale;
     
     private UIModalDialogPresenter m_dialogPresenter;
     
-    private float m_timeScale;
+    private bool m_isMenuShown;
+    
+    private bool m_isMenuRequested;
+    
+    private bool m_isModal;
     
     private CoroutineEx m_dialogCloseCoroutine;
-    
-    private bool m_isMenuShown;
 
     private void Start()
     {
@@ -44,9 +44,16 @@ public partial class UIController : MonoBehaviour
 
     private void Pause()
     {
-        if (m_isDialogShown && m_dialogCloseCoroutine?.IsRunning is not true)
+        // Modal 시 Game State가 Pause로 변경되므로, Modal 관련 로직이 우선되어야 함
+        if (m_isModal && m_dialogCloseCoroutine?.IsRunning is not true)
         {
             m_dialogPresenter.Confirm();
+            return;
+        }
+        
+        if (GameManager.Instance.IsPaused)
+        {
+            GameManager.Instance.SetResume();
             return;
         }
 
@@ -54,12 +61,11 @@ public partial class UIController : MonoBehaviour
         {
             return;
         }
-
-        m_inputActions.Character.Disable();
+        
+        m_isMenuRequested = true;
         GameManager.Instance.SetPause();
     }
 
-    // ReSharper disable Unity.PerformanceAnalysis
     private void OnGameOver(object sender, EventArgs e)
     {
         StartCoroutine(ShowUI());
@@ -73,14 +79,24 @@ public partial class UIController : MonoBehaviour
 
     private void OnPause(object sender, EventArgs e)
     {
-        GameManager.UI.ShowMenuUI(MenuInfoBag.Continue, MenuInfoBag.Menu, MenuInfoBag.Exit, MenuInfoBag.PausedText);
-        m_isMenuShown = true;
+        m_inputActions.Character.Disable();
+        if (m_isMenuRequested)
+        {
+            GameManager.UI.ShowMenuUI(MenuInfoBag.Continue, MenuInfoBag.Menu, MenuInfoBag.Exit, MenuInfoBag.PausedText);
+            m_isMenuShown = true;
+            m_isMenuRequested = false;
+        }
     }
     
     private void OnResume(object sender, EventArgs e)
     {
+        if (m_isMenuShown)
+        {
+            GameManager.UI.HideMenuUI();
+            m_isMenuShown = false;
+        }
+        
         m_inputActions.Character.Enable();
-        m_isMenuShown = false;
     }
 
     private void OnNotificationActivated(object sender, Notification e)
@@ -91,20 +107,13 @@ public partial class UIController : MonoBehaviour
         }
     }
 
-    private void ShowModalDialog(ModalDialog dialog, bool isInitial = true)
+    private void ShowModalDialog(ModalDialog dialog)
     {
-        if (isInitial)
-        {
-            m_timeScale = Time.timeScale;
-            Time.timeScale = 0f;
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.Confined;
-            m_inputActions.Character.Disable();
-        }
+        GameManager.Instance.SetPause();
 
         m_dialogPresenter = ManagerRoot.UI.ShowPopupUI<UIModalDialogPresenter>();
         m_dialogPresenter.SetDialog(dialog, OnConfirm);
-        m_isDialogShown = true;
+        m_isModal = true;
 
         void OnConfirm()
         {
@@ -120,15 +129,12 @@ public partial class UIController : MonoBehaviour
 
             if (dialog.RelatedDialog == null)
             {
-                m_inputActions.Character.Enable();
-                Time.timeScale = m_timeScale;
-                Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
-                m_isDialogShown = false;
+                GameManager.Instance.SetResume();
+                m_isModal = false;
             }
             else
             {
-                ShowModalDialog(dialog.RelatedDialog, false);
+                ShowModalDialog(dialog.RelatedDialog);
             }
         }
     }
