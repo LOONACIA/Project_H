@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.VFX;
 
 [Serializable]
 public class Shield : MonoBehaviour
@@ -18,6 +19,9 @@ public class Shield : MonoBehaviour
 
     // 쉴드 생성한 시간
     private float m_startTime;
+
+    [SerializeField]
+    private VisualEffect hitVfx;
 
     // 남은 쉴드량
     public float ShieldAmount
@@ -46,19 +50,6 @@ public class Shield : MonoBehaviour
     public event EventHandler<float> ShieldChanged;
     
     public event EventHandler Destroyed;
-    
-    private void Awake()
-    {
-        Init(m_shieldAmount, m_timeLimit);
-    }
-
-    private void Update()
-    {
-        if (m_hasTimeLimit && Time.time - m_startTime > m_timeLimit)
-        {
-            Destroy();
-        }
-    }
 
     public void Init(float shieldPoint, float timeLimit)
     {
@@ -72,9 +63,10 @@ public class Shield : MonoBehaviour
         m_startTime = Time.time;
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(in AttackInfo damageInfo)
     {
-        ShieldAmount -= damage;
+        ShieldAmount -= damageInfo.Damage;
+        PlayHitVfx(damageInfo);
         if (ShieldAmount <= 0)
         {
             Destroy();
@@ -88,5 +80,29 @@ public class Shield : MonoBehaviour
     {
         Destroyed?.Invoke(this, EventArgs.Empty);
         Destroy(gameObject);
+    }
+
+    private void Awake()
+    {
+        Init(m_shieldAmount, m_timeLimit);
+    }
+
+    private void Update()
+    {
+        if (m_hasTimeLimit && Time.time - m_startTime > m_timeLimit)
+        {
+            Destroy();
+        }
+    }
+
+    private void PlayHitVfx(in AttackInfo damage)
+    {
+        if (hitVfx != null)
+        {
+            hitVfx.SetInt(ConstVariables.VFX_GRAPH_PARAMETER_PARTICLE_COUNT, damage.Damage * 2);
+            hitVfx.SetVector3(ConstVariables.VFX_GRAPH_PARAMETER_DIRECTION, damage.AttackDirection);
+            hitVfx.transform.position = damage.HitPoint;
+            hitVfx.SendEvent(ConstVariables.VFX_GRAPH_EVENT_ON_PLAY);
+        }
     }
 }
