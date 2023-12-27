@@ -426,6 +426,7 @@ public class MonsterMovement : MonoBehaviour
         //이미 대쉬 중이거나, 대쉬 딜레이 중이거나, 남은 대쉬가 없다면 대쉬 불가능
         if (IsDashing || m_actor.Status.CurrentDashCount <= 0 || m_actor.Status.IsKnockedDown || direction == Vector3.zero)
         {
+            GameManager.Sound.Play(GameManager.Sound.ObjectDataSounds.DashUnable);
             return;
         }
 
