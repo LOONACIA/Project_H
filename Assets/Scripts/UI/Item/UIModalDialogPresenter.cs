@@ -37,6 +37,7 @@ public class UIModalDialogPresenter : UIPopup
 
         m_onConfirm = onConfirm;
         m_modalWindow.OpenWindow();
+        GameManager.Sound.OffInGame();
         m_videoPlayer.Play();
     }
 
@@ -55,5 +56,6 @@ public class UIModalDialogPresenter : UIPopup
     private void OnConfirm()
     {
         m_onConfirm?.Invoke();
+        GameManager.Sound.OnInGame();
     }
 }
