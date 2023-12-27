@@ -26,7 +26,17 @@ public class UIModalDialogPresenter : UIPopup
     private Action m_onConfirm;
 
     public bool IsOpen => m_modalWindow.isActiveAndEnabled;
-    
+
+    private void OnEnable()
+    {
+        GameManager.Sound.OffInGame();
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Sound.OnInGame();
+    }
+
     public void SetDialog(ModalDialog dialog, Action onConfirm = null)
     {
         m_text.text = dialog.Content;
@@ -37,13 +47,11 @@ public class UIModalDialogPresenter : UIPopup
 
         m_onConfirm = onConfirm;
         m_modalWindow.OpenWindow();
-        GameManager.Sound.OffInGame();
         m_videoPlayer.Play();
     }
 
     public void Confirm()
     {
-        GameManager.Sound.OnInGame();
         m_modalWindow.CloseWindow();
         m_onConfirm?.Invoke();
     }
