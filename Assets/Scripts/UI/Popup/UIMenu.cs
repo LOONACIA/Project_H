@@ -49,12 +49,14 @@ public class UIMenu : UIPopup
     private void OnEnable()
     {
         m_coroutine = CoroutineEx.Create(this, CoDisableAnimator());
+        GameManager.Sound.OffInGame();
     }
 
     private void OnDisable()
     {
         m_coroutine?.Abort();
         m_firstButton.transform.localScale = m_secondButton.transform.localScale = m_thirdButton.transform.localScale = Vector3.one;
+        GameManager.Sound.OnInGame();
     }
 
     public void SetTitle(string text)

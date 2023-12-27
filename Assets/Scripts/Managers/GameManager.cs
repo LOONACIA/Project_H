@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using LOONACIA.Unity.Managers;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
