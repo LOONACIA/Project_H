@@ -40,6 +40,11 @@ public class DoNothingIfStunned : Action
 
     public override void OnEnd()
     {
+        if (Disabled)
+        {
+            return;
+        }
+        
         if (m_isAborted && m_navMeshAgent.enabled)
         {
             m_navMeshAgent.isStopped = false;

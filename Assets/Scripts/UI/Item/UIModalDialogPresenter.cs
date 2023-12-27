@@ -43,9 +43,8 @@ public class UIModalDialogPresenter : UIPopup
 
     public void Confirm()
     {
-        GameManager.Sound.OnInGame();
         m_modalWindow.CloseWindow();
-        m_onConfirm?.Invoke();
+        OnConfirm();
     }
     
     protected override void Init()
@@ -57,5 +56,6 @@ public class UIModalDialogPresenter : UIPopup
     private void OnConfirm()
     {
         m_onConfirm?.Invoke();
+        GameManager.Sound.OnInGame();
     }
 }

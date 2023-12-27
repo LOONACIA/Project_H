@@ -70,7 +70,7 @@ public class QuestCompleteTrigger : MonoBehaviour
         {
             return;
         }
-        Debug.Log("Interacted");
+
         m_isTriggered = true;
         Complete();
         if(m_nextQuestId != 0)

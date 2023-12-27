@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using LOONACIA.Unity.Managers;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -60,7 +59,15 @@ public class GameManager : MonoBehaviour
 
     public static GameUIManager UI => Instance.m_ui;
 
+    /// <summary>
+    /// Gets a value indicating whether game is over.
+    /// </summary>
     public bool IsGameOver { get; private set; }
+
+    /// <summary>
+    /// Gets a value indicating whether game is paused.
+    /// </summary>
+    public bool IsPaused { get; private set; }
 
     public static GameManager Instance
     {
@@ -71,10 +78,19 @@ public class GameManager : MonoBehaviour
         }
     }
     
+    /// <summary>
+    /// Occurs when game is over.
+    /// </summary>
     public event EventHandler GameOver;
 
+    /// <summary>
+    /// Occurs when game is paused.
+    /// </summary>
     public event EventHandler Pause;
     
+    /// <summary>
+    /// Occurs when game is resumed.
+    /// </summary>
     public event EventHandler Resume;
 
     private void Awake()
@@ -99,17 +115,29 @@ public class GameManager : MonoBehaviour
 
     public void SetPause()
     {
+        if (IsPaused)
+        {
+            return;
+        }
+        
         Time.timeScale = 0;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+        IsPaused = true;
         Pause?.Invoke(this, EventArgs.Empty);
     }
     
     public void SetResume()
     {
+        if (!IsPaused)
+        {
+            return;
+        }
+        
         Time.timeScale = 1;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+        IsPaused = false;
         Resume?.Invoke(this, EventArgs.Empty);
     }
 

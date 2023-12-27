@@ -43,8 +43,6 @@ public class UIMenu : UIPopup
     private CoroutineEx m_coroutine;
 
     private Animator m_animator;
-    
-    private AudioSource m_audioSource;
 
     private void OnEnable()
     {
@@ -56,7 +54,6 @@ public class UIMenu : UIPopup
     {
         m_coroutine?.Abort();
         m_firstButton.transform.localScale = m_secondButton.transform.localScale = m_thirdButton.transform.localScale = Vector3.one;
-        GameManager.Sound.OnInGame();
     }
 
     public void SetTitle(string text)
@@ -91,7 +88,8 @@ public class UIMenu : UIPopup
 
     protected override void Init()
     {
-        base.Init();
+        // Menu should be top of the UI stack. Don't call base.Init().
+        //base.Init();
 
         m_animator = GetComponent<Animator>();
         
@@ -105,10 +103,6 @@ public class UIMenu : UIPopup
         m_firstButton.onClick.AddListener(OnFirstButtonClick);
         m_secondButton.onClick.AddListener(OnSecondButtonClick);
         m_thirdButton.onClick.AddListener(OnThirdButtonClick);
-
-        RegisterButtonEvents(m_firstButton);
-        RegisterButtonEvents(m_secondButton);
-        RegisterButtonEvents(m_thirdButton);
         
         m_titleTextBox = Get<TextMeshProUGUI, Texts>(Texts.Title);
         if (!string.IsNullOrEmpty(m_title))
@@ -116,44 +110,23 @@ public class UIMenu : UIPopup
             m_titleTextBox.text = m_title;
         }
     }
-
-    private void RegisterButtonEvents(ButtonManager button)
-    {
-        button.onSelect.AddListener(() => OnHover(button));
-        button.onHover.AddListener(() => OnHover(button));
-        button.onLeave.AddListener(() => OnLeave(button));
-        button.onDeselect.AddListener(() => OnLeave(button));
-    }
-    
-    private void OnHover(ButtonManager buttonManager)
-    {
-        buttonManager.transform.localScale = Vector3.one * 1.05f;
-        if (m_audioSource != null && m_audioSource.isPlaying)
-        {
-            m_audioSource.Stop();
-        }
-        
-        m_audioSource = GameManager.Sound.Play(GameManager.Sound.ObjectDataSounds.ObjectUpdate);
-    }
-    
-    private void OnLeave(ButtonManager buttonManager)
-    {
-        buttonManager.transform.localScale = Vector3.one;
-    }
     
     private void OnFirstButtonClick()
     {
         m_firstButtonAction?.Invoke();
+        GameManager.Sound.OnInGame();
     }
     
     private void OnSecondButtonClick()
     {
         m_secondButtonAction?.Invoke();
+        GameManager.Sound.OnInGame();
     }
     
     private void OnThirdButtonClick()
     {
         m_thirdButtonAction?.Invoke();
+        GameManager.Sound.OnInGame();;
     }
     
     private IEnumerator CoDisableAnimator()
