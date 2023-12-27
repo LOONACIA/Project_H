@@ -24,6 +24,7 @@ public class SaveMachine : InteractableObject
     protected override void OnInteract(Actor actor)
     {
         GameManager.Character.SaveInformation(actor, m_respawnPosition);
+        GameManager.Sound.Play(GameManager.Sound.ObjectDataSounds.SavePointComplete);
         IsInteractable = false;
     }
 }
