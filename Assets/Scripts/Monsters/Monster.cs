@@ -32,6 +32,11 @@ public class Monster : Actor
         Movement = GetComponent<MonsterMovement>();
         var weapons = Animator.GetComponents<Weapon>();
         Attack.ChangeWeapon(weapons.FirstOrDefault(weapon => weapon.enabled));
+
+        //네브매쉬의 Agent와 Rigidbody의 Kinematic은 세트로 움직여야 함
+        //MonsterMovement의 FixedUpdate 또는 Monster의 OnCollisionEnter에서 판정하여 On/Off됨
+        m_navMeshAgent.enabled = false;
+        m_rigidbody.isKinematic = false;
     }
 
     protected override void OnEnable()
@@ -106,9 +111,11 @@ public class Monster : Actor
         if (Movement != null && Movement.IsOnGround)
         {
             m_navMeshAgent.enabled = true;
+            m_rigidbody.isKinematic = true;
         }
         else
         {
+            m_navMeshAgent.enabled = false;
             m_rigidbody.isKinematic = false;
         }
     }
