@@ -130,10 +130,10 @@ public class PossessionShuriken : MonoBehaviour
         }
         else if ((m_surikenStopLayer & (1 << other.gameObject.layer)) != 0)
         {
-            if (m_isTrace)
-                return;
+            //23.12.27: 추적 기능 사용하지 않으므로 비활성화.
+            //if (m_isTrace)
+            //    return;
 
-            m_isStop = true;
 
             if (m_isTargetWall)
             {
@@ -141,11 +141,16 @@ public class PossessionShuriken : MonoBehaviour
                 //transform.SetParent(other.transform);
             }
 
-
-            PlayTargetHackingSFX();
+            //23.12.27: 수리검이 누군가와 부딪힌 즉시 멈추고, 해당 대상을 부모로 한 채 비활성화됨.
+            m_isStop = true;
             m_rb.isKinematic = true;
-            TryHackingObject(other.transform);
             GetComponent<Collider>().enabled = false;
+            transform.SetParent(other.transform);
+            if (TryHackingObject(other.transform))
+            {
+                //해킹 가능한 오브젝트였을 경우, 해킹 소리 재생
+                PlayTargetHackingSFX();
+            }
             Invoke(nameof(DestroySelf), 5f);
         }
     }
@@ -218,14 +223,15 @@ public class PossessionShuriken : MonoBehaviour
         m_onTargetHit?.Invoke(this, actor);
     }
 
-    private void TryHackingObject(Transform _target)
+    private bool TryHackingObject(Transform _target)
     {
         HackingObject obj = _target.GetComponent<HackingObject>();
 
         if (obj == null)
-            return;
+            return false;
 
         obj.Interact();
+        return true;
     }
 
     private IEnumerator IE_Destory()
