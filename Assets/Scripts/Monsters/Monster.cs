@@ -12,6 +12,8 @@ using UnityEngine.AI;
 [RequireComponent(typeof(MonsterMovement))]
 public class Monster : Actor
 {
+    private WaitUntil m_waitUntilNavMeshAgentEnableCache;
+    
     private NavMeshAgent m_navMeshAgent;
 
     // Movement animation ratio (for lerp)
@@ -41,6 +43,7 @@ public class Monster : Actor
         //MonsterMovement의 FixedUpdate 또는 Monster의 OnCollisionEnter에서 판정하여 On/Off됨
         m_navMeshAgent.enabled = false;
         m_rigidbody.isKinematic = false;
+        m_waitUntilNavMeshAgentEnableCache = new(() => m_navMeshAgent!.enabled);
     }
 
     protected override void OnEnable()
@@ -133,7 +136,7 @@ public class Monster : Actor
         
         IEnumerator CoWaitUntilNavMeshAgentEnable()
         {
-            yield return new WaitUntil(() => m_navMeshAgent.enabled);
+            yield return m_waitUntilNavMeshAgentEnableCache;
             m_behaviorTree.enabled = true;
         }
     }
