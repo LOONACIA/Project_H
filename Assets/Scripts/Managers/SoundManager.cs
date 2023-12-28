@@ -20,7 +20,7 @@ public class SoundManager
     public bool isPlayingDetectionSound = false;
 
     private Tween m_BGMSettingTween;
-    private float m_bgmTime;
+    private float m_bgmTime = 0f;
 
     public void Init()
     {
@@ -137,7 +137,10 @@ public class SoundManager
     public void OnInGame()
     {
         m_audioSources[(int)SoundType.Bgm].Play();
-        m_audioSources[(int)SoundType.Bgm].time = m_bgmTime;
+
+        if(m_bgmTime <= m_audioSources[(int)SoundType.Bgm].clip.length)
+            m_audioSources[(int)SoundType.Bgm].time = m_bgmTime;
+
         //AudioMixer.SetFloat("InGame", 0f);
         m_BGMSettingTween?.Kill();
         m_BGMSettingTween = audioMixer.DOSetFloat("InGame", 0f, 1f).SetUpdate(true);
@@ -203,6 +206,7 @@ public class SoundManager
 
         audioSource.Stop();
         audioSource.clip = _info.audio;
+        audioSource.time = 0f;
         audioSource.Play();
     }
 
