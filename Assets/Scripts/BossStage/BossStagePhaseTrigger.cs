@@ -6,8 +6,11 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class BossStagePhaseTrigger : MonoBehaviour, IActivate
 {
-    [SerializeField, Tooltip("BossPhase 시작되면 활성화 될 지면 오브젝트 목록")]
-    private Collider[] m_groundObjectList;
+    [SerializeField, Tooltip("플레이어가 트리거에 접촉하면 활성화 할 오브젝트 목록")]
+    private Collider[] m_onEnterActiveObjects;
+
+    [SerializeField, Tooltip("플레이어가 트리거에 접촉하면 비활성화 할 오브젝트 목록")]
+    private Collider[] m_onEnterDeactiveObjects;
 
     [SerializeField, Tooltip("플레이어가 착지할 곳을 보여줄 오브젝트의 목록")]
     private Renderer[] m_landingPointList;
@@ -27,7 +30,7 @@ public class BossStagePhaseTrigger : MonoBehaviour, IActivate
             landingPoint.material = new(landingPoint.material);
         }
 
-        foreach (var groundCollier in m_groundObjectList)
+        foreach (var groundCollier in m_onEnterActiveObjects)
         { 
             groundCollier.gameObject.SetActive(false);
             groundCollier.enabled = false;
@@ -44,10 +47,16 @@ public class BossStagePhaseTrigger : MonoBehaviour, IActivate
 
             StartCoroutine(Dissolve());
             
-            foreach (var groundCollier in m_groundObjectList) 
+            foreach (var activeObject in m_onEnterActiveObjects) 
             {
-                groundCollier.gameObject.SetActive(true);
-                groundCollier.enabled = true;
+                activeObject.gameObject.SetActive(true);
+                activeObject.enabled = true;
+            }
+
+            foreach (var deactiveObject in m_onEnterDeactiveObjects)
+            {
+                deactiveObject.gameObject.SetActive(false);
+                deactiveObject.enabled = false;
             }
         }
     }
