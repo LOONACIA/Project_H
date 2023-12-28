@@ -49,7 +49,7 @@ public class PossessionShuriken : MonoBehaviour
     {
         TryGetComponent<Rigidbody>(out m_rb);
         m_targetLayer = LayerMask.GetMask("Monster");
-        m_surikenStopLayer = LayerMask.GetMask("Wall", "Ground", "Shield", "Obstacle");
+        m_surikenStopLayer = LayerMask.GetMask("Wall", "Ground", "Shield", "Obstacle", "InteractableObject");
         StartCoroutine(nameof(IE_Destory));
     }
 
