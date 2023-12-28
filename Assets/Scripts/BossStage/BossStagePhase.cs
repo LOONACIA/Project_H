@@ -181,6 +181,10 @@ public class BossStagePhase : MonoBehaviour
         m_explosionParticle?.Play();
         if (m_explosionAnimator != null)
             m_explosionAnimator.enabled = true;
+
+        //사운드
+        m_explosionParticle.TryGetComponent<AudioSource>(out var audioSource);
+        audioSource.Play();
     }
 
     /// <summary>
