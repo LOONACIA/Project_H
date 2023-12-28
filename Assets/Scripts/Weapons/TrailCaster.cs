@@ -184,7 +184,7 @@ public class TrailCaster : MonoBehaviour
                 curPos[i, j] = transform.TransformPoint(m_trailRotation * localTrailPos[i, j]); //월드 좌표를 curPos로 저장
 
                 Vector3 trailOrg = oldPos[i, j];
-                Vector3 trailDir = curPos[i, j] - oldPos[i, j];
+                Vector3 trailDir = (curPos[i, j] - oldPos[i, j]).normalized;
                 int hitCounts = Physics.RaycastNonAlloc(
                     trailOrg, trailDir, hits, trailDir.magnitude,
                     LayerMask.GetMask("Monster", "Damageable"));
