@@ -139,6 +139,7 @@ public class Sniper : Gun
         {
             Vector3 position = Vector3.Lerp(m_spawnPosition.position, target, i / interval);
             var lightEffect = ManagerRoot.Resource.Instantiate(GameManager.Settings.AttackLight, position, Quaternion.identity).GetOrAddComponent<AttackLightEffect>();
+            lightEffect.Intensity = 100;
             lightEffect.Duration = 0.3f;
         }
 
