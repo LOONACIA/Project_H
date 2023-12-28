@@ -20,7 +20,7 @@ namespace LOONACIA.Unity.Managers
         {
             Scene currentScene = SceneManager.GetActiveScene();
             SceneChanging?.Invoke(currentScene);
-
+            
             return SceneManager.LoadSceneAsync(sceneName, mode);
         }
     }
