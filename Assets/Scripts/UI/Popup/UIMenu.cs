@@ -91,7 +91,7 @@ public class UIMenu : UIPopup
     protected override void Init()
     {
         // Menu should be top of the UI stack. Don't call base.Init().
-        //base.Init();
+        base.Init();
 
         m_animator = GetComponent<Animator>();
         
