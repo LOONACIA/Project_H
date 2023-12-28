@@ -27,6 +27,8 @@ public class TitleScene : MonoBehaviour
 
     private IDisposable m_inputHandle;
 
+    private bool m_isStarted;
+
     private void Awake()
     {
         Cursor.visible = true;
@@ -37,6 +39,7 @@ public class TitleScene : MonoBehaviour
     private void OnEnable()
     {
         m_inputHandle = InputSystem.onAnyButtonPress.Call(OnAnyButtonPress);
+        m_isStarted = false;
     }
 
     private void OnDisable()
@@ -46,7 +49,13 @@ public class TitleScene : MonoBehaviour
 
     public void OnPlayButtonClick()
     {
+        if (m_isStarted)
+        {
+            return;
+        }
+        
         m_animator.Play("TitleMenu_Out");
+        m_isStarted = true;
         CoroutineEx.Create(GameManager.Instance, WaitForLoadScene(m_gameSceneName));
     }
     
