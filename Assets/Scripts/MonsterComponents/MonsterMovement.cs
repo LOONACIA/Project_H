@@ -92,6 +92,7 @@ public class MonsterMovement : MonoBehaviour
 
         m_actor.Status.CurrentDashCount = m_actor.Status.MaxDashCount = m_data.MaxDashCount;
         m_actor.Status.DashCoolTime = m_data.DashCoolTime;
+        m_agent.angularSpeed = m_data.AngularSpeed;
         m_currentMoveToAccel = m_data.AccelerationTime > 0f ? 1f / m_data.AccelerationTime : float.PositiveInfinity;
         m_lastPath = new(); //네브매쉬패스는 Start, Awake에서 초기화되어야함.
     }
