@@ -2,6 +2,7 @@ using LOONACIA.Unity;
 using System.Buffers;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Runtime.CompilerServices;
 using Unity.XR.Oculus.Input;
 using UnityEngine;
@@ -92,7 +93,6 @@ public class MonsterMovement : MonoBehaviour
 
         m_actor.Status.CurrentDashCount = m_actor.Status.MaxDashCount = m_data.MaxDashCount;
         m_actor.Status.DashCoolTime = m_data.DashCoolTime;
-        m_agent.angularSpeed = m_data.AngularSpeed;
         m_currentMoveToAccel = m_data.AccelerationTime > 0f ? 1f / m_data.AccelerationTime : float.PositiveInfinity;
         m_lastPath = new(); //네브매쉬패스는 Start, Awake에서 초기화되어야함.
     }
@@ -384,7 +384,10 @@ public class MonsterMovement : MonoBehaviour
                 UpdateObstacleAvoidanceType();
             }
 
-            m_agent.SetPath(m_lastPath);
+            if (!m_agent.isOnOffMeshLink)
+            {
+                m_agent.SetPath(m_lastPath);
+            }
 
             UpdateAgentSpeedByOnGround();
         }
@@ -402,7 +405,10 @@ public class MonsterMovement : MonoBehaviour
                 UpdateObstacleAvoidanceType();
             }
 
-            m_agent.SetDestination(destination);
+            if (!m_agent.isOnOffMeshLink)
+            {
+                m_agent.SetDestination(destination);
+            }
 
             UpdateAgentSpeedByOnGround();
         }
@@ -441,10 +447,12 @@ public class MonsterMovement : MonoBehaviour
             // 몬스터가 떨어지는 경우 중력 영향을 받음
             float expectedSpeed = m_agent.speed + Physics.gravity.y * Time.deltaTime * -1;
             m_agent.speed = Mathf.Clamp(expectedSpeed, 0, 30);
+            m_agent.angularSpeed = m_data.AngularSpeed;
         }
         else
         {
             m_agent.speed = m_data.MoveSpeed;
+            m_agent.angularSpeed = m_data.AngularSpeed;
         }
     }
 
