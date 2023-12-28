@@ -47,8 +47,6 @@ public class BossStageRoot : MonoBehaviour
         m_character = GameManager.Character.Controller.Character;
     }
 
-
-
     public void StageStart()
     {
         m_currentPhase = 0;
@@ -67,6 +65,8 @@ public class BossStageRoot : MonoBehaviour
         m_bossStagePhaseList[m_currentPhase]?.ReadyPhase();
     }
 
+    // test
+    [ContextMenu(nameof(OnPhaseEnd))]
     private void OnPhaseEnd(object sender, EventArgs e)
     {
         m_boss.TakeDamage(new AttackInfo());
