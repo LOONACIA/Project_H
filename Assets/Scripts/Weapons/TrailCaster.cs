@@ -71,7 +71,7 @@ public class TrailCaster : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         if (!m_showGizmo) return;
 
@@ -184,7 +184,7 @@ public class TrailCaster : MonoBehaviour
                 curPos[i, j] = transform.TransformPoint(m_trailRotation * localTrailPos[i, j]); //월드 좌표를 curPos로 저장
 
                 Vector3 trailOrg = oldPos[i, j];
-                Vector3 trailDir = curPos[i, j] - oldPos[i, j];
+                Vector3 trailDir = (curPos[i, j] - oldPos[i, j]).normalized;
                 int hitCounts = Physics.RaycastNonAlloc(
                     trailOrg, trailDir, hits, trailDir.magnitude,
                     LayerMask.GetMask("Monster", "Damageable"));
@@ -205,7 +205,7 @@ public class TrailCaster : MonoBehaviour
                 }
 
                 //DrawRay
-                Debug.DrawRay(trailOrg, trailDir, Color.magenta, 3f, true);
+                Debug.DrawRay(trailOrg, (curPos[i, j] - oldPos[i, j]), Color.magenta, 3f, true);
             }
         }
         ArrayPool<RaycastHit>.Shared.Return(hits);
