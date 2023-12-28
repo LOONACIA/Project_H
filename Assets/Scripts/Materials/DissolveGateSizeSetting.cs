@@ -24,7 +24,7 @@ public class DissolveGateSizeSetting : MonoBehaviour
 
         if (m_renderer == null) return;
 
-        var dotsTiling = new Vector2(transform.lossyScale.x, transform.lossyScale.y) * 2;
+        var dotsTiling = new Vector2(transform.lossyScale.x / 1.4f, transform.lossyScale.y) * 2;
 
         m_renderer.material = new(m_renderer.material);
         
