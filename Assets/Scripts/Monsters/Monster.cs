@@ -36,14 +36,23 @@ public class Monster : Actor
         m_navMeshAgent = GetComponent<NavMeshAgent>();
         Attack = GetComponent<MonsterAttack>();
         Movement = GetComponent<MonsterMovement>();
-        var weapons = Animator.GetComponents<Weapon>();
-        Attack.ChangeWeapon(weapons.FirstOrDefault(weapon => weapon.enabled));
 
         //네브매쉬의 Agent와 Rigidbody의 Kinematic은 세트로 움직여야 함
         //MonsterMovement의 FixedUpdate 또는 Monster의 OnCollisionEnter에서 판정하여 On/Off됨
         m_navMeshAgent.enabled = false;
         m_rigidbody.isKinematic = false;
         m_waitUntilNavMeshAgentEnableCache = new(() => m_navMeshAgent!.enabled);
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+
+        if (Attack.CurrentWeapon == null)
+        {
+            var weapons = Animator.GetComponents<Weapon>();
+            Attack.ChangeWeapon(weapons.FirstOrDefault(weapon => weapon.enabled));
+        }
     }
 
     protected override void OnEnable()
@@ -195,7 +204,11 @@ public class Monster : Actor
     {
         base.OnPossessed();
 
-        Attack.ChangeWeapon(Animator.GetComponent<Weapon>());
+        if (Attack.CurrentWeapon == null || !Attack.CurrentWeapon.isActiveAndEnabled)
+        {
+            Attack.ChangeWeapon(Animator.GetComponent<Weapon>());
+        }
+
         Attack.Target = Vector3.zero;
         m_directionInput = Vector3.zero;
     }
@@ -204,7 +217,11 @@ public class Monster : Actor
     {
         base.OnUnPossessed();
 
-        Attack.ChangeWeapon(Animator.GetComponent<Weapon>());
+        if (Attack.CurrentWeapon == null || !Attack.CurrentWeapon.isActiveAndEnabled)
+        {
+            Attack.ChangeWeapon(Animator.GetComponent<Weapon>());
+        }
+        
         Status.IsBlocking = false;
     }
 

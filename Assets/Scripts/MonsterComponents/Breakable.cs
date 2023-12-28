@@ -59,13 +59,12 @@ public class Breakable : MonoBehaviour
 
     private void ExplodePart(Vector3 attackDirection)
     {
-        //m_rigidbody.AddExplosionForce(m_explosionForce, explosionPosition, m_explosionRadius);
         m_rigidbody.AddForce(attackDirection * m_explosionForce, ForceMode.Impulse);
     }
 
     private IEnumerator DestroyPart(float interval)
     {
-        float randomInterval = Random.Range(interval * 0.9f, interval * 1.1f);
+        float randomInterval = Random.Range(interval * 0.95f, interval * 1.05f);
         yield return new WaitForSeconds(randomInterval);
         Destroy(gameObject);
     }
