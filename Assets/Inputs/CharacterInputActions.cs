@@ -393,6 +393,15 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Click"",
+                    ""type"": ""Button"",
+                    ""id"": ""096ef862-f334-4d76-891c-e71ba8b1560a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -571,6 +580,17 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
                     ""action"": ""Submit"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e3d78f13-44c8-4832-8678-f52d9a19a991"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Click"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -622,6 +642,7 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
         m_UI_Pause = m_UI.FindAction("Pause", throwIfNotFound: true);
         m_UI_Point = m_UI.FindAction("Point", throwIfNotFound: true);
         m_UI_Submit = m_UI.FindAction("Submit", throwIfNotFound: true);
+        m_UI_Click = m_UI.FindAction("Click", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -797,6 +818,7 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
     private readonly InputAction m_UI_Pause;
     private readonly InputAction m_UI_Point;
     private readonly InputAction m_UI_Submit;
+    private readonly InputAction m_UI_Click;
     public struct UIActions
     {
         private @CharacterInputActions m_Wrapper;
@@ -805,6 +827,7 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
         public InputAction @Pause => m_Wrapper.m_UI_Pause;
         public InputAction @Point => m_Wrapper.m_UI_Point;
         public InputAction @Submit => m_Wrapper.m_UI_Submit;
+        public InputAction @Click => m_Wrapper.m_UI_Click;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -826,6 +849,9 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
             @Submit.started += instance.OnSubmit;
             @Submit.performed += instance.OnSubmit;
             @Submit.canceled += instance.OnSubmit;
+            @Click.started += instance.OnClick;
+            @Click.performed += instance.OnClick;
+            @Click.canceled += instance.OnClick;
         }
 
         private void UnregisterCallbacks(IUIActions instance)
@@ -842,6 +868,9 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
             @Submit.started -= instance.OnSubmit;
             @Submit.performed -= instance.OnSubmit;
             @Submit.canceled -= instance.OnSubmit;
+            @Click.started -= instance.OnClick;
+            @Click.performed -= instance.OnClick;
+            @Click.canceled -= instance.OnClick;
         }
 
         public void RemoveCallbacks(IUIActions instance)
@@ -895,5 +924,6 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
         void OnPause(InputAction.CallbackContext context);
         void OnPoint(InputAction.CallbackContext context);
         void OnSubmit(InputAction.CallbackContext context);
+        void OnClick(InputAction.CallbackContext context);
     }
 }

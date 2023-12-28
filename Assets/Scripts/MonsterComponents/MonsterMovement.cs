@@ -182,6 +182,108 @@ public class MonsterMovement : MonoBehaviour
 
         //사운드
         PlayWalkSound();
+    }    
+
+    /// <summary>
+    /// NavMeshAgent의 움직임을 멈춥니다.
+    /// </summary>
+    public void StopAgentMove()
+    {
+        if (m_agent.enabled)
+        {
+            m_agent.isStopped = true;
+            m_agent.ResetPath();
+            m_agent.velocity = Vector3.zero;
+
+            //애니메이션 값 0
+            m_movementRatio = 0f;
+
+            //m_agent.updatePosition = false;
+            //m_agent.updateRotation = false;
+        }
+    }
+
+    public void TryJump()
+    {
+        // 지상에 있지 않은 경우 또는 CanJump가 false라면
+        if (!IsOnGround || !m_data.CanJump)
+        {
+            // 아무 것도 하지 않음
+            return;
+        }
+
+        m_jumpVelocity = m_data.JumpHeight / m_data.ZeroGravityDuration;
+        m_lastJumpedTime = Time.time;
+
+        // velocity가 원래 몇이든 m_jumpVelocity로 만드는 효과
+        m_rigidbody.AddForce(Vector3.up * (m_jumpVelocity - m_rigidbody.velocity.y), ForceMode.VelocityChange);
+
+        //점프 애니메이션 체크용 변수 true
+        m_isJumped = true;
+
+        //점프 사운드 출력
+        gameObject.FindChild<MonsterSFXPlayer>().OnPlayJump();
+    }
+
+    public void TryDash(Vector3 direction)
+    {
+        //대쉬 중인 경우 다른 물리 이동(move, jump, gravity)등을 무시하고 해당 위치까지 이동합니다.
+        //TryDash에서는 대쉬 시작 명령을 내리고 방향을 정하며, 실제 대쉬 연산은 매 FixedUpdate의 ApplyDash에서 일어납니다.
+
+        //이미 대쉬 중이거나, 대쉬 딜레이 중이거나, 남은 대쉬가 없다면 대쉬 불가능
+        if (IsDashing || m_actor.Status.CurrentDashCount <= 0 || m_actor.Status.IsKnockedDown || direction == Vector3.zero)
+        {
+            GameManager.Sound.Play(GameManager.Sound.ObjectDataSounds.DashUnable);
+            return;
+        }
+
+        m_actor.Status.CurrentDashCount -= 1;
+
+        //대쉬를 시도함.
+        //1. 속도값을 지정 (나눗셈 연산을 줄이기 위해 한번만 수행)
+        if (m_data.DashDuration == 0)
+        {
+            Debug.LogWarning("대쉬한 오브젝트의 대쉬 지속시간이 0입니다.");
+            m_dashSpeed = 0f;
+        }
+        else
+        {
+            m_dashSpeed = m_data.DashAmount / m_data.DashDuration;
+        }
+
+        //2. 대쉬의 초기 방향을 지정
+        if (direction == Vector3.zero)
+        {
+            m_dashDirection = transform.forward;
+        }
+        else
+        {
+            m_dashDirection = transform.TransformDirection(direction.normalized);
+        }
+
+        m_lastDashTime = Time.time;
+        IsDashing = true;
+
+        GameManager.Effect.ShowDashEffect();
+        gameObject.FindChild<MonsterSFXPlayer>().OnPlayDash();
+    }
+
+    public void TryKnockBack(Vector3 direction, float power, bool overwrite = true)
+    {
+        //넉백값 변경
+        m_actor.Status.IsKnockBack = true;
+        m_lastKnockBackTime = Time.time;
+        m_actor.Animator.SetBool(ConstVariables.ANIMATOR_PARAMETER_KNOCKBACK, true);
+
+        m_agent.enabled = false;
+        m_rigidbody.isKinematic = false;
+
+        if (overwrite)
+        {
+            m_rigidbody.velocity = new Vector3();
+        }
+
+        m_rigidbody.AddForce(direction * power, ForceMode.Impulse);
     }
 
     #region LegacyMoveToFunctions
@@ -289,28 +391,7 @@ public class MonsterMovement : MonoBehaviour
             //주변에 다른 대상이 있는지 찾는다.
             if (useAdaptiveAvoidanceTest)
             {
-                int amount = Physics.OverlapSphereNonAlloc(transform.position + m_collider.center, m_agent.radius + m_agent.velocity.magnitude * Time.deltaTime * 2f, m_avoidanceCheckColliders, LayerMask.GetMask("Monster"));
-                //자기 자신이 포함되었는지 확인
-                int max = amount < m_avoidanceCheckColliders.Length ? amount : m_avoidanceCheckColliders.Length;
-                for (int i = 0; i < max; i++)
-                {
-                    if (m_avoidanceCheckColliders[i].gameObject.GetInstanceID() == gameObject.GetInstanceID())
-                    {
-                        //자기 자신일 경우 패스
-                        max -= 1;
-                        break;
-                    }
-                }
-                if (max > 0)
-                {
-                    //자기 자신을 제외하고 누군가 범위 내에 있다면, Quality를 높인다.
-                    m_agent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
-                }
-                else
-                {
-                    //아무도 없다면 None으로 진행(다른 Agent, Corner 무시)
-                    m_agent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance;
-                }
+                UpdateObstacleAvoidanceType();
             }
 
             m_agent.SetPath(m_lastPath);
@@ -337,28 +418,7 @@ public class MonsterMovement : MonoBehaviour
 
             if (useAdaptiveAvoidanceTest)
             {
-                int amount = Physics.OverlapSphereNonAlloc(transform.position + m_collider.center, m_agent.radius + m_agent.velocity.magnitude * Time.deltaTime * 2f, m_avoidanceCheckColliders, LayerMask.GetMask("Monster"));
-                //자기 자신이 포함되었는지 확인
-                int max = amount < m_avoidanceCheckColliders.Length ? amount : m_avoidanceCheckColliders.Length;
-                for (int i = 0; i < max; i++)
-                {
-                    if (m_avoidanceCheckColliders[i].gameObject.GetInstanceID() == gameObject.GetInstanceID())
-                    {
-                        //자기 자신일 경우 패스
-                        max -= 1;
-                        break;
-                    }
-                }
-                if (max > 0)
-                {
-                    //자기 자신을 제외하고 누군가 범위 내에 있다면, Quality를 높인다.
-                    m_agent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
-                }
-                else
-                {
-                    //아무도 없다면 None으로 진행(다른 Agent, Corner 무시)
-                    m_agent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance;
-                }
+                UpdateObstacleAvoidanceType();
             }
 
             m_agent.SetDestination(destination);
@@ -376,106 +436,31 @@ public class MonsterMovement : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// NavMeshAgent의 움직임을 멈춥니다.
-    /// </summary>
-    public void StopAgentMove()
+    private void UpdateObstacleAvoidanceType()
     {
-        if (m_agent.enabled)
+
+        int amount = Physics.OverlapSphereNonAlloc(transform.position + m_collider.center, m_agent.radius + m_agent.velocity.magnitude * Time.deltaTime * 2f, m_avoidanceCheckColliders, LayerMask.GetMask("Monster"));
+        //자기 자신이 포함되었는지 확인
+        int max = amount < m_avoidanceCheckColliders.Length ? amount : m_avoidanceCheckColliders.Length;
+        for (int i = 0; i < max; i++)
         {
-            m_agent.isStopped = true;
-            m_agent.ResetPath();
-            m_agent.velocity = Vector3.zero;
-
-            //애니메이션 값 0
-            m_movementRatio = 0f;
-
-            //m_agent.updatePosition = false;
-            //m_agent.updateRotation = false;
+            if (m_avoidanceCheckColliders[i].gameObject.GetInstanceID() == gameObject.GetInstanceID())
+            {
+                //자기 자신일 경우 패스
+                max -= 1;
+                break;
+            }
         }
-    }
-
-    public void TryJump()
-    {
-        // 지상에 있지 않은 경우 또는 CanJump가 false라면
-        if (!IsOnGround || !m_data.CanJump)
+        if (max > 0)
         {
-            // 아무 것도 하지 않음
-            return;
-        }
-
-        m_jumpVelocity = m_data.JumpHeight / m_data.ZeroGravityDuration;
-        m_lastJumpedTime = Time.time;
-
-        // velocity가 원래 몇이든 m_jumpVelocity로 만드는 효과
-        m_rigidbody.AddForce(Vector3.up * (m_jumpVelocity - m_rigidbody.velocity.y), ForceMode.VelocityChange);
-
-        //점프 애니메이션 체크용 변수 true
-        m_isJumped = true;
-
-        //점프 사운드 출력
-        gameObject.FindChild<MonsterSFXPlayer>().OnPlayJump();
-    }
-
-    public void TryDash(Vector3 direction)
-    {
-        //대쉬 중인 경우 다른 물리 이동(move, jump, gravity)등을 무시하고 해당 위치까지 이동합니다.
-        //TryDash에서는 대쉬 시작 명령을 내리고 방향을 정하며, 실제 대쉬 연산은 매 FixedUpdate의 ApplyDash에서 일어납니다.
-
-        //이미 대쉬 중이거나, 대쉬 딜레이 중이거나, 남은 대쉬가 없다면 대쉬 불가능
-        if (IsDashing || m_actor.Status.CurrentDashCount <= 0 || m_actor.Status.IsKnockedDown || direction == Vector3.zero)
-        {
-            GameManager.Sound.Play(GameManager.Sound.ObjectDataSounds.DashUnable);
-            return;
-        }
-
-        m_actor.Status.CurrentDashCount -= 1;
-
-        //대쉬를 시도함.
-        //1. 속도값을 지정 (나눗셈 연산을 줄이기 위해 한번만 수행)
-        if (m_data.DashDuration == 0)
-        {
-            Debug.LogWarning("대쉬한 오브젝트의 대쉬 지속시간이 0입니다.");
-            m_dashSpeed = 0f;
+            //자기 자신을 제외하고 누군가 범위 내에 있다면, Quality를 높인다.
+            m_agent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
         }
         else
         {
-            m_dashSpeed = m_data.DashAmount / m_data.DashDuration;
+            //아무도 없다면 None으로 진행(다른 Agent, Corner 무시)
+            m_agent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance;
         }
-
-        //2. 대쉬의 초기 방향을 지정
-        if (direction == Vector3.zero)
-        {
-            m_dashDirection = transform.forward;
-        }
-        else
-        {
-            m_dashDirection = transform.TransformDirection(direction.normalized);
-        }
-
-        m_lastDashTime = Time.time;
-        IsDashing = true;
-
-        GameManager.Effect.ShowDashEffect();
-        gameObject.FindChild<MonsterSFXPlayer>().OnPlayDash();
-    }
-
-    public void TryKnockBack(Vector3 direction, float power, bool overwrite = true)
-    {
-        //넉백값 변경
-        m_actor.Status.IsKnockBack = true;
-        m_lastKnockBackTime = Time.time;
-        m_actor.Animator.SetBool(ConstVariables.ANIMATOR_PARAMETER_KNOCKBACK, true);
-
-        m_agent.enabled = false;
-        m_rigidbody.isKinematic = false;
-
-        if (overwrite)
-        {
-            m_rigidbody.velocity = new Vector3();
-        }
-
-        m_rigidbody.AddForce(direction * power, ForceMode.Impulse);
     }
 
     private static Vector3 TranslateBySurfaceNormal(Vector3 originalVector, Vector3 surfaceNormal)
