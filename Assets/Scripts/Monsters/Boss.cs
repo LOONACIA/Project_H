@@ -1,10 +1,6 @@
 using LOONACIA.Unity.Coroutines;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.Burst.Intrinsics;
-using Unity.Mathematics;
-using UnityEditor.Search;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 

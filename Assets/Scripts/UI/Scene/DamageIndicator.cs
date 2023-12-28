@@ -1,3 +1,5 @@
+using LOONACIA.Unity.Coroutines;
+using LOONACIA.Unity.Managers;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,24 +16,25 @@ public class DamageIndicator : MonoBehaviour
 
     #region PrivateVariables
 
+    private readonly WaitForSeconds m_coroutineWaitCache = new(1);
+
+    private readonly WaitForSeconds m_waitForSecondsCache = new(1 / 30f);
+
     private GameObject m_attacker;
     private Actor m_victim;
 
     private Quaternion m_rotation;
     private float m_angle;
+    
+    private CoroutineEx m_fadeOutCoroutine;
 
     #endregion
 
     #region PublicMethod
-
-    public void Init(in AttackInfo _info, Actor _sender)
+    
+    void OnDisable()
     {
-        m_attacker = _info.Attacker;
-        m_victim = _sender;
-
-        TraceTarget();
-
-        StartCoroutine(nameof(IE_FadeOut));
+        m_fadeOutCoroutine?.Abort();
     }
 
     public void Init(in AttackInfo _info, Actor _sender, Color color)
@@ -42,7 +45,7 @@ public class DamageIndicator : MonoBehaviour
         indicatorImage.color = color;
         TraceTarget();
 
-        StartCoroutine(nameof(IE_FadeOut));
+        m_fadeOutCoroutine = CoroutineEx.Create(this, IE_FadeOut());
     }
 
     private void Update()
@@ -61,44 +64,47 @@ public class DamageIndicator : MonoBehaviour
 
     private float CalculateAngle()
     {
-        if (m_attacker == null)
+        if (m_attacker == null || m_victim == null)
         {
-            Destroy(gameObject);
+            ManagerRoot.Resource.Release(gameObject);
             return default;
         }
 
         Vector3 posA = m_victim.transform.position;
         Vector3 posB = m_attacker.transform.position;
+        Vector3 forward = m_victim.transform.forward;
 
-        Vector2 viewVector = new Vector2(m_victim.transform.forward.x, m_victim.transform.forward.z);
+        Vector2 viewVector = new(forward.x, forward.z);
 
-        Vector2 from = new Vector2(posA.x, posA.z);
-        Vector2 to = new Vector2(posB.x, posB.z);
+        Vector2 from = new(posA.x, posA.z);
+        Vector2 to = new(posB.x, posB.z);
 
-        to = to - from;
+        to -= from;
 
         return Vector2.SignedAngle(viewVector, to) + 90;
     }
 
     private IEnumerator IE_FadeOut()
     {
-        yield return new WaitForSeconds(1f);
+        yield return m_coroutineWaitCache;
 
         Color color = indicatorImage.color;
         float alpha = color.a;
         float value = alpha / (alpha * fadeOutTime * 30);
         while (true)
         {
-            color = new Color(color.r, color.g, color.b, alpha);
+            color = new(color.r, color.g, color.b, alpha);
             indicatorImage.color = color;
             alpha -= value;
-            yield return new WaitForSeconds(1 / 30);
+            yield return m_waitForSecondsCache;
 
             if (alpha <= 0)
+            {
                 break;
+            }
         }
 
-        Destroy(gameObject);
+        ManagerRoot.Resource.Release(gameObject);
     }
 
     #endregion
