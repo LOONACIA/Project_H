@@ -2,8 +2,12 @@ using DG.Tweening;
 using LOONACIA.Unity.Coroutines;
 using LOONACIA.Unity.Managers;
 using Michsky.UI.Reach;
+using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Utilities;
 
 public class TitleScene : MonoBehaviour
 {
@@ -15,14 +19,29 @@ public class TitleScene : MonoBehaviour
 
     [SerializeField]
     private GameObject m_pressAnyKeyLabel;
+
+    [SerializeField]
+    private GameObject m_firstFocus;
     
     private CanvasGroup m_canvasGroup;
+
+    private IDisposable m_inputHandle;
 
     private void Awake()
     {
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.Confined;
         m_canvasGroup = m_pressAnyKeyLabel.GetComponent<CanvasGroup>();
+    }
+
+    private void OnEnable()
+    {
+        m_inputHandle = InputSystem.onAnyButtonPress.Call(OnAnyButtonPress);
+    }
+
+    private void OnDisable()
+    {
+        m_inputHandle?.Dispose();
     }
 
     public void OnPlayButtonClick()
@@ -33,7 +52,11 @@ public class TitleScene : MonoBehaviour
     
     public void OnExitButtonClick()
     {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
         Application.Quit();
+#endif
     }
 
     private IEnumerator WaitForLoadScene(string sceneName)
@@ -59,7 +82,6 @@ public class TitleScene : MonoBehaviour
                 {
                     canPressAnyKey = true;
                     tween = m_canvasGroup.DOFade(1f, 0.5f).SetEase(Ease.InCubic);
-                    //m_pressAnyKeyLabel.gameObject.SetActive(true);
                 }
 
                 if (Input.anyKeyDown)
@@ -72,6 +94,14 @@ public class TitleScene : MonoBehaviour
             }
             
             yield return null;
+        }
+    }
+    
+    private void OnAnyButtonPress(InputControl inputControl)
+    {
+        if (!inputControl.device.name.ToLower().Contains("mouse") && EventSystem.current.currentSelectedGameObject == null)
+        {
+            EventSystem.current.SetSelectedGameObject(m_firstFocus);
         }
     }
 }

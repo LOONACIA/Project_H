@@ -1,10 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler
 {
     private AudioSource m_audioSource;
     
@@ -25,6 +22,22 @@ public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerEx
     }
 
     public void OnPointerExit(PointerEventData eventData)
+    {
+        transform.localScale = Vector3.one;
+    }
+
+    public void OnSelect(BaseEventData eventData)
+    {
+        if (m_audioSource != null && m_audioSource.isPlaying)
+        {
+            m_audioSource.Stop();
+        }
+        
+        m_audioSource = GameManager.Sound.Play(GameManager.Sound.ObjectDataSounds.ObjectUpdate);
+        transform.localScale = Vector3.one * 1.05f;
+    }
+
+    public void OnDeselect(BaseEventData eventData)
     {
         transform.localScale = Vector3.one;
     }

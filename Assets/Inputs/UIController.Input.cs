@@ -38,12 +38,27 @@ public partial class UIController
             m_controller = controller;
         }
 
+        public void OnNavigate(InputAction.CallbackContext context)
+        {
+            // Handled by EventSystem in Scene
+        }
+
         public void OnPause(InputAction.CallbackContext context)
         {
             if (context.performed)
             {
                 m_controller.Pause();
             }
+        }
+
+        public void OnPoint(InputAction.CallbackContext context)
+        {
+            // Handled by EventSystem in Scene
+        }
+
+        public void OnSubmit(InputAction.CallbackContext context)
+        {
+            // Handled by EventSystem in Scene
         }
     }
 }
