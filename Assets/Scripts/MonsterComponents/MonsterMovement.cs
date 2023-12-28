@@ -177,8 +177,8 @@ public class MonsterMovement : MonoBehaviour
         //3인칭인 경우 Avoidance값을 높임
         m_agent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
         //MoveToWithNavMove(destination);
-        MoveToWithNavSetDest(destination, true);
-        //MoveToWithNavSetPath(destination, true);
+        //MoveToWithNavSetDest(destination, true);
+        MoveToWithNavSetPath(destination, true);
 
         //사운드
         PlayWalkSound();
@@ -369,12 +369,15 @@ public class MonsterMovement : MonoBehaviour
             if (!NavMesh.CalculatePath(transform.position, destination, m_agent.areaMask, m_lastPath))
             {
                 //만약 Invalid한 위치(공중 or Navmesh가 없는 곳)에 있다면, 가장 가까운 NavMesh위치로 이동합니다.
-                if (!(NavMesh.SamplePosition(destination, out var hit, float.PositiveInfinity, m_agent.areaMask)
-                    && NavMesh.CalculatePath(transform.position, hit.position, m_agent.areaMask, m_lastPath)))
+                if(!NavMesh.SamplePosition(destination, out var hit, float.PositiveInfinity, m_agent.areaMask))
                 {
-                    //가장 가까운 NavMesh가 없다면, return합니다.
-                    Debug.LogWarning($"{gameObject.name}: destination에 인접한 NavMesh가 없어 길찾기 실패.");
+                    Debug.LogWarning($"{gameObject.name}: destination에 인접한 NavMesh가 없어 길찾기 실패. Destination: {destination}");
                     return;
+                }
+                if (!NavMesh.CalculatePath(transform.position, hit.position, m_agent.areaMask, m_lastPath))
+                {
+                    //가장 가까운 NavMesh조차 없거나, path가 Invalid면 (OffMeshLink가 이미 사용중이라던가), return합니다.
+                    //Debug.Log($"길을 찾을 수 없음... path: {m_lastPath.status.ToString()}");
                 }
             }
 
@@ -384,7 +387,7 @@ public class MonsterMovement : MonoBehaviour
                 UpdateObstacleAvoidanceType();
             }
 
-            if (!m_agent.isOnOffMeshLink)
+            if (!m_agent.isOnOffMeshLink&&m_lastPath.status != NavMeshPathStatus.PathInvalid)
             {
                 m_agent.SetPath(m_lastPath);
             }
