@@ -71,7 +71,7 @@ public class TrailCaster : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         if (!m_showGizmo) return;
 
