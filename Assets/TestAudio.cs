@@ -13,10 +13,10 @@ public class TestAudio : MonoBehaviour
     #region PublicMethod
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            GameManager.Sound.OffInGame();
-        }
+        //if (Input.GetKeyDown(KeyCode.Alpha3))
+        //{
+        //    GameManager.Sound.OffInGame();
+        //}
     }
     #endregion
 
