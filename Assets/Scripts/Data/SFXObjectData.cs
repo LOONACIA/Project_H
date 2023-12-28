@@ -34,4 +34,8 @@ public class SFXObjectData : ScriptableObject
     [field: SerializeField]
     [field: Tooltip("Object 업데이트 시 사운드")]
     public SFXInfo ObjectUpdate { get; private set; }
+
+    [field: SerializeField]
+    [field: Tooltip("쉴드 파괴 시 사운드")]
+    public SFXInfo BreakShield { get; private set; }
 }
