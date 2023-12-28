@@ -38,6 +38,11 @@ public partial class UIController
             m_controller = controller;
         }
 
+        public void OnClick(InputAction.CallbackContext context)
+        {
+            // Handled by EventSystem in Scene
+        }
+
         public void OnNavigate(InputAction.CallbackContext context)
         {
             // Handled by EventSystem in Scene
