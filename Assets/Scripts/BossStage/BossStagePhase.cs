@@ -27,6 +27,9 @@ public class BossStagePhase : MonoBehaviour
     [SerializeField, Tooltip("Phase 끝나면 끌 객체")]
     private GameObject[] m_onEndDeactiveObjects;
 
+    [SerializeField, Tooltip("Phase 끝나면 켤 객체")]
+    private GameObject[] m_onEndActiveObjects;
+
     [Header("Explosion Data")]
     [SerializeField, Tooltip("폭발의 지연 시간")]
     private float m_explosionDelay;
@@ -135,6 +138,12 @@ public class BossStagePhase : MonoBehaviour
         foreach (var deactiveObject in m_onEndDeactiveObjects)
         {
             deactiveObject.SetActive(false);
+        }
+
+        // 객체 활성화
+        foreach (var activeObject in m_onEndActiveObjects)
+        {
+            activeObject.SetActive(true);
         }
 
         StartCoroutine(IE_WaitEndEvent(interactedTransform));

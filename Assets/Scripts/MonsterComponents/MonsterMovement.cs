@@ -11,9 +11,7 @@ using UnityEngine.AI;
 [RequireComponent(typeof(CapsuleCollider))]
 [RequireComponent(typeof(NavMeshAgent))]
 public class MonsterMovement : MonoBehaviour
-{
-    private static readonly int s_animatorKnockBack = Animator.StringToHash("KnockBack");
-    
+{    
     private readonly Collider[] m_avoidanceCheckColliders = new Collider[3];
 
     [SerializeField]
@@ -466,7 +464,7 @@ public class MonsterMovement : MonoBehaviour
         //넉백값 변경
         m_actor.Status.IsKnockBack = true;
         m_lastKnockBackTime = Time.time;
-        m_actor.Animator.SetBool(s_animatorKnockBack, true);
+        m_actor.Animator.SetBool(ConstVariables.ANIMATOR_PARAMETER_KNOCKBACK, true);
 
         m_agent.enabled = false;
         m_rigidbody.isKinematic = false;
@@ -591,7 +589,7 @@ public class MonsterMovement : MonoBehaviour
 
         //23.12.18 NavMeshAgent는 CheckCanUseNavMesh에서 처리
         m_actor.Status.IsKnockBack = false;
-        m_actor.Animator.SetBool(s_animatorKnockBack, false);
+        m_actor.Animator.SetBool(ConstVariables.ANIMATOR_PARAMETER_KNOCKBACK, false);
     }
 
     private void CheckCanUseNavMesh()
