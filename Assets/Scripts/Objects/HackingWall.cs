@@ -39,6 +39,13 @@ public class HackingWall : HackingObject
 
         isHacking = true;
 
+        //Sound
+        if(TryGetComponent<AudioSource>(out var audioSource) && audios.Length >= 1)
+        {
+            audioSource.clip = audios[(int)HackingSoundType.Hacking];
+            audioSource.Play();
+        }
+
         ConvertMat();
     }
 
@@ -112,6 +119,13 @@ public class HackingWall : HackingObject
         yield return new WaitForSeconds(returnTime);
 
         ReturnMat();
+
+        //Sound
+        if (TryGetComponent<AudioSource>(out var audioSource) && audios.Length >= 1)
+        {
+            audioSource.clip = audios[(int)HackingSoundType.Unhacking];
+            audioSource.Play();
+        }
     }
 
     #endregion
