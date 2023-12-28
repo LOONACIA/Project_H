@@ -19,10 +19,8 @@ public class DissolveGateSizeSetting : MonoBehaviour
 
     public void InitSetting()
     {
-        if (m_renderer == null)
-            TryGetComponent<Renderer>(out m_renderer);
-
-        if (m_renderer == null) return;
+        if (!TryGetComponent<Renderer>(out m_renderer)) 
+            return;
 
         var dotsTiling = new Vector2(transform.lossyScale.x / 1.4f, transform.lossyScale.y) * 2;
 
