@@ -151,7 +151,7 @@ public partial class UIController : MonoBehaviour
 #if UNITY_EDITOR
             new("Exit the game", () => UnityEditor.EditorApplication.isPlaying = false);
 #else
-        new("Exit the game", Application.Quit);
+            new("Exit the game", Application.Quit);
 #endif
         public static readonly string GameOverText = "Game Over";
         
