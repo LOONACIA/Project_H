@@ -54,9 +54,6 @@ public class UIMenu : UIPopup
     {
         m_coroutine?.Abort();
         m_firstButton.transform.localScale = m_secondButton.transform.localScale = m_thirdButton.transform.localScale = Vector3.one;
-
-        //TEST by 민석 - UI 끝나도 소리가 안돌아와서 여기가 맞는지 일단 넣어봣음
-        GameManager.Sound.OnInGame();
     }
 
     public void SetTitle(string text)
@@ -85,7 +82,8 @@ public class UIMenu : UIPopup
     
     public override void Close()
     {
-        m_firstButtonAction?.Invoke();
+        // 종료 시 첫 번째 버튼의 동작을 실행
+        OnFirstButtonClick();
         base.Close();
     }
 
