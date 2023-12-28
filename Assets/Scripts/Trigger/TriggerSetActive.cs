@@ -19,7 +19,12 @@ public class TriggerSetActive : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other)
-    {
+    {   
+        if(!other.TryGetComponent<Actor>(out var actor) || actor.IsPossessed == false)
+        {
+            return;
+        }
+
         foreach (var item in m_gameObject) { item.SetActive(true); }
 
     }

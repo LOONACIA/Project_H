@@ -15,7 +15,7 @@ public class BGMTrigger : MonoBehaviour
     #region PublicMethod
     private void OnTriggerEnter(Collider other)
     {
-        if(!other.TryGetComponent<Actor>(out var actor1) || !actor1.IsPossessed)
+        if (!other.TryGetComponent<Actor>(out var actor1) || !actor1.IsPossessed)
         {
             return;
         }
