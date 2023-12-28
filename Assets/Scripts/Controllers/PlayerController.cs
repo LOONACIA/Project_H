@@ -131,8 +131,12 @@ public partial class PlayerController : MonoBehaviour
 
     private void Move()
     {
-        if (m_character != null && !m_isOnInteracting)
+        if (m_character != null)
         {
+            if (m_isOnInteracting)
+            {
+                m_directionInput = Vector3.zero;
+            }
             m_character.Move(m_directionInput);
         }
     }
