@@ -40,6 +40,11 @@ public class BossStageBreakGround : MonoBehaviour
             BreakGround();
             m_bossStageRoot.StageStart();
 
+            if(TryGetComponent<AudioSource>(out var audioSource))
+            {
+                audioSource.Play();
+            }
+
             foreach (var child in m_childrenList)
             {
                 child.gameObject.layer = LayerMask.NameToLayer("Default");
