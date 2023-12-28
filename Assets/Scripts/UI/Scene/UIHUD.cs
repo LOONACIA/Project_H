@@ -268,7 +268,8 @@ public class UIHUD : UIScene
         
         ResetHpBoxes();
         m_dashIndicatorCursor = m_actor.Status.CurrentDashCount;
-        for (int index = 0; index < m_actor.Status.MaxDashCount; index++)
+        
+        for (int index = 0; index < m_dashIndicators.Length; index++)
         {
             m_dashIndicators[index].fillAmount = index < m_dashIndicatorCursor ? 1 : 0;
         }
