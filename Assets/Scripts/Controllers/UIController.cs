@@ -143,7 +143,7 @@ public partial class UIController : MonoBehaviour
     {
         public static readonly MenuInfo Restart = new("Restart from checkpoint", () => SceneManagerEx.LoadScene(SceneManager.GetActiveScene().name));
     
-        public static readonly MenuInfo Continue = new("Resume", () => GameManager.Instance.SetResume());
+        public static readonly MenuInfo Continue = new("Return to game", () => GameManager.Instance.SetResume());
     
         public static readonly MenuInfo Menu = new("Exit to main menu", () => SceneManagerEx.LoadScene("TitleScene"));
     

@@ -17,9 +17,11 @@ public class BossSceneTrigger : MonoBehaviour
     #region PrivateMethod
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject == GameManager.Character.Controller.Character.gameObject)
+        if (other.gameObject == GameManager.Character.Controller.Character.gameObject)
         {
-            SceneManagerEx.LoadScene("BossStage");
+            ManagerRoot.Input.Disable<CharacterInputActions>();
+            _ = SceneHelper.LazyLoadAsync("BossStage");
+            //SceneManagerEx.LoadScene("BossStage");
         }
     }
     #endregion
