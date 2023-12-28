@@ -1,12 +1,9 @@
 using DG.Tweening;
-using JetBrains.Annotations;
-using LOONACIA.Unity;
 using LOONACIA.Unity.Coroutines;
 using LOONACIA.Unity.Managers;
 using Michsky.UI.Reach;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class TitleScene : MonoBehaviour
 {
