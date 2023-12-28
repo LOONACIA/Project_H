@@ -181,6 +181,12 @@ public class SoundManager
         return m_audioSources[(int)SoundType.Bgm].clip;
     }
 
+    public void BGMOff()
+    {
+        //m_audioSources[(int)SoundType.Bgm].Stop();
+        audioMixer.DOSetFloat("BGM", -40f, 1f);
+    }
+
     public void ChangeBGMDirectly(SFXInfo _info)
     {
         if (_info.audio == null)
@@ -202,7 +208,7 @@ public class SoundManager
 
     private void ChangeBGM(AudioSource audioSource, AudioClip audioClip) 
     {
-        audioMixer.DOSetFloat("BGM", -40f, 2f).onComplete = () =>
+        audioMixer.DOSetFloat("BGM", -40f, 1f).onComplete = () =>
         {
             audioSource.Stop();
             audioSource.clip = audioClip;

@@ -230,7 +230,6 @@ public class MonsterAttack : MonoBehaviour
             //빛
             GameObject light = ManagerRoot.Resource.Instantiate(GameManager.Settings.AttackLight);
             light.transform.position = Camera.main.transform.position + transform.forward * 0.5f;
-            
 
             m_bool = false;
 
