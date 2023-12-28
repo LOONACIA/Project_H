@@ -45,7 +45,10 @@ public class DamageIndicator : MonoBehaviour
         indicatorImage.color = color;
         TraceTarget();
 
-        m_fadeOutCoroutine = CoroutineEx.Create(this, IE_FadeOut());
+        if (isActiveAndEnabled)
+        {
+            m_fadeOutCoroutine = CoroutineEx.Create(this, IE_FadeOut());
+        }
     }
 
     private void Update()
