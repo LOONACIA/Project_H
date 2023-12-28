@@ -1,3 +1,4 @@
+using LOONACIA.Unity.Managers;
 using LOONACIA.Unity.UI;
 using UnityEngine;
 
@@ -30,18 +31,23 @@ public class UIDamageIndicator : UIScene
     private void OnCharacterDamaged(object sender, in AttackInfo e)
     {
         // TODO: 로직 최적화
-        DamageIndicator indi = Instantiate(damageIndicator, indicatorParent.transform).GetComponent<DamageIndicator>();
+        var indicator = ManagerRoot.Resource.Instantiate(damageIndicator, indicatorParent.transform)
+            .GetComponent<DamageIndicator>();
+        Color color = new(1f, 0.29803923f, 0.29803923f);
+        //DamageIndicator indi = Instantiate(damageIndicator, indicatorParent.transform).GetComponent<DamageIndicator>();
 
-        indi.Init(e, m_characterController.Character);
+        indicator.Init(e, m_characterController.Character, color);
     }
 
     private void OnCharacterBlocked(object sender, in AttackInfo e)
     {
         // TODO: 로직 최적화
-        DamageIndicator indi = Instantiate(damageIndicator, indicatorParent.transform).GetComponent<DamageIndicator>();
-        Color color = new Color(192f / 255f, 192f / 255f, 192f / 255f);
+        //DamageIndicator indi = Instantiate(damageIndicator, indicatorParent.transform).GetComponent<DamageIndicator>();
+        var indicator = ManagerRoot.Resource.Instantiate(damageIndicator, indicatorParent.transform)
+            .GetComponent<DamageIndicator>();
+        Color color = new(192f / 255f, 192f / 255f, 192f / 255f);
 
-        indi.Init(e, m_characterController.Character, color);
+        indicator.Init(e, m_characterController.Character, color);
     }
     #endregion
 }
