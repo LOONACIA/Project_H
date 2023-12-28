@@ -58,14 +58,16 @@ public class TitleScene : MonoBehaviour
                 if (!canPressAnyKey)
                 {
                     canPressAnyKey = true;
-                    tween = m_canvasGroup.DOFade(1f, 0.2f).SetEase(Ease.InCubic);
-                    m_pressAnyKeyLabel.gameObject.SetActive(true);
+                    tween = m_canvasGroup.DOFade(1f, 0.5f).SetEase(Ease.InCubic);
+                    //m_pressAnyKeyLabel.gameObject.SetActive(true);
                 }
 
                 if (Input.anyKeyDown)
                 {
                     tween?.Kill();
-                    task.allowSceneActivation = true;
+                    DOTween.Sequence()
+                        .Append(m_canvasGroup.DOFade(0f, 0.5f).SetEase(Ease.InCubic))
+                        .AppendCallback(() => task.allowSceneActivation = true);
                 }
             }
             

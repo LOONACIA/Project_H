@@ -68,13 +68,13 @@ public class HUDSystem : MonoBehaviour
         {
             foreach (var hit in hits.AsSpan(0, length))
             {
-                Vector3 direction = hit.transform.position - origin;
+                Vector3 direction = hit.collider.transform.position - origin;
                 if (direction.sqrMagnitude < sqrMinDistance)
                 {
                     continue;
                 }
 
-                TryAdd(hit.transform);
+                TryAdd(hit.collider.transform);
             }
         }
 
@@ -146,7 +146,7 @@ public class HUDSystem : MonoBehaviour
         if (Physics.Raycast(cameraPosition, (targetPosition - cameraPosition).normalized, out var hit, direction.magnitude,
                 m_settings.AimLayers | m_settings.ObstacleLayers))
         {
-            if (hit.transform != target)
+            if (hit.collider.transform != target)
             {
                 return true;
             }
