@@ -1,6 +1,8 @@
 using LOONACIA.Unity;
 using LOONACIA.Unity.Coroutines;
+using LOONACIA.Unity.Managers;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -80,8 +82,6 @@ public class Sniper : Gun
 
         var targets = hits.TakeWhile(hit => ((1 << hit.transform.gameObject.layer) & m_damageLayer) != 0);
 
-        Hit(ProcessHit(targets));
-
         Vector3 target;
         if (hits.Length > 0)
         {
@@ -91,6 +91,8 @@ public class Sniper : Gun
         {
             target = ray.GetPoint(m_maxDistance);
         }
+        
+        Hit(ProcessHit(targets));
 
         m_target = Vector3.zero;
         DrawLine(target);
@@ -130,11 +132,19 @@ public class Sniper : Gun
             m_intensity = 1f;
             m_onShot = false;
         });
+        
+        float distance = Vector3.Distance(m_spawnPosition.position, target);
+        float interval = distance / 3f;
+        for (int i = 0; i < interval; i++)
+        {
+            Vector3 position = Vector3.Lerp(m_spawnPosition.position, target, i / interval);
+            var lightEffect = ManagerRoot.Resource.Instantiate(GameManager.Settings.AttackLight, position, Quaternion.identity).GetOrAddComponent<AttackLightEffect>();
+            lightEffect.Duration = 0.3f;
+        }
 
         // 총 사운드
         var sfx = GetComponent<MonsterSFXPlayer>();
         var sound = GameManager.Sound.PlayClipAt(sfx.monsterSFX.Attack2, transform.position);
-        
     }
     
     private void UpdateLine()
