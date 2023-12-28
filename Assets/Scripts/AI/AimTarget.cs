@@ -81,7 +81,7 @@ public class AimTarget : Action
             m_previousTargetPosition = target + (Random.insideUnitSphere * m_randomRange.Value);
         }
 
-        //조준 중일 때 다른 적이 막히지 않게 하기 위함
+        //조준 중일 때 다른 적의 이동이 막히지 않게 하기 위함
         m_orgAvoidance = m_agent.obstacleAvoidanceType;
         m_orgPriority = m_agent.avoidancePriority;
         m_agent.avoidancePriority = 99;
@@ -108,6 +108,12 @@ public class AimTarget : Action
         
         if (Time.time - m_timer < m_aimDuration)
         {
+            //타겟이 죽었을 경우 조준을 유지하고 Return;
+            if (!m_target.Value)
+            {
+                return TaskStatus.Running;
+            }
+
             Vector3 offset = m_collider.center + m_collider.height / 4f * Vector3.up;
             Vector3 target = m_targetIsActor ? m_targetActor.position - Vector3.up * 0.05f : m_target.Value.position + offset;
             Vector3 targetPosition = Vector3.Lerp(m_previousTargetPosition, target, (Time.time - m_timer) / m_aimSpeed.Value);
