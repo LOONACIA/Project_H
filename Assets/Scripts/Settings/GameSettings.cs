@@ -4,6 +4,10 @@ using UnityEngine.Audio;
 [CreateAssetMenu(fileName = nameof(GameSettings), menuName = "Settings/" + nameof(GameSettings))]
 public class GameSettings : ScriptableObject
 {
+    [field: Header("General")]
+    [field: SerializeField]
+    public GeneralSettings GeneralSettings { get; set; } = new();
+
     [field: Header("Quest")]
     [field: SerializeField]
     public QuestData QuestData { get; private set; }

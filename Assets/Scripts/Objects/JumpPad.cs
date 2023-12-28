@@ -84,6 +84,11 @@ public class JumpPad : MonoBehaviour, IActivate
             //}
         }
 
+        if(TryGetComponent<AudioSource>(out var audioSource))
+        {
+            audioSource.Play();
+        }
+
         switch (m_jumpType)
         {
             case JumpType.Reflection:

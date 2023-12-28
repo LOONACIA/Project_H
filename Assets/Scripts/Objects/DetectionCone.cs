@@ -1,3 +1,4 @@
+using DG.Tweening;
 using LOONACIA.Unity;
 using LOONACIA.Unity.Coroutines;
 using System.Collections;
@@ -26,7 +27,10 @@ public class DetectionCone : MonoBehaviour
     private float m_coneAngle;
     
     private bool m_isEnabled;
-    
+
+    //사운드
+    private bool m_isAlarmSoundPlayed = false;
+
     private void Awake()
     {
         m_alarm = GetComponent<Alarm>();
@@ -79,6 +83,10 @@ public class DetectionCone : MonoBehaviour
         {
             m_targets.Remove(actor);
             actor.Dying -= OnTargetDying;
+
+            // 플레이어 나갈시 사이렌 초기화
+            if (actor.IsPossessed == true)
+                m_isAlarmSoundPlayed = false;
         }
     }
     
@@ -109,6 +117,12 @@ public class DetectionCone : MonoBehaviour
                 {
                     // Show detection warning effect
                     GameManager.Effect.ShowDetectionWarningEffect();
+
+                    if(TryGetComponent<AudioSource>(out var audioSource) && m_isAlarmSoundPlayed == false)
+                    {
+                        audioSource.Play();
+                        m_isAlarmSoundPlayed = true;
+                    }
                 }
                 
                 // Trigger alarm

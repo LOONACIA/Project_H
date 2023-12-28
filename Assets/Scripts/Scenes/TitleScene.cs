@@ -5,6 +5,7 @@ using Michsky.UI.Reach;
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
@@ -28,6 +29,8 @@ public class TitleScene : MonoBehaviour
     private IDisposable m_inputHandle;
 
     private bool m_isStarted;
+    
+    private UISettings m_settings;
 
     private void Awake()
     {
@@ -45,6 +48,14 @@ public class TitleScene : MonoBehaviour
     private void OnDisable()
     {
         m_inputHandle?.Dispose();
+    }
+
+    public void OnSettingsButtonClick()
+    {
+        if (m_settings == null || !m_settings.gameObject.activeSelf)
+        {
+            m_settings = ManagerRoot.UI.ShowPopupUI<UISettings>();            
+        }
     }
 
     public void OnPlayButtonClick()
@@ -103,7 +114,7 @@ public class TitleScene : MonoBehaviour
                         .AppendCallback(() => task.allowSceneActivation = true);
                 }
             }
-            
+                
             yield return null;
         }
     }
