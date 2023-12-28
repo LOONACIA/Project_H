@@ -18,7 +18,7 @@ public class Boss : MonoBehaviour, IHealth
 
     private int m_maxHp = 1;
 
-    private float m_rotateSpeed = .5f;
+    private float m_rotateSpeed = .2f;
 
     private CoroutineEx m_waitLookCoroutine;
 
@@ -101,7 +101,7 @@ public class Boss : MonoBehaviour, IHealth
     {
         m_animator.SetBool(ConstVariables.ANIMATOR_PARAMETER_LOOK, false);
         m_lerpCoroutine?.Abort();
-        m_lerpCoroutine = CoroutineEx.Create(this, Co_LerpLook(.1f, 1, 0));
+        m_lerpCoroutine = CoroutineEx.Create(this, Co_LerpLook(.05f, 1, 0));
 
         yield return new WaitUntil(() => m_animator.GetBool(ConstVariables.ANIMATOR_PARAMETER_LOOK) == true);
         m_lerpCoroutine?.Abort();
