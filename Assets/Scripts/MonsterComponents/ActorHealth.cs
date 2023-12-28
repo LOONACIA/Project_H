@@ -196,6 +196,7 @@ public class ActorHealth : MonoBehaviour, IHealth
     {
         return GetComponent<Monster>().m_thirdPersonAnimator.GetComponent<MonsterSFXPlayer>();
     }
+    
     private void PlayHitSound()
     {
         int num = UnityEngine.Random.Range(0, 3);
@@ -242,17 +243,10 @@ public class ActorHealth : MonoBehaviour, IHealth
 
     private void PlayDeadSound()
     {
-        if (m_actor.IsPossessed)
-            PlayFPDeadSound();
-        else
+        if (!m_actor.IsPossessed)
+        {
             PlayerTPDeadSound();
-    }
-
-    private void PlayFPDeadSound()
-    {
-        MonsterSFXPlayer sfx = GetSFX();
-
-        sfx.OnPlayFPDeath();
+        }
     }
 
     private void PlayerTPDeadSound()

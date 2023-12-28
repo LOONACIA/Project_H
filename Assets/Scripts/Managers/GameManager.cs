@@ -147,7 +147,13 @@ public class GameManager : MonoBehaviour
         IsGameOver = true;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+        
         m_effect.ShowGameOverEffect();
+
+        MonsterSFXPlayer sfx = Character.Controller.Character.GetComponentInChildren<MonsterSFXPlayer>();
+
+        sfx.OnPlayFPDeath();
+        
         GameOver?.Invoke(this, EventArgs.Empty);
     }
 
