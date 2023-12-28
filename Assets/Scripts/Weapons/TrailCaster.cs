@@ -1,7 +1,7 @@
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.VFX;
 
 
 public class TrailCaster : MonoBehaviour
@@ -175,6 +175,7 @@ public class TrailCaster : MonoBehaviour
     /// </summary>
     private void TrailCast()
     {
+        RaycastHit[] hits = ArrayPool<RaycastHit>.Shared.Rent(50);
         for (int i = 0; i < m_thicknessX; i++)
         {
             for (int j = 0; j < m_trailCountY; j++)
@@ -182,28 +183,32 @@ public class TrailCaster : MonoBehaviour
                 oldPos[i, j] = curPos[i, j]; //직전 월드 좌표를 저장
                 curPos[i, j] = transform.TransformPoint(m_trailRotation * localTrailPos[i, j]); //월드 좌표를 curPos로 저장
 
-                Vector3 localDir = oldPos[i, j] - curPos[i, j];
-                RaycastHit[] hits = Physics.RaycastAll(
-                    curPos[i, j],
-                    curPos[i, j] - oldPos[i, j],
-                    localDir.magnitude,
+                Vector3 trailOrg = oldPos[i, j];
+                Vector3 trailDir = curPos[i, j] - oldPos[i, j];
+                int hitCounts = Physics.RaycastNonAlloc(
+                    trailOrg, trailDir, hits, trailDir.magnitude,
                     LayerMask.GetMask("Monster", "Damageable"));
-                for (int k = 0; k < hits.Length; k++)
+                if (hitCounts > hits.Length)
+                {
+                    Debug.LogWarning("TrailCast: 감지한 적의 수가 한계를 초과함");
+                }
+                for (int k = 0; k < hitCounts; k++)
                 {
                     //딕셔너리에 등록되어있지 않다면, 등록 후 리스트에 추가
                     int jid = hits[k].transform.gameObject.GetInstanceID();
                     if (!attackedList.ContainsKey(jid))
                     {
-                        HitInfo info = new HitInfo(curPos[i, j] - oldPos[i, j], hits[k]);
+                        HitInfo info = new HitInfo(trailDir, hits[k]);
                         attackedList.Add(jid, info);
                         buffer.Add(info);
                     }
                 }
 
                 //DrawRay
-                Debug.DrawRay(curPos[i, j], oldPos[i, j] - curPos[i, j], Color.magenta, 0.3f, true);
+                Debug.DrawRay(trailOrg, trailDir, Color.magenta, 3f, true);
             }
         }
+        ArrayPool<RaycastHit>.Shared.Return(hits);
     }
 
     #endregion
