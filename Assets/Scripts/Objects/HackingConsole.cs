@@ -1,3 +1,4 @@
+using LOONACIA.Unity;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -52,6 +53,10 @@ public class HackingConsole : HackingObject
         OnHacking?.Invoke(this, EventArgs.Empty);
 
         Hacking();
+
+        //Sound
+        OffLaserSound();
+
     }
 
     public void Hacking(bool hasRecoverTime = true)
@@ -132,5 +137,33 @@ public class HackingConsole : HackingObject
         }
 
         Recovery();
+
+        //Sound
+        if (TryGetComponent<AudioSource>(out var audioSource) && audios.Length >= 1)
+        {
+            audioSource.clip = audios[(int)HackingSoundType.Unhacking];
+            audioSource.Play();
+            OnLaserSound();
+        }
+    }
+
+    private void OffLaserSound()
+    {
+        AudioSource[] audios = transform.GetComponentsInChildren<AudioSource>();
+
+        foreach (var audio in audios)
+        {
+            audio.Stop();
+        }
+    }
+
+    private void OnLaserSound()
+    {
+        AudioSource[] audios = transform.GetComponentsInChildren<AudioSource>();
+
+        foreach (var audio in audios) 
+        {
+            audio.Play();
+        }
     }
 }
