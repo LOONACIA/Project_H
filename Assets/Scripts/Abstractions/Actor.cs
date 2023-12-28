@@ -32,13 +32,13 @@ public abstract class Actor : MonoBehaviour
     private GameObject m_firstPersonCameraPivot;
 
     public Animator m_firstPersonAnimator;
-    
+
     public Animator m_thirdPersonAnimator;
 
     private CinemachineVirtualCamera m_vcam;
 
     private bool m_isPossessed;
-    
+
     private CoroutineEx m_stunCoroutine;
 
     public ActorData Data => m_data;
@@ -67,7 +67,7 @@ public abstract class Actor : MonoBehaviour
     public Animator Animator => IsPossessed ? m_firstPersonAnimator : m_thirdPersonAnimator;
 
     public GameObject FirstPersonCameraPivot => m_firstPersonCameraPivot;
-    
+
     public event EventHandler Spawned;
 
     public event RefEventHandler<AttackInfo> Dying;
@@ -80,11 +80,16 @@ public abstract class Actor : MonoBehaviour
         m_vcam = GetComponentInChildren<CinemachineVirtualCamera>();
         Health = GetComponent<ActorHealth>();
         Status = GetComponent<ActorStatus>();
-        
+
         if (Data != null && Status != null)
         {
             Status.CanKnockBack = Data.CanKnockBack;
             Status.CanKnockDown = Data.CanKnockDown;
+        }
+        
+        if (m_firstPersonAnimator != null)
+        {
+            m_firstPersonAnimator.gameObject.SetActive(false);
         }
     }
 
@@ -92,10 +97,6 @@ public abstract class Actor : MonoBehaviour
     {
         if (!IsPossessed)
         {
-            if (m_firstPersonAnimator != null)
-            {
-                m_firstPersonAnimator.gameObject.SetActive(false);
-            }
             EnableAIComponents();
         }
     }
@@ -114,7 +115,7 @@ public abstract class Actor : MonoBehaviour
         {
             m_collider.enabled = true;
         }
-        
+
         OnSpawned();
     }
 
@@ -144,7 +145,7 @@ public abstract class Actor : MonoBehaviour
             m_interactableObjects.Remove(obj);
         }
     }
-    
+
     public IInteractableObject GetClosestInteractableObject()
     {
         if (m_interactableObjects.Count == 0)
@@ -285,7 +286,7 @@ public abstract class Actor : MonoBehaviour
             Debug.LogWarning($"{name}: {nameof(m_data)} is null");
         }
     }
-    
+
     private void Stun(float seconds)
     {
         if (seconds <= 0f)
