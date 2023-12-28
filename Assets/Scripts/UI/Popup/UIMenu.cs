@@ -1,11 +1,10 @@
 using LOONACIA.Unity.Coroutines;
-using LOONACIA.Unity.Managers;
 using Michsky.UI.Reach;
 using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using UIPopup = LOONACIA.Unity.UI.UIPopup;
 
 public class UIMenu : UIPopup
@@ -48,6 +47,8 @@ public class UIMenu : UIPopup
     {
         m_coroutine = CoroutineEx.Create(this, CoDisableAnimator());
         GameManager.Sound.OffInGame();
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(m_firstButton.gameObject);
     }
 
     private void OnDisable()

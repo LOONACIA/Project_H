@@ -1,11 +1,8 @@
-using LOONACIA.Unity.UI;
 using Michsky.UI.Reach;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using UnityEngine.Video;
 using UIPopup = LOONACIA.Unity.UI.UIPopup;
 
@@ -26,7 +23,13 @@ public class UIModalDialogPresenter : UIPopup
     private Action m_onConfirm;
 
     public bool IsOpen => m_modalWindow.isActiveAndEnabled;
-    
+
+    private void OnEnable()
+    {
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(m_confirmButton.gameObject);
+    }
+
     public void SetDialog(ModalDialog dialog, Action onConfirm = null)
     {
         m_text.text = dialog.Content;
