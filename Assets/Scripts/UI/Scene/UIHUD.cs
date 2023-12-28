@@ -274,6 +274,13 @@ public class UIHUD : UIScene
             m_dashIndicators[index].fillAmount = index < m_dashIndicatorCursor ? 1 : 0;
         }
 
+        if (m_dashIndicators.Length > 0)
+        {
+            m_dashIndicatorManager.colorType = Mathf.Approximately(m_dashIndicators[0].fillAmount, 1)
+                ? UIManagerImage.ColorType.Accent
+                : UIManagerImage.ColorType.Negative;
+        }
+
         if (m_actor != null)
         {
             m_actor.Status.DashCountChanged += OnDashCountChanged;
@@ -296,6 +303,11 @@ public class UIHUD : UIScene
         if (m_dashIndicatorCursor < m_dashIndicators.Length)
         {
             m_dashIndicatorCoroutine = CoImageHighlightEffect(m_dashIndicators[m_dashIndicatorCursor], m_dashIndicators[m_dashIndicatorCursor].transform.parent);
+        }
+
+        if (m_dashIndicatorCursor < e)
+        {
+            GameManager.Sound.Play(GameManager.Sound.ObjectDataSounds.DashCharged);
         }
         
         m_dashIndicatorCursor = e;

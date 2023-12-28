@@ -18,6 +18,8 @@ public class AttackLightEffect : MonoBehaviour
     
     private CoroutineEx m_coroutine;
     
+    private Light m_light;
+    
     #endregion
 
     public float Duration
@@ -37,6 +39,16 @@ public class AttackLightEffect : MonoBehaviour
         }
     }
 
+    public float Intensity
+    {
+        set => m_light.intensity = value;
+    }
+
+    private void Awake()
+    {
+        m_light = GetComponent<Light>();
+    }
+
     #region PublicMethod
     private void OnEnable()
     {
@@ -52,7 +64,8 @@ public class AttackLightEffect : MonoBehaviour
 
     #region PrivateMethod
     private IEnumerator IE_ReleaseSelf()
-    {   
+    {
+        
         yield return m_waitForSecondsCache;
         ManagerRoot.Resource.Release(gameObject);
     }
