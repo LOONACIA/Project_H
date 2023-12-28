@@ -54,11 +54,11 @@ public class HackingConsole : HackingObject
         Hacking();
     }
 
-    public void Hacking()
+    public void Hacking(bool hasRecoverTime = true)
     {
         if (m_isHacking)
         {
-            if (m_materialCoroutine != null)
+            if (m_coolTimeCoroutine != null)
                 StopCoroutine(m_coolTimeCoroutine);
 
             m_coolTimeCoroutine = StartCoroutine(IE_WaitCoolTime());
@@ -76,11 +76,13 @@ public class HackingConsole : HackingObject
             hackable.Activate();
         }
 
-        m_coolTimeCoroutine = StartCoroutine(IE_WaitCoolTime());
-        //Invoke(nameof(Recovery), m_hackingCoolTime);
+        if (hasRecoverTime) 
+        {
+            m_coolTimeCoroutine = StartCoroutine(IE_WaitCoolTime());
+        }
     }
 
-    private void Recovery()
+    public void Recovery()
     {
         m_isHacking = false;
 
