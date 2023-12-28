@@ -114,12 +114,17 @@ public class Monster : Actor
 
     protected override void EnableAIComponents()
     {
-        base.EnableAIComponents();
+        // NavMeshAgent가 있는 경우 BehaviorTree를 활성화하기 전에 NavMeshAgent를 활성화해야 함
+        // 따라서 base.EnableAIComponents()를 호출하지 않고, 별도로 구현
+        if (m_rigidbody != null)
+        {
+            m_rigidbody.isKinematic = true;
+        }
 
         if (m_behaviorTree != null)
         {
             m_behaviorTree.enabled = false;
-            m_waitUntilNavMeshAgentEnableCoroutine = CoroutineEx.Create(this, CoWaitUntilNavMeshAgentEnable());
+            m_waitUntilNavMeshAgentEnableCoroutine = CoroutineEx.Create(this, WaitUntilNavMeshAgentEnable());
         }
 
         if (Movement != null && Movement.IsOnGround)
@@ -134,9 +139,13 @@ public class Monster : Actor
         }
         return;
         
-        IEnumerator CoWaitUntilNavMeshAgentEnable()
+        IEnumerator WaitUntilNavMeshAgentEnable()
         {
-            yield return m_waitUntilNavMeshAgentEnableCache;
+            if (m_navMeshAgent != null)
+            {
+                yield return m_waitUntilNavMeshAgentEnableCache;
+            }
+
             m_behaviorTree.enabled = true;
         }
     }

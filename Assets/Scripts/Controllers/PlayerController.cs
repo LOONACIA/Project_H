@@ -220,8 +220,8 @@ public partial class PlayerController : MonoBehaviour
             return;
         }
         
-        float xDelta = m_lookDelta.x * m_data.CameraHorizontalSensitivity * Time.fixedUnscaledDeltaTime;
-        float yDelta = m_lookDelta.y * m_data.CameraVerticalSensitivity * Time.fixedUnscaledDeltaTime;
+        float xDelta = m_lookDelta.x * m_data.CameraHorizontalSensitivity * Time.fixedDeltaTime;
+        float yDelta = m_lookDelta.y * m_data.CameraVerticalSensitivity * Time.fixedDeltaTime;
 
         float z = m_cameraHolder.eulerAngles.z;
 
