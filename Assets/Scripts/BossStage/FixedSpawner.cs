@@ -67,7 +67,6 @@ public class FixedSpawner : MonoBehaviour, ISpawn
         }
     }
 
-    [ContextMenu(nameof(StartSpawn))]
     public void StartSpawn()
     {
         if (m_active) return;

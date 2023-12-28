@@ -7,7 +7,8 @@ using UnityEngine;
 
 public class BossStageRoot : MonoBehaviour
 {
-    public Boss boss;
+    [SerializeField]
+    private Boss m_boss;
 
     [SerializeField]
     private BossStagePhase[] m_bossStagePhaseList;
@@ -40,18 +41,20 @@ public class BossStageRoot : MonoBehaviour
     {
         foreach (var phase in m_bossStagePhaseList)
         {
-            phase.PhaseEnd += NextPhase;
+            phase.PhaseEnd += OnPhaseEnd;
         }
 
         m_character = GameManager.Character.Controller.Character;
     }
+
+
 
     public void StageStart()
     {
         m_currentPhase = 0;
         m_lastPhase = m_bossStagePhaseList.Length - 1;
 
-        boss.gameObject.SetActive(true);
+        m_boss.gameObject.SetActive(true);
 
         // Stage 시작하면 플레이어를 지정한 방향으로 날림
         ThrowPlayer();
@@ -64,7 +67,15 @@ public class BossStageRoot : MonoBehaviour
         m_bossStagePhaseList[m_currentPhase]?.ReadyPhase();
     }
 
-    private void NextPhase(object sender, EventArgs e)
+    private void OnPhaseEnd(object sender, EventArgs e)
+    {
+        m_boss.TakeDamage(new AttackInfo());
+        
+        NextPhase();
+    }
+
+
+    private void NextPhase()
     {
         if (m_currentPhase >= m_lastPhase)
         {
@@ -77,7 +88,7 @@ public class BossStageRoot : MonoBehaviour
 
     private void StageClear()
     {
-        boss.Kill();
+        m_boss.Kill();
         CoroutineEx.Create(this, Co_StageClear());
     }
 

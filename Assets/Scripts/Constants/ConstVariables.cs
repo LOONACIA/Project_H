@@ -62,6 +62,7 @@ public static class ConstVariables
     public const string ANIMATOR_PARAMETER_JUMP = "Jump";
     public const string ANIMATOR_PARAMETER_IS_HIT_PLAYING = "IsHitPlaying";
     public const string ANIMATOR_PARAMETER_KNOCKBACK = "KnockBack";
+    public const string ANIMATOR_PARAMETER_LOOK = "Look";
 
     [Header("Animator Layer")]
     public const string ANIMATOR_LAYER_BASE_LAYER = "Base Layer";
