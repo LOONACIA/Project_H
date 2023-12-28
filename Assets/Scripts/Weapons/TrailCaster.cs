@@ -71,7 +71,7 @@ public class TrailCaster : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         if (!m_showGizmo) return;
 
@@ -205,7 +205,7 @@ public class TrailCaster : MonoBehaviour
                 }
 
                 //DrawRay
-                Debug.DrawRay(trailOrg, trailDir, Color.magenta, 3f, true);
+                Debug.DrawRay(trailOrg, (curPos[i, j] - oldPos[i, j]), Color.magenta, 3f, true);
             }
         }
         ArrayPool<RaycastHit>.Shared.Return(hits);
