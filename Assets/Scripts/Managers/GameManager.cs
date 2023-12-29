@@ -217,6 +217,7 @@ public class GameManager : MonoBehaviour
         m_sound.Clear();
         m_ui.Clear();
 
+        IsPaused = false;
         IsGameOver = false;
         Time.timeScale = 1f;
         Cursor.visible = false;
