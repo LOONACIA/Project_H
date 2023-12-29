@@ -14,7 +14,7 @@ public class MoveMachine : InteractableObject
     private AudioSource m_audioSource;
 
     public AudioClip[] m_audios;
-    private enum AudioIndex {Start, Move, End};
+    private enum AudioIndex {Move};
 
     [SerializeField]
     [Tooltip("이동할 오브젝트")]
@@ -93,7 +93,7 @@ public class MoveMachine : InteractableObject
     private IEnumerator Move()
     {
         // 시작 사운드
-        m_audioSource.clip = m_audios[(int)AudioIndex.Start];
+        m_audioSource.clip = m_audios[(int)AudioIndex.Move];
         m_audioSource.Play();
 
         float sqrEpsilon = m_epsilon * m_epsilon;
@@ -105,22 +105,20 @@ public class MoveMachine : InteractableObject
             sqrDistance = (m_destination - m_target.transform.position).sqrMagnitude;
             yield return m_waitForFixedUpdateCache;
 
-            //사운드 체크
-            if(m_audioSource.isPlaying == false)
-            {
-                m_audioSource.clip = m_audios[(int)AudioIndex.Move];
-                m_audioSource.Play();
-                m_audioSource.loop = true;
-            }
+            ////사운드 체크
+            //if(m_audioSource.isPlaying == false)
+            //{
+            //    m_audioSource.clip = m_audios[(int)AudioIndex.Move];
+            //    m_audioSource.Play();
+            //    m_audioSource.loop = true;
+            //}
         }
         m_target.transform.position = m_destination;
         ElevatorMoveEnd.Invoke(this, null);
         transform.SetParent(m_originalParent);
 
         //사운드
-        m_audioSource.clip = m_audios[(int)AudioIndex.End];
-        m_audioSource.Play();
-        m_audioSource.loop = false;
+        m_audioSource.Stop();
     }
 
     private void OnDrawGizmosSelected()
