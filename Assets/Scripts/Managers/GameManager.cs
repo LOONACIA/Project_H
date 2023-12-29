@@ -79,6 +79,11 @@ public class GameManager : MonoBehaviour
     }
     
     /// <summary>
+    /// Occurs when game is cleared.
+    /// </summary>
+    public event EventHandler GameClear;
+    
+    /// <summary>
     /// Occurs when game is over.
     /// </summary>
     public event EventHandler GameOver;
@@ -116,6 +121,7 @@ public class GameManager : MonoBehaviour
         IsGameOver = true;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+        GameClear?.Invoke(this, EventArgs.Empty);
     }
 
     public void SetPause()

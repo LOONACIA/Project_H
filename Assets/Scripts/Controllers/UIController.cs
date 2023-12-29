@@ -28,6 +28,7 @@ public partial class UIController : MonoBehaviour
 
     private void OnEnable()
     {
+        GameManager.Instance.GameClear += OnGameClear;
         GameManager.Instance.GameOver += OnGameOver;
         GameManager.Instance.Pause += OnPause;
         GameManager.Instance.Resume += OnResume;
@@ -36,6 +37,7 @@ public partial class UIController : MonoBehaviour
 
     private void OnDisable()
     {
+        GameManager.Instance.GameClear -= OnGameClear;
         GameManager.Instance.GameOver -= OnGameOver;
         GameManager.Instance.Pause -= OnPause;
         GameManager.Instance.Resume -= OnResume;
@@ -69,6 +71,11 @@ public partial class UIController : MonoBehaviour
         
         m_isMenuRequested = true;
         GameManager.Instance.SetPause();
+    }
+    
+    private void OnGameClear(object sender, EventArgs e)
+    {
+        GameManager.UI.ShowMenuUI(MenuInfoBag.GameClearText, MenuInfoBag.Menu, MenuInfoBag.Credits, MenuInfoBag.Exit);
     }
 
     private void OnGameOver(object sender, EventArgs e)
@@ -153,6 +160,8 @@ public partial class UIController : MonoBehaviour
         public static readonly MenuInfo Menu = new("Exit to main menu", () => SceneManagerEx.LoadScene("TitleScene"));
         
         public static readonly MenuInfo Settings = new("Settings", () => ManagerRoot.UI.ShowPopupUI<UISettings>());
+        
+        public static readonly MenuInfo Credits = new("Credits", () => ManagerRoot.UI.ShowPopupUI<UICredits>());
     
         public static readonly MenuInfo Exit =
 #if UNITY_EDITOR
@@ -163,5 +172,7 @@ public partial class UIController : MonoBehaviour
         public static readonly string GameOverText = "Game Over";
         
         public static readonly string PausedText = "Paused";
+        
+        public static readonly string GameClearText = "Game Clear";
     }
 }
