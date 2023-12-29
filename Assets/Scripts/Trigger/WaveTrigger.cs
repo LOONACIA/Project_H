@@ -31,7 +31,10 @@ public class WaveTrigger : MonoBehaviour
     [SerializeField]
     [Tooltip("스폰 횟수. 하위 객체 Spawner의 WaveInfoList 길이에 따라 무시될 수 있음.")]
     private int m_waveCount;
-    
+
+    [SerializeField]
+    private bool m_usePosseionClear = true;
+
     private PossessionProcessor m_processor;
 
     private Spawner[] m_spawners;
@@ -228,7 +231,9 @@ public class WaveTrigger : MonoBehaviour
 
     private IEnumerator CoWaitSpawn()
     {
-        m_processor.ClearTarget();
+        if (m_usePosseionClear)
+            m_processor.ClearTarget();
+
         yield return new WaitForSeconds(m_waitTime);
         StartSpawn();
     }

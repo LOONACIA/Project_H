@@ -40,8 +40,9 @@ public class UISettings : UIPopup
     
     private GeneralSettings m_settingsCache;
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
         m_settingsCache = GameManager.Settings.Load();
         LoadSettings();
         EventSystem.current.SetSelectedGameObject(null);
