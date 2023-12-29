@@ -22,6 +22,10 @@ public class SoundManager
     private Tween m_BGMSettingTween;
     private float m_bgmTime = 0f;
 
+    private AudioClip m_bgmClip;
+
+    private bool isTestBGMPlaying = false;
+
     public void Init()
     {
         ObjectDataSounds = GameManager.Settings.SFXObjectDatas;
@@ -128,15 +132,19 @@ public class SoundManager
     public void OffInGame()
     {
         m_bgmTime = m_audioSources[(int)SoundType.Bgm].time;
+        m_bgmClip = m_audioSources[(int)SoundType.Bgm].clip;
+
         m_audioSources[(int)SoundType.Bgm].Stop();
+
 
         //AudioMixer.SetFloat("InGame", -80f);
         m_BGMSettingTween?.Kill();
-        m_BGMSettingTween = audioMixer.DOSetFloat("InGame", -10f, 2f).SetUpdate(true);
+        m_BGMSettingTween = audioMixer.DOSetFloat("InGame", -80f, 2f).SetUpdate(true);
     }
 
     public void OnInGame()
     {
+        m_audioSources[(int)SoundType.Bgm].clip = m_bgmClip;
         m_audioSources[(int)SoundType.Bgm].Play();
 
         var clip = m_audioSources[(int)SoundType.Bgm].clip;
@@ -145,7 +153,7 @@ public class SoundManager
 
         //AudioMixer.SetFloat("InGame", 0f);
         m_BGMSettingTween?.Kill();
-        m_BGMSettingTween = audioMixer.DOSetFloat("InGame", 0f, 1f).SetUpdate(true);
+        m_BGMSettingTween = audioMixer.DOSetFloat("InGame", 3f, 2f).SetUpdate(true);
     }
 
     private AudioClip GetOrAddAudioClip(string path, SoundType type = SoundType.Sfx)
@@ -189,7 +197,7 @@ public class SoundManager
     public void BGMOff()
     {
         //m_audioSources[(int)SoundType.Bgm].Stop();
-        audioMixer.DOSetFloat("BGM", -40f, 1f);
+        audioMixer.DOSetFloat("BGM", -80f, 1f);
     }
 
     public void ChangeBGMDirectly(SFXInfo _info)
@@ -214,13 +222,47 @@ public class SoundManager
 
     private void ChangeBGM(AudioSource audioSource, AudioClip audioClip)
     {
-        audioMixer.DOSetFloat("BGM", -40f, 1f).onComplete = () =>
+        audioMixer.DOSetFloat("BGM", -80f, 1f).SetUpdate(true).onComplete = () =>
         {
             audioSource.Stop();
             audioSource.clip = audioClip;
             audioSource.Play();
-            audioMixer.DOSetFloat("BGM", 0f, 3f);
+            audioMixer.DOSetFloat("BGM", 3f, 1f).SetUpdate(true);
         };
+    }
+
+    /// <summary>
+    /// Setting 에서 쓸 테스트 BGM 틀어주는 함수
+    /// </summary>
+    public void PlayTestBGM()
+    {
+        if (isTestBGMPlaying)
+            return;
+
+        isTestBGMPlaying = true;
+
+        m_BGMSettingTween?.Kill();
+        m_BGMSettingTween = audioMixer.DOSetFloat("InGame", 3f, 2f).SetUpdate(true);
+
+        Play(ObjectDataSounds.TestBGM);
+    }
+
+    /// <summary>
+    /// Setting 에서 쓸 테스트 BGM 틀어주는 함수
+    /// </summary>
+    public void StopTestBGM()
+    {
+        isTestBGMPlaying = false;
+
+        m_BGMSettingTween?.Kill();
+        m_BGMSettingTween = audioMixer.DOSetFloat("InGame", -80f, 2f).SetUpdate(true);
+
+        m_audioSources[(int)SoundType.Bgm].Stop();
+    }
+
+    public void PlayTestSFX()
+    {
+        Play(ObjectDataSounds.TestSFX);
     }
 }
 
