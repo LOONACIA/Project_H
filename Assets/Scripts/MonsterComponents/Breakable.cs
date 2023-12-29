@@ -64,7 +64,10 @@ public class Breakable : MonoBehaviour
     private void AddForce(in AttackInfo info)
     {
         Vector3 attackDirection = info.AttackDirection;
-        attackDirection += info.Attacker.transform.forward * 1f;
+
+        if (info.Attacker is not null)
+            attackDirection += info.Attacker.transform.forward * 1f;
+
         attackDirection += Random.insideUnitSphere * 1f;
         attackDirection = attackDirection.GetFlatVector();
         attackDirection = attackDirection.normalized;

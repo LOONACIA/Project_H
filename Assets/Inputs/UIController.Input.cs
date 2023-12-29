@@ -43,6 +43,11 @@ public partial class UIController
             // Handled by EventSystem in Scene
         }
 
+        public void OnCancel(InputAction.CallbackContext context)
+        {
+            // Handled by EventSystem in Scene
+        }
+
         public void OnNavigate(InputAction.CallbackContext context)
         {
             // Handled by EventSystem in Scene

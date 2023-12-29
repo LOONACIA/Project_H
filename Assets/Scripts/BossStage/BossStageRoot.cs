@@ -21,7 +21,7 @@ public class BossStageRoot : MonoBehaviour
     private float m_throwKnockDownTime;
 
     [SerializeField]
-    private GameObject m_fence;
+    private Explosive m_dummyMachine;
 
     [SerializeField]
     private GameObject m_detectionLight;
@@ -56,10 +56,8 @@ public class BossStageRoot : MonoBehaviour
 
         // Stage 시작하면 플레이어를 지정한 방향으로 날림
         ThrowPlayer();
-        
-        // Stage 주변을 감쌀 울타리 활성화
-        m_fence?.SetActive(true);
 
+        m_dummyMachine?.Explode(20, transform.forward * 5f, 100, 10);
         m_detectionLight?.SetActive(true);
 
         m_bossStagePhaseList[m_currentPhase]?.ReadyPhase();

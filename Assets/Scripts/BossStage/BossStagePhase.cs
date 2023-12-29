@@ -24,6 +24,9 @@ public class BossStagePhase : MonoBehaviour
     [SerializeField, Tooltip("Phase 시작하면 켤 객체")]
     private GameObject[] m_onStartActiveObjects;
 
+    [SerializeField, Tooltip("Phase 시작하면 끌 객체")]
+    private GameObject[] m_onStartDeactiveObjects;
+
     [SerializeField, Tooltip("Phase 끝나면 끌 객체")]
     private GameObject[] m_onEndDeactiveObjects;
 
@@ -114,6 +117,11 @@ public class BossStagePhase : MonoBehaviour
         foreach (var activeObject in m_onStartActiveObjects)
         {
             activeObject.SetActive(true);
+        }
+
+        foreach (var deactiveObject in m_onStartDeactiveObjects)
+        {
+            deactiveObject.SetActive(false);
         }
     }
 
@@ -233,10 +241,11 @@ public class BossStagePhase : MonoBehaviour
 
         // 몬스터 사망 처리
         m_processor.ClearTarget();
-        var monsterList = GameObject.FindObjectsOfType<Monster>().Where(x => x.IsPossessed == false);
+        var monsterList = FindObjectsOfType<Monster>();
         foreach (var monster in monsterList)
         {
-            monster.Health.Kill();
+            if (!monster.IsPossessed)
+                monster.Health.Kill();
         }
 
         PhaseEnd?.Invoke(this, EventArgs.Empty);

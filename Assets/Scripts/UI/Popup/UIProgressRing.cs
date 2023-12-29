@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIProgressRing : UIPopup
+public class UIProgressRing : UIBase
 {
     public enum TextDisplayMode
     {
@@ -94,8 +94,6 @@ public class UIProgressRing : UIPopup
 
     protected override void Init()
     {
-        base.Init();
-        
         Bind<Image, Images>();
         Bind<TextMeshProUGUI, Texts>();
         

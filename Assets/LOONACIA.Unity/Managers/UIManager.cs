@@ -39,6 +39,22 @@ namespace LOONACIA.Unity.Managers
 
             canvas.sortingOrder = sort ? _order++ : 0;
         }
+        
+        public T ShowItemUI<T>(string name = null, bool usePool = true)
+            where T : UIBase
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                name = typeof(T).Name;
+            }
+
+            GameObject gameObject = ManagerRoot.Resource.Instantiate($"UI/Item/{name}", usePool: usePool);
+            var ui = gameObject.GetOrAddComponent<T>();
+
+            gameObject.transform.SetParent(Root.transform);
+
+            return ui;
+        }
 
         public T ShowSceneUI<T>(string name = null)
             where T : UIScene
@@ -74,16 +90,16 @@ namespace LOONACIA.Unity.Managers
             return popup;
         }
 
-        public void ClosePopupUI(UIPopup popup)
+        public bool ClosePopupUI(UIPopup popup)
         {
             if (_popupStack.Count == 0)
             {
-                return;
+                return false;
             }
 
             if (_popupStack.Peek() != popup)
             {
-                return;
+                return false;
             }
 
             popup = _popupStack.Pop();
@@ -93,14 +109,24 @@ namespace LOONACIA.Unity.Managers
             }
 
             _order--;
+            if (_order < 1)
+            {
+                _order = 1;
+            }
+
+            return true;
         }
 
-        public void ClosePopupUI()
+        // ReSharper disable Unity.PerformanceAnalysis
+        public bool ClosePopupUI()
         {
             if (_popupStack.TryPeek(out var popup))
             {
-                ClosePopupUI(popup);
+                popup.Close();
+                return true;
             }
+
+            return false;
         }
 
         public void ClearAllPopup()
@@ -126,6 +152,11 @@ namespace LOONACIA.Unity.Managers
             {
                 Object.Destroy(_root.gameObject);
             }
+        }
+
+        public UIPopup GetTopPopupUI()
+        {
+            return _popupStack.Count > 0 ? _popupStack.Peek() : null;
         }
     }
 }
