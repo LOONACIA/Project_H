@@ -1,4 +1,5 @@
 using Michsky.UI.Reach;
+using System;
 using UnityEngine;
 using UIPopup = LOONACIA.Unity.UI.UIPopup;
 
@@ -12,12 +13,18 @@ public class UISettings : UIPopup
     
     private static readonly float s_maxSliderValue = 100f;
     
+    [Header("General")]
     [SerializeField]
     private HorizontalSelector m_languageSelector;
     
+    [Header("Input")]
     [SerializeField]
     private SliderManager m_inputSensitivitySlider;
     
+    [SerializeField]
+    private SwitchManager m_invertVerticalViewSwitch;
+    
+    [Header("Audio")]
     [SerializeField]
     private SliderManager m_masterVolumeSlider;
     
@@ -53,7 +60,8 @@ public class UISettings : UIPopup
         
         LoadSettings();
         
-        m_inputSensitivitySlider.onValueChanged.AddListener(OnInputSensitivityChanged);
+        m_inputSensitivitySlider.onValueChanged.AddListener(value => GameManager.Settings.GeneralSettings.LookSensitivity = value);
+        m_invertVerticalViewSwitch.onValueChanged.AddListener(value => GameManager.Settings.GeneralSettings.InvertVerticalView = value);
         m_masterVolumeSlider.onValueChanged.AddListener(OnMasterVolumeChanged);
         m_bgmVolumeSlider.onValueChanged.AddListener(OnBGMVolumeChanged);
         m_sfxVolumeSlider.onValueChanged.AddListener(OnSFXVolumeChanged);
@@ -85,7 +93,8 @@ public class UISettings : UIPopup
     
     private void LoadSettings()
     {
-        m_inputSensitivitySlider.mainSlider.value = GameManager.Settings.GeneralSettings.InputSensitivity;
+        m_inputSensitivitySlider.mainSlider.value = GameManager.Settings.GeneralSettings.LookSensitivity;
+        m_invertVerticalViewSwitch.isOn = GameManager.Settings.GeneralSettings.InvertVerticalView;
         m_masterVolumeSlider.mainSlider.value = ConvertVolumeToSlider(GameManager.Settings.GeneralSettings.MasterVolume);
         m_bgmVolumeSlider.mainSlider.value = ConvertVolumeToSlider(GameManager.Settings.GeneralSettings.BGMVolume);
         m_sfxVolumeSlider.mainSlider.value = ConvertVolumeToSlider(GameManager.Settings.GeneralSettings.SfxVolume);
@@ -93,11 +102,6 @@ public class UISettings : UIPopup
         m_masterVolumeSlider.UpdateUI();
         m_bgmVolumeSlider.UpdateUI();
         m_sfxVolumeSlider.UpdateUI();
-    }
-
-    private void OnInputSensitivityChanged(float value)
-    {
-        GameManager.Settings.GeneralSettings.InputSensitivity = value;
     }
     
     private void OnMasterVolumeChanged(float value)
