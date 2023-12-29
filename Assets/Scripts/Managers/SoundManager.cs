@@ -19,7 +19,7 @@ public class SoundManager
 
     public bool isPlayingDetectionSound = false;
 
-    public int m_footStepCount = 0;
+    public int footStepCount = 0;
 
     private Tween m_BGMSettingTween;
     private float m_bgmTime = 0f;
