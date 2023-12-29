@@ -86,11 +86,6 @@ public class WaveTrigger : MonoBehaviour
             m_evaluationCoroutine = CoroutineEx.Create(this, CoEvaluate());
         }
 
-        foreach (var spawner in m_spawners)
-        {
-            spawner.Spawn();
-        }
-
         WaveStart?.Invoke(this, EventArgs.Empty);
         Spawn();
     }
