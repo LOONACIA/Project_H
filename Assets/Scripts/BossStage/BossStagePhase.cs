@@ -90,7 +90,7 @@ public class BossStagePhase : MonoBehaviour
         // 객체 비활성화
         foreach (var activeObject in m_onStartActiveObjects)
         {
-            activeObject.SetActive(false);
+            activeObject?.SetActive(false);
         }
     }
 
