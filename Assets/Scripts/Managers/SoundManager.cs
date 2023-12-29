@@ -19,12 +19,16 @@ public class SoundManager
 
     public bool isPlayingDetectionSound = false;
 
+    public int footStepCount = 0;
+
     private Tween m_BGMSettingTween;
     private float m_bgmTime = 0f;
 
     private AudioClip m_bgmClip;
 
     private bool isTestBGMPlaying = false;
+
+    
 
     public void Init()
     {
@@ -46,6 +50,7 @@ public class SoundManager
             }
 
             m_audioSources[(int)SoundType.Bgm].loop = true;
+            m_audioSources[(int)SoundType.Bgm].priority = 200;
             m_audioSources[(int)SoundType.Bgm].outputAudioMixerGroup = audioMixer.FindMatchingGroups("BGM")[1];
 
             m_audioSources[(int)SoundType.UI].outputAudioMixerGroup = audioMixer.FindMatchingGroups("UI")[0];
@@ -153,7 +158,7 @@ public class SoundManager
 
         //AudioMixer.SetFloat("InGame", 0f);
         m_BGMSettingTween?.Kill();
-        m_BGMSettingTween = audioMixer.DOSetFloat("InGame", 3f, 2f).SetUpdate(true);
+        m_BGMSettingTween = audioMixer.DOSetFloat("InGame", 1f, 2f).SetUpdate(true);
     }
 
     private AudioClip GetOrAddAudioClip(string path, SoundType type = SoundType.Sfx)
@@ -226,8 +231,9 @@ public class SoundManager
         {
             audioSource.Stop();
             audioSource.clip = audioClip;
+            audioSource.priority = 1;
             audioSource.Play();
-            audioMixer.DOSetFloat("BGM", 3f, 1f).SetUpdate(true);
+            audioMixer.DOSetFloat("BGM", 1f, 1f).SetUpdate(true);
         };
     }
 
@@ -254,7 +260,7 @@ public class SoundManager
 
         isTestBGMPlaying = true;
 
-        audioMixer.SetFloat("InGame", 3f);
+        audioMixer.SetFloat("InGame", 1f);
 
         m_audioSources[(int)SoundType.Bgm].clip = ObjectDataSounds.TestBGM.audio;
         m_audioSources[(int)SoundType.Bgm].Play();
@@ -276,7 +282,7 @@ public class SoundManager
     public void PlayTestSFX()
     {
 
-        audioMixer.SetFloat("InGame", 3f);
+        audioMixer.SetFloat("InGame", 1f);
         
         Play(ObjectDataSounds.TestSFX);
     }

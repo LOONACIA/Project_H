@@ -1,4 +1,5 @@
 using LOONACIA.Unity;
+using System;
 using System.Buffers;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -95,6 +96,13 @@ public class MonsterMovement : MonoBehaviour
         m_actor.Status.DashCoolTime = m_data.DashCoolTime;
         m_currentMoveToAccel = m_data.AccelerationTime > 0f ? 1f / m_data.AccelerationTime : float.PositiveInfinity;
         m_lastPath = new(); //네브매쉬패스는 Start, Awake에서 초기화되어야함.
+    }
+
+    private void OnDisable()
+    {
+        m_isWalkSoundPlaying = false;
+        m_audioSource.Stop();
+        GameManager.Sound.footStepCount = GameManager.Sound.footStepCount <= 0 ? 0 : --GameManager.Sound.footStepCount;
     }
 
     private void Update()
@@ -697,30 +705,55 @@ public class MonsterMovement : MonoBehaviour
     #region 사운드 관련
     private void PlayWalkSound()
     {
-        //땅 위가 아니면 return
-        if (!IsOnGround)
+        if (!m_isOnGround)
         {
             m_isWalkSoundPlaying = false;
             m_audioSource.Stop();
+            GameManager.Sound.footStepCount = GameManager.Sound.footStepCount <= 0 ? 0 : --GameManager.Sound.footStepCount;
+
             return;
         }
-            
-
+        
+        if (m_actor.IsPossessed == false && m_isWalkSoundPlaying && Vector3.Distance(transform.position, Camera.main.transform.position) > 15)
+        {
+            m_isWalkSoundPlaying = false;
+            m_audioSource.Stop();
+            GameManager.Sound.footStepCount = GameManager.Sound.footStepCount <= 0 ? 0 : --GameManager.Sound.footStepCount;
+            return;
+        }
+        
+        if (m_actor.IsPossessed == false)
+        {
+            if (GameManager.Sound.footStepCount > 10)
+            {
+                return;
+            }
+        }
+        
         //걷는 사운드가 이미 출력되고 있으면 return
         if (m_isWalkSoundPlaying)
+        {
             return;
+        }
 
         m_audioSource.Play();
         m_isWalkSoundPlaying = true;
+        if (!m_actor.IsPossessed)
+        {
+            GameManager.Sound.footStepCount++;
+        }
     }
 
     private void CheckWalk()
     {
-        if (m_actor.Animator.GetFloat(ConstVariables.ANIMATOR_PARAMETER_MOVEMENT_RATIO) >= 0.1f)
+        if (m_actor.Animator.GetFloat(ConstVariables.ANIMATOR_PARAMETER_MOVEMENT_RATIO) >= 0.1f || !m_isWalkSoundPlaying)
+        {
             return;
+        }
 
         m_isWalkSoundPlaying = false;
         m_audioSource.Stop();
+        GameManager.Sound.footStepCount = GameManager.Sound.footStepCount <= 0 ? 0 : --GameManager.Sound.footStepCount;
     }
 
     private void CheckFootStepSound()
