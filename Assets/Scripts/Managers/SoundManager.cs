@@ -241,8 +241,7 @@ public class SoundManager
 
         isTestBGMPlaying = true;
 
-        m_BGMSettingTween?.Kill();
-        m_BGMSettingTween = audioMixer.DOSetFloat("InGame", 3f, 2f).SetUpdate(true);
+        audioMixer.SetFloat("InGame", 3f);
 
         Play(ObjectDataSounds.TestBGM);
     }
@@ -255,13 +254,16 @@ public class SoundManager
         isTestBGMPlaying = false;
 
         m_BGMSettingTween?.Kill();
-        m_BGMSettingTween = audioMixer.DOSetFloat("InGame", -80f, 2f).SetUpdate(true);
+        //m_BGMSettingTween = audioMixer.DOSetFloat("InGame", -80f, 2f).SetUpdate(true);
 
         m_audioSources[(int)SoundType.Bgm].Stop();
     }
 
     public void PlayTestSFX()
     {
+
+        audioMixer.SetFloat("InGame", 3f);
+        
         Play(ObjectDataSounds.TestSFX);
     }
 }
