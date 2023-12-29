@@ -94,7 +94,7 @@ public class UISettings : UIPopup
             case VolumeType.Master:
                 break;
             case VolumeType.BGM:
-                GameManager.Sound.PlayTestBGM();
+                //GameManager.Sound.PlayTestBGM();
                 break;
             case VolumeType.Sfx:
                 GameManager.Sound.StopTestBGM();
@@ -172,6 +172,8 @@ public class UISettings : UIPopup
         
         //사운드
         m_currentVolumeType = VolumeType.BGM;
+
+        GameManager.Sound.PlayTestBGM();
     }
     
     private void OnSFXVolumeChanged(float value)
