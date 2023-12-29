@@ -122,6 +122,9 @@ public class PossessionProcessor : MonoBehaviour
 
         Possessing?.Invoke(this, EventArgs.Empty);
 
+        // 사운드
+        GameManager.Sound.Play(GameManager.Sound.ObjectDataSounds.TryHackingSound);
+
         ghost.PossessToTarget(m_shuriken.targetActor, () => OnPossessed(m_shuriken.targetActor));
     }
 
@@ -196,14 +199,14 @@ public class PossessionProcessor : MonoBehaviour
     private void TryHacking(Actor target)
     {
         target.Health.TakeDamage(new(m_sender.gameObject, target.Health, 0, Vector3.zero, Vector3.zero));
-        
+
         // 해킹이 불가능한 Actor라면
         if (!target.Data.CanHack)
         {
             // return
             return;
         }
-        
+
         target.PlayHackAnimation();
         HackStarted?.Invoke(this, target.Data.PossessionRequiredTime);
         m_possessionCoroutine = CoroutineEx.Create(this, CoWaitForPossession(target.Data.PossessionRequiredTime));
