@@ -8,7 +8,7 @@ public class SceneHelper
     public static async Task LazyLoadAsync(string sceneName, float delay = 1.5f)
     {
         ManagerRoot.UI.Clear(false);
-        var dim = ManagerRoot.UI.ShowSceneUI<UIDim>();
+        var dim = ManagerRoot.Resource.Instantiate($"UI/Scene/{nameof(UIDim)}").GetComponent<UIDim>();
         dim.FadeIn(delay);
 
         await Task.Delay((int)(delay * 1000));
