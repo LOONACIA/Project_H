@@ -77,17 +77,24 @@ public class UISettings : UIPopup
         value = Mathf.Clamp(value, s_minSliderValue, s_maxSliderValue);
 
         float newValue = s_minVolumeValue + (value - s_minSliderValue) * (s_maxVolumeValue - s_minVolumeValue) / (s_maxSliderValue - s_minSliderValue);
+        if (Mathf.Approximately(newValue, s_minVolumeValue))
+        {
+            newValue = -80f;
+        }
+        
         return newValue;
     }
     
     /// <summary>
     /// Convert volume value to slider value
     /// </summary>
-    /// <param name="originalValue"></param>
+    /// <param name="value"></param>
     /// <returns></returns>
-    private static float ConvertVolumeToSlider(float originalValue)
+    private static float ConvertVolumeToSlider(float value)
     {
-        float newValue = s_minSliderValue + (originalValue - s_minVolumeValue) * (s_maxSliderValue - s_minSliderValue) / (s_maxVolumeValue - s_minVolumeValue);
+        value = Mathf.Clamp(value, s_minVolumeValue, s_maxVolumeValue);
+        
+        float newValue = s_minSliderValue + (value - s_minVolumeValue) * (s_maxSliderValue - s_minSliderValue) / (s_maxVolumeValue - s_minVolumeValue);
         return newValue;
     }
     

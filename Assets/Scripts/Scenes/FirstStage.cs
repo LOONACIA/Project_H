@@ -17,10 +17,7 @@ public class FirstStage : MonoBehaviour
 
     private void Start()
 	{
-        if (BGMS[0] != null)
-        {
-            ChangeBgm(0);
-        }
+        
     }
 
     public void ChangeBgm(int _index)

@@ -1,4 +1,5 @@
 using LOONACIA.Unity.Coroutines;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,87 +8,69 @@ using UnityEngine.VFX;
 [RequireComponent(typeof(VisualEffect))]
 public class BulletParticleEffect : MonoBehaviour
 {
-    private VisualEffect vfx;
+    private VisualEffect m_vfx;
+    private Transform m_parent = null;
+    private Projectile m_projectile;
 
-    private bool m_initialized = false;
-    private Transform m_oldParent = null;
-    private bool m_visualized = false;
+    private bool m_parentEnabled = false;
+    private float m_disableDelay = 0f;
 
-    private void OnEnable()
+    private float m_lastDisabledTime = 0f;
+
+    public void OnBulletEnabled(object o, EventArgs arg)
     {
-        Init();
+        //부모 재등록
+        transform.parent = m_parent;
+        m_parentEnabled = true;
+
+        //모든 파티클 초기화 및 트레일 생성 시작
+        m_vfx.Reinit();
+        m_vfx.SendEvent("OnPlay");
     }
 
-    private void Init()
+    public void OnBulletDisabled(object o, EventArgs arg)
     {
-
-        if(m_oldParent != null)
-        {
-            //이전에 초기화된 적이 있음. return;
-            return;
-        }
-
-        if(transform.parent == null)
-        {
-            Debug.LogError("샷건 이펙트의 부모 총알이 존재하지 않음.");
-        }
-
-        vfx = GetComponent<VisualEffect>();
-        //부모가 사라져도 일정시간 Trail을 남기기 위해, 부모를 분리합니다.
-
-        m_oldParent = transform.parent;
+        //부모로부터 detach(트레일이 갑자기 한번에 사라지면 어색하므로)
         transform.parent = null;
+        m_parentEnabled = false;
+        m_lastDisabledTime = Time.time;
 
-        m_initialized = true;
-        vfx.SendEvent("OnPlay");
-        vfx.SetBool("TrailAlive", true);
+        //트레일 생성 종료
+        m_vfx.SendEvent("OnEnd");
+    }
+
+    private void Awake()
+    {
+        m_parent = transform.parent;
+        m_vfx = GetComponent<VisualEffect>();
+        m_disableDelay = m_vfx.GetFloat("TrailLifeTime") + 0.01f;
+        if (m_parent != null)
+        {
+            m_projectile = transform.parent.GetComponent<Projectile>();
+            m_projectile.OnEnableComponents += OnBulletEnabled;
+            m_projectile.OnDisableComponents += OnBulletDisabled;
+        }
+        else
+        {
+            Debug.LogError("BulletParticleEffect: 부모 총알이 없음");
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (m_projectile != null)
+        {
+            m_projectile.OnEnableComponents -= OnBulletEnabled;
+            m_projectile.OnDisableComponents -= OnBulletDisabled;
+        }
     }
 
     private void Update()
     {
-        if (!m_initialized)
+        if(!m_parentEnabled&&m_lastDisabledTime + m_disableDelay < Time.time)
         {
-            return;
+            //부모가 Disable되었고, 딜레이가 지났다면 부모를 원상복귀한다(Pool로 들어간다)
+            transform.parent = m_parent;
         }
-        if(m_oldParent == null)
-        {
-            //부모가 없으면 이펙트 발동 x
-            return;
-        }
-
-        if (!m_oldParent)
-        {
-            //부모가 Destroy되었다면, 1초 뒤 삭제하는 절차를 밟음
-            CoroutineEx.Create(this, IE_End());
-            m_oldParent = null;
-            return;
-        }
-
-
-        if (m_oldParent.gameObject.activeSelf)
-        {
-            if (!m_visualized)
-            {
-                m_visualized = true;
-                vfx.SendEvent("OnPlay");
-                vfx.SetBool("TrailAlive", true);
-            }
-            transform.position = m_oldParent.position;
-        }
-        else
-        {
-            if (m_visualized)
-            {
-                m_visualized = false;
-                vfx.SendEvent("OnEnd");
-                vfx.SetBool("TrailAlive", false);
-            }
-        }
-    }
-
-    private IEnumerator IE_End()
-    {
-        yield return new WaitForSeconds(1f);
-        Destroy(gameObject);
     }
 }

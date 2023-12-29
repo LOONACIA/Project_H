@@ -21,7 +21,6 @@ public class BossSceneTrigger : MonoBehaviour
         {
             ManagerRoot.Input.Disable<CharacterInputActions>();
             _ = SceneHelper.LazyLoadAsync("BossStage");
-            //SceneManagerEx.LoadScene("BossStage");
         }
     }
     #endregion
