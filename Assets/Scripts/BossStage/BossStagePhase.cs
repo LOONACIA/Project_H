@@ -24,6 +24,9 @@ public class BossStagePhase : MonoBehaviour
     [SerializeField, Tooltip("Phase 시작하면 켤 객체")]
     private GameObject[] m_onStartActiveObjects;
 
+    [SerializeField, Tooltip("Phase 시작하면 끌 객체")]
+    private GameObject[] m_onStartDeactiveObjects;
+
     [SerializeField, Tooltip("Phase 끝나면 끌 객체")]
     private GameObject[] m_onEndDeactiveObjects;
 
@@ -114,6 +117,11 @@ public class BossStagePhase : MonoBehaviour
         foreach (var activeObject in m_onStartActiveObjects)
         {
             activeObject.SetActive(true);
+        }
+
+        foreach (var deactiveObject in m_onStartDeactiveObjects)
+        {
+            deactiveObject.SetActive(false);
         }
     }
 
