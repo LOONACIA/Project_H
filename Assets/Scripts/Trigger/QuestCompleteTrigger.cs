@@ -39,7 +39,6 @@ public class QuestCompleteTrigger : MonoBehaviour
     private bool m_isTriggered;
 
 
-
     private void Start()
     {
         if (m_type == CompleteType.Interaction && m_associatedObject != null)
@@ -47,7 +46,7 @@ public class QuestCompleteTrigger : MonoBehaviour
             m_associatedObject.Interacted += OnInteracted;
         }
 
-        if(m_type == CompleteType.Horde && m_waveTrigger != null)
+        if (m_type == CompleteType.Horde && m_waveTrigger != null)
         {
             m_waveTrigger.WaveEnd += OnWaveEnd;
         }
@@ -67,7 +66,7 @@ public class QuestCompleteTrigger : MonoBehaviour
 
         m_isTriggered = true;
         Complete();
-        if(m_nextQuestId != 0)
+        if (m_nextQuestId != 0)
         {
             GameManager.Notification.Activate(m_nextQuestId);
         }
@@ -79,6 +78,7 @@ public class QuestCompleteTrigger : MonoBehaviour
         {
             return;
         }
+
         if (m_isPanel)
         {
             GameManager.Notification.Activate(m_nextQuestId);
@@ -88,20 +88,15 @@ public class QuestCompleteTrigger : MonoBehaviour
 
         m_isTriggered = true;
         Complete();
-        if(m_nextQuestId != 0)
+        if (m_nextQuestId != 0)
         {
             GameManager.Notification.Activate(m_nextQuestId);
         }
-        else
-        {
-            GameManager.Notification.Activate(m_questId + 1);
-        }
-
     }
 
     private void OnWaveEnd(object sender, EventArgs e)
     {
-        if(m_waveTrigger == null)
+        if (m_waveTrigger == null)
         {
             return;
         }
@@ -111,14 +106,19 @@ public class QuestCompleteTrigger : MonoBehaviour
         {
             GameManager.Notification.Activate(m_nextQuestId);
         }
-        else
-        {
-            GameManager.Notification.Activate(m_questId + 1);
-        }
     }
+
     private void Complete()
     {
         GameManager.Notification.Complete(m_questId);
         m_onComplete?.Invoke();
+    }
+
+    private void OnValidate()
+    {
+        if (m_questId <= 0)
+        {
+            Debug.LogError("Quest ID must be greater than 0.", gameObject);
+        }
     }
 }
