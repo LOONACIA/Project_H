@@ -6,6 +6,13 @@ using UIPopup = LOONACIA.Unity.UI.UIPopup;
 
 public class UISettings : UIPopup
 {
+    private enum VolumeType
+    {
+        Master,
+        BGM,
+        Sfx
+    }
+    
     private static readonly float s_minVolumeValue = -40f;
     
     private static readonly float s_maxVolumeValue = 3f;
@@ -39,6 +46,8 @@ public class UISettings : UIPopup
     private GameObject m_firstFocus;
     
     private GeneralSettings m_settingsCache;
+    
+    private VolumeType m_currentVolumeType;
 
     protected override void OnEnable()
     {
@@ -76,6 +85,22 @@ public class UISettings : UIPopup
     public override void Close()
     {
         Cancel();
+    }
+
+    public void OnRelease()
+    {
+        switch (m_currentVolumeType)
+        {
+            case VolumeType.Master:
+                break;
+            case VolumeType.BGM:
+                GameManager.Sound.PlayTestBGM();
+                break;
+            case VolumeType.Sfx:
+                GameManager.Sound.StopTestBGM();
+                GameManager.Sound.PlayTestSFX();
+                break;
+        }
     }
 
     protected override void Init()
@@ -138,20 +163,21 @@ public class UISettings : UIPopup
     private void OnMasterVolumeChanged(float value)
     {
         GameManager.Settings.GeneralSettings.MasterVolume = ConvertSliderToVolume(value);
+        m_currentVolumeType = VolumeType.Master;
     }
     
     private void OnBGMVolumeChanged(float value)
     {
         GameManager.Settings.GeneralSettings.BGMVolume = ConvertSliderToVolume(value);
-
+        
         //사운드
-        GameManager.Sound.PlayTestBGM();
+        m_currentVolumeType = VolumeType.BGM;
     }
     
     private void OnSFXVolumeChanged(float value)
     {
         GameManager.Settings.GeneralSettings.SfxVolume = ConvertSliderToVolume(value);
-
-        GameManager.Sound.PlayTestSFX();
+        
+        m_currentVolumeType = VolumeType.Sfx;
     }
 }
