@@ -3,7 +3,7 @@ using LOONACIA.Unity.UI;
 using System.Collections;
 using UnityEngine;
 
-public class UISensedWarning : UIPopup
+public class UISensedWarning : UIBase
 {
     private Canvas m_canvas;
     
@@ -11,8 +11,6 @@ public class UISensedWarning : UIPopup
     
     protected override void Init()
     {
-        base.Init();
-
         m_canvas = GetComponentInChildren<Canvas>();
     }
     

@@ -32,7 +32,10 @@ public class DoNothingIfStunned : Action
                 m_navMeshAgent.ResetPath();
                 m_navMeshAgent.velocity = Vector3.zero;
             }
-            m_navMeshAgent.isStopped = m_isAborted;
+            if (m_navMeshAgent.isOnNavMesh)
+            {
+                m_navMeshAgent.isStopped = m_isAborted;
+            }
         }
         
         return m_status.IsStunned ? TaskStatus.Running : TaskStatus.Failure;
