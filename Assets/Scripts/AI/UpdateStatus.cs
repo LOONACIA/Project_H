@@ -46,6 +46,7 @@ public class UpdateStatus : Action
         }
         
         Actor closestTarget = m_owner.Targets
+            .Where(target => target != null)
             .OrderBy(target => Vector3.Distance(transform.position, target.transform.position))
             .FirstOrDefault();
 
