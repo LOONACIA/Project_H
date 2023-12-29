@@ -68,6 +68,8 @@ public partial class UIController : MonoBehaviour
 
     private void OnGameOver(object sender, EventArgs e)
     {
+        ManagerRoot.UI.Clear(false);
+        
         StartCoroutine(ShowUI());
         
         IEnumerator ShowUI()

@@ -113,7 +113,7 @@ public partial class PlayerController : MonoBehaviour
             string text = m_inputActions.Character.Interact.bindings
                 .SingleOrDefault(binding => binding.groups.Equals(ManagerRoot.Input.GetCurrentControlScheme<CharacterInputActions>()))
                 .ToDisplayString();
-            //string text = m_inputActions.Character.Interact.activeControl?.displayName ?? string.Empty;
+            
             m_interactProgress = GameManager.UI.ShowProgressRing(UIProgressRing.TextDisplayMode.Text, text);
         }
         else if (!m_isOnInteracting)
