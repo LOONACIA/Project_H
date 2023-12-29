@@ -133,7 +133,10 @@ namespace LOONACIA.Unity.Managers
         {
             while (_popupStack.Count > 0)
             {
-                ClosePopupUI();
+                if (_popupStack.TryPeek(out var popup))
+                {
+                    ClosePopupUI(popup);
+                }
             }
         }
         
