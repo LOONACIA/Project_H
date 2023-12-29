@@ -133,10 +133,10 @@ public class Alarm : MonoBehaviour
         else
         {
             // Try remove actor from recipients' targets
-            foreach (var recipient in recipients)
-            {
-                recipient.Targets.Remove(target);
-            }
+            //foreach (var recipient in recipients)
+            //{
+            //    recipient.Targets.Remove(target);
+            //}
         }
     }
 
