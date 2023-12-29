@@ -224,8 +224,12 @@ public partial class PlayerController : MonoBehaviour
             return;
         }
         
-        float xDelta = m_lookDelta.x * m_data.CameraHorizontalSensitivity * Time.fixedDeltaTime;
-        float yDelta = m_lookDelta.y * m_data.CameraVerticalSensitivity * Time.fixedDeltaTime;
+        float xDelta = m_lookDelta.x * GameManager.Settings.GeneralSettings.LookSensitivity * Time.fixedDeltaTime;
+        float yDelta = m_lookDelta.y * GameManager.Settings.GeneralSettings.LookSensitivity * Time.fixedDeltaTime;
+        if (GameManager.Settings.GeneralSettings.InvertVerticalView)
+        {
+            yDelta *= -1f;
+        }
 
         float z = m_cameraHolder.eulerAngles.z;
 
