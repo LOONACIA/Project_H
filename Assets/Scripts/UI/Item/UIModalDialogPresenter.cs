@@ -31,6 +31,14 @@ public class UIModalDialogPresenter : UIPopup
         EventSystem.current.SetSelectedGameObject(m_confirmButton.gameObject);
     }
 
+    private void Update()
+    {
+        if (EventSystem.current.currentSelectedGameObject != m_confirmButton.gameObject)
+        {
+            EventSystem.current.SetSelectedGameObject(m_confirmButton.gameObject);
+        }
+    }
+
     public void SetDialog(ModalDialog dialog, Action onConfirm = null)
     {
         m_text.text = dialog.Content;
