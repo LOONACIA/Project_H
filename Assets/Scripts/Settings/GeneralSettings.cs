@@ -2,22 +2,36 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [Serializable]
 public class GeneralSettings : INotifyPropertyChanged
 {
+    [SerializeField]
+    private float m_lookSensitivity = 5f;
+    
+    [SerializeField]
+    private bool m_invertVerticalView;
+    
+    [SerializeField]
     private float m_masterVolume = 1f;
     
+    [SerializeField]
     private float m_bgmVolume = 1f;
     
+    [SerializeField]
     private float m_sfxVolume = 1f;
-    
-    private float m_inputSensitivity = 5f;
 
-    public float InputSensitivity
+    public float LookSensitivity
     {
-        get => m_inputSensitivity;
-        set => SetField(ref m_inputSensitivity, value, EventArgCache.InputSensitivity);
+        get => m_lookSensitivity;
+        set => SetField(ref m_lookSensitivity, value, EventArgCache.LookSensitivity);
+    }
+
+    public bool InvertVerticalView
+    {
+        get => m_invertVerticalView;
+        set => SetField(ref m_invertVerticalView, value, EventArgCache.InvertVerticalView);
     }
 
     public float MasterVolume
@@ -59,9 +73,10 @@ public class GeneralSettings : INotifyPropertyChanged
     
     private static class EventArgCache
     {
-        internal static readonly PropertyChangedEventArgs InputSensitivity = new(nameof(InputSensitivity));
-        internal static readonly PropertyChangedEventArgs MasterVolume = new(nameof(MasterVolume));
-        internal static readonly PropertyChangedEventArgs BGMVolume = new(nameof(BGMVolume));
-        internal static readonly PropertyChangedEventArgs SfxVolume = new(nameof(SfxVolume));
+        internal static readonly PropertyChangedEventArgs LookSensitivity = new(nameof(GeneralSettings.LookSensitivity));
+        internal static readonly PropertyChangedEventArgs InvertVerticalView = new(nameof(GeneralSettings.InvertVerticalView));
+        internal static readonly PropertyChangedEventArgs MasterVolume = new(nameof(GeneralSettings.MasterVolume));
+        internal static readonly PropertyChangedEventArgs BGMVolume = new(nameof(GeneralSettings.BGMVolume));
+        internal static readonly PropertyChangedEventArgs SfxVolume = new(nameof(GeneralSettings.SfxVolume));
     }
 }

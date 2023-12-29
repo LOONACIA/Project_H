@@ -138,7 +138,8 @@ public class SoundManager
     {
         m_audioSources[(int)SoundType.Bgm].Play();
 
-        if(m_bgmTime < m_audioSources[(int)SoundType.Bgm].clip.length)
+        var clip = m_audioSources[(int)SoundType.Bgm].clip;
+        if(clip != null && m_bgmTime < clip.length)
             m_audioSources[(int)SoundType.Bgm].time = m_bgmTime;
 
         //AudioMixer.SetFloat("InGame", 0f);
