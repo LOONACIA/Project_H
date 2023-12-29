@@ -24,6 +24,9 @@ public class QuestCompleteTrigger : MonoBehaviour
     private CompleteType m_type;
 
     [SerializeField]
+    private bool m_isPanel;
+
+    [SerializeField]
     private InteractableObject m_associatedObject;
 
     [SerializeField]
@@ -33,7 +36,8 @@ public class QuestCompleteTrigger : MonoBehaviour
     private UnityEvent m_onComplete;
 
     private bool m_isTriggered;
-    
+
+
 
     private void Start()
     {
@@ -68,6 +72,12 @@ public class QuestCompleteTrigger : MonoBehaviour
     {
         if (m_isTriggered)
         {
+            return;
+        }
+        if (m_isPanel)
+        {
+            GameManager.Notification.Activate(m_nextQuestId);
+            m_isTriggered = true;
             return;
         }
 
