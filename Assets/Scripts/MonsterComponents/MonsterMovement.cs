@@ -486,7 +486,7 @@ public class MonsterMovement : MonoBehaviour
     {
         float radius = m_collider.radius;
         IsOnGround = Physics.SphereCast(transform.position + m_collider.center, radius, Vector3.down, out var ground,
-            radius + 0.2f, m_data.WhatIsGround);
+            radius + 0.5f, m_data.WhatIsGround);
         if (IsOnGround)
         {
             // 착지시 IsFlying 상태이상 초기화

@@ -45,17 +45,22 @@ public partial class UIController : MonoBehaviour
     private void Pause()
     {
         // Modal 시 Game State가 Pause로 변경되므로, Modal 관련 로직이 우선되어야 함
-        if (m_isModal && m_dialogCloseCoroutine?.IsRunning is not true)
+        // if (m_isModal && m_dialogCloseCoroutine?.IsRunning is not true)
+        // {
+        //     m_dialogPresenter.Confirm();
+        //     return;
+        // }
+
+        if (ManagerRoot.UI.ClosePopupUI())
         {
-            m_dialogPresenter.Confirm();
             return;
         }
         
-        if (GameManager.Instance.IsPaused)
-        {
-            GameManager.Instance.SetResume();
-            return;
-        }
+        // if (GameManager.Instance.IsPaused)
+        // {
+        //     GameManager.Instance.SetResume();
+        //     return;
+        // }
 
         if (GameManager.Instance.IsGameOver)
         {
@@ -68,14 +73,12 @@ public partial class UIController : MonoBehaviour
 
     private void OnGameOver(object sender, EventArgs e)
     {
-        ManagerRoot.UI.Clear(false);
-        
         StartCoroutine(ShowUI());
         
         IEnumerator ShowUI()
         {
             yield return m_gameOverYieldInstructionCache;
-            GameManager.UI.ShowMenuUI(MenuInfoBag.Restart, MenuInfoBag.Menu, MenuInfoBag.Exit, MenuInfoBag.GameOverText);
+            GameManager.UI.ShowMenuUI(MenuInfoBag.GameOverText, MenuInfoBag.Restart, MenuInfoBag.Menu, MenuInfoBag.Settings, MenuInfoBag.Exit);
         }
     }
 
@@ -84,7 +87,7 @@ public partial class UIController : MonoBehaviour
         m_inputActions.Character.Disable();
         if (m_isMenuRequested)
         {
-            GameManager.UI.ShowMenuUI(MenuInfoBag.Continue, MenuInfoBag.Menu, MenuInfoBag.Exit, MenuInfoBag.PausedText);
+            GameManager.UI.ShowMenuUI(MenuInfoBag.PausedText, MenuInfoBag.Continue, MenuInfoBag.Menu, MenuInfoBag.Settings, MenuInfoBag.Exit);
             m_isMenuShown = true;
             m_isMenuRequested = false;
         }
@@ -148,6 +151,8 @@ public partial class UIController : MonoBehaviour
         public static readonly MenuInfo Continue = new("Return to game", () => GameManager.Instance.SetResume());
     
         public static readonly MenuInfo Menu = new("Exit to main menu", () => SceneManagerEx.LoadScene("TitleScene"));
+        
+        public static readonly MenuInfo Settings = new("Settings", () => ManagerRoot.UI.ShowPopupUI<UISettings>());
     
         public static readonly MenuInfo Exit =
 #if UNITY_EDITOR

@@ -46,10 +46,16 @@ public class UIModalDialogPresenter : UIPopup
 
     public void Confirm()
     {
+        Close();
+    }
+
+    public override void Close()
+    {
         m_modalWindow.CloseWindow();
         OnConfirm();
+        base.Close();
     }
-    
+
     protected override void Init()
     {
         base.Init();

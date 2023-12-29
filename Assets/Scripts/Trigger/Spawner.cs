@@ -21,9 +21,9 @@ public class Spawner : MonoBehaviour
         m_waveTrigger = GetComponentInParent<WaveTrigger>();
         m_collider = GetComponent<Collider>();
     }
-
     public void Spawn()
     {
+
         if (m_currentSpawnIndex >= m_waveInfoList.Length)
         {
             m_currentSpawnIndex++;
@@ -130,7 +130,9 @@ public class Spawner : MonoBehaviour
 
         return new(randomX, randomY, randomZ);
     }
-    
+
+
+
     [System.Serializable]
     private class WaveInfo
     {

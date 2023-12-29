@@ -48,8 +48,6 @@ public class SoundManager
 
             m_audioSources[(int)SoundType.Sfx].outputAudioMixerGroup = audioMixer.FindMatchingGroups("SFX")[1];
         }
-
-        
     }
 
     public void Clear()
@@ -59,21 +57,24 @@ public class SoundManager
             audioSource.clip = null;
             audioSource.Stop();
         }
+
         m_audioClips.Clear();
     }
 
-    public void Play(string path, SoundType type = SoundType.Sfx, float volume = 1.0f, float pitch = 1.0f, int priority = 128)
+    public void Play(string path, SoundType type = SoundType.Sfx, float volume = 1.0f, float pitch = 1.0f,
+        int priority = 128)
     {
         AudioClip audioClip = GetOrAddAudioClip(path, type);
         Play(audioClip, type, volume, pitch, priority);
     }
 
     public AudioSource Play(SFXInfo _info)
-    {   
+    {
         return Play(_info.audio, _info.type, _info.volume, _info.pitch, _info.priority, _info.blend, _info.loop);
     }
 
-    public AudioSource Play(AudioClip audioClip, SoundType type = SoundType.Sfx, float volume = 1.0f, float pitch = 1.0f, int priority = 128, float blend = 0f, bool loop = false)
+    public AudioSource Play(AudioClip audioClip, SoundType type = SoundType.Sfx, float volume = 1.0f,
+        float pitch = 1.0f, int priority = 128, float blend = 0f, bool loop = false)
     {
         if (audioClip == null)
         {
@@ -139,7 +140,7 @@ public class SoundManager
         m_audioSources[(int)SoundType.Bgm].Play();
 
         var clip = m_audioSources[(int)SoundType.Bgm].clip;
-        if(clip != null && m_bgmTime < clip.length)
+        if (clip != null && m_bgmTime < clip.length)
             m_audioSources[(int)SoundType.Bgm].time = m_bgmTime;
 
         //AudioMixer.SetFloat("InGame", 0f);
@@ -155,10 +156,10 @@ public class SoundManager
         }
 
         if (type == SoundType.Sfx && !m_audioClips.TryGetValue(path, out AudioClip audioClip))
-		{
+        {
             audioClip = ManagerRoot.Resource.Load<AudioClip>(path);
             m_audioClips.Add(path, audioClip);
-		}
+        }
         else
         {
             audioClip = ManagerRoot.Resource.Load<AudioClip>(path);
@@ -169,11 +170,11 @@ public class SoundManager
             Debug.Log($"[SoundManager] Not found audio clip: {path}");
         }
 
-		return audioClip;
+        return audioClip;
     }
 
     public SFXInfo ChangeBlend(SFXInfo _info, float value = 1.0f)
-    {   
+    {
         SFXInfo audioInfo = (SFXInfo)_info.Clone();
         audioInfo.blend = value;
 
@@ -211,7 +212,7 @@ public class SoundManager
         audioSource.Play();
     }
 
-    private void ChangeBGM(AudioSource audioSource, AudioClip audioClip) 
+    private void ChangeBGM(AudioSource audioSource, AudioClip audioClip)
     {
         audioMixer.DOSetFloat("BGM", -40f, 1f).onComplete = () =>
         {
@@ -221,8 +222,6 @@ public class SoundManager
             audioMixer.DOSetFloat("BGM", 0f, 3f);
         };
     }
-
-    
 }
 
 [System.Serializable]
