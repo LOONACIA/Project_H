@@ -56,14 +56,13 @@ public class AlarmTarget : Action
         
         foreach (var monster in monstersInRadius)
         {
-            if (clearExistingTargets)
-            {
-                monster.Targets.Clear();
-            }
-
             if (monster == target || monster.Targets.Contains(target))
             {
                 continue;
+            }
+            if (clearExistingTargets)
+            {
+                monster.Targets.Clear();
             }
 
             // 만약 벽이 두 몬스터 사이에 있다면, 타겟으로 지정하지 않습니다.
