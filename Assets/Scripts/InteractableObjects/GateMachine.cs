@@ -59,7 +59,11 @@ public class GateMachine : InteractableObject, IHealth
 
     public void TakeDamage(in AttackInfo damageInfo)
     {
-        if (m_useShield && m_shield != null && m_shield.IsValid) 
+        if (!m_useShield) return;
+        if (m_shield == null || !m_shield.IsValid) return;
+        if (damageInfo.Attacker == null) return;
+
+        if (damageInfo.Attacker.TryGetComponent<Actor>(out var actor) && actor.IsPossessed)
         {
             m_shield?.TakeDamage(damageInfo);
 
