@@ -46,4 +46,12 @@ public class SFXObjectData : ScriptableObject
     [field: SerializeField]
     [field: Tooltip("몬스터에 해킹 시 사운드")]
     public SFXInfo TryHackingSound { get; private set; }
+
+    [field: SerializeField]
+    [field: Tooltip("TestBGM")]
+    public SFXInfo TestBGM { get; private set; }
+
+    [field: SerializeField]
+    [field: Tooltip("TestSFX")]
+    public SFXInfo TestSFX { get; private set; }
 }
