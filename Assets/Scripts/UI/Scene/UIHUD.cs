@@ -330,7 +330,7 @@ public class UIHUD : UIScene
         {
             GameManager.Sound.Play(GameManager.Sound.ObjectDataSounds.DashCharged);
         }
-        
+
         m_dashIndicatorCursor = e;
         
         if (m_dashIndicatorCursor + 1 < m_dashIndicators.Length)
