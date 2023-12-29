@@ -33,7 +33,7 @@ public class FixedSpawner : MonoBehaviour, ISpawn
 
     private int m_currentSpawnCount;
 
-    private bool m_active;
+    private bool m_isActive;
 
     private bool m_isFirstSpawn;
 
@@ -48,7 +48,7 @@ public class FixedSpawner : MonoBehaviour, ISpawn
 
     private void Evaluate()
     {
-        if (!m_active) return;
+        if (!m_isActive) return;
         if (!CanDetect()) return;
         
         // 한 번도 소환한 적 없으면 바로 소환
@@ -69,9 +69,9 @@ public class FixedSpawner : MonoBehaviour, ISpawn
 
     public void StartSpawn()
     {
-        if (m_active) return;
+        if (m_isActive) return;
 
-        m_active = true;
+        m_isActive = true;
     
         if (CanDetect())
             Invoke(nameof(Spawn), m_firstSpawnDelay);
@@ -80,9 +80,9 @@ public class FixedSpawner : MonoBehaviour, ISpawn
 
     public void EndSpawn()
     {
-        if (!m_active) return;
+        if (!m_isActive) return;
 
-        m_active = false;
+        m_isActive = false;
 
         if (m_spawnCoroutine != null)
             m_spawnCoroutine?.Abort();
@@ -92,7 +92,7 @@ public class FixedSpawner : MonoBehaviour, ISpawn
 
     private void Spawn()
     {
-        if (!m_active) return;
+        if (!m_isActive) return;
 
         if (m_monster is null) return;
 
