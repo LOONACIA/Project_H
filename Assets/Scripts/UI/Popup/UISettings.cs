@@ -43,10 +43,22 @@ public class UISettings : UIPopup
     protected override void OnEnable()
     {
         base.OnEnable();
+
+        //버튼 눌렸으니깐 꺼주는거 넣어줌
+        GameManager.Sound.OffInGame();
+
         m_settingsCache = GameManager.Settings.Load();
         LoadSettings();
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(m_firstFocus.gameObject);
+    }
+
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+
+        //사운드
+        GameManager.Sound.StopTestBGM();
     }
 
     public void Confirm()
@@ -131,10 +143,15 @@ public class UISettings : UIPopup
     private void OnBGMVolumeChanged(float value)
     {
         GameManager.Settings.GeneralSettings.BGMVolume = ConvertSliderToVolume(value);
+
+        //사운드
+        GameManager.Sound.PlayTestBGM();
     }
     
     private void OnSFXVolumeChanged(float value)
     {
         GameManager.Settings.GeneralSettings.SfxVolume = ConvertSliderToVolume(value);
+
+        GameManager.Sound.PlayTestSFX();
     }
 }

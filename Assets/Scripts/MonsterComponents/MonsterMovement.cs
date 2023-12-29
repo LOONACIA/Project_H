@@ -102,6 +102,9 @@ public class MonsterMovement : MonoBehaviour
         CheckJumping();
 
         UpdateAnimator();
+
+        //사운드
+        CheckFootStepSound();
     }
 
     private void FixedUpdate()
@@ -718,6 +721,12 @@ public class MonsterMovement : MonoBehaviour
 
         m_isWalkSoundPlaying = false;
         m_audioSource.Stop();
+    }
+
+    private void CheckFootStepSound()
+    {
+        TryGetComponent<AudioSource>(out var audioSource);
+        audioSource.pitch = Time.timeScale;
     }
     #endregion
 }
