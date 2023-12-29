@@ -98,6 +98,13 @@ public class MonsterMovement : MonoBehaviour
         m_lastPath = new(); //네브매쉬패스는 Start, Awake에서 초기화되어야함.
     }
 
+    private void OnDisable()
+    {
+        m_isWalkSoundPlaying = false;
+        m_audioSource.Stop();
+        GameManager.Sound.footStepCount = GameManager.Sound.footStepCount <= 0 ? 0 : --GameManager.Sound.footStepCount;
+    }
+
     private void Update()
     {
         CheckJumping();
@@ -698,9 +705,20 @@ public class MonsterMovement : MonoBehaviour
     #region 사운드 관련
     private void PlayWalkSound()
     {
-        //걷는 사운드가 이미 출력되고 있으면 return
-        if (m_isWalkSoundPlaying)
+        if (!m_isOnGround)
         {
+            m_isWalkSoundPlaying = false;
+            m_audioSource.Stop();
+            GameManager.Sound.footStepCount = GameManager.Sound.footStepCount <= 0 ? 0 : --GameManager.Sound.footStepCount;
+
+            return;
+        }
+        
+        if (m_actor.IsPossessed == false && m_isWalkSoundPlaying && Vector3.Distance(transform.position, Camera.main.transform.position) > 15)
+        {
+            m_isWalkSoundPlaying = false;
+            m_audioSource.Stop();
+            GameManager.Sound.footStepCount = GameManager.Sound.footStepCount <= 0 ? 0 : --GameManager.Sound.footStepCount;
             return;
         }
         
@@ -712,11 +730,9 @@ public class MonsterMovement : MonoBehaviour
             }
         }
         
-        if (m_actor.IsPossessed == false && Vector3.Distance(transform.position, Camera.main.transform.position) > 15)
+        //걷는 사운드가 이미 출력되고 있으면 return
+        if (m_isWalkSoundPlaying)
         {
-            m_isWalkSoundPlaying = false;
-            m_audioSource.Stop();
-            GameManager.Sound.footStepCount = GameManager.Sound.footStepCount <= 0 ? 0 : GameManager.Sound.footStepCount--;
             return;
         }
 
@@ -737,7 +753,7 @@ public class MonsterMovement : MonoBehaviour
 
         m_isWalkSoundPlaying = false;
         m_audioSource.Stop();
-        GameManager.Sound.footStepCount = GameManager.Sound.footStepCount <= 0 ? 0 : GameManager.Sound.footStepCount--;
+        GameManager.Sound.footStepCount = GameManager.Sound.footStepCount <= 0 ? 0 : --GameManager.Sound.footStepCount;
     }
 
     private void CheckFootStepSound()
