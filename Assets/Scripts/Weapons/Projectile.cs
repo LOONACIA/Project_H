@@ -21,6 +21,9 @@ public class Projectile : MonoBehaviour
     
     private int m_damage;
 
+    public event EventHandler OnEnableComponents;
+    public event EventHandler OnDisableComponents;
+
     public Rigidbody Rigidbody { get; private set; }
 
     private void Awake()
@@ -93,6 +96,7 @@ public class Projectile : MonoBehaviour
         m_isStopped = false;
         Rigidbody.isKinematic = false;
         m_collider.enabled = true;
+        OnEnableComponents?.Invoke(this, EventArgs.Empty);
     }
 
     private void DisableComponents()
@@ -100,5 +104,6 @@ public class Projectile : MonoBehaviour
         m_isStopped = true;
         Rigidbody.isKinematic = true;
         m_collider.enabled = false;
+        OnDisableComponents?.Invoke(this, EventArgs.Empty);
     }
 }
