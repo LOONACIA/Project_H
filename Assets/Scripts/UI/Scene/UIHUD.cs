@@ -205,6 +205,35 @@ public class UIHUD : UIScene
         controller.Damaged += OnDamaged;
         controller.HpChanged += OnHpChanged;
         controller.AbilityRateChanged += OnAbilityRateChanged;
+        controller.SkillCoolTimeChanged += OnSkillCoolTimeChanged;
+    }
+
+    private void OnSkillCoolTimeChanged(object sender, float e)
+    {
+        if (m_controller.Character == null || m_controller.Character.Status == null)
+        {
+            return;
+        }
+        
+        if (m_controller.Character.Status.AbilityRate == 0f)
+        {
+            m_abilityPresenter.currentValue = e;
+            m_abilityPresenter.UpdateUI();
+        }
+    }
+
+    private void UnregisterEvents(PlayerController controller)
+    {
+        if (controller == null)
+        {
+            return;
+        }
+
+        controller.CharacterChanged -= OnCharacterChanged;
+        controller.Damaged -= OnDamaged;
+        controller.HpChanged -= OnHpChanged;
+        controller.AbilityRateChanged -= OnAbilityRateChanged;
+        controller.SkillCoolTimeChanged -= OnSkillCoolTimeChanged;
     }
 
     private void RegisterEvents()
@@ -232,6 +261,7 @@ public class UIHUD : UIScene
         processor.Possessing += OnPossessing;
         processor.Possessed += OnPossessed;
     }
+    
 
     private void UnregisterEvents(PossessionProcessor processor)
     {
@@ -245,19 +275,6 @@ public class UIHUD : UIScene
         processor.Possessable -= OnPossessable;
         processor.Possessing -= OnPossessing;
         processor.Possessed -= OnPossessed;
-    }
-
-    private void UnregisterEvents(PlayerController controller)
-    {
-        if (controller == null)
-        {
-            return;
-        }
-
-        controller.CharacterChanged -= OnCharacterChanged;
-        controller.Damaged -= OnDamaged;
-        controller.HpChanged -= OnHpChanged;
-        controller.AbilityRateChanged -= OnAbilityRateChanged;
     }
 
     private void OnCharacterChanged(object sender, Actor e)
