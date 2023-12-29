@@ -1,6 +1,7 @@
+using LOONACIA.Unity.Managers;
 using Michsky.UI.Reach;
-using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UIPopup = LOONACIA.Unity.UI.UIPopup;
 
 public class UISettings : UIPopup
@@ -34,24 +35,34 @@ public class UISettings : UIPopup
     [SerializeField]
     private SliderManager m_sfxVolumeSlider;
     
+    [SerializeField]
+    private GameObject m_firstFocus;
+    
     private GeneralSettings m_settingsCache;
 
     private void OnEnable()
     {
         m_settingsCache = GameManager.Settings.Load();
         LoadSettings();
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(m_firstFocus.gameObject);
     }
 
     public void Confirm()
     {
         GameManager.Settings.Save(GameManager.Settings.GeneralSettings);
-        Close();
+        ManagerRoot.UI.ClosePopupUI(this);
     }
 
     public void Cancel()
     {
         GameManager.Settings.Save(m_settingsCache);
-        Close();
+        ManagerRoot.UI.ClosePopupUI(this);
+    }
+
+    public override void Close()
+    {
+        Cancel();
     }
 
     protected override void Init()

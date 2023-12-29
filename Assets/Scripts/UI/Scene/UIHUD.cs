@@ -25,7 +25,8 @@ public class UIHUD : UIScene
         BackPanel,
         FrontPanel,
         HackingPanel,
-        DashPanel
+        DashPanel,
+        QuestHolder
     }
 
     private enum Texts
@@ -77,6 +78,8 @@ public class UIHUD : UIScene
     private GameObject m_frontPanel;
     
     private GameObject m_hackingPanel;
+    
+    private GameObject m_questHolder;
 
     private TextMeshProUGUI m_hpTextBox;
 
@@ -166,6 +169,7 @@ public class UIHUD : UIScene
         m_backPanel = Get<GameObject, Panels>(Panels.BackPanel);
         m_frontPanel = Get<GameObject, Panels>(Panels.FrontPanel);
         m_hackingPanel = Get<GameObject, Panels>(Panels.HackingPanel);
+        m_questHolder = Get<GameObject, Panels>(Panels.QuestHolder);
 
         m_hpTextBox = Get<TextMeshProUGUI, Texts>(Texts.HpText);
         m_hpText = m_hpTextBox.GetComponent<UIManagerText>();
@@ -337,6 +341,7 @@ public class UIHUD : UIScene
         m_hpText.gameObject.SetActive(isActive);
         m_backgroundPanel.SetActive(isActive);
         m_hackingPanel.SetActive(isActive);
+        m_questHolder.SetActive(isActive);
         m_centerLayerRoot.SetActive(isActive);
 
         m_hpTextBox.text = e.ToString();

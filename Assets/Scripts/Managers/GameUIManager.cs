@@ -70,22 +70,27 @@ public class GameUIManager
     }
     
     // ReSharper disable Unity.PerformanceAnalysis
-    public void ShowMenuUI(MenuInfo first, MenuInfo second, MenuInfo third, string text = "Game Over")
+    public void ShowMenuUI(string title = "Game Over", params MenuInfo[] menuInfos)
     {
         HideMenuUI();
 
-        MenuInfo resume = new(first.Text, Resume);
+        if (menuInfos.Length == 0)
+        {
+            return;
+        }
+        
+        var resume = menuInfos[0];
+        resume.OnClick += Resume;
         
         m_menuUI = ManagerRoot.UI.ShowPopupUI<UIMenu>();
-        m_menuUI.SetButtonContent(resume, second, third);
-        m_menuUI.SetTitle(text);
+        m_menuUI.SetButtonContent(menuInfos);
+        m_menuUI.SetTitle(title);
 
         return;
 
         void Resume()
         {
             ManagerRoot.UI.ClosePopupUI(m_menuUI);
-            first?.OnClick?.Invoke();
         }
     }
 
@@ -169,7 +174,7 @@ public class GameUIManager
         // If progress ring is already shown, hide it
         HideProgressRing();
         
-        m_progressRing = ManagerRoot.UI.ShowPopupUI<UIProgressRing>();
+        m_progressRing = ManagerRoot.UI.ShowItemUI<UIProgressRing>();
         m_progressRing.DisplayMode = mode;
         m_progressRing.SetText(text);
         Progress<float> progress = new(value =>
@@ -185,7 +190,7 @@ public class GameUIManager
     {
         if (m_progressRing is not null)
         {
-            ManagerRoot.UI.ClosePopupUI(m_progressRing);
+            ManagerRoot.Resource.Release(m_progressRing.gameObject);
             m_progressRing = null;
         }
     }
