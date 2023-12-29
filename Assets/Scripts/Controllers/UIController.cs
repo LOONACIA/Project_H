@@ -1,3 +1,4 @@
+using LOONACIA.Unity.Console;
 using LOONACIA.Unity.Coroutines;
 using LOONACIA.Unity.Managers;
 using System;
@@ -20,6 +21,8 @@ public partial class UIController : MonoBehaviour
     private bool m_isModal;
     
     private CoroutineEx m_dialogCloseCoroutine;
+    
+    private DebugController m_debugController;
 
     private void Start()
     {
@@ -33,6 +36,12 @@ public partial class UIController : MonoBehaviour
         GameManager.Instance.Pause += OnPause;
         GameManager.Instance.Resume += OnResume;
         GameManager.Notification.Activated += OnNotificationActivated;
+
+        m_debugController = FindObjectOfType<DebugController>();
+        if (m_debugController != null)
+        {
+            m_debugController.Toggled += OnDebugToggled;
+        }
     }
 
     private void OnDisable()
@@ -42,27 +51,19 @@ public partial class UIController : MonoBehaviour
         GameManager.Instance.Pause -= OnPause;
         GameManager.Instance.Resume -= OnResume;
         GameManager.Notification.Activated -= OnNotificationActivated;
+        
+        if (m_debugController != null)
+        {
+            m_debugController.Toggled -= OnDebugToggled;
+        }
     }
 
     private void Pause()
     {
-        // Modal 시 Game State가 Pause로 변경되므로, Modal 관련 로직이 우선되어야 함
-        // if (m_isModal && m_dialogCloseCoroutine?.IsRunning is not true)
-        // {
-        //     m_dialogPresenter.Confirm();
-        //     return;
-        // }
-
         if (ManagerRoot.UI.ClosePopupUI())
         {
             return;
         }
-        
-        // if (GameManager.Instance.IsPaused)
-        // {
-        //     GameManager.Instance.SetResume();
-        //     return;
-        // }
 
         if (GameManager.Instance.IsGameOver)
         {
@@ -148,6 +149,18 @@ public partial class UIController : MonoBehaviour
             {
                 ShowModalDialog(dialog.RelatedDialog);
             }
+        }
+    }
+    
+    private void OnDebugToggled(object sender, bool isToggled)
+    {
+        if (isToggled)
+        {
+            GameManager.Instance.SetPause();
+        }
+        else
+        {
+            GameManager.Instance.SetResume();
         }
     }
 

@@ -23,6 +23,8 @@ namespace LOONACIA.Unity.Console
         private Action _enablePlayerInput;
 
         private Action _disablePlayerInput;
+        
+        public event EventHandler<bool> Toggled;
 
         private void Awake()
         {
@@ -103,22 +105,45 @@ namespace LOONACIA.Unity.Console
                     format: "load <scene name>",
                     execute: input => SceneManagerEx.LoadScene(input),
                     parser: ArgumentParserBag.TryGetString),
+                new DebugCommand<float>(
+                    id: "kill_monsters",
+                    description: "Kills all monsters within a certain range.",
+                    format: "kill_monsters <range>",
+                    execute: input =>
+                    {
+                        var character = GameManager.Character.Controller.Character;
+                        if (character == null)
+                        {
+                            return;
+                        }
+                        
+                        var position = character.transform.position;
+                        using var list = GameManager.Actor.GetMonstersInRadius(position, input);
+                        foreach (var monster in list.AsSpan())
+                        {
+                            if (monster != character && monster.TryGetComponent<IHealth>(out var health))
+                            {
+                                health.Kill();
+                            }
+                        }
+                    },
+                    parser: float.TryParse),
                 new DebugCommand<string>(
                     id: "kill",
                     description: "Kill the specified GameObject",
                     format: "kill <name>",
                     execute: input => GameObject.Find(input).GetComponent<IHealth>().Kill(),
                     parser: ArgumentParserBag.TryGetString),
-                new TransformObjectCommand(
-                    id: "move",
-                    description: "Move the position of specified GameObject",
-                    format: "move <name> <position>",
-                    type: TransformObjectCommand.TransformType.Position),
-                new TransformObjectCommand(
-                    id: "rotate",
-                    description: "Rotate the specified GameObject",
-                    format: "rotate <name> <rotation>",
-                    type: TransformObjectCommand.TransformType.Rotation),
+                // new TransformObjectCommand(
+                //     id: "move",
+                //     description: "Move the position of specified GameObject",
+                //     format: "move <name> <position>",
+                //     type: TransformObjectCommand.TransformType.Position),
+                // new TransformObjectCommand(
+                //     id: "rotate",
+                //     description: "Rotate the specified GameObject",
+                //     format: "rotate <name> <rotation>",
+                //     type: TransformObjectCommand.TransformType.Rotation),
                 new DebugCommand<float>(
                     id: "time_scale",
                     description: "Change the time scale",
