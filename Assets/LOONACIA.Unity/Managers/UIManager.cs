@@ -33,7 +33,12 @@ namespace LOONACIA.Unity.Managers
 
         public void SetCanvas(GameObject gameObject, bool sort = true)
         {
-            var canvas = gameObject.GetComponentInChildren<Canvas>();
+            var canvas = gameObject.GetComponent<Canvas>();
+            if (canvas == null)
+            {
+                canvas = gameObject.GetComponentInChildren<Canvas>();
+            }
+            
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             canvas.overrideSorting = true;
 
@@ -109,10 +114,6 @@ namespace LOONACIA.Unity.Managers
             }
 
             _order--;
-            if (_order < 1)
-            {
-                _order = 1;
-            }
 
             return true;
         }
