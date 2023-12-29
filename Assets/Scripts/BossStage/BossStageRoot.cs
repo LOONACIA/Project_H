@@ -63,8 +63,6 @@ public class BossStageRoot : MonoBehaviour
         m_bossStagePhaseList[m_currentPhase]?.ReadyPhase();
     }
 
-    // test
-    [ContextMenu(nameof(OnPhaseEnd))]
     private void OnPhaseEnd(object sender, EventArgs e)
     {
         m_boss.TakeDamage(new AttackInfo());
@@ -72,22 +70,15 @@ public class BossStageRoot : MonoBehaviour
         NextPhase();
     }
 
-
     private void NextPhase()
     {
         if (m_currentPhase >= m_lastPhase)
         {
-            StageClear();
+            m_boss.Kill();
             return;
         }
 
         m_bossStagePhaseList[++m_currentPhase].ReadyPhase();
-    }
-
-    private void StageClear()
-    {
-        m_boss.Kill();
-        CoroutineEx.Create(this, Co_StageClear());
     }
 
     private void ThrowPlayer()    {
@@ -105,12 +96,5 @@ public class BossStageRoot : MonoBehaviour
 
             rigidbody.AddForce(direction * force, ForceMode.VelocityChange);
         }
-    }
-
-    private IEnumerator Co_StageClear()
-    { 
-        yield return new WaitForSeconds(m_clearDelayTime);
-
-        GameManager.Instance.SetGameClear();
     }
 }
