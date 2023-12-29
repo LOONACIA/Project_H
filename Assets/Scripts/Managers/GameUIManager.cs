@@ -1,3 +1,4 @@
+using LOONACIA.Unity;
 using LOONACIA.Unity.Coroutines;
 using LOONACIA.Unity.Managers;
 using LOONACIA.Unity.UI;
@@ -264,7 +265,7 @@ public class GameUIManager
     {
         if (m_warningUI == null)
         {
-            m_warningUI = ManagerRoot.UI.ShowPopupUI<UISensedWarning>();
+            m_warningUI = ManagerRoot.Resource.Instantiate($"UI/Item/{nameof(UISensedWarning)}").GetOrAddComponent<UISensedWarning>();
         }
         
         m_warningUI.Show(duration, interval);
