@@ -241,10 +241,11 @@ public class BossStagePhase : MonoBehaviour
 
         // 몬스터 사망 처리
         m_processor.ClearTarget();
-        var monsterList = GameObject.FindObjectsOfType<Monster>().Where(x => x.IsPossessed == false);
+        var monsterList = FindObjectsOfType<Monster>();
         foreach (var monster in monsterList)
         {
-            monster.Health.Kill();
+            if (!monster.IsPossessed)
+                monster.Health.Kill();
         }
 
         PhaseEnd?.Invoke(this, EventArgs.Empty);

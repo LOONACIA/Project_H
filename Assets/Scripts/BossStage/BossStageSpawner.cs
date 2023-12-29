@@ -48,7 +48,7 @@ public class BossStageSpawner : MonoBehaviour, ISpawn
 
     private Actor m_character;
 
-    private bool m_active;
+    private bool m_isActive;
 
     private float m_lastSpawnTime;
 
@@ -66,9 +66,9 @@ public class BossStageSpawner : MonoBehaviour, ISpawn
 
     public void StartSpawn()
     {
-        if (m_active) return;
+        if (m_isActive) return;
 
-        m_active = true;
+        m_isActive = true;
         m_currentSpawnIndex = 0;
         Spawn();
         InvokeRepeating(nameof(Evaluate), 0, 0.5f);
@@ -76,9 +76,9 @@ public class BossStageSpawner : MonoBehaviour, ISpawn
 
     public void EndSpawn()
     {
-        if (!m_active) return;
+        if (!m_isActive) return;
 
-        m_active = false;
+        m_isActive = false;
 
         if (m_spawnCoroutine != null)
             StopCoroutine(m_spawnCoroutine);
@@ -133,7 +133,7 @@ public class BossStageSpawner : MonoBehaviour, ISpawn
 
     private void Spawn()
     {
-        if (!m_active) return;
+        if (!m_isActive) return;
 
         if (m_spawnCoroutine != null)
             m_spawnCoroutine = null;
