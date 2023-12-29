@@ -115,20 +115,20 @@ public class UIMenu : UIPopup
     
     private void OnFirstButtonClick()
     {
-        m_firstButtonAction?.Invoke();
         GameManager.Sound.OnInGame();
+        m_firstButtonAction?.Invoke();
     }
     
     private void OnSecondButtonClick()
     {
-        m_secondButtonAction?.Invoke();
         GameManager.Sound.OnInGame();
+        m_secondButtonAction?.Invoke();
     }
     
     private void OnThirdButtonClick()
     {
+        GameManager.Sound.OnInGame();
         m_thirdButtonAction?.Invoke();
-        GameManager.Sound.OnInGame();;
     }
     
     private IEnumerator CoDisableAnimator()
