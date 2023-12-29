@@ -199,50 +199,50 @@ public class GameUIManager
     {
         return -1;
 
-        if (m_dialog == null)
-        {
-            m_dialog = ManagerRoot.UI.ShowPopupUI<UIMessageDialog>();            
-        }
-        
-        m_dialog.SetText(text);
-        m_dialog.gameObject.SetActive(true);
-        return ++m_dialogVersion;
+        // if (m_dialog == null)
+        // {
+        //     m_dialog = ManagerRoot.UI.ShowPopupUI<UIMessageDialog>();            
+        // }
+        //
+        // m_dialog.SetText(text);
+        // m_dialog.gameObject.SetActive(true);
+        // return ++m_dialogVersion;
     }
 
     public int ShowDialog(MessageDialogInfo[] texts, float interval = 1f)
     {
         return -1;
 
-        if (m_dialog == null)
-        {
-            m_dialog = ManagerRoot.UI.ShowPopupUI<UIMessageDialog>();
-        }
-        m_showDialogCoroutine?.Abort();
-        m_dialog.Abort();
+        // if (m_dialog == null)
+        // {
+        //     m_dialog = ManagerRoot.UI.ShowPopupUI<UIMessageDialog>();
+        // }
+        // m_showDialogCoroutine?.Abort();
+        // m_dialog.Abort();
+        //
+        // int index = 0;
+        // MessageDialogInfo dialogInfo = texts[index++];
+        // m_dialog.SetDialogInfo(dialogInfo, () => dialogInfo.Callback?.Invoke());
+        // //m_dialog.SetText(dialogInfo.Message, () => dialogInfo.Callback?.Invoke());
+        // m_dialog.gameObject.SetActive(true);
+        // m_showDialogCoroutine = CoroutineEx.Create(m_dialog, CoShowDialog(texts, interval, index));
+        // return ++m_dialogVersion;
 
-        int index = 0;
-        MessageDialogInfo dialogInfo = texts[index++];
-        m_dialog.SetDialogInfo(dialogInfo, () => dialogInfo.Callback?.Invoke());
-        //m_dialog.SetText(dialogInfo.Message, () => dialogInfo.Callback?.Invoke());
-        m_dialog.gameObject.SetActive(true);
-        m_showDialogCoroutine = CoroutineEx.Create(m_dialog, CoShowDialog(texts, interval, index));
-        return ++m_dialogVersion;
-
-        IEnumerator CoShowDialog(IReadOnlyList<MessageDialogInfo> infoList, float innerInterval, int innerIndex)
-        {
-            while (innerIndex < infoList.Count)
-            {
-                while (m_dialog.IsTyping)
-                {
-                    yield return null;
-                }
-                yield return new WaitForSeconds(innerInterval);
-
-                var info = infoList[innerIndex++];
-                m_dialog.SetDialogInfo(info, () => info.Callback?.Invoke());
-                //m_dialog.SetText(info.Message, () => info.Callback?.Invoke());
-            }
-        }
+        // IEnumerator CoShowDialog(IReadOnlyList<MessageDialogInfo> infoList, float innerInterval, int innerIndex)
+        // {
+        //     while (innerIndex < infoList.Count)
+        //     {
+        //         while (m_dialog.IsTyping)
+        //         {
+        //             yield return null;
+        //         }
+        //         yield return new WaitForSeconds(innerInterval);
+        //
+        //         var info = infoList[innerIndex++];
+        //         m_dialog.SetDialogInfo(info, () => info.Callback?.Invoke());
+        //         //m_dialog.SetText(info.Message, () => info.Callback?.Invoke());
+        //     }
+        // }
     }
 
     public void HideDialog(int version)
