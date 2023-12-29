@@ -22,7 +22,6 @@ public class BulletParticleEffect : MonoBehaviour
         //부모 재등록
         transform.parent = m_parent;
         m_parentEnabled = true;
-        Debug.Log("됨");
 
         //모든 파티클 초기화 및 트레일 생성 시작
         m_vfx.Reinit();
