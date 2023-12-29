@@ -137,7 +137,7 @@ public class ActorStatus : MonoBehaviour
             // 기존에 생성한 오브젝트 제거
             if (m_shield != null)
             {
-                m_shield.Destroy();
+                m_shield.Destroy(new());
             }
 
             m_shield = value;
@@ -254,7 +254,7 @@ public class ActorStatus : MonoBehaviour
         // 쉴드가 더이상 유효하지 않으면 제거
         if (!Shield.IsValid)
         {
-            Shield.Destroy();
+            Shield.Destroy(new());
 
             Shield = null;
         }

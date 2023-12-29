@@ -12,21 +12,23 @@ public class BossStageBreakGround : MonoBehaviour
     #region PrivateVariables
     [SerializeField]
     private BossStageRoot m_bossStageRoot;
-    private Transform[] m_childrenList;
+    //private Transform[] m_childrenList;
     private MeshRenderer m_mr;
     private MeshCollider m_col;
     private BoxCollider m_trigger;
+    private Explosive[] m_explosiveList;
     #endregion
 
     #region PublicMethod
     private void Start()
     {
-
         m_mr = GetComponent<MeshRenderer>();
         m_col = GetComponent<MeshCollider>();
         m_trigger = GetComponent<BoxCollider>();
 
-        m_childrenList = GetComponentsInChildren<Transform>(true);
+        //m_childrenList = GetComponentsInChildren<Transform>(true);
+        
+        m_explosiveList = GetComponentsInChildren<Explosive>(true);
     }
     #endregion
 
@@ -45,10 +47,7 @@ public class BossStageBreakGround : MonoBehaviour
                 audioSource.Play();
             }
 
-            foreach (var child in m_childrenList)
-            {
-                child.gameObject.layer = LayerMask.NameToLayer("Default");
-            }
+
         }
     }
 
@@ -57,11 +56,18 @@ public class BossStageBreakGround : MonoBehaviour
         m_mr.enabled = false;
         m_col.enabled = false;
 
-        var children = GetComponentsInChildren<Rigidbody>(true);
+        //var children = GetComponentsInChildren<Rigidbody>(true);
 
-        foreach (var child in children) 
-        { 
-            SetForce(child);
+        //foreach (var child in children) 
+        //{ 
+        //    SetForce(child);
+        //}
+
+        foreach (var explosive in m_explosiveList)
+        {
+            explosive.gameObject.layer = LayerMask.NameToLayer("Default");
+            explosive.gameObject.SetActive(true);
+            explosive.Explode(200, transform.position + Vector3.down * 50, 100, 10);
         }
     }
 
