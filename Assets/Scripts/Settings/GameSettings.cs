@@ -118,7 +118,8 @@ public class GameSettings : ScriptableObject
                 AudioMixer.SetFloat("BGMSetting", GeneralSettings.BGMVolume);
                 break;
             case nameof(GeneralSettings.SfxVolume):
-                AudioMixer.SetFloat("SFX", GeneralSettings.SfxVolume);
+                AudioMixer.SetFloat("SFXSetting", GeneralSettings.SfxVolume);
+                AudioMixer.SetFloat("UI", GeneralSettings.SfxVolume);
                 break;
         }
     }
@@ -135,7 +136,8 @@ public class GameSettings : ScriptableObject
             newSettings.PropertyChanged += OnGeneralSettingsPropertyChanged;
             AudioMixer.SetFloat("Master", newSettings.MasterVolume);
             AudioMixer.SetFloat("BGMSetting", newSettings.BGMVolume);
-            AudioMixer.SetFloat("SFX", newSettings.SfxVolume);
+            AudioMixer.SetFloat("SFXSetting", newSettings.SfxVolume);
+            AudioMixer.SetFloat("UI", newSettings.SfxVolume);
         }
     }
 }
