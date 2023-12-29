@@ -13,7 +13,7 @@ using UnityEngine.InputSystem.Utilities;
 public class TitleScene : MonoBehaviour
 {
     [SerializeField]
-    private string m_gameSceneName;
+    private SceneName m_gameSceneName;
     
     [SerializeField]
     private Animator m_animator;
@@ -84,10 +84,10 @@ public class TitleScene : MonoBehaviour
 #endif
     }
 
-    private IEnumerator WaitForLoadScene(string sceneName)
+    private IEnumerator WaitForLoadScene(SceneName sceneName)
     {
         yield return new WaitForSeconds(ReachUIInternalTools.GetAnimatorClipLength(m_animator, "TitleMenu_Out"));
-        AsyncOperation task = SceneManagerEx.LoadSceneAsync(sceneName);
+        AsyncOperation task = SceneManagerEx.LoadSceneAsync(sceneName.ToString());
         if (task == null)
         {
             Debug.LogError($"Failed to load scene: {sceneName}");

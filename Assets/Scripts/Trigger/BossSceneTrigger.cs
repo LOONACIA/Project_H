@@ -20,7 +20,7 @@ public class BossSceneTrigger : MonoBehaviour
         if (other.gameObject == GameManager.Character.Controller.Character.gameObject)
         {
             ManagerRoot.Input.Disable<CharacterInputActions>();
-            _ = SceneHelper.LazyLoadAsync("BossStage");
+            _ = SceneHelper.LazyLoadAsync(nameof(SceneName.Stage3));
         }
     }
     #endregion
