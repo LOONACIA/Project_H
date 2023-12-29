@@ -37,6 +37,9 @@ public class TitleScene : MonoBehaviour
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.Confined;
         m_canvasGroup = m_pressAnyKeyLabel.GetComponent<CanvasGroup>();
+
+        //사운드
+        GameManager.Sound.Play(GameManager.Sound.ObjectDataSounds.TitleSceneBGM);
     }
 
     private void OnEnable()
