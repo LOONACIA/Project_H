@@ -34,7 +34,7 @@ public class AlarmTarget : Action
             }
         }
         Actor actor = Target.Value.GetComponent<Actor>();
-        SendMessageToOtherMonsters(actor, Radius.Value);
+        SendMessageToOtherMonsters(actor, Radius.Value, true);
         return TaskStatus.Success;
     }
 

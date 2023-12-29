@@ -26,6 +26,8 @@ public class SetTargetIfDamaged : Conditional
             // Owner의 Target list에 Attacker가 없다면
             if (!m_owner.Targets.Contains(m_attacker))
             {
+                //플레이어를 제외하고 모두 삭제
+                m_owner.Targets.Clear();
                 // Target list에 추가
                 m_owner.Targets.Add(m_attacker);
             }
