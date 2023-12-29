@@ -12,7 +12,6 @@ public class UISensedWarning : UIPopup
     protected override void Init()
     {
         base.Init();
-        // TODO: Bind UI
 
         m_canvas = GetComponentInChildren<Canvas>();
     }
@@ -24,6 +23,11 @@ public class UISensedWarning : UIPopup
             return;
         }
         
+        if (!isActiveAndEnabled)
+        {
+            return;
+        }
+
         m_showCoroutine = CoroutineEx.Create(this, CoShowUI(duration, interval));
     }
 

@@ -9,6 +9,8 @@ public class GameSettings : ScriptableObject
 {
     private static readonly string s_defaultSettingsKey = "GameSettings";
     
+    private static readonly string s_defaultSettingsFileName = "settings.dat";
+    
     private static string s_defaultSettingsPath;
     
     private bool m_isInitialized;
@@ -84,7 +86,7 @@ public class GameSettings : ScriptableObject
         
         if (string.IsNullOrEmpty(s_defaultSettingsPath))
         {
-            s_defaultSettingsPath = Path.Join(Application.dataPath, "settings.es3");
+            s_defaultSettingsPath = Path.Join(Application.dataPath, s_defaultSettingsFileName);
         }
         
         ES3.Save(s_defaultSettingsKey, settings, s_defaultSettingsPath);
@@ -94,7 +96,7 @@ public class GameSettings : ScriptableObject
     {
         if (string.IsNullOrEmpty(s_defaultSettingsPath))
         {
-            s_defaultSettingsPath = Path.Join(Application.dataPath, "settings.es3");
+            s_defaultSettingsPath = Path.Join(Application.dataPath, s_defaultSettingsFileName);
         }
         
         if (ES3.FileExists(s_defaultSettingsPath))
@@ -118,7 +120,8 @@ public class GameSettings : ScriptableObject
                 AudioMixer.SetFloat("BGMSetting", GeneralSettings.BGMVolume);
                 break;
             case nameof(GeneralSettings.SfxVolume):
-                AudioMixer.SetFloat("SFX", GeneralSettings.SfxVolume);
+                AudioMixer.SetFloat("SFXSetting", GeneralSettings.SfxVolume);
+                AudioMixer.SetFloat("UI", GeneralSettings.SfxVolume);
                 break;
         }
     }
@@ -135,7 +138,8 @@ public class GameSettings : ScriptableObject
             newSettings.PropertyChanged += OnGeneralSettingsPropertyChanged;
             AudioMixer.SetFloat("Master", newSettings.MasterVolume);
             AudioMixer.SetFloat("BGMSetting", newSettings.BGMVolume);
-            AudioMixer.SetFloat("SFX", newSettings.SfxVolume);
+            AudioMixer.SetFloat("SFXSetting", newSettings.SfxVolume);
+            AudioMixer.SetFloat("UI", newSettings.SfxVolume);
         }
     }
 }
