@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class QuestTrigger : MonoBehaviour
@@ -46,6 +47,14 @@ public class QuestTrigger : MonoBehaviour
             {
                 yield return m_waitForSecondsCache;
             }
+        }
+    }
+    
+    private void OnValidate()
+    {
+        if (m_Id.Any(id => id <= 0))
+        {
+            Debug.LogError("Quest ID must be greater than 0.", gameObject);
         }
     }
 }
