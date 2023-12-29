@@ -236,14 +236,28 @@ public class SoundManager
     /// </summary>
     public void PlayTestBGM()
     {
+        audioMixer.GetFloat("InGame", out float value);
+        
+        // 하드 코딩
         if (isTestBGMPlaying)
-            return;
+        {
+            if (value <= -70f)
+            {
+
+            }
+            else
+            {
+                return;
+            }
+        }
+            
 
         isTestBGMPlaying = true;
 
         audioMixer.SetFloat("InGame", 3f);
 
-        Play(ObjectDataSounds.TestBGM);
+        m_audioSources[(int)SoundType.Bgm].clip = ObjectDataSounds.TestBGM.audio;
+        m_audioSources[(int)SoundType.Bgm].Play();
     }
 
     /// <summary>
