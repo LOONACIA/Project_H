@@ -42,6 +42,7 @@ public class UpdateStatus : Action
         if (m_owner.Targets.Count == 0)
         {
             Target.Value = null;
+            TargetObject.Value = null;
             return;
         }
         
