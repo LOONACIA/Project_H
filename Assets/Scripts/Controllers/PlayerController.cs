@@ -53,6 +53,8 @@ public partial class PlayerController : MonoBehaviour
     public event EventHandler<int> HpChanged;
     
     public event EventHandler<float> AbilityRateChanged;
+    
+    public event EventHandler<float> SkillCoolTimeChanged; 
 
     private void Awake()
     {
@@ -275,6 +277,7 @@ public partial class PlayerController : MonoBehaviour
             m_character.Health.Damaged += OnDamaged;
             m_character.Health.Blocked += OnBlocked;
             m_character.Status.AbilityRateChanged += OnAbilityRateChanged;
+            m_character.Status.SkillCoolTimeChanged += OnSkillCoolTimeChanged;
         }
     }
 
@@ -291,6 +294,7 @@ public partial class PlayerController : MonoBehaviour
         {
             m_character.Status.HpChanged -= OnHpChanged;
             m_character.Status.AbilityRateChanged -= OnAbilityRateChanged;
+            m_character.Status.SkillCoolTimeChanged -= OnSkillCoolTimeChanged;
 
             m_character.Health.Damaged -= OnDamaged;
             m_character.Health.Blocked -= OnBlocked;
@@ -326,6 +330,11 @@ public partial class PlayerController : MonoBehaviour
     private void OnAbilityRateChanged(object sender, float e)
     {
         AbilityRateChanged?.Invoke(this, e);
+    }
+    
+    private void OnSkillCoolTimeChanged(object sender, float e)
+    {
+        SkillCoolTimeChanged?.Invoke(this, e);
     }
 
     /// <summary>
