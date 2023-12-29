@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 
 public class QuestCompleteTrigger : MonoBehaviour
 {
@@ -62,6 +63,10 @@ public class QuestCompleteTrigger : MonoBehaviour
 
         m_isTriggered = true;
         Complete();
+        if(m_nextQuestId != 0)
+        {
+            GameManager.Notification.Activate(m_nextQuestId);
+        }
     }
 
     private void OnInteracted(object sender, Transform e)
