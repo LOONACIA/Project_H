@@ -49,7 +49,7 @@ public class PossessionShuriken : MonoBehaviour
     {
         TryGetComponent<Rigidbody>(out m_rb);
         m_targetLayer = LayerMask.GetMask("Monster");
-        m_surikenStopLayer = LayerMask.GetMask("Wall", "Ground", "Shield", "Obstacle", "InteractableObject");
+        m_surikenStopLayer = LayerMask.GetMask("Wall", "Ground", "Shield", "Obstacle", "HackingObject");
         StartCoroutine(nameof(IE_Destory));
     }
 
@@ -128,12 +128,18 @@ public class PossessionShuriken : MonoBehaviour
             HitTarget(); 
             Invoke(nameof(DestroySelf), 1f);
         }
+        
         else if ((m_surikenStopLayer & (1 << other.gameObject.layer)) != 0)
         {
             //23.12.27: 추적 기능 사용하지 않으므로 비활성화.
             //if (m_isTrace)
             //    return;
 
+            //인터렉터블 오브젝트인데 해킹 오브젝트는 아닐 때
+            if (other.gameObject.layer == LayerMask.NameToLayer("InteractableObject"))
+            {
+                return;
+            }
 
             if (m_isTargetWall)
             {
