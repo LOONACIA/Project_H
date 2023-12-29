@@ -13,5 +13,5 @@ public class MenuInfo
     
     public string Text { get; }
     
-    public Action OnClick { get; }
+    public Action OnClick { get; set; }
 }

@@ -105,6 +105,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        m_settings.Initialize();
+    }
+
     public void SetGameClear()
     {
         Time.timeScale = 0;

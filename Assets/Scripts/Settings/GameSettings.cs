@@ -10,8 +10,8 @@ public class GameSettings : ScriptableObject
     private static readonly string s_defaultSettingsKey = "GameSettings";
     
     private static string s_defaultSettingsPath;
-
-    private static bool s_isInitialized;
+    
+    private bool m_isInitialized;
 
     [Header("General")]
     [SerializeField]
@@ -58,18 +58,22 @@ public class GameSettings : ScriptableObject
     private void OnEnable()
     {
         GeneralSettings.PropertyChanged += OnGeneralSettingsPropertyChanged;
-        if (s_isInitialized)
-        {
-            return;
-        }
-        
-        s_isInitialized = true;
-        GeneralSettings = Load();
     }
     
     private void OnDisable()
     {
         GeneralSettings.PropertyChanged -= OnGeneralSettingsPropertyChanged;
+    }
+
+    public void Initialize()
+    {
+        if (m_isInitialized)
+        {
+            return;
+        }
+        
+        m_isInitialized = true;
+        GeneralSettings = Load();
     }
 
     public void Save(GeneralSettings settings)
@@ -129,9 +133,9 @@ public class GameSettings : ScriptableObject
         if (newSettings is not null)
         {
             newSettings.PropertyChanged += OnGeneralSettingsPropertyChanged;
-            AudioMixer.SetFloat("Master", GeneralSettings.MasterVolume);
-            AudioMixer.SetFloat("BGMSetting", GeneralSettings.BGMVolume);
-            AudioMixer.SetFloat("SFX", GeneralSettings.SfxVolume);
+            AudioMixer.SetFloat("Master", newSettings.MasterVolume);
+            AudioMixer.SetFloat("BGMSetting", newSettings.BGMVolume);
+            AudioMixer.SetFloat("SFX", newSettings.SfxVolume);
         }
     }
 }
