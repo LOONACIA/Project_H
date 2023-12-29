@@ -24,8 +24,9 @@ public class UIModalDialogPresenter : UIPopup
 
     public bool IsOpen => m_modalWindow.isActiveAndEnabled;
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(m_confirmButton.gameObject);
     }

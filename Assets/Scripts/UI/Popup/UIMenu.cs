@@ -38,15 +38,17 @@ public class UIMenu : UIPopup, IEventSystemHandler
 
     private Animator m_animator;
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
         m_coroutine = CoroutineEx.Create(this, CoDisableAnimator());
         GameManager.Sound.OffInGame();
         m_buttonsCanvasGroup.interactable = true;
     }
 
-    private void OnDisable()
+    protected override void OnDisable()
     {
+        base.OnDisable();
         m_coroutine?.Abort();
     }
 
