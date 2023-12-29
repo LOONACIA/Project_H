@@ -50,6 +50,7 @@ namespace LOONACIA.Unity.Console
 				}
 			
 				_controller._isToggled = !_controller._isToggled;
+                _controller.Toggled?.Invoke(_controller, _controller._isToggled);
 			}
 		}
 	}
