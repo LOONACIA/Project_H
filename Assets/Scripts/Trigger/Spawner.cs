@@ -4,7 +4,7 @@ using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 [Serializable]
-public class Spawner : MonoBehaviour, ISpawn
+public class Spawner : MonoBehaviour
 {
     [FormerlySerializedAs("m_waveInfos")]
     [SerializeField]
@@ -16,28 +16,13 @@ public class Spawner : MonoBehaviour, ISpawn
 
     private Collider m_collider;
 
-    private bool m_isActive;
-
     private void Start()
     {
         m_waveTrigger = GetComponentInParent<WaveTrigger>();
         m_collider = GetComponent<Collider>();
     }
-
-    public void StartSpawn()
-    {
-        m_isActive = true;
-    }
-
-    public void EndSpawn()
-    {
-        m_isActive = false;
-    }
-
     public void Spawn()
     {
-        if (!m_isActive)
-            return;
 
         if (m_currentSpawnIndex >= m_waveInfoList.Length)
         {
