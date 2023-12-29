@@ -231,6 +231,7 @@ public class SoundManager
         {
             audioSource.Stop();
             audioSource.clip = audioClip;
+            audioSource.priority = 200;
             audioSource.Play();
             audioMixer.DOSetFloat("BGM", 1f, 1f).SetUpdate(true);
         };
