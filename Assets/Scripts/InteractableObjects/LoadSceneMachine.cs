@@ -8,6 +8,7 @@ public class LoadSceneMachine : InteractableObject
     
     protected override void OnInteract(Actor actor)
     {
+        IsInteractable = false;
         ManagerRoot.Input.Disable<CharacterInputActions>();
         _ = SceneHelper.LazyLoadAsync(m_sceneName);
     }

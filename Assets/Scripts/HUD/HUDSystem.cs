@@ -20,6 +20,8 @@ public class HUDSystem : MonoBehaviour
     private HUDSettings m_settings;
 
     private Camera m_camera;
+    
+    private bool m_isActivated;
 
     private void Awake()
     {
@@ -41,6 +43,8 @@ public class HUDSystem : MonoBehaviour
 
     private void OnEnable()
     {
+        m_isActivated = true;
+        GameManager.Instance.GameOver += OnGameOver;
         if (m_processor != null)
         {
             m_processor.Possessing += OnPossessing;
@@ -53,10 +57,17 @@ public class HUDSystem : MonoBehaviour
         {
             m_processor.Possessing -= OnPossessing;
         }
+        
+        GameManager.Instance.GameOver -= OnGameOver;
     }
 
     private void FixedUpdate()
     {
+        if (!m_isActivated)
+        {
+            return;
+        }
+        
         var hits = ArrayPool<RaycastHit>.Shared.Rent(16);
         Transform cameraTransform = m_camera.transform;
         Vector3 origin = cameraTransform.position;
@@ -187,6 +198,12 @@ public class HUDSystem : MonoBehaviour
         (float yMin, float yMax) = leftTop.y < rightBottom.y ? (rightBottom.y, leftTop.y) : (leftTop.y, rightBottom.y);
 
         card.UpdatePosition(xMin, xMax, yMin, yMax);
+    }
+    
+    private void OnGameOver(object sender, EventArgs e)
+    {
+        m_isActivated = false;
+        Clear();
     }
     
     private void OnPossessing(object sender, EventArgs e)
