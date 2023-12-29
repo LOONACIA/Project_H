@@ -23,6 +23,10 @@ public class Shield : MonoBehaviour
     [SerializeField]
     private VisualEffect hitVfx;
 
+    private Breakable[] m_breakables;
+
+    private GameObject m_bodyPartCollector;
+
     // 남은 쉴드량
     public float ShieldAmount
     {
@@ -69,15 +73,23 @@ public class Shield : MonoBehaviour
         PlayHitVfx(damageInfo);
         if (ShieldAmount <= 0)
         {
-            Destroy();
+            Destroy(damageInfo);
         }
         
         float percent = ShieldAmount / MaxShieldAmount;
         ShieldChanged?.Invoke(this, percent);
     }
 
-    public void Destroy()
+    public void Destroy(in AttackInfo damageInfo)
     {
+        // SFX
+        GameManager.Sound.PlayClipAt(GameManager.Sound.ObjectDataSounds.BreakShield, transform.position);
+
+        if (damageInfo.Attacker != null)
+        {
+            ReplaceParts(damageInfo);
+        }
+        
         Destroyed?.Invoke(this, EventArgs.Empty);
         Destroy(gameObject);
     }
@@ -85,13 +97,21 @@ public class Shield : MonoBehaviour
     private void Awake()
     {
         Init(m_shieldAmount, m_timeLimit);
+
+        m_breakables = GetComponentsInChildren<Breakable>(true);
+
+        m_bodyPartCollector = GameObject.Find("BodyPartCollector");
+        if (m_bodyPartCollector == null)
+        {
+            m_bodyPartCollector = new() { name = "BodyPartCollector" };
+        }
     }
 
     private void Update()
     {
         if (m_hasTimeLimit && Time.time - m_startTime > m_timeLimit)
         {
-            Destroy();
+            Destroy(new ());
         }
     }
 
@@ -104,5 +124,18 @@ public class Shield : MonoBehaviour
             hitVfx.transform.position = damage.HitPoint;
             hitVfx.SendEvent(ConstVariables.VFX_GRAPH_EVENT_ON_PLAY);
         }
+    }
+
+    private void ReplaceParts(in AttackInfo damageInfo)
+    {
+        foreach (var breakable in m_breakables)
+        {
+            breakable.gameObject.SetActive(true);
+
+            breakable.ReplacePart(damageInfo, 0.8f);
+            breakable.transform.SetParent(m_bodyPartCollector.transform);
+        }
+
+        gameObject.SetActive(false);
     }
 }

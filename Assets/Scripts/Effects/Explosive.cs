@@ -1,7 +1,9 @@
+using LOONACIA.Unity.Coroutines;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem.Layouts;
+using UnityEngine.UIElements;
 
 [RequireComponent(typeof(Collider))]
 [RequireComponent(typeof(Rigidbody))]
@@ -11,7 +13,7 @@ public class Explosive : MonoBehaviour
 
     private Rigidbody m_rigidBody;
 
-    public void Explode(float force, Vector3 centerPosition, float radius)
+    public void Explode(float force, Vector3 centerPosition, float radius, float upwardModifier = 10)
     {
         if (TryGetComponent<Collider>(out m_collider)
             && TryGetComponent<Rigidbody>(out m_rigidBody))
@@ -29,9 +31,20 @@ public class Explosive : MonoBehaviour
             var randomVec = Random.insideUnitSphere * 0.1f;
             direction += randomVec;
             m_rigidBody.AddForce(direction * force, ForceMode.VelocityChange);
-
-            // temp
-            m_rigidBody.AddExplosionForce(100, centerPosition, 100, 100);
+            m_rigidBody.AddExplosionForce(force, centerPosition, radius, upwardModifier);
         }
+
+        Invoke(nameof(Destroy), Random.Range(5, 8));
+    }
+
+    private void Destroy()
+    {
+        Destroy(this);
+    }
+
+    private IEnumerator Co_Destroy(float delayTime)
+    {
+        yield return new WaitForSeconds(delayTime);
+        Destroy(gameObject);
     }
 }

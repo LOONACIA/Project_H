@@ -4,18 +4,21 @@ using UnityEngine;
 
 public class Breakable : MonoBehaviour
 {
+    // 파편이 사라지는 시간
+    private const float DESTROY_INTERVAL_DEFALUT = 5f;
+    private const float DESTROY_INTERVAL_GROUND = 3f;
+ 
     private Rigidbody m_rigidbody;
     private BoxCollider m_collider;
 
-    // 파편이 날라가는 정도
-    private float m_explosionForce = 15;
+    // 파편 폭발 효과 관련 변수
+    private float m_throwForce = 10f;
+    private float m_explosionForce = 10f;
+    private float m_explosionRadius = 1f;
+    private float m_upwardsModifier = 1f;
 
     // 파편이 사라지는 시간을 관리하는 코루틴
     private Coroutine m_coroutine;
-
-    // 파편이 사라지는 시간
-    private float m_initInterval = 5f;
-    private float m_onGroundInterval = 3f;
 
     private void Start()
     {
@@ -36,12 +39,12 @@ public class Breakable : MonoBehaviour
             if (m_coroutine != null)
             {
                 StopCoroutine(m_coroutine);
-                m_coroutine = StartCoroutine(DestroyPart(m_onGroundInterval));
+                m_coroutine = StartCoroutine(DestroyPart(DESTROY_INTERVAL_GROUND));
             }
         }
     }
 
-    public void ReplacePart(in AttackInfo info)
+    public void ReplacePart(in AttackInfo info, float destroyInterval = DESTROY_INTERVAL_DEFALUT)
     {
         if (m_rigidbody == null || m_collider == null) return;
 
@@ -49,18 +52,31 @@ public class Breakable : MonoBehaviour
         m_collider.enabled = true;
 
         transform.parent = null;
-        ExplodePart(info.AttackDirection);
+        AddForce(info);
+        AddExplosion(info.HitPoint);
 
         if (m_coroutine == null)
         {
-            m_coroutine = StartCoroutine(DestroyPart(m_initInterval));
+            m_coroutine = StartCoroutine(DestroyPart(destroyInterval));
         }
     }
-
-    private void ExplodePart(Vector3 attackDirection)
+   
+    private void AddForce(in AttackInfo info)
     {
-        m_rigidbody.AddForce(attackDirection * m_explosionForce, ForceMode.Impulse);
+        Vector3 attackDirection = info.AttackDirection;
+        attackDirection += info.Attacker.transform.forward * 1f;
+        attackDirection += Random.insideUnitSphere * 1f;
+        attackDirection = attackDirection.GetFlatVector();
+        attackDirection = attackDirection.normalized;
+
+        m_rigidbody.AddForce(attackDirection * m_throwForce, ForceMode.VelocityChange);
     }
+
+    private void AddExplosion(Vector3 hitPoint)
+    {
+        m_rigidbody.AddExplosionForce(m_explosionForce, hitPoint, m_explosionRadius, m_upwardsModifier, ForceMode.VelocityChange);
+    }
+
 
     private IEnumerator DestroyPart(float interval)
     {

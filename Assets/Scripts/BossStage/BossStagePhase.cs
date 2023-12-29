@@ -170,7 +170,8 @@ public class BossStagePhase : MonoBehaviour
         foreach (var explosive in m_explosiveList)
         {
             explosive.gameObject.SetActive(true);
-            explosive.Explode(m_explosionForce, interactedTransform.transform.position, m_explosionRadius);
+            if (explosive.gameObject.activeSelf) 
+                explosive.Explode(m_explosionForce, interactedTransform.transform.position, m_explosionRadius);
         }
     }
 
