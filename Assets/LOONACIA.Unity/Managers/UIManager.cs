@@ -114,8 +114,9 @@ namespace LOONACIA.Unity.Managers
         public void Clear(bool destroyAssociatedObject)
         {
             ClearAllPopup();
-            foreach (Transform child in Root)
+            for (int index = Root.childCount - 1; index >= 0; index--)
             {
+                Transform child = Root.GetChild(index);
                 ManagerRoot.Resource.Release(child.gameObject);
             }
             
