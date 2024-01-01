@@ -104,6 +104,8 @@ public class GameManager : MonoBehaviour
         m_stickyKeysFlags = NativeMethods.DisableStickyKeysActive();
 #endif
 
+        Application.targetFrameRate = 60;
+
         if (m_settings == null)
         {
             m_settings = ManagerRoot.Resource.Load<GameSettings>($"Settings/{nameof(GameSettings)}");
