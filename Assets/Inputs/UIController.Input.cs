@@ -10,23 +10,32 @@ public partial class UIController
 
     private UIInputActionContext m_context;
     
+    private bool m_isInputInitialized;
+    
     private void InitInput()
     {
         m_inputActions ??= ManagerRoot.Input.GetInputActions<CharacterInputActions>();
         m_context ??= new(this);
         
         m_inputActions.UI.SetCallbacks(m_context);
+        m_isInputInitialized = true;
         EnableInput();
     }
 
     private void EnableInput()
     {
-        m_inputActions.UI.Enable();
+        if (m_isInputInitialized)
+        {
+            m_inputActions.UI.Enable();
+        }
     }
 
     private void DisableInput()
     {
-        m_inputActions.UI.Disable();
+        if (m_isInputInitialized)
+        {
+            m_inputActions.UI.Disable();
+        }
     }
 
     private class UIInputActionContext : CharacterInputActions.IUIActions
