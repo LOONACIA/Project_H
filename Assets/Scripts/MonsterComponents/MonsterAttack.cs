@@ -222,9 +222,13 @@ public class MonsterAttack : MonoBehaviour
             //시간 조절
             GameManager.Effect.ChangeTimeScale(this, 0f, 0.1f, 1000f, 1000f);
             //카메라 쉐이크
-            if (m_actor is not Shooter)
+            if (m_actor is Monster { Data: { Type: ActorType.Melee } })
             {
                 GameManager.Effect.ShakeCamera(10, 0.6f);
+            }
+            else if(m_actor is EliteBoss)
+            {
+                GameManager.Effect.ShakeCamera(3, 0.6f);
             }
 
             //빛
