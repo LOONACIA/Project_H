@@ -72,6 +72,7 @@ public class TitleScene : MonoBehaviour
         
         m_animator.Play("TitleMenu_Out");
         m_isStarted = true;
+        GameManager.Notification.Initialize();
         CoroutineEx.Create(GameManager.Instance, WaitForLoadScene(m_gameSceneName));
     }
     
