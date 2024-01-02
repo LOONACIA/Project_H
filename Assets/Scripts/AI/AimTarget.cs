@@ -109,7 +109,7 @@ public class AimTarget : Action
         if (Time.time - m_timer < m_aimDuration)
         {
             //타겟이 죽었을 경우 조준을 유지하고 Return;
-            if (m_target.Value == null)
+            if (m_target.Value == null || !m_target.Value || !m_collider)
             {
                 return TaskStatus.Running;
             }
