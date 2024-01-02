@@ -37,6 +37,18 @@ public class NotificationManager
         }
     }
 
+    public void Initialize()
+    {
+        foreach (var notification in m_registeredNotifications.Values)
+        {
+            notification.IsNotified = false;
+            if (notification is Quest quest)
+            {
+                quest.IsCompleted = false;
+            }
+        }
+    }
+
     public void Clear()
     {
         // 활성화된 퀘스트 초기화. 만약 전체 알림을 초기화하고 싶다면 이 부분을 수정할 것
