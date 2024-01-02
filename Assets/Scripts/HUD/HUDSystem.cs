@@ -68,7 +68,7 @@ public class HUDSystem : MonoBehaviour
             return;
         }
         
-        var hits = ArrayPool<RaycastHit>.Shared.Rent(16);
+        var hits = ArrayPool<RaycastHit>.Shared.Rent(64);
         Transform cameraTransform = m_camera.transform;
         Vector3 origin = cameraTransform.position;
         int length = Physics.SphereCastNonAlloc(origin, m_settings.CheckRadius, cameraTransform.forward, hits,
