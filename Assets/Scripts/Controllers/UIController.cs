@@ -42,6 +42,8 @@ public partial class UIController : MonoBehaviour
         {
             m_debugController.Toggled += OnDebugToggled;
         }
+        
+        EnableInput();
     }
 
     private void OnDisable()
@@ -56,6 +58,8 @@ public partial class UIController : MonoBehaviour
         {
             m_debugController.Toggled -= OnDebugToggled;
         }
+        
+        DisableInput();
     }
 
     private void Pause()
