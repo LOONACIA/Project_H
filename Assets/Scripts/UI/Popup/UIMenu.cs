@@ -87,6 +87,7 @@ public class UIMenu : UIPopup, IEventSystemHandler
         {
             int cursor = index;
             var button = ManagerRoot.Resource.Instantiate(m_buttonPrefab, m_buttonParent).GetComponent<ButtonManager>();
+            button.transform.localScale = Vector3.one;
             button.buttonText = GameManager.Localization.Get(menuInfos[cursor].ResourceKey);
             button.onClick.AddListener(() => OnButtonClick(menuInfos[cursor].OnClick));
             button.UpdateUI();
