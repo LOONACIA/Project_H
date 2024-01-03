@@ -54,4 +54,12 @@ public class SFXObjectData : ScriptableObject
     [field: SerializeField]
     [field: Tooltip("TestSFX")]
     public SFXInfo TestSFX { get; private set; }
+
+    [field: SerializeField]
+    [field: Tooltip("EliteBoss 타격 이펙트 시작음")]
+    public SFXInfo EliteBossAttackEffectStart { get; private set; }
+
+    [field: SerializeField]
+    [field: Tooltip("EliteBoss 타격 이펙트 폭발음")]
+    public SFXInfo EliteBossAttackEffectExplosion { get; private set; }
 }
