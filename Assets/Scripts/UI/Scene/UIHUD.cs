@@ -306,11 +306,12 @@ public class UIHUD : UIScene
                 ? UIManagerImage.ColorType.Accent
                 : UIManagerImage.ColorType.Negative;
         }
-
-        m_cooldownIndicator.gameObject.SetActive(false);
-
+        
         if (m_actor != null)
         {
+            m_cooldownIndicator.fillAmount = m_actor.Status.SkillCoolTime;
+            m_cooldownIndicator.gameObject.SetActive(m_actor.Status.HasCooldown);
+            
             m_actor.Status.DashCountChanged += OnDashCountChanged;
             m_actor.Status.DashCoolTimeChanged += OnDashCoolTimeChanged;
         }
