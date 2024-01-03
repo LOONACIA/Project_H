@@ -18,7 +18,7 @@ public class LocalizationManager
     {
         SupportedCultures = new List<CultureInfo> { s_defaultCulture, new("ko"), }.AsReadOnly();
     }
-
+    
     public static IReadOnlyList<CultureInfo> SupportedCultures { get; }
 
     public event EventHandler LanguageChanged;
