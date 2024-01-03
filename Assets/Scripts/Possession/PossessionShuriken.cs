@@ -41,6 +41,8 @@ public class PossessionShuriken : MonoBehaviour
     private Action<PossessionShuriken, Actor> m_onTargetHit;
 
     private int m_surikenStopLayer;
+
+    private float m_castRadius = 0.01f;
     #endregion
 
     #region PublicMethod
@@ -51,6 +53,8 @@ public class PossessionShuriken : MonoBehaviour
         m_targetLayer = LayerMask.GetMask("Monster");
         m_surikenStopLayer = LayerMask.GetMask("Wall", "Ground", "Shield", "Obstacle", "HackingObject");
         StartCoroutine(nameof(IE_Destory));
+
+        StartCoroutine(IE_UpdateCastRadius());
     }
 
     public void InitSetting(Actor actor, Actor sender, Action<PossessionShuriken, Actor> onTargetHit)
@@ -105,7 +109,7 @@ public class PossessionShuriken : MonoBehaviour
 
     private void CheckBack()
     {
-        if (!Physics.SphereCast(transform.position, 0.2f, m_targetDir.normalized,
+        if (!Physics.SphereCast(transform.position, m_castRadius, m_targetDir.normalized,
                 out RaycastHit hit, 1.3f, m_surikenStopLayer))
         {
             return;
@@ -250,6 +254,12 @@ public class PossessionShuriken : MonoBehaviour
     private void PlayTargetHackingSFX()
     {
         GameManager.Sound.PlayClipAt(objectSFX.ShurikenTargetHit, transform.position);
+    }
+
+    private IEnumerator IE_UpdateCastRadius()
+    {
+        yield return new WaitForSeconds(0.3f);
+        m_castRadius = 0.2f;
     }
     #endregion
 }
