@@ -10,7 +10,7 @@ public class GeneralSettings : INotifyPropertyChanged
     [SerializeField]
     private int m_cultureId = CultureInfo.CurrentUICulture.LCID;
 
-    private CultureInfo m_culture = CultureInfo.CurrentUICulture;
+    private CultureInfo m_culture;
     
     [SerializeField]
     private float m_lookSensitivity = 5f;
@@ -37,8 +37,8 @@ public class GeneralSettings : INotifyPropertyChanged
                 return;
             }
             
-            m_cultureId = value.LCID;
             m_culture = value;
+            SetField(ref m_cultureId, value.LCID, EventArgCache.CurrentLanguage);
         }
     }
 
@@ -93,6 +93,7 @@ public class GeneralSettings : INotifyPropertyChanged
     
     private static class EventArgCache
     {
+        internal static readonly PropertyChangedEventArgs CurrentLanguage = new(nameof(GeneralSettings.CurrentLanguage));
         internal static readonly PropertyChangedEventArgs LookSensitivity = new(nameof(GeneralSettings.LookSensitivity));
         internal static readonly PropertyChangedEventArgs InvertVerticalView = new(nameof(GeneralSettings.InvertVerticalView));
         internal static readonly PropertyChangedEventArgs MasterVolume = new(nameof(GeneralSettings.MasterVolume));

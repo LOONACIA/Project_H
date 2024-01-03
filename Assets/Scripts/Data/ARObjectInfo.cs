@@ -4,7 +4,7 @@ using UnityEngine;
 public class ARObjectInfo : ScriptableObject
 {
     [field: SerializeField]
-    public string Description { get; private set; }
+    public string ResourceKey { get; private set; }
 
     [field: SerializeField]
     public float TypeWritingDelay { get; private set; } = 0.05f;
