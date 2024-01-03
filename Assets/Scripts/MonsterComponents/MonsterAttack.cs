@@ -65,6 +65,7 @@ public class MonsterAttack : MonoBehaviour
 
     private void Start()
     {
+        m_actor.Status.HasCooldown = m_data.SkillCoolTime > 0f;
         m_actor.Status.SkillCoolTime = 1f;
 
         if (CurrentWeapon != null)
@@ -158,7 +159,7 @@ public class MonsterAttack : MonoBehaviour
     public void Ability(bool isToggled)
     {
         //TODO: KnockBack, KnockDown 중 스킬 못하게 할 것인가?
-        if (m_actor.Status.SkillCoolTime < 1f)
+        if (m_actor.Status.HasCooldown && m_actor.Status.SkillCoolTime < 1f)
         {
             return;
         }
@@ -278,10 +279,7 @@ public class MonsterAttack : MonoBehaviour
         
         if (m_actor.Status.SkillCoolTime < 1f)
         {
-            //TODO: 부동소수점, deltaTime 이슈로 실제 시간과 작은 오차 발생 가능, 해결 필요한지 확인
             float cur = m_actor.Status.SkillCoolTime * coolTime + Time.deltaTime;
-
-            //TODO: 1/full 미리 계산해두기(최적화)
             m_actor.Status.SkillCoolTime = cur / coolTime;
         }
     }
