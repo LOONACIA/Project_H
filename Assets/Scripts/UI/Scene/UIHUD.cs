@@ -224,8 +224,7 @@ public class UIHUD : UIScene
         }
 
         m_cooldownIndicator.fillAmount = e;
-        bool isActive = !Mathf.Approximately(e, 1);
-        m_cooldownIndicator.gameObject.SetActive(isActive);
+        m_cooldownIndicator.gameObject.SetActive(true);
     }
 
     private void UnregisterEvents(PlayerController controller)
