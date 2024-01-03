@@ -1,5 +1,7 @@
 using LOONACIA.Unity.Managers;
 using Michsky.UI.Reach;
+using System.Globalization;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UIPopup = LOONACIA.Unity.UI.UIPopup;
@@ -149,6 +151,20 @@ public class UISettings : UIPopup
     
     private void LoadSettings()
     {
+        m_languageSelector.items.Clear();
+
+        foreach (var cultureInfo in LocalizationManager.SupportedCultures)
+        {
+            HorizontalSelector.Item item = new() { itemTitle = cultureInfo.NativeName };
+            item.onItemSelect.AddListener(() => OnLanguageChanged(cultureInfo));
+            m_languageSelector.items.Add(item);
+            
+            if (LocalizationManager.IsEquals(cultureInfo, GameManager.Settings.GeneralSettings.CurrentLanguage))
+            {
+                m_languageSelector.defaultIndex = m_languageSelector.items.Count - 1;
+            }
+        }
+        
         m_inputSensitivitySlider.mainSlider.value = GameManager.Settings.GeneralSettings.LookSensitivity;
         m_invertVerticalViewSwitch.isOn = GameManager.Settings.GeneralSettings.InvertVerticalView;
         m_masterVolumeSlider.mainSlider.value = ConvertVolumeToSlider(GameManager.Settings.GeneralSettings.MasterVolume);
@@ -158,6 +174,12 @@ public class UISettings : UIPopup
         m_masterVolumeSlider.UpdateUI();
         m_bgmVolumeSlider.UpdateUI();
         m_sfxVolumeSlider.UpdateUI();
+    }
+    
+    private void OnLanguageChanged(CultureInfo cultureInfo)
+    {
+        GameManager.Settings.GeneralSettings.CurrentLanguage = cultureInfo;
+        GameManager.Localization.SetLanguage(cultureInfo);
     }
     
     private void OnMasterVolumeChanged(float value)
