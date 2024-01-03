@@ -152,6 +152,11 @@ public class UISettings : UIPopup
     
     private void LoadSettings()
     {
+        foreach (var item in m_languageSelector.items)
+        {
+            item.onItemSelect.RemoveAllListeners();
+        }
+        
         m_languageSelector.items.Clear();
 
         foreach (var cultureInfo in LocalizationManager.SupportedCultures)
@@ -162,7 +167,7 @@ public class UISettings : UIPopup
             
             if (LocalizationManager.IsEquals(cultureInfo, GameManager.Settings.GeneralSettings.CurrentLanguage))
             {
-                m_languageSelector.defaultIndex = m_languageSelector.items.Count - 1;
+                m_languageSelector.index = m_languageSelector.items.Count - 1;
             }
         }
         

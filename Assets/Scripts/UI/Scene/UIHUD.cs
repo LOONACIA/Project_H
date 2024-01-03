@@ -25,6 +25,7 @@ public class UIHUD : UIScene
         BackPanel,
         FrontPanel,
         HackingPanel,
+        AbilityPanel,
         DashPanel,
         QuestHolder
     }
@@ -38,6 +39,7 @@ public class UIHUD : UIScene
     {
         Crosshair,
         HackingIndicator,
+        CooldownIndicator,
         
         // 이 밑으로는 Dash Indicator만 사용
         FirstDashIndicator,
@@ -46,7 +48,7 @@ public class UIHUD : UIScene
 
     private enum Presenters
     {
-        AbilityPresenter
+        AbilityIndicator
     }
 
     private readonly List<RectTransform> m_backLayerHpBoxes = new();
@@ -79,6 +81,8 @@ public class UIHUD : UIScene
     
     private GameObject m_hackingPanel;
     
+    private GameObject m_abilityPanel;
+    
     private GameObject m_questHolder;
 
     private TextMeshProUGUI m_hpTextBox;
@@ -92,7 +96,9 @@ public class UIHUD : UIScene
     // Center Panel의 Scale을 조절하기 위한 객체
     private GameObject m_centerLayerRoot;
     
-    private ProgressBar m_abilityPresenter;
+    private ProgressBar m_abilityIndicator;
+    
+    private Image m_cooldownIndicator;
 
     private Image m_crosshair;
     
@@ -169,12 +175,14 @@ public class UIHUD : UIScene
         m_backPanel = Get<GameObject, Panels>(Panels.BackPanel);
         m_frontPanel = Get<GameObject, Panels>(Panels.FrontPanel);
         m_hackingPanel = Get<GameObject, Panels>(Panels.HackingPanel);
+        m_abilityPanel = Get<GameObject, Panels>(Panels.AbilityPanel);
         m_questHolder = Get<GameObject, Panels>(Panels.QuestHolder);
 
         m_hpTextBox = Get<TextMeshProUGUI, Texts>(Texts.HpText);
         m_hpText = m_hpTextBox.GetComponent<UIManagerText>();
         
-        m_abilityPresenter = Get<ProgressBar, Presenters>(Presenters.AbilityPresenter);
+        m_abilityIndicator = Get<ProgressBar, Presenters>(Presenters.AbilityIndicator);
+        m_cooldownIndicator = Get<Image, Images>(Images.CooldownIndicator);
         
         m_crosshair = Get<Image, Images>(Images.Crosshair);
         m_hackingIndicator = Get<Image, Images>(Images.HackingIndicator);
@@ -214,12 +222,9 @@ public class UIHUD : UIScene
         {
             return;
         }
-        
-        if (m_controller.Character.Status.AbilityRate == 0f)
-        {
-            m_abilityPresenter.currentValue = e;
-            m_abilityPresenter.UpdateUI();
-        }
+
+        m_cooldownIndicator.fillAmount = e;
+        m_cooldownIndicator.gameObject.SetActive(true);
     }
 
     private void UnregisterEvents(PlayerController controller)
@@ -301,9 +306,12 @@ public class UIHUD : UIScene
                 ? UIManagerImage.ColorType.Accent
                 : UIManagerImage.ColorType.Negative;
         }
-
+        
         if (m_actor != null)
         {
+            m_cooldownIndicator.fillAmount = m_actor.Status.SkillCoolTime;
+            m_cooldownIndicator.gameObject.SetActive(m_actor.Status.HasCooldown);
+            
             m_actor.Status.DashCountChanged += OnDashCountChanged;
             m_actor.Status.DashCoolTimeChanged += OnDashCoolTimeChanged;
         }
@@ -353,11 +361,11 @@ public class UIHUD : UIScene
     private void OnHpChanged(object sender, int e)
     {
         bool isActive = e > 0;
-        m_abilityPresenter.gameObject.SetActive(isActive);
         m_crosshair.gameObject.SetActive(isActive);
         m_hpText.gameObject.SetActive(isActive);
         m_backgroundPanel.SetActive(isActive);
         m_hackingPanel.SetActive(isActive);
+        m_abilityPanel.SetActive(isActive);
         m_questHolder.SetActive(isActive);
         m_centerLayerRoot.SetActive(isActive);
 
@@ -366,8 +374,8 @@ public class UIHUD : UIScene
     
     private void OnAbilityRateChanged(object sender, float e)
     {
-        m_abilityPresenter.currentValue = e;
-        m_abilityPresenter.UpdateUI();
+        m_abilityIndicator.currentValue = e;
+        m_abilityIndicator.UpdateUI();
     }
     
     private void UpdateCrosshair()
