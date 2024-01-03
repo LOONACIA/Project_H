@@ -42,6 +42,16 @@ public class UIQuestPresenter : UIBase
 
     private RectTransform m_questItemRectTransform;
 
+    private void OnEnable()
+    {
+        GameManager.Localization.LanguageChanged += OnLanguageChanged;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Localization.LanguageChanged -= OnLanguageChanged;
+    }
+
     public void SetQuest(Quest quest)
     {
         m_quest = quest;
@@ -73,14 +83,30 @@ public class UIQuestPresenter : UIBase
     private IEnumerator FitSize()
     {
         yield return new WaitUntil(() => m_questItemRectTransform.sizeDelta.y != 0);
+
+        float x = m_questItemRectTransform.sizeDelta.x;
+        
+        while (true)
+        {
+            yield return null;
+            if (Mathf.Approximately(x, m_questItemRectTransform.sizeDelta.x))
+            {
+                break;
+            }
+            
+            x = m_questItemRectTransform.sizeDelta.x;
+        }
+        
         Vector2 sizeDelta = m_questItemRectTransform.sizeDelta;
         m_layoutElement.preferredWidth = sizeDelta.x;
         m_layoutElement.preferredHeight = sizeDelta.y;
     }
+    
+    private Coroutine m_coroutine;
 
     private void SetQuestItem()
     {
-        StartCoroutine(FitSize());
+        m_coroutine = StartCoroutine(FitSize());
         if (m_canvasScaler == null)
         {
             m_canvasScaler = GetComponentInParent<CanvasScaler>();
@@ -104,7 +130,7 @@ public class UIQuestPresenter : UIBase
             xOffset = m_subQuestXOffset / reactiveXScale;
         }
         
-        m_questItem.questText = m_quest.Content;
+        m_questItem.questText = GameManager.Localization.Get(m_quest.Content);
         m_questItem.UpdateUI();
         m_questItem.ExpandQuest();
         GameManager.Sound.Play(GameManager.Sound.ObjectDataSounds.ObjectUpdate);
@@ -118,6 +144,7 @@ public class UIQuestPresenter : UIBase
 
         IEnumerator CoWait()
         {
+            yield return m_coroutine;
             yield return new WaitUntil(() => m_questItemRectTransform.sizeDelta.x != 0);
             Vector3 final = new(xOffset, 0, 0);
 
@@ -138,6 +165,13 @@ public class UIQuestPresenter : UIBase
                 .AppendInterval(0.25f)
                 .Append(m_questItemRectTransform.DOAnchorPos(final, 0.25f).SetEase(m_curve));
         }
+    }
+    
+    private void OnLanguageChanged(object sender, EventArgs e)
+    {
+        m_questItem.questText = GameManager.Localization.Get(m_quest.Content);
+        m_questItem.UpdateUI();
+        StartCoroutine(FitSize());
     }
 
     private IEnumerator CoWaitForDisable()

@@ -312,8 +312,8 @@ MonoBehaviour:
   m_Padding:
     m_Left: 18
     m_Right: 13
-    m_Top: 6
-    m_Bottom: 6
+    m_Top: 8
+    m_Bottom: 8
   m_ChildAlignment: 0
   m_Spacing: 0
   m_ChildForceExpandWidth: 1
@@ -542,8 +542,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: OBJECTIVE UPDATED
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8322a83c36dbf604db8a075474b12c47, type: 2}
-  m_sharedMaterial: {fileID: 3055816025143138274, guid: 8322a83c36dbf604db8a075474b12c47,
+  m_fontAsset: {fileID: 11400000, guid: 3ef81a220e37ed344a48e0c7dd0641df, type: 2}
+  m_sharedMaterial: {fileID: -1878814284279450118, guid: 3ef81a220e37ed344a48e0c7dd0641df,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -568,8 +568,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 22
+  m_fontSizeBase: 22
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -718,8 +718,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Quest text here
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: e62ece968382eaf44897316c9daaf99e, type: 2}
-  m_sharedMaterial: {fileID: 7526820672995758586, guid: e62ece968382eaf44897316c9daaf99e,
+  m_fontAsset: {fileID: 11400000, guid: 3ef81a220e37ed344a48e0c7dd0641df, type: 2}
+  m_sharedMaterial: {fileID: -1878814284279450118, guid: 3ef81a220e37ed344a48e0c7dd0641df,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -846,6 +846,7 @@ GameObject:
   - component: {fileID: 5590926552013884165}
   - component: {fileID: 916788546007364152}
   - component: {fileID: 1849913083471701602}
+  - component: {fileID: 3707737654373635425}
   m_Layer: 0
   m_Name: UIQuestPresenter
   m_TagString: Untagged
@@ -953,6 +954,7 @@ MonoBehaviour:
   m_indicatorManager: {fileID: 1979797862643584192}
   m_filledManager: {fileID: 1165325666824045343}
   m_textManager: {fileID: 8175027266265732939}
+  m_subQuestXOffset: 20
 --- !u!114 &916788546007364152
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -987,3 +989,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 2
   m_VerticalFit: 2
+--- !u!114 &3707737654373635425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8032309577630845111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 668c575b1413c0841b35a62640ed50e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_key: objective_updated
+  m_objectType: 0
+  m_textObject: {fileID: 8509790234373803843}
+  m_buttonObject: {fileID: 0}

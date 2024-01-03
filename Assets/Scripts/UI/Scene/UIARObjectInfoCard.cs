@@ -1,5 +1,6 @@
 using LOONACIA.Unity.Coroutines;
 using LOONACIA.Unity.UI;
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -68,13 +69,19 @@ public class UIARObjectInfoCard : UIScene
         }
         
         m_animator.SetTrigger(s_showFillAnimationKey);
+        GameManager.Localization.LanguageChanged += OnLanguageChanged;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Localization.LanguageChanged -= OnLanguageChanged;
     }
 
     public void SetInfo(ARObjectInfo info)
     {
         m_typeWritingCoroutine?.Abort();
         m_info = info;
-        m_description.text = m_info.Description;
+        m_description.text = GameManager.Localization.Get(m_info.ResourceKey);
         m_waitForSecondsCache = new(info.TypeWritingDelay);
     }
     
@@ -137,6 +144,13 @@ public class UIARObjectInfoCard : UIScene
         m_rightBottom = Get<Image, Images>(Images.RightBottom);
         m_description = Get<TextMeshProUGUI, Texts>(Texts.Description);
     }
+    
+    private void OnLanguageChanged(object sender, EventArgs e)
+    {
+        m_typeWritingCoroutine?.Abort();
+        m_description.text = GameManager.Localization.Get(m_info.ResourceKey);
+        m_description.maxVisibleCharacters = m_description.text.Length;
+    }
 
     private IEnumerator TypeDescription()
     {
@@ -148,7 +162,7 @@ public class UIARObjectInfoCard : UIScene
         yield return new WaitUntil(() => m_description != null);
         
         int count = 0;
-        int maxLength = m_info.Description.Length;
+        int maxLength = GameManager.Localization.Get(m_info.ResourceKey).Length;
         
         while (count < maxLength)
         {

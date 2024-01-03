@@ -1,12 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 [Serializable]
 public class GeneralSettings : INotifyPropertyChanged
 {
+    [SerializeField]
+    private int m_cultureId = CultureInfo.CurrentUICulture.LCID;
+
+    private CultureInfo m_culture;
+    
     [SerializeField]
     private float m_lookSensitivity = 5f;
     
@@ -21,6 +26,21 @@ public class GeneralSettings : INotifyPropertyChanged
     
     [SerializeField]
     private float m_sfxVolume = 1f;
+
+    public CultureInfo CurrentLanguage
+    {
+        get => m_culture ??= new(m_cultureId);
+        set
+        {
+            if (m_cultureId == value.LCID)
+            {
+                return;
+            }
+            
+            m_culture = value;
+            SetField(ref m_cultureId, value.LCID, EventArgCache.CurrentLanguage);
+        }
+    }
 
     public float LookSensitivity
     {
@@ -73,6 +93,7 @@ public class GeneralSettings : INotifyPropertyChanged
     
     private static class EventArgCache
     {
+        internal static readonly PropertyChangedEventArgs CurrentLanguage = new(nameof(GeneralSettings.CurrentLanguage));
         internal static readonly PropertyChangedEventArgs LookSensitivity = new(nameof(GeneralSettings.LookSensitivity));
         internal static readonly PropertyChangedEventArgs InvertVerticalView = new(nameof(GeneralSettings.InvertVerticalView));
         internal static readonly PropertyChangedEventArgs MasterVolume = new(nameof(GeneralSettings.MasterVolume));

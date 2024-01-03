@@ -33,6 +33,8 @@ public class GameManager : MonoBehaviour
 
     private EffectManager m_effect = new();
     
+    private LocalizationManager m_localization = new();
+    
     private NotificationManager m_notification = new();
 
     private SoundManager m_sound = new();
@@ -50,6 +52,8 @@ public class GameManager : MonoBehaviour
     public static CharacterManager Character => Instance.m_character;
 
     public static EffectManager Effect => Instance.m_effect;
+    
+    public static LocalizationManager Localization => Instance.m_localization;
     
     public static NotificationManager Notification => Instance.m_notification;
 
@@ -192,6 +196,7 @@ public class GameManager : MonoBehaviour
             // 매니저 클래스 초기화
             s_instance.m_character.Init(s_instance.m_settings);
             s_instance.m_effect.Init();
+            s_instance.m_localization.Init();
             s_instance.m_notification.Init();
             s_instance.m_sound.Init();
             s_instance.m_ui.Init();

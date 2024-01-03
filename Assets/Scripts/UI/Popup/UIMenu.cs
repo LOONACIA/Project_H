@@ -28,6 +28,8 @@ public class UIMenu : UIPopup, IEventSystemHandler
     [SerializeField]
     private CanvasGroup m_buttonsCanvasGroup;
     
+    private MenuInfo[] m_menuInfos;
+    
     private WaitForSeconds m_waitForSecondsCache;
 
     private TextMeshProUGUI m_titleTextBox;
@@ -44,12 +46,14 @@ public class UIMenu : UIPopup, IEventSystemHandler
         m_coroutine = CoroutineEx.Create(this, CoDisableAnimator());
         GameManager.Sound.OffInGame();
         m_buttonsCanvasGroup.interactable = true;
+        GameManager.Localization.LanguageChanged += OnLanguageChanged;
     }
 
     protected override void OnDisable()
     {
         base.OnDisable();
         m_coroutine?.Abort();
+        GameManager.Localization.LanguageChanged -= OnLanguageChanged;
     }
 
     private void Update()
@@ -77,12 +81,13 @@ public class UIMenu : UIPopup, IEventSystemHandler
     
     public void SetButtonContent(params MenuInfo[] menuInfos)
     {
+        m_menuInfos = menuInfos;
         Clear();
         for (int index = 0; index < menuInfos.Length; index++)
         {
             int cursor = index;
             var button = ManagerRoot.Resource.Instantiate(m_buttonPrefab, m_buttonParent).GetComponent<ButtonManager>();
-            button.buttonText = menuInfos[index].Text;
+            button.buttonText = GameManager.Localization.Get(menuInfos[cursor].ResourceKey);
             button.onClick.AddListener(() => OnButtonClick(menuInfos[cursor].OnClick));
             button.UpdateUI();
             m_buttons.Add(button);
@@ -104,12 +109,6 @@ public class UIMenu : UIPopup, IEventSystemHandler
         {
             EventSystem.current.SetSelectedGameObject(m_buttons[0].gameObject);
         }
-    }
-
-    private void OnButtonClick(Action action)
-    {
-        GameManager.Sound.OnInGame();
-        action?.Invoke();
     }
     
     public override void Close()
@@ -150,6 +149,27 @@ public class UIMenu : UIPopup, IEventSystemHandler
         {
             ManagerRoot.Resource.Release(m_buttonParent.GetChild(0).gameObject);
         }
+    }
+    
+    private void UpdateUI()
+    {
+        int index = 0;
+        foreach (var button in m_buttons)
+        {
+            button.buttonText = GameManager.Localization.Get(m_menuInfos[index++].ResourceKey);
+            button.UpdateUI();
+        }
+    }
+    
+    private void OnLanguageChanged(object sender, EventArgs e)
+    {
+        UpdateUI();
+    }
+
+    private void OnButtonClick(Action action)
+    {
+        GameManager.Sound.OnInGame();
+        action?.Invoke();
     }
     
     private IEnumerator CoDisableAnimator()
