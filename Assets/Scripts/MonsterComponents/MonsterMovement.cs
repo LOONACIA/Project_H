@@ -45,6 +45,10 @@ public class MonsterMovement : MonoBehaviour
     [SerializeField]
     private bool m_isOnGround;
 
+    //23.01.03: 땅 판정 기준을 시점별로 분리함.
+    private float m_firstPersonGroundThreshold = 0.2f;
+    private float m_thirdPersonGroundThreshold = 0.5f;
+
     private float m_jumpVelocity;
 
     // 현재 점프속도가 즉시 적용되지 않음, 애니메이션 적용 시 해당 값을 기다림
@@ -80,6 +84,22 @@ public class MonsterMovement : MonoBehaviour
     {
         get => m_isOnGround;
         private set => m_isOnGround = value;
+    }
+
+    //OnGround 판정을 위한 엡실론 값
+    public float GroundThreshold
+    {
+        get
+        {
+            if (m_actor != null)
+            {
+                return m_actor.IsPossessed ? m_firstPersonGroundThreshold : m_thirdPersonGroundThreshold;
+            }
+            else
+            {
+                return 0.5f;
+            }
+        }
     }
 
     public bool IsDashing { get; private set; }
@@ -497,7 +517,7 @@ public class MonsterMovement : MonoBehaviour
     {
         float radius = m_collider.radius;
         IsOnGround = Physics.SphereCast(transform.position + m_collider.center, radius, Vector3.down, out var ground,
-            radius + 0.5f, m_data.WhatIsGround);
+            radius + GroundThreshold, m_data.WhatIsGround);
         if (IsOnGround)
         {
             // 착지시 IsFlying 상태이상 초기화
