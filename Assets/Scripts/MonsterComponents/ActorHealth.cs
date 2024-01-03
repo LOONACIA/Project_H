@@ -68,6 +68,7 @@ public class ActorHealth : MonoBehaviour, IHealth
         if (m_status.Shield != null)
         {
             m_status.Shield.TakeDamage(info);
+            OnDamaged(info);
             return;
         }
 
