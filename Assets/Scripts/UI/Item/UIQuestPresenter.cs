@@ -135,7 +135,8 @@ public class UIQuestPresenter : UIBase
         m_questItem.ExpandQuest();
         GameManager.Sound.Play(GameManager.Sound.ObjectDataSounds.ObjectUpdate);
 
-        var point = Camera.main.ViewportToScreenPoint(new(0.5f, 0.4f, 0f));
+        Vector3 point = new(m_canvasScaler.referenceResolution.x * 0.5f, m_canvasScaler.referenceResolution.y * 0.4f,
+            0); //Camera.main.ViewportToScreenPoint(new(0.5f, 0.4f, 0f));
         
         var myTransform = transform.GetComponent<RectTransform>();
         
@@ -149,7 +150,7 @@ public class UIQuestPresenter : UIBase
             Vector3 final = new(xOffset, 0, 0);
 
             var anchoredPosition = myTransform.anchoredPosition;
-            Vector3 from = point - Vector3.right * (anchoredPosition.x + m_layoutElement.preferredWidth / reactiveXScale / 2f);
+            Vector3 from = point - Vector3.right * (anchoredPosition.x + m_layoutElement.preferredWidth / 2f);
             from.y = -(from.y + anchoredPosition.y);
             Vector3 to = from.GetFlatVector() + final;
             

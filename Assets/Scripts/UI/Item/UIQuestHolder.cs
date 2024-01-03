@@ -43,6 +43,7 @@ public class UIQuestHolder : UIBase
 
         var go = ManagerRoot.Resource.Instantiate($"UI/Item/{nameof(UIQuestPresenter)}");
         go.transform.SetParent(transform);
+        go.transform.localScale = Vector3.one;
         presenter = go.GetOrAddComponent<UIQuestPresenter>();
         presenter.SetQuest(quest);
         m_presenters.Add(id, presenter);
