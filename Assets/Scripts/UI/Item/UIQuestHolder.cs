@@ -10,6 +10,10 @@ public class UIQuestHolder : UIBase
 
     private void OnEnable()
     {
+        foreach (var activatedQuest in GameManager.Notification.GetActivatedQuests())
+        {
+            OnNotificationActivated(this, activatedQuest);
+        }
         GameManager.Notification.Activated += OnNotificationActivated;
         GameManager.Notification.QuestCompleted += OnNotificationCompleted;
     }
