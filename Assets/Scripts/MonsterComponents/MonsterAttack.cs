@@ -1,6 +1,7 @@
 using LOONACIA.Unity;
 using LOONACIA.Unity.Managers;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -192,6 +193,8 @@ public class MonsterAttack : MonoBehaviour
             //공격 스테이트로 진입 시, 타격 수 count 초기화
             m_diedVictimCount = 0;
             m_bool = true;
+            m_eliteBool = true;
+
         }
     }
     
@@ -209,6 +212,7 @@ public class MonsterAttack : MonoBehaviour
     }
 
     private bool m_bool;
+    private bool m_eliteBool;
             
     private void OnAttackHit(object sender, IEnumerable<AttackInfo> e)
     {
@@ -217,7 +221,24 @@ public class MonsterAttack : MonoBehaviour
         // 죽은 몬스터 수 체크
         m_diedVictimCount += e.Count(info => info.Victim.CurrentHp <= 0f);
         
-        if (m_diedVictimCount >= 2 && m_bool)
+        if(m_actor is EliteBoss && m_diedVictimCount >= 7 && m_eliteBool)
+        {
+            //시간 조절
+            GameManager.Effect.ChangeTimeScale(this, 0f, 0.3f, 1000f, 1000f);
+
+            GameObject light = ManagerRoot.Resource.Instantiate(GameManager.Settings.AttackLight);
+            light.transform.position = Camera.main.transform.position + transform.forward * 0.5f;
+
+            GameObject light2 = ManagerRoot.Resource.Instantiate(GameManager.Settings.AttackLight);
+            light2.transform.position = Camera.main.transform.position;
+
+            m_eliteBool = false;
+
+            GameManager.Sound.Play(GameManager.Sound.ObjectDataSounds.EliteBossAttackEffectStart);
+
+            StartCoroutine(IE_EliteBossAttackEffect());
+        }
+        else if (m_diedVictimCount >= 2 && m_bool)
         {
             //시간 조절
             GameManager.Effect.ChangeTimeScale(this, 0f, 0.1f, 1000f, 1000f);
@@ -228,7 +249,7 @@ public class MonsterAttack : MonoBehaviour
             }
             else if(m_actor is EliteBoss)
             {
-                GameManager.Effect.ShakeCamera(3, 0.6f);
+                GameManager.Effect.ShakeCamera(5, 0.6f);
             }
 
             //빛
@@ -236,10 +257,6 @@ public class MonsterAttack : MonoBehaviour
             light.transform.position = Camera.main.transform.position + transform.forward * 0.5f;
 
             m_bool = false;
-
-            //0.03초간 속도 0, Bloom
-            //GameManager.Effect.ChangeTimeScale(this, 0f, 0.5f, 1000f, 1000f);
-            //GameManager.Effect.SetBloomIntensityInTime(this, 15f, 0.5f);
         }
     }
 
@@ -267,6 +284,15 @@ public class MonsterAttack : MonoBehaviour
             //TODO: 1/full 미리 계산해두기(최적화)
             m_actor.Status.SkillCoolTime = cur / coolTime;
         }
+    }
+
+    private IEnumerator IE_EliteBossAttackEffect()
+    {
+        yield return new WaitForSecondsRealtime(0.3f);
+
+        GameManager.Effect.ShakeCamera(7, 0.6f);
+
+        GameManager.Sound.Play(GameManager.Sound.ObjectDataSounds.EliteBossAttackEffectExplosion);
     }
 }
 
