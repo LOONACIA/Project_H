@@ -5,13 +5,13 @@ using UnityEngine;
 
 public class MenuInfo
 {
-    public MenuInfo(string text, Action onClick)
+    public MenuInfo(string resourceKey, Action onClick)
     {
-        Text = text;
+        ResourceKey = resourceKey;
         OnClick = onClick;
     }
     
-    public string Text { get; }
+    public string ResourceKey { get; }
     
     public Action OnClick { get; set; }
 }

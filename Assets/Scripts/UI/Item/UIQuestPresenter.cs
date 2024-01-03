@@ -42,6 +42,16 @@ public class UIQuestPresenter : UIBase
 
     private RectTransform m_questItemRectTransform;
 
+    private void OnEnable()
+    {
+        GameManager.Localization.LanguageChanged += OnLanguageChanged;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Localization.LanguageChanged -= OnLanguageChanged;
+    }
+
     public void SetQuest(Quest quest)
     {
         m_quest = quest;
@@ -104,7 +114,7 @@ public class UIQuestPresenter : UIBase
             xOffset = m_subQuestXOffset / reactiveXScale;
         }
         
-        m_questItem.questText = m_quest.Content;
+        m_questItem.questText = GameManager.Localization.Get(m_quest.Content);
         m_questItem.UpdateUI();
         m_questItem.ExpandQuest();
         GameManager.Sound.Play(GameManager.Sound.ObjectDataSounds.ObjectUpdate);
@@ -138,6 +148,13 @@ public class UIQuestPresenter : UIBase
                 .AppendInterval(0.25f)
                 .Append(m_questItemRectTransform.DOAnchorPos(final, 0.25f).SetEase(m_curve));
         }
+    }
+    
+    private void OnLanguageChanged(object sender, EventArgs e)
+    {
+        m_questItem.questText = GameManager.Localization.Get(m_quest.Content);
+        m_questItem.UpdateUI();
+        StartCoroutine(FitSize());
     }
 
     private IEnumerator CoWaitForDisable()

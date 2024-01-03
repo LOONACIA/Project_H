@@ -170,21 +170,21 @@ public partial class UIController : MonoBehaviour
 
     private static class MenuInfoBag
     {
-        public static readonly MenuInfo Restart = new("Restart from checkpoint", () => SceneManagerEx.LoadScene(SceneManager.GetActiveScene().name));
+        public static readonly MenuInfo Restart = new("restart_checkpoint_button", () => SceneManagerEx.LoadScene(SceneManager.GetActiveScene().name));
     
-        public static readonly MenuInfo Continue = new("Return to game", () => GameManager.Instance.SetResume());
+        public static readonly MenuInfo Continue = new("return_game_button", () => GameManager.Instance.SetResume());
     
-        public static readonly MenuInfo Menu = new("Exit to main menu", () => SceneManagerEx.LoadScene("TitleScene"));
+        public static readonly MenuInfo Menu = new("exit_menu_button", () => SceneManagerEx.LoadScene("TitleScene"));
         
-        public static readonly MenuInfo Settings = new("Settings", () => ManagerRoot.UI.ShowPopupUI<UISettings>());
+        public static readonly MenuInfo Settings = new("settings_button", () => ManagerRoot.UI.ShowPopupUI<UISettings>());
         
-        public static readonly MenuInfo Credits = new("Credits", () => ManagerRoot.UI.ShowPopupUI<UICredits>());
+        public static readonly MenuInfo Credits = new("credits_button", () => ManagerRoot.UI.ShowPopupUI<UICredits>());
     
         public static readonly MenuInfo Exit =
 #if UNITY_EDITOR
-            new("Exit the game", () => UnityEditor.EditorApplication.isPlaying = false);
+            new("exit_game_button", () => UnityEditor.EditorApplication.isPlaying = false);
 #else
-            new("Exit the game", Application.Quit);
+            new("exit_game_button", Application.Quit);
 #endif
         public static readonly string GameOverText = "Game Over";
         
