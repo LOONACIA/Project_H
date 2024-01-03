@@ -20,6 +20,8 @@ public class UIModalDialogPresenter : UIPopup
     [SerializeField]
     private ButtonManager m_confirmButton;
     
+    private ModalDialog m_dialog;
+    
     private Action m_onConfirm;
 
     public bool IsOpen => m_modalWindow.isActiveAndEnabled;
@@ -29,6 +31,13 @@ public class UIModalDialogPresenter : UIPopup
         base.OnEnable();
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(m_confirmButton.gameObject);
+        GameManager.Localization.LanguageChanged += OnLanguageChanged;
+    }
+
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+        GameManager.Localization.LanguageChanged -= OnLanguageChanged;
     }
 
     private void Update()
@@ -41,7 +50,8 @@ public class UIModalDialogPresenter : UIPopup
 
     public void SetDialog(ModalDialog dialog, Action onConfirm = null)
     {
-        m_text.text = dialog.Content;
+        m_dialog = dialog;
+        m_text.text = GameManager.Localization.Get(dialog.Content);
         if (dialog.Video != null)
         {
             m_videoPlayer.clip = dialog.Video;
@@ -75,5 +85,10 @@ public class UIModalDialogPresenter : UIPopup
     {
         m_onConfirm?.Invoke();
         GameManager.Sound.OnInGame();
+    }
+    
+    private void OnLanguageChanged(object sender, EventArgs e)
+    {
+        m_text.text = GameManager.Localization.Get(m_dialog.Content);
     }
 }

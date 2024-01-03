@@ -1,12 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 [Serializable]
 public class GeneralSettings : INotifyPropertyChanged
 {
+    [SerializeField]
+    private int m_cultureId = CultureInfo.CurrentUICulture.LCID;
+
+    private CultureInfo m_culture = CultureInfo.CurrentUICulture;
+    
     [SerializeField]
     private float m_lookSensitivity = 5f;
     
@@ -21,6 +26,21 @@ public class GeneralSettings : INotifyPropertyChanged
     
     [SerializeField]
     private float m_sfxVolume = 1f;
+
+    public CultureInfo CurrentLanguage
+    {
+        get => m_culture ??= new(m_cultureId);
+        set
+        {
+            if (m_cultureId == value.LCID)
+            {
+                return;
+            }
+            
+            m_cultureId = value.LCID;
+            m_culture = value;
+        }
+    }
 
     public float LookSensitivity
     {
