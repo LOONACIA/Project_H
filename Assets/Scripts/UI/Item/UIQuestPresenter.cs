@@ -154,6 +154,8 @@ public class UIQuestPresenter : UIBase
             Vector3 to = from.GetFlatVector() + final;
             
             m_questItemRectTransform.anchoredPosition = from;
+            m_alarmText.color = m_alarmText.color.SetAlpha(1);
+            
             Animator animator = m_questItem.Animator;
             yield return new WaitUntil(() => !animator.enabled);
             Color color = m_alarmText.color;
