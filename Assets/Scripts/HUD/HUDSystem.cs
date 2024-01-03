@@ -84,6 +84,11 @@ public class HUDSystem : MonoBehaviour
                 {
                     continue;
                 }
+                
+                if (hit.collider == null || hit.collider.transform == null)
+                {
+                    continue;
+                }
 
                 TryAdd(hit.collider.transform);
             }
