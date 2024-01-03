@@ -778,8 +778,19 @@ public class MonsterMovement : MonoBehaviour
 
     private void CheckFootStepSound()
     {
-        TryGetComponent<AudioSource>(out var audioSource);
-        audioSource.pitch = Time.timeScale;
+       
+
+        if(Time.timeScale == 0f)
+        {
+            m_audioSource.pitch = 0f;
+        }
+        else
+        {
+            if (m_actor is EliteBoss)
+                m_audioSource.pitch = 0.8f;
+            else
+                m_audioSource.pitch = 1f;
+        }
     }
     #endregion
 }

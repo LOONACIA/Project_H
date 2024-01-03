@@ -193,6 +193,8 @@ public class MonsterAttack : MonoBehaviour
             //공격 스테이트로 진입 시, 타격 수 count 초기화
             m_diedVictimCount = 0;
             m_bool = true;
+            m_eliteBool = true;
+
         }
     }
     
@@ -210,6 +212,7 @@ public class MonsterAttack : MonoBehaviour
     }
 
     private bool m_bool;
+    private bool m_eliteBool;
             
     private void OnAttackHit(object sender, IEnumerable<AttackInfo> e)
     {
@@ -218,7 +221,7 @@ public class MonsterAttack : MonoBehaviour
         // 죽은 몬스터 수 체크
         m_diedVictimCount += e.Count(info => info.Victim.CurrentHp <= 0f);
         
-        if(m_diedVictimCount >= 7 && m_bool)
+        if(m_actor is EliteBoss && m_diedVictimCount >= 7 && m_eliteBool)
         {
             //시간 조절
             GameManager.Effect.ChangeTimeScale(this, 0f, 0.3f, 1000f, 1000f);
@@ -226,7 +229,10 @@ public class MonsterAttack : MonoBehaviour
             GameObject light = ManagerRoot.Resource.Instantiate(GameManager.Settings.AttackLight);
             light.transform.position = Camera.main.transform.position + transform.forward * 0.5f;
 
-            m_bool = false;
+            GameObject light2 = ManagerRoot.Resource.Instantiate(GameManager.Settings.AttackLight);
+            light2.transform.position = Camera.main.transform.position;
+
+            m_eliteBool = false;
 
             GameManager.Sound.Play(GameManager.Sound.ObjectDataSounds.EliteBossAttackEffectStart);
 
