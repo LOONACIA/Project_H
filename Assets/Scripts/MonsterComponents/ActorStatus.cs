@@ -144,6 +144,8 @@ public class ActorStatus : MonoBehaviour
         }
     }
 
+    public bool HasCooldown { get; set; }
+
     /// <summary>
     /// 0~1로 표현되며, 1일때 스킬 사용 가능.
     /// </summary>
