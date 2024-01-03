@@ -48,7 +48,7 @@ public class DoNothingIfStunned : Action
             return;
         }
         
-        if (m_isAborted && m_navMeshAgent.enabled)
+        if (m_isAborted && m_navMeshAgent.enabled && m_navMeshAgent.isOnNavMesh)
         {
             m_navMeshAgent.isStopped = false;
         }
