@@ -5,7 +5,7 @@ using UnityEngine;
 public class CanSeeTargets : Conditional
 {
     // Start is called before the first frame update
-    public SharedTransform target;
+    public SharedGameObject target;
     public SharedGameObject self;
     public LayerMask targetLayer;
     public float fovAngle;
@@ -20,7 +20,7 @@ public class CanSeeTargets : Conditional
         }
         
         Vector3 selfPosition = self.Value.transform.position + Vector3.up;
-        Vector3 targetPosition = target.Value.position + (Vector3.up / 2f);
+        Vector3 targetPosition = target.Value.transform.position + (Vector3.up / 2f);
         //Vector3 targetHeadPosition = target.Value.transform.position + Vector3.up;
 
         Ray ray = new Ray(selfPosition, (targetPosition - selfPosition).normalized);
