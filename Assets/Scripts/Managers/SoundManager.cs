@@ -276,6 +276,11 @@ public class SoundManager
         m_BGMSettingTween?.Kill();
         //m_BGMSettingTween = audioMixer.DOSetFloat("InGame", -80f, 2f).SetUpdate(true);
 
+        if (m_audioSources[(int)SoundType.Bgm] == null)
+        {
+            return;
+        }
+        
         m_audioSources[(int)SoundType.Bgm].Stop();
     }
 

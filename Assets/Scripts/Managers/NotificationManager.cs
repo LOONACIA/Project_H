@@ -36,6 +36,14 @@ public class NotificationManager
             }
         }
     }
+    
+    public IEnumerable<Quest> GetActivatedQuests()
+    {
+        foreach (var quest in m_activatedQuests)
+        {
+            yield return quest;
+        }
+    }
 
     public void Initialize()
     {
@@ -52,13 +60,13 @@ public class NotificationManager
     public void Clear()
     {
         // 활성화된 퀘스트 초기화. 만약 전체 알림을 초기화하고 싶다면 이 부분을 수정할 것
-        foreach (var quest in m_activatedQuests)
-        {
-            quest.IsCompleted = false;
-            quest.IsNotified = false;
-        }
-        
-        m_activatedQuests.Clear();
+        // foreach (var quest in m_activatedQuests)
+        // {
+        //     quest.IsCompleted = false;
+        //     quest.IsNotified = false;
+        // }
+        //
+        // m_activatedQuests.Clear();
     }
 
     // ReSharper disable Unity.PerformanceAnalysis
