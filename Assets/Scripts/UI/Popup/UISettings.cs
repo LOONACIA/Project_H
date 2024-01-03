@@ -81,6 +81,7 @@ public class UISettings : UIPopup
     public void Cancel()
     {
         GameManager.Settings.Save(m_settingsCache);
+        GameManager.Localization.SetLanguage(m_settingsCache.CurrentLanguage);
         ManagerRoot.UI.ClosePopupUI(this);
     }
 
@@ -170,6 +171,8 @@ public class UISettings : UIPopup
         m_masterVolumeSlider.mainSlider.value = ConvertVolumeToSlider(GameManager.Settings.GeneralSettings.MasterVolume);
         m_bgmVolumeSlider.mainSlider.value = ConvertVolumeToSlider(GameManager.Settings.GeneralSettings.BGMVolume);
         m_sfxVolumeSlider.mainSlider.value = ConvertVolumeToSlider(GameManager.Settings.GeneralSettings.SfxVolume);
+        
+        m_languageSelector.UpdateUI();
         m_inputSensitivitySlider.UpdateUI();
         m_masterVolumeSlider.UpdateUI();
         m_bgmVolumeSlider.UpdateUI();

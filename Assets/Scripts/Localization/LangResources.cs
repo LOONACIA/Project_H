@@ -37,9 +37,8 @@ public class LangResources : ScriptableObject, ISerializationCallbackReceiver
     private void Parse()
     {
         const string marker = "%%";
-        
         Resources.Clear();
-        var span = m_textAsset.text.Replace(@"\,", marker).AsSpan().Trim();
+        var span = m_textAsset.text.Replace(Environment.NewLine, "\n").Replace(@"\,", marker).AsSpan().Trim();
         foreach (var line in span.Split('\n'))
         {
             if (line.Chars.IsWhiteSpace())
