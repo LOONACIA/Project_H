@@ -13,7 +13,7 @@ using UnityEngine.AI;
 [RequireComponent(typeof(CapsuleCollider))]
 [RequireComponent(typeof(NavMeshAgent))]
 public class MonsterMovement : MonoBehaviour
-{    
+{
     private readonly Collider[] m_avoidanceCheckColliders = new Collider[3];
 
     [SerializeField]
@@ -103,15 +103,18 @@ public class MonsterMovement : MonoBehaviour
     }
 
     public bool IsDashing { get; private set; }
-    
-    private void Start()
+
+    private void Awake()
     {
         m_actor = GetComponent<Monster>();
         m_rigidbody = GetComponent<Rigidbody>();
         m_collider = GetComponent<CapsuleCollider>();
         m_agent = GetComponent<NavMeshAgent>();
-        m_audioSource = GetComponent<AudioSource>();    
+        m_audioSource = GetComponent<AudioSource>();
+    }
 
+    private void Start()
+    {
         m_actor.Status.CurrentDashCount = m_actor.Status.MaxDashCount = m_data.MaxDashCount;
         m_actor.Status.DashCoolTime = m_data.DashCoolTime;
         m_currentMoveToAccel = m_data.AccelerationTime > 0f ? 1f / m_data.AccelerationTime : float.PositiveInfinity;
@@ -199,7 +202,7 @@ public class MonsterMovement : MonoBehaviour
         m_rigidbody.AddRelativeForce((forwardForce + strafeForce), ForceMode.VelocityChange);
 
         // 사운드
-        if(directionInput != default)
+        if (directionInput != default)
             PlayWalkSound();
     }
 
@@ -213,7 +216,7 @@ public class MonsterMovement : MonoBehaviour
 
         //사운드
         PlayWalkSound();
-    }    
+    }
 
     /// <summary>
     /// NavMeshAgent의 움직임을 멈춥니다.
@@ -262,7 +265,8 @@ public class MonsterMovement : MonoBehaviour
         //TryDash에서는 대쉬 시작 명령을 내리고 방향을 정하며, 실제 대쉬 연산은 매 FixedUpdate의 ApplyDash에서 일어납니다.
 
         //이미 대쉬 중이거나, 대쉬 딜레이 중이거나, 남은 대쉬가 없다면 대쉬 불가능
-        if (IsDashing || m_actor.Status.CurrentDashCount <= 0 || m_actor.Status.IsKnockedDown || direction == Vector3.zero)
+        if (IsDashing || m_actor.Status.CurrentDashCount <= 0 || m_actor.Status.IsKnockedDown ||
+            direction == Vector3.zero)
         {
             GameManager.Sound.Play(GameManager.Sound.ObjectDataSounds.DashUnable);
             return;
@@ -318,6 +322,7 @@ public class MonsterMovement : MonoBehaviour
     }
 
     #region LegacyMoveToFunctions
+
     /// <summary>
     /// NavMesh의 Move를 통한 이동을 구현
     /// 현재 사용하지 않으나, 후에 다른 로직 구현에 사용될 수 있는 코드가 있어 남겨둠
@@ -332,7 +337,7 @@ public class MonsterMovement : MonoBehaviour
             {
                 //만약 Invalid한 위치(공중 or Navmesh가 없는 곳)에 있다면, 반경 10f 안에 가장 가까운 NavMesh위치로 이동합니다.
                 if (!(NavMesh.SamplePosition(destination, out var hit, float.PositiveInfinity, m_agent.areaMask)
-                    && NavMesh.CalculatePath(transform.position, hit.position, m_agent.areaMask, m_lastPath)))
+                      && NavMesh.CalculatePath(transform.position, hit.position, m_agent.areaMask, m_lastPath)))
                 {
                     //반경 10f 안에 가장 가까운 NavMesh가 없다면, return합니다.
                     Debug.LogWarning($"{gameObject.name}: destination에 인접한 NavMesh가 없어 길찾기 실패.");
@@ -359,6 +364,7 @@ public class MonsterMovement : MonoBehaviour
                 else
                     angle = -Data.AngularSpeed * Time.deltaTime;
             }
+
             Vector3 nextDir = Quaternion.Euler(0f, angle, 0f) * transform.forward.GetFlatVector();
 
             //Vector3 nextDir = Vector3.Lerp(transform.forward.GetFlatVector(), dir.GetFlatVector(), Time.deltaTime * rotSpeed);
@@ -400,11 +406,13 @@ public class MonsterMovement : MonoBehaviour
             if (!NavMesh.CalculatePath(transform.position, destination, m_agent.areaMask, m_lastPath))
             {
                 //만약 Invalid한 위치(공중 or Navmesh가 없는 곳)에 있다면, 가장 가까운 NavMesh위치로 이동합니다.
-                if(!NavMesh.SamplePosition(destination, out var hit, float.PositiveInfinity, m_agent.areaMask))
+                if (!NavMesh.SamplePosition(destination, out var hit, float.PositiveInfinity, m_agent.areaMask))
                 {
-                    Debug.LogWarning($"{gameObject.name}: destination에 인접한 NavMesh가 없어 길찾기 실패. Destination: {destination}");
+                    Debug.LogWarning(
+                        $"{gameObject.name}: destination에 인접한 NavMesh가 없어 길찾기 실패. Destination: {destination}");
                     return;
                 }
+
                 if (!NavMesh.CalculatePath(transform.position, hit.position, m_agent.areaMask, m_lastPath))
                 {
                     //가장 가까운 NavMesh조차 없거나, path가 Invalid면 (OffMeshLink가 이미 사용중이라던가), return합니다.
@@ -418,7 +426,7 @@ public class MonsterMovement : MonoBehaviour
                 UpdateObstacleAvoidanceType();
             }
 
-            if (!m_agent.isOnOffMeshLink&&m_lastPath.status != NavMeshPathStatus.PathInvalid)
+            if (!m_agent.isOnOffMeshLink && m_lastPath.status != NavMeshPathStatus.PathInvalid)
             {
                 m_agent.SetPath(m_lastPath);
             }
@@ -426,6 +434,7 @@ public class MonsterMovement : MonoBehaviour
             UpdateAgentSpeedByOnGround();
         }
     }
+
     #endregion
 
     private void MoveToWithNavSetDest(Vector3 destination, bool useAdaptiveAvoidanceTest = true)
@@ -450,7 +459,9 @@ public class MonsterMovement : MonoBehaviour
 
     private void UpdateObstacleAvoidanceType()
     {
-        int amount = Physics.OverlapSphereNonAlloc(transform.position + m_collider.center, m_agent.radius + m_agent.velocity.magnitude * Time.deltaTime * 2f, m_avoidanceCheckColliders, LayerMask.GetMask("Monster"));
+        int amount = Physics.OverlapSphereNonAlloc(transform.position + m_collider.center,
+            m_agent.radius + m_agent.velocity.magnitude * Time.deltaTime * 2f, m_avoidanceCheckColliders,
+            LayerMask.GetMask("Monster"));
         //자기 자신이 포함되었는지 확인
         int max = amount < m_avoidanceCheckColliders.Length ? amount : m_avoidanceCheckColliders.Length;
         for (int i = 0; i < max; i++)
@@ -462,6 +473,7 @@ public class MonsterMovement : MonoBehaviour
                 break;
             }
         }
+
         if (max > 0)
         {
             //자기 자신을 제외하고 누군가 범위 내에 있다면, Quality를 높인다.
@@ -544,6 +556,7 @@ public class MonsterMovement : MonoBehaviour
             m_rigidbody.velocity = Vector3.zero;
             return;
         }
+
         float nextSpeed = m_dashSpeed;
 
         //대쉬시 모든 물리 영향을 초기화함
@@ -553,8 +566,10 @@ public class MonsterMovement : MonoBehaviour
         Vector3 nextDirection = TranslateBySurfaceNormal(m_dashDirection, m_currentNormal).normalized;
 
         //2. 캡슐캐스트 진행, 몬스터와 만나는지 체크합니다.
-        Vector3 p1 = transform.TransformPoint(m_collider.center + Vector3.up * (0.5f * m_collider.height - m_collider.radius));
-        Vector3 p2 = transform.TransformPoint(m_collider.center + Vector3.down * (0.5f * m_collider.height - m_collider.radius));
+        Vector3 p1 =
+            transform.TransformPoint(m_collider.center + Vector3.up * (0.5f * m_collider.height - m_collider.radius));
+        Vector3 p2 =
+            transform.TransformPoint(m_collider.center + Vector3.down * (0.5f * m_collider.height - m_collider.radius));
 
         if (Physics.CapsuleCast(p1, p2, m_collider.radius - 0.01f, m_dashDirection, out var hit,
                 m_dashSpeed * Time.fixedDeltaTime, LayerMask.GetMask(ConstVariables.MOVEMENT_COLLISION_LAYERS)))
@@ -568,11 +583,13 @@ public class MonsterMovement : MonoBehaviour
                 Vector3 nextDir = Vector3.ProjectOnPlane(m_dashDirection, hit.normal);
                 Vector3 nextPos = transform.position + m_dashDirection * hit.distance;
                 float nextDist = m_dashSpeed * Time.fixedDeltaTime - hit.distance;
-                Vector3 np1 = nextPos + (m_collider.center + Vector3.up * (0.5f * m_collider.height - m_collider.radius));
-                Vector3 np2 = nextPos + (m_collider.center + Vector3.down * (0.5f * m_collider.height - m_collider.radius));
+                Vector3 np1 = nextPos +
+                              (m_collider.center + Vector3.up * (0.5f * m_collider.height - m_collider.radius));
+                Vector3 np2 = nextPos +
+                              (m_collider.center + Vector3.down * (0.5f * m_collider.height - m_collider.radius));
 
                 if (Physics.CapsuleCast(np1, np2, m_collider.radius - 0.01f, nextDir, out var nhit,
-                nextDist, LayerMask.GetMask(ConstVariables.MOVEMENT_COLLISION_LAYERS)))
+                        nextDist, LayerMask.GetMask(ConstVariables.MOVEMENT_COLLISION_LAYERS)))
                 {
                     //그래도 충돌할 경우 거기까지만 이동.
                     m_rigidbody.MovePosition(nextPos + nextDir * nhit.distance);
@@ -583,6 +600,7 @@ public class MonsterMovement : MonoBehaviour
                     m_rigidbody.MovePosition(nextPos + nextDir * nextDist);
                 }
             }
+
             return;
         }
 
@@ -723,25 +741,29 @@ public class MonsterMovement : MonoBehaviour
 
 
     #region 사운드 관련
+
     private void PlayWalkSound()
     {
         if (!m_isOnGround)
         {
             m_isWalkSoundPlaying = false;
             m_audioSource.Stop();
-            GameManager.Sound.footStepCount = GameManager.Sound.footStepCount <= 0 ? 0 : --GameManager.Sound.footStepCount;
+            GameManager.Sound.footStepCount =
+                GameManager.Sound.footStepCount <= 0 ? 0 : --GameManager.Sound.footStepCount;
 
             return;
         }
-        
-        if (m_actor.IsPossessed == false && m_isWalkSoundPlaying && Vector3.Distance(transform.position, Camera.main.transform.position) > 15)
+
+        if (m_actor.IsPossessed == false && m_isWalkSoundPlaying &&
+            Vector3.Distance(transform.position, Camera.main.transform.position) > 15)
         {
             m_isWalkSoundPlaying = false;
             m_audioSource.Stop();
-            GameManager.Sound.footStepCount = GameManager.Sound.footStepCount <= 0 ? 0 : --GameManager.Sound.footStepCount;
+            GameManager.Sound.footStepCount =
+                GameManager.Sound.footStepCount <= 0 ? 0 : --GameManager.Sound.footStepCount;
             return;
         }
-        
+
         if (m_actor.IsPossessed == false)
         {
             if (GameManager.Sound.footStepCount > 10)
@@ -749,7 +771,7 @@ public class MonsterMovement : MonoBehaviour
                 return;
             }
         }
-        
+
         //걷는 사운드가 이미 출력되고 있으면 return
         if (m_isWalkSoundPlaying)
         {
@@ -771,7 +793,8 @@ public class MonsterMovement : MonoBehaviour
 
     private void CheckWalk()
     {
-        if (m_actor.Animator.GetFloat(ConstVariables.ANIMATOR_PARAMETER_MOVEMENT_RATIO) >= 0.1f || !m_isWalkSoundPlaying)
+        if (m_actor.Animator.GetFloat(ConstVariables.ANIMATOR_PARAMETER_MOVEMENT_RATIO) >= 0.1f ||
+            !m_isWalkSoundPlaying)
         {
             return;
         }
@@ -783,9 +806,7 @@ public class MonsterMovement : MonoBehaviour
 
     private void CheckFootStepSound()
     {
-       
-
-        if(Time.timeScale == 0f)
+        if (Time.timeScale == 0f)
         {
             m_audioSource.pitch = 0f;
         }
@@ -797,5 +818,6 @@ public class MonsterMovement : MonoBehaviour
                 m_audioSource.pitch = 1f;
         }
     }
+
     #endregion
 }
