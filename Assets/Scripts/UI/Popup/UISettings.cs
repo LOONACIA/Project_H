@@ -167,7 +167,7 @@ public class UISettings : UIPopup
             
             if (LocalizationManager.IsEquals(cultureInfo, GameManager.Settings.GeneralSettings.CurrentLanguage))
             {
-                m_languageSelector.index = m_languageSelector.items.Count - 1;
+                m_languageSelector.defaultIndex = m_languageSelector.index = m_languageSelector.items.Count - 1;
             }
         }
         
