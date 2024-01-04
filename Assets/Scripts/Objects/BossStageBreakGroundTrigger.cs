@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class BossStageBreakGround : MonoBehaviour
+public class BossStageBreakGroundTrigger : MonoBehaviour
 {
     #region PublicVariables
     #endregion
@@ -12,7 +12,9 @@ public class BossStageBreakGround : MonoBehaviour
     #region PrivateVariables
     [SerializeField]
     private BossStageRoot m_bossStageRoot;
-    //private Transform[] m_childrenList;
+    [SerializeField]
+    private GameObject m_breakGround;
+
     private MeshRenderer m_mr;
     private MeshCollider m_col;
     private BoxCollider m_trigger;
@@ -22,13 +24,11 @@ public class BossStageBreakGround : MonoBehaviour
     #region PublicMethod
     private void Start()
     {
-        m_mr = GetComponent<MeshRenderer>();
-        m_col = GetComponent<MeshCollider>();
+        m_mr = m_breakGround.GetComponent<MeshRenderer>();
+        m_col = m_breakGround.GetComponent<MeshCollider>();
         m_trigger = GetComponent<BoxCollider>();
-
-        //m_childrenList = GetComponentsInChildren<Transform>(true);
         
-        m_explosiveList = GetComponentsInChildren<Explosive>(true);
+        m_explosiveList = m_breakGround.GetComponentsInChildren<Explosive>(true);
     }
     #endregion
 
@@ -46,8 +46,6 @@ public class BossStageBreakGround : MonoBehaviour
             {
                 audioSource.Play();
             }
-
-
         }
     }
 
@@ -55,13 +53,6 @@ public class BossStageBreakGround : MonoBehaviour
     {
         m_mr.enabled = false;
         m_col.enabled = false;
-
-        //var children = GetComponentsInChildren<Rigidbody>(true);
-
-        //foreach (var child in children) 
-        //{ 
-        //    SetForce(child);
-        //}
 
         foreach (var explosive in m_explosiveList)
         {
