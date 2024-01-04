@@ -343,6 +343,11 @@ public class UIHUD : UIScene
 
     private void OnDashCoolTimeChanged(object sender, float e)
     {
+        if (m_dashIndicators.Length <= m_dashIndicatorCursor)
+        {
+            return;
+        }
+        
         m_dashIndicators[m_dashIndicatorCursor].fillAmount = e;
         if (m_dashIndicatorCursor == 0)
         {

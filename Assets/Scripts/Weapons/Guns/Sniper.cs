@@ -38,7 +38,12 @@ public class Sniper : Gun
         
         m_renderer = GetComponent<LineRenderer>();
     }
-    
+
+    private void Start()
+    {
+        Owner.Status.AbilityRate = Ammo / (float)m_maxAmmo;
+    }
+
     protected void OnDisable()
     {
         m_drawLineCoroutine?.Abort();
