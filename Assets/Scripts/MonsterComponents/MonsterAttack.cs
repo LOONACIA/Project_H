@@ -222,11 +222,11 @@ public class MonsterAttack : MonoBehaviour
         // 죽은 몬스터 수 체크
         m_diedVictimCount += e.Count(info => info.Victim.CurrentHp <= 0f);
         
-        if(m_actor is EliteBoss && m_diedVictimCount >= 7 && m_eliteBool)
+        if(m_actor is EliteBoss && m_diedVictimCount >= 5 && m_eliteBool)
         {
             //시간 조절
             GameManager.Effect.ChangeTimeScale(this, 0f, 0.3f, 1000f, 1000f);
-
+            
             GameObject light = ManagerRoot.Resource.Instantiate(GameManager.Settings.AttackLight);
             light.transform.position = Camera.main.transform.position + transform.forward * 0.5f;
 
