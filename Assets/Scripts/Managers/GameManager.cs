@@ -213,11 +213,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void OnSceneChanging(Scene obj)
+    private void OnSceneChanging(string sceneName)
     {
         // 씬이 변경될 때 별도 처리가 필요한 경우 여기에 작성
         m_actor.Clear();
-        m_notification.Clear();
+        m_notification.Clear(sceneName);
         m_sound.Clear();
         m_ui.Clear();
 
