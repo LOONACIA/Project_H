@@ -12,8 +12,6 @@ public class NotificationManager
 
     private readonly HashSet<Quest> m_activatedQuests = new();
 
-    private string m_currentSceneName;
-
     /// <summary>
     /// Notification이 활성화되었을 때 발생하는 이벤트
     /// </summary>
@@ -62,21 +60,22 @@ public class NotificationManager
 
     public void Clear(string sceneName)
     {
-        if (m_currentSceneName == sceneName)
+        string currentSceneName = SceneManager.GetActiveScene().name;
+        if (currentSceneName == sceneName)
         {
             return;
         }
         
-        m_currentSceneName = sceneName;
-        foreach (var activatedQuest in m_activatedQuests)
-        {
-            activatedQuest.IsCompleted = false;
-        }
+        currentSceneName = sceneName;
         m_activatedQuests.Clear();
         
         foreach (var notification in m_registeredNotifications.Values)
         {
             notification.IsNotified = false;
+            if (notification is Quest quest)
+            {
+                quest.IsCompleted = false;
+            }
         }
     }
 
