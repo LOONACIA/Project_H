@@ -30,6 +30,9 @@ public class Shotgun : Gun
         
         Ray ray = GetRay();
         bool isHit = Physics.Raycast(ray, out var hit, distance, m_aimLayers);
+        if (isHit && hit.collider.gameObject == Owner.gameObject)
+            isHit = false;
+
         Vector3 target = isHit ? hit.point : ray.GetPoint(distance);
         Vector3 spawnPosition = m_spawnPosition.position;
         Vector3 direction = (target - spawnPosition).normalized;
