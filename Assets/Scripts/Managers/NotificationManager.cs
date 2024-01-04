@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Quest와 ModalDialog를 관리하는 매니저 클래스
@@ -10,6 +11,8 @@ public class NotificationManager
     private readonly Dictionary<int, Notification> m_registeredNotifications = new();
 
     private readonly HashSet<Quest> m_activatedQuests = new();
+
+    private string m_currentSceneName;
 
     /// <summary>
     /// Notification이 활성화되었을 때 발생하는 이벤트
@@ -23,6 +26,8 @@ public class NotificationManager
 
     public void Init()
     {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        
         m_registeredNotifications.Clear();
         var notifications = GameManager.Settings.QuestData.Notifications;
         var span = CollectionsMarshal.AsSpan(notifications);
@@ -36,7 +41,7 @@ public class NotificationManager
             }
         }
     }
-    
+
     public IEnumerable<Quest> GetActivatedQuests()
     {
         foreach (var quest in m_activatedQuests)
@@ -59,14 +64,6 @@ public class NotificationManager
 
     public void Clear()
     {
-        // 활성화된 퀘스트 초기화. 만약 전체 알림을 초기화하고 싶다면 이 부분을 수정할 것
-        // foreach (var quest in m_activatedQuests)
-        // {
-        //     quest.IsCompleted = false;
-        //     quest.IsNotified = false;
-        // }
-        //
-        // m_activatedQuests.Clear();
     }
 
     // ReSharper disable Unity.PerformanceAnalysis
@@ -115,5 +112,25 @@ public class NotificationManager
         }
 
         QuestCompleted?.Invoke(this, quest);
+    }
+    
+    private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
+    {
+        if (m_currentSceneName == arg0.name)
+        {
+            return;
+        }
+        
+        m_currentSceneName = arg0.name;
+        foreach (var activatedQuest in m_activatedQuests)
+        {
+            activatedQuest.IsCompleted = false;
+        }
+        m_activatedQuests.Clear();
+        
+        foreach (var notification in m_registeredNotifications.Values)
+        {
+            notification.IsNotified = false;
+        }
     }
 }
