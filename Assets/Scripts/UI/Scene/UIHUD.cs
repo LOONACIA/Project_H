@@ -151,6 +151,7 @@ public class UIHUD : UIScene
     {
         UnregisterEvents(m_controller);
         m_controller = controller;
+        OnCharacterChanged(this, m_controller.Character);
         RegisterEvents(m_controller);
         return this;
     }

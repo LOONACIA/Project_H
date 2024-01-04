@@ -756,6 +756,11 @@ public class MonsterMovement : MonoBehaviour
             return;
         }
 
+        if (m_agent.enabled == true && m_agent.velocity.magnitude < 0.1f)
+        {
+            return;
+        }
+
         m_audioSource.Play();
         m_isWalkSoundPlaying = true;
         if (!m_actor.IsPossessed)
