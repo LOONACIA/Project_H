@@ -6,20 +6,18 @@ namespace LOONACIA.Unity.Managers
 {
     public static class SceneManagerEx
     {
-        public static Action<Scene> SceneChanging;
+        public static Action<string> SceneChanging;
 
         public static void LoadScene(string sceneName, LoadSceneMode mode = LoadSceneMode.Single)
         {
-            Scene currentScene = SceneManager.GetActiveScene();
-            SceneChanging?.Invoke(currentScene);
+            SceneChanging?.Invoke(sceneName);
             
             SceneManager.LoadScene(sceneName, mode);
         }
 
         public static AsyncOperation LoadSceneAsync(string sceneName, LoadSceneMode mode = LoadSceneMode.Single)
         {
-            Scene currentScene = SceneManager.GetActiveScene();
-            SceneChanging?.Invoke(currentScene);
+            SceneChanging?.Invoke(sceneName);
             
             return SceneManager.LoadSceneAsync(sceneName, mode);
         }

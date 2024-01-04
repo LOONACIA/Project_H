@@ -15,8 +15,6 @@ public class GameSettings : ScriptableObject
     
     private bool m_isInitialized;
 
-    [Header("General")]
-    [SerializeField]
     private GeneralSettings m_generalSettings = new();
 
     public GeneralSettings GeneralSettings
@@ -69,12 +67,6 @@ public class GameSettings : ScriptableObject
 
     public void Initialize()
     {
-        if (m_isInitialized)
-        {
-            return;
-        }
-        
-        m_isInitialized = true;
         GeneralSettings = Load();
     }
 

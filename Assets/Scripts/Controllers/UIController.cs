@@ -174,7 +174,11 @@ public partial class UIController : MonoBehaviour
     
         public static readonly MenuInfo Continue = new("return_game_button", () => GameManager.Instance.SetResume());
     
-        public static readonly MenuInfo Menu = new("exit_menu_button", () => SceneManagerEx.LoadScene("TitleScene"));
+        public static readonly MenuInfo Menu = new("exit_menu_button", () =>
+        {
+            GameManager.Sound.ResetBGMTime();
+            SceneManagerEx.LoadScene("TitleScene");
+        });
         
         public static readonly MenuInfo Settings = new("settings_button", () => ManagerRoot.UI.ShowPopupUI<UISettings>());
         

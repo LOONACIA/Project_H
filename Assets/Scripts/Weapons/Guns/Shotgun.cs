@@ -30,9 +30,14 @@ public class Shotgun : Gun
         
         Ray ray = GetRay();
         bool isHit = Physics.Raycast(ray, out var hit, distance, m_aimLayers);
-        Vector3 target = isHit ? hit.point : ray.GetPoint(distance);
+        if (isHit && hit.collider.gameObject == Owner.gameObject)
+            isHit = false;
+
+        float sqrMagnitude = (hit.point - m_virtualCamera.transform.position).sqrMagnitude;
+        Vector3 target = isHit && sqrMagnitude > 1 ? hit.point : ray.GetPoint(distance);
         Vector3 spawnPosition = m_spawnPosition.position;
         Vector3 direction = (target - spawnPosition).normalized;
+
         for (int index = 0; index < m_shotgunBulletCount; index++)
         {
             Vector3 coneDirection = GetRandomConeDirection(direction, m_shotgunSpreadAngle);

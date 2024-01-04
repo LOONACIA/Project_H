@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Quest와 ModalDialog를 관리하는 매니저 클래스
@@ -36,7 +37,7 @@ public class NotificationManager
             }
         }
     }
-    
+
     public IEnumerable<Quest> GetActivatedQuests()
     {
         foreach (var quest in m_activatedQuests)
@@ -57,16 +58,25 @@ public class NotificationManager
         }
     }
 
-    public void Clear()
+    public void Clear(string sceneName)
     {
-        // 활성화된 퀘스트 초기화. 만약 전체 알림을 초기화하고 싶다면 이 부분을 수정할 것
-        // foreach (var quest in m_activatedQuests)
-        // {
-        //     quest.IsCompleted = false;
-        //     quest.IsNotified = false;
-        // }
-        //
-        // m_activatedQuests.Clear();
+        string currentSceneName = SceneManager.GetActiveScene().name;
+        if (currentSceneName == sceneName)
+        {
+            return;
+        }
+        
+        currentSceneName = sceneName;
+        m_activatedQuests.Clear();
+        
+        foreach (var notification in m_registeredNotifications.Values)
+        {
+            notification.IsNotified = false;
+            if (notification is Quest quest)
+            {
+                quest.IsCompleted = false;
+            }
+        }
     }
 
     // ReSharper disable Unity.PerformanceAnalysis
