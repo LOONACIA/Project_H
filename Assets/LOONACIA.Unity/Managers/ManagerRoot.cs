@@ -62,7 +62,7 @@ namespace LOONACIA.Unity.Managers
 			_ui.Init();
 		}
 
-		private void OnSceneChanging(Scene obj)
+		private void OnSceneChanging(string sceneName)
 		{
 			Clear(false);
 		}
