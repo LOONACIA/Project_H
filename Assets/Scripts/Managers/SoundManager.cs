@@ -291,6 +291,11 @@ public class SoundManager
         
         Play(ObjectDataSounds.TestSFX);
     }
+
+    public void ResetBGMTime()
+    {
+        m_bgmTime = 0f;
+    }
 }
 
 [System.Serializable]
