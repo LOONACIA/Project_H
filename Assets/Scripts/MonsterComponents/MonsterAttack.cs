@@ -65,6 +65,17 @@ public class MonsterAttack : MonoBehaviour
 
     private void Start()
     {
+        if (m_abilities.Length == 0)
+        {
+            m_abilities = GetComponentsInChildren<Ability>();
+            foreach (Ability ability in m_abilities.AsSpan())
+            {
+                ability.Owner = m_actor;
+                ability.StateChanged -= OnAbilityStateChanged;
+                ability.StateChanged += OnAbilityStateChanged;
+            }
+        }
+        
         m_actor.Status.HasCooldown = m_data.SkillCoolTime > 0f;
         m_actor.Status.SkillCoolTime = 1f;
 
@@ -77,7 +88,7 @@ public class MonsterAttack : MonoBehaviour
     }
 
     private void OnEnable()
-    {
+    { 
         if (CurrentWeapon != null)
         {
             CurrentWeapon.Owner = m_actor;
@@ -88,6 +99,7 @@ public class MonsterAttack : MonoBehaviour
         foreach (Ability ability in m_abilities.AsSpan())
         {
             ability.Owner = m_actor;
+            ability.StateChanged -= OnAbilityStateChanged;
             ability.StateChanged += OnAbilityStateChanged;
         }
     }
