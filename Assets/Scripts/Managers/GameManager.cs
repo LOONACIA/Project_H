@@ -114,10 +114,7 @@ public class GameManager : MonoBehaviour
         {
             m_settings = ManagerRoot.Resource.Load<GameSettings>($"Settings/{nameof(GameSettings)}");
         }
-    }
-
-    private void Start()
-    {
+        
         m_settings.Initialize();
     }
 
@@ -192,6 +189,11 @@ public class GameManager : MonoBehaviour
 
             s_instance = manager;
             DontDestroyOnLoad(s_instance);
+            
+#if !UNITY_EDITOR
+            InitializeLog();
+            Application.logMessageReceived += s_instance.OnLogMessageReceived;
+#endif
 
             // 매니저 클래스 초기화
             s_instance.m_character.Init(s_instance.m_settings);
@@ -205,22 +207,17 @@ public class GameManager : MonoBehaviour
             // Example:
             //      var manager = s_instance.AddComponent<Manager>();
 
-#if !UNITY_EDITOR
-            InitializeLog();
-            Application.logMessageReceived += s_instance.OnLogMessageReceived;
-#endif
-
             SceneManagerEx.SceneChanging += s_instance.OnSceneChanging;
 
             Debug.Log("Game Manager Initialized\n");
         }
     }
 
-    private void OnSceneChanging(Scene obj)
+    private void OnSceneChanging(string sceneName)
     {
         // 씬이 변경될 때 별도 처리가 필요한 경우 여기에 작성
         m_actor.Clear();
-        m_notification.Clear();
+        m_notification.Clear(sceneName);
         m_sound.Clear();
         m_ui.Clear();
 
