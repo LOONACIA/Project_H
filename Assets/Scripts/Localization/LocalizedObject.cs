@@ -8,7 +8,8 @@ public class LocalizedObject : MonoBehaviour
     private enum ObjectType
     {
         Text,
-        Button
+        Button,
+        Panel
     }
     
     [SerializeField]
@@ -22,6 +23,9 @@ public class LocalizedObject : MonoBehaviour
     
     [SerializeField]
     private ButtonManager m_buttonObject;
+    
+    [SerializeField]
+    private PanelButton m_panelObject;
 
     private void OnEnable()
     {
@@ -49,6 +53,9 @@ public class LocalizedObject : MonoBehaviour
             case ObjectType.Button:
                 UpdateButton();
                 break;
+            case ObjectType.Panel:
+                UpdatePanel();
+                break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
@@ -75,5 +82,17 @@ public class LocalizedObject : MonoBehaviour
         
         m_buttonObject.buttonText = GameManager.Localization.Get(m_key);
         m_buttonObject.UpdateUI();
+    }
+    
+    private void UpdatePanel()
+    {
+        if (m_panelObject == null)
+        {
+            Debug.LogWarning($"{nameof(m_panelObject)} is null.");
+            return;
+        }
+        
+        m_panelObject.buttonText = GameManager.Localization.Get(m_key);
+        m_panelObject.UpdateUI();
     }
 }

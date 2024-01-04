@@ -110,9 +110,8 @@ public class UIHUD : UIScene
 
     private int m_hpBoxCursor;
 
-    
     private int m_backLayerCursor;
-    
+
     private int m_dashIndicatorCursor;
 
     private CoroutineEx m_hpChangingEffectCoroutine;
@@ -124,6 +123,8 @@ public class UIHUD : UIScene
     private CoroutineEx m_dashIndicatorCoroutine;
     
     private UIManagerImage m_dashIndicatorManager;
+    
+    private bool m_dashIndicatorInitialized;
 
     private void OnEnable()
     {
@@ -152,12 +153,6 @@ public class UIHUD : UIScene
     {
         UnregisterEvents(m_controller);
         m_controller = controller;
-    
-        if (m_controller != null)
-        {
-            OnCharacterChanged(this, m_controller.Character);
-        }
-
         RegisterEvents(m_controller);
         return this;
     }
@@ -215,6 +210,7 @@ public class UIHUD : UIScene
         {
             return;
         }
+        UnregisterEvents(controller);
 
         controller.CharacterChanged += OnCharacterChanged;
         controller.Damaged += OnDamaged;
@@ -231,7 +227,7 @@ public class UIHUD : UIScene
         }
 
         m_cooldownIndicator.fillAmount = e;
-        m_cooldownIndicator.gameObject.SetActive(true);
+        m_cooldownIndicator.gameObject.SetActive(m_controller.Character.Status.HasCooldown);
     }
 
     private void UnregisterEvents(PlayerController controller)
@@ -266,6 +262,7 @@ public class UIHUD : UIScene
         {
             return;
         }
+        UnregisterEvents(processor);
         
         processor.ShurikenThrown += OnShurikenThrown;
         processor.HackStarted += OnHackStarted;
@@ -291,7 +288,6 @@ public class UIHUD : UIScene
 
     private void OnCharacterChanged(object sender, Actor e)
     {
-        m_dashIndicatorCursor = 0;
         if (m_actor != null)
         {
             m_actor.Status.DashCountChanged -= OnDashCountChanged;
@@ -301,27 +297,27 @@ public class UIHUD : UIScene
         m_actor = e;
         
         ResetHpBoxes();
-        
-        if (m_actor != null && m_actor.Status != null)
-        {
-            m_dashIndicatorCursor = m_actor.Status.CurrentDashCount;
-            m_cooldownIndicator.fillAmount = m_actor.Status.SkillCoolTime;
-            m_cooldownIndicator.gameObject.SetActive(m_actor.Status.HasCooldown);
-            
-            m_actor.Status.DashCountChanged += OnDashCountChanged;
-            m_actor.Status.DashCoolTimeChanged += OnDashCoolTimeChanged;
-        }
+        m_dashIndicatorCursor = m_actor.Status.CurrentDashCount;
         
         for (int index = 0; index < m_dashIndicators.Length; index++)
         {
             m_dashIndicators[index].fillAmount = index < m_dashIndicatorCursor ? 1 : 0;
         }
 
-        if (m_dashIndicators.Length > 0)
+        if (m_dashIndicatorInitialized && m_dashIndicators.Length > 0)
         {
             m_dashIndicatorManager.colorType = Mathf.Approximately(m_dashIndicators[0].fillAmount, 1)
                 ? UIManagerImage.ColorType.Accent
                 : UIManagerImage.ColorType.Negative;
+        }
+        
+        if (m_actor != null)
+        {
+            m_cooldownIndicator.fillAmount = m_actor.Status.SkillCoolTime;
+            m_cooldownIndicator.gameObject.SetActive(m_actor.Status.HasCooldown);
+            
+            m_actor.Status.DashCountChanged += OnDashCountChanged;
+            m_actor.Status.DashCoolTimeChanged += OnDashCoolTimeChanged;
         }
     }
 
@@ -336,6 +332,18 @@ public class UIHUD : UIScene
 
     private void OnDashCountChanged(object sender, int e)
     {
+        // 초기화 시 이벤트가 발생하므로 이를 무시합니다. 대신, m_dashIndicators의 fillAmount를 모두 1로 설정합니다.
+        if (!m_dashIndicatorInitialized)
+        {
+            m_dashIndicatorInitialized = true;
+            for (int index = 0; index < m_dashIndicators.Length; index++)
+            {
+                m_dashIndicators[index].fillAmount = 1;
+            }
+
+            return;
+        }
+        
         m_dashIndicatorCoroutine?.Abort();
         if (m_dashIndicatorCursor < m_dashIndicators.Length)
         {
@@ -415,11 +423,6 @@ public class UIHUD : UIScene
 
     private void ResetHpBoxes()
     {
-        if (m_controller == null || m_controller.Character == null || m_controller.Character.Health == null)
-        {
-            return;
-        }
-        
         int respectedHpBoxCount = Mathf.CeilToInt(m_controller.Character.Health.MaxHp / (float)m_hpPerBox) - 1;
         int count = m_backLayerHpBoxes.Count;
         while (count-- > respectedHpBoxCount)
