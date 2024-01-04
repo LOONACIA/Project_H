@@ -18,7 +18,13 @@ public class CanSeeTargets : Conditional
         {
             return TaskStatus.Success;
         }
-        
+
+        //24.01.04: target이 GameObject로 이전 로직에서 체크되지 않을 수 있어 Null체크 실행.
+        if (target.Value == null)
+        {
+            return TaskStatus.Failure;
+        }
+
         Vector3 selfPosition = self.Value.transform.position + Vector3.up;
         Vector3 targetPosition = target.Value.transform.position + (Vector3.up / 2f);
         //Vector3 targetHeadPosition = target.Value.transform.position + Vector3.up;

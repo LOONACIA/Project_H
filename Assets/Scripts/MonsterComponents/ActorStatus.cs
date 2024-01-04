@@ -137,10 +137,19 @@ public class ActorStatus : MonoBehaviour
             // 기존에 생성한 오브젝트 제거
             if (m_shield != null)
             {
+                m_shield.ShieldChanged -= ShieldChanged;
+                m_shield.Destroyed -= ShieldDestroyed;
                 m_shield.Destroy(new());
             }
 
             m_shield = value;
+            
+            if (m_shield != null)
+            {
+                m_shield.ShieldChanged += ShieldChanged;
+                m_shield.Destroyed += ShieldDestroyed;
+                ShieldChanged?.Invoke(m_shield, m_shield.ShieldAmount / m_shield.MaxShieldAmount);
+            }
         }
     }
 
@@ -184,6 +193,10 @@ public class ActorStatus : MonoBehaviour
     public float DashCoolTime { get; set; }
 
     public event EventHandler<int> HpChanged;
+    
+    public event EventHandler<float> ShieldChanged; 
+    
+    public event EventHandler ShieldDestroyed;
     
     public event EventHandler<float> AbilityRateChanged;
 

@@ -27,7 +27,8 @@ public class UIHUD : UIScene
         HackingPanel,
         AbilityPanel,
         DashPanel,
-        QuestHolder
+        QuestHolder,
+        ShieldPanel
     }
 
     private enum Texts
@@ -84,6 +85,8 @@ public class UIHUD : UIScene
     private GameObject m_abilityPanel;
     
     private GameObject m_questHolder;
+    
+    private GameObject m_shieldPanel;
 
     private TextMeshProUGUI m_hpTextBox;
 
@@ -179,6 +182,7 @@ public class UIHUD : UIScene
         m_hackingPanel = Get<GameObject, Panels>(Panels.HackingPanel);
         m_abilityPanel = Get<GameObject, Panels>(Panels.AbilityPanel);
         m_questHolder = Get<GameObject, Panels>(Panels.QuestHolder);
+        m_shieldPanel = Get<GameObject, Panels>(Panels.ShieldPanel);
 
         m_hpTextBox = Get<TextMeshProUGUI, Texts>(Texts.HpText);
         m_hpText = m_hpTextBox.GetComponent<UIManagerText>();
@@ -292,6 +296,8 @@ public class UIHUD : UIScene
         {
             m_actor.Status.DashCountChanged -= OnDashCountChanged;
             m_actor.Status.DashCoolTimeChanged -= OnDashCoolTimeChanged;
+            m_actor.Status.ShieldChanged -= OnShieldChanged;
+            m_actor.Status.ShieldDestroyed -= OnShieldDestroyed;
         }
         
         m_actor = e;
@@ -311,6 +317,8 @@ public class UIHUD : UIScene
                 : UIManagerImage.ColorType.Negative;
         }
         
+        m_shieldPanel.SetActive(false);
+        
         if (m_actor != null)
         {
             m_cooldownIndicator.fillAmount = m_actor.Status.SkillCoolTime;
@@ -318,11 +326,28 @@ public class UIHUD : UIScene
             
             m_actor.Status.DashCountChanged += OnDashCountChanged;
             m_actor.Status.DashCoolTimeChanged += OnDashCoolTimeChanged;
+            m_actor.Status.ShieldChanged += OnShieldChanged;
+            m_actor.Status.ShieldDestroyed += OnShieldDestroyed;
         }
+    }
+
+    private void OnShieldDestroyed(object sender, EventArgs e)
+    {
+        m_shieldPanel.SetActive(false);
+    }
+
+    private void OnShieldChanged(object sender, float e)
+    { 
+        m_shieldPanel.SetActive(e > 0);
     }
 
     private void OnDashCoolTimeChanged(object sender, float e)
     {
+        if (m_dashIndicators.Length <= m_dashIndicatorCursor)
+        {
+            return;
+        }
+        
         m_dashIndicators[m_dashIndicatorCursor].fillAmount = e;
         if (m_dashIndicatorCursor == 0)
         {
