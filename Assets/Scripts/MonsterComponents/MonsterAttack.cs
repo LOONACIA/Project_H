@@ -170,6 +170,17 @@ public class MonsterAttack : MonoBehaviour
 
     public void Ability(bool isToggled)
     {
+        if (m_abilities.Length == 0)
+        {
+            m_abilities = GetComponentsInChildren<Ability>();
+            foreach (Ability ability in m_abilities.AsSpan())
+            {
+                ability.Owner = m_actor;
+                ability.StateChanged -= OnAbilityStateChanged;
+                ability.StateChanged += OnAbilityStateChanged;
+            }
+        }
+        
         //TODO: KnockBack, KnockDown 중 스킬 못하게 할 것인가?
         if (m_actor.Status.HasCooldown && m_actor.Status.SkillCoolTime < 1f)
         {
