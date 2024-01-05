@@ -13,7 +13,7 @@ public class MonsterSFXPlayer : MonoBehaviour
     #endregion
 
     #region PrivateVariables
-    private bool isWalkSoundPlaying = false;
+    private bool isWalkSoundPlaying;
     #endregion
 
     #region PublicMethod
