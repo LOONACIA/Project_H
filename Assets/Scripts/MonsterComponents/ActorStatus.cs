@@ -137,8 +137,8 @@ public class ActorStatus : MonoBehaviour
             // 기존에 생성한 오브젝트 제거
             if (m_shield != null)
             {
-                m_shield.ShieldChanged -= ShieldChanged;
-                m_shield.Destroyed -= ShieldDestroyed;
+                m_shield.ShieldChanged -= OnShieldChanged;
+                m_shield.Destroyed -= OnShieldDestroyed;
                 m_shield.Destroy(new());
             }
 
@@ -146,11 +146,28 @@ public class ActorStatus : MonoBehaviour
             
             if (m_shield != null)
             {
-                m_shield.ShieldChanged += ShieldChanged;
-                m_shield.Destroyed += ShieldDestroyed;
-                ShieldChanged?.Invoke(m_shield, m_shield.ShieldAmount / m_shield.MaxShieldAmount);
+                m_shield.ShieldChanged += OnShieldChanged;
+                m_shield.Destroyed += OnShieldDestroyed;
+                OnShieldChanged(m_shield, m_shield.ShieldAmount / m_shield.MaxShieldAmount);
             }
         }
+    }
+
+    private void OnShieldChanged(object sender, float e)
+    {
+        ShieldChanged?.Invoke(this, e);
+    }
+
+    private void OnShieldDestroyed(object sender, EventArgs e)
+    {
+        if (sender is not Shield shield)
+        {
+            return;
+        }
+        
+        shield.Destroyed -= OnShieldDestroyed;
+        shield.ShieldChanged -= OnShieldChanged;
+        ShieldDestroyed?.Invoke(this, EventArgs.Empty);
     }
 
     public bool HasCooldown { get; set; }
