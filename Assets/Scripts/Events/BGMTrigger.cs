@@ -23,7 +23,6 @@ public class BGMTrigger : MonoBehaviour
         if (bgm.audio == GameManager.Sound.GetCureentBGM())
             return;
     
-        GameManager.Sound.ResetBGMTime();
         GameManager.Sound.Play(bgm);
     }
     #endregion
