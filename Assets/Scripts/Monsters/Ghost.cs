@@ -19,9 +19,31 @@ public class Ghost : Actor
         GameManager.Effect.ShowPossessionStartEffect();
         
         transform.LookAt(target.FirstPersonCameraPivot.transform.position);
-        
+
+        StartCoroutine(CoPossess());
+        //float speed = ConstVariables.HACKING_SUCCESS_EFFECT_DURATION;
+        //Utility.Lerp(transform.position, m_target.transform.position, speed, position => transform.position = position, PossessEnd, true);
+    }
+
+    private IEnumerator CoPossess()
+    {
+        Vector3 from = transform.position;
+        Vector3 to = m_target.transform.position;
         float speed = ConstVariables.HACKING_SUCCESS_EFFECT_DURATION;
-        Utility.Lerp(transform.position, m_target.transform.position, speed, position => transform.position = position, PossessEnd, true);
+        float time = 0f;
+        while (time < speed)
+        {
+            if (!GameManager.Instance.IsPaused)
+            {
+                transform.position = Vector3.Lerp(from, to, time / speed);
+                time += Time.unscaledDeltaTime;
+            }
+
+            yield return null;
+        }
+        
+        transform.position = to;
+        PossessEnd();
     }
 
     private void PossessEnd()

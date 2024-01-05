@@ -119,12 +119,17 @@ public class EffectManager
 
 		// Open Eye Effect
         const float duration = ConstVariables.HACKING_SUCCESS_EFFECT_DURATION;
-		Utility.Lerp(1, 0, duration, value => m_vignette.intensity.Override(value), ignoreTimeScale: true);
         GameManager.Instance.StartCoroutine(RevertTimeScale());
         return;
         
         IEnumerator RevertTimeScale()
         {
+            if (GameManager.Instance.IsPaused)
+            {
+                yield return new WaitUntil(() => !GameManager.Instance.IsPaused);
+            }
+            
+            Utility.Lerp(1, 0, duration, value => m_vignette.intensity.Override(value), ignoreTimeScale: true);
             yield return new WaitForSecondsRealtime(duration);
             Time.timeScale = 1f;
         }
