@@ -150,12 +150,12 @@ public class SoundManager
     public void OnInGame()
     {
         m_audioSources[(int)SoundType.Bgm].clip = m_bgmClip;
-        m_audioSources[(int)SoundType.Bgm].Play();
 
         var clip = m_audioSources[(int)SoundType.Bgm].clip;
         if (clip != null && m_bgmTime < clip.length)
             m_audioSources[(int)SoundType.Bgm].time = m_bgmTime;
 
+        m_audioSources[(int)SoundType.Bgm].Play();
         //AudioMixer.SetFloat("InGame", 0f);
         m_BGMSettingTween?.Kill();
         m_BGMSettingTween = audioMixer.DOSetFloat("InGame", 1f, 2f).SetUpdate(true);
@@ -232,6 +232,7 @@ public class SoundManager
             audioSource.Stop();
             audioSource.clip = audioClip;
             audioSource.priority = 1;
+            audioSource.time = 0f;
             audioSource.Play();
             audioMixer.DOSetFloat("BGM", 1f, 1f).SetUpdate(true);
         };

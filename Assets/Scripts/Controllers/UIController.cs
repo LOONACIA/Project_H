@@ -18,8 +18,6 @@ public partial class UIController : MonoBehaviour
     
     private bool m_isMenuRequested;
     
-    private bool m_isModal;
-    
     private CoroutineEx m_dialogCloseCoroutine;
     
     private DebugController m_debugController;
@@ -130,7 +128,6 @@ public partial class UIController : MonoBehaviour
 
         m_dialogPresenter = ManagerRoot.UI.ShowPopupUI<UIModalDialogPresenter>();
         m_dialogPresenter.SetDialog(dialog, OnConfirm);
-        m_isModal = true;
 
         void OnConfirm()
         {
@@ -147,7 +144,6 @@ public partial class UIController : MonoBehaviour
             if (dialog.RelatedDialog == null)
             {
                 GameManager.Instance.SetResume();
-                m_isModal = false;
             }
             else
             {
