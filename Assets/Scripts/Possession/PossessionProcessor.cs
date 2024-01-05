@@ -163,7 +163,7 @@ public class PossessionProcessor : MonoBehaviour
             Instantiate(m_sender.Data.ShurikenObj, cameraTransform.position + Vector3.down * 1 / 16f,
                 Quaternion.Euler(objectAngle, 0, 0)).GetComponent<PossessionShuriken>();
 
-        if (isHit && hit.transform.TryGetComponent<Actor>(out var actor) && actor.Status.Shield != null)
+        if (isHit && hit.transform.TryGetComponent<Actor>(out var actor) && actor.Status.Shield != null && actor.IsPossessed == false)
         {
             m_shuriken.InitSetting(actor, m_sender, OnTargetHit);
         }
