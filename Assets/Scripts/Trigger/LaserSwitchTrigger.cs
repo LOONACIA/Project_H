@@ -1,3 +1,5 @@
+using LOONACIA.Unity.Coroutines;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,7 +7,8 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class LaserSwitchTrigger : MonoBehaviour
 {
-    private Collider m_Collider;
+    [SerializeField]
+    private float m_delayTime = 1f;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -19,7 +22,13 @@ public class LaserSwitchTrigger : MonoBehaviour
     {
         if (other.TryGetComponent<HackingConsole>(out var console))
         {
-            console.Recovery();
+            CoroutineEx.Create(this, Co_WaitDelayTime(console));
         }
+    }
+
+    private IEnumerator Co_WaitDelayTime(HackingConsole console)
+    { 
+        yield return new WaitForSeconds(m_delayTime);
+        console.Recovery();
     }
 }
