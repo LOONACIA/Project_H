@@ -40,10 +40,10 @@ public class DissolveGate : MonoBehaviour, IGate
         yield return null;
 
         if (m_gate == null) yield break;
-
         if (m_state == GateState.Open) yield break;
-            m_state = GateState.Open;
-
+        
+        m_state = GateState.Open;
+        m_obstacle.enabled = false;
         gameObject.layer = LayerMask.NameToLayer("Default");
 
         if (m_gateCollider != null)
@@ -58,7 +58,6 @@ public class DissolveGate : MonoBehaviour, IGate
             yield return StartCoroutine(Dissolve(true));
         }
 
-        m_obstacle.enabled = false;
     }
 
     public IEnumerator Close()
@@ -66,14 +65,10 @@ public class DissolveGate : MonoBehaviour, IGate
         yield return null;
 
         if (m_gate == null) yield break;
-
-        if (m_state == GateState.Close)
-        {
-            yield break;
-        }
+        if (m_state == GateState.Close) yield break;
         
         m_state = GateState.Close;
-
+        m_obstacle.enabled = true;
         gameObject.layer = LayerMask.NameToLayer("Wall");
 
         if (m_gateCollider != null)
@@ -88,8 +83,6 @@ public class DissolveGate : MonoBehaviour, IGate
 
             yield return StartCoroutine(Dissolve(false));
         }
-
-        m_obstacle.enabled = true;
     }
 
     private void Start()
@@ -103,16 +96,19 @@ public class DissolveGate : MonoBehaviour, IGate
         m_appearMaterial = Instantiate<Material>(m_gateRenderer.material);
         m_dissolveMaterial = Instantiate<Material>(Resources.Load<Material>(ConstVariables.GATE_DISSOLVE_MATERIAL_PATH));
 
+        m_obstacle.carving = true;
         if (m_state == GateState.Open)
         {
             m_gateCollider.isTrigger = true;
             m_gateRenderer.enabled = false;
+            m_obstacle.enabled = false;
             gameObject.layer = LayerMask.NameToLayer("Default");
         }
         else
         { 
             m_gateCollider.isTrigger = false;
             m_gateRenderer.enabled = true;
+            m_obstacle.enabled = true;
             gameObject.layer = LayerMask.NameToLayer("Wall");
         }
     }

@@ -20,7 +20,7 @@ public class GateMachine : InteractableObject, IHealth
     [SerializeField]
     private Shield m_shield;
 
-    private List<IGate> m_gateScript = new();
+    private List<IGate> m_gateList = new();
     
     private Alarm m_alarm;
 
@@ -37,7 +37,7 @@ public class GateMachine : InteractableObject, IHealth
         foreach (var gate in m_gate)
         {
             if (gate.TryGetComponent<IGate>(out var gateScript))
-                m_gateScript.Add(gateScript);
+                m_gateList.Add(gateScript);
         }
 
         m_alarm = GetComponentInChildren<Alarm>();
@@ -86,7 +86,7 @@ public class GateMachine : InteractableObject, IHealth
     {
         IsInteractable = false;
 
-        foreach (var gate in m_gateScript) 
+        foreach (var gate in m_gateList) 
         {
             StartCoroutine(gate.Open());
         }
