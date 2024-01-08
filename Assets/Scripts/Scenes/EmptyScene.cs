@@ -11,7 +11,7 @@ public class EmptyScene : MonoBehaviour
 
     private IEnumerator LoadSceneAsync()
     {
-        var task = SceneManagerEx.LoadSceneAsync("TitleScene");
+        var task = SceneManagerEx.LoadSceneAsync("LogoScene");
         task.allowSceneActivation = false;
         while (!task.isDone)
         {
