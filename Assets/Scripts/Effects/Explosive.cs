@@ -39,12 +39,6 @@ public class Explosive : MonoBehaviour
 
     private void Destroy()
     {
-        Destroy(this);
-    }
-
-    private IEnumerator Co_Destroy(float delayTime)
-    {
-        yield return new WaitForSeconds(delayTime);
         Destroy(gameObject);
     }
 }
