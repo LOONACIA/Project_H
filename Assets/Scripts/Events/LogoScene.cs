@@ -1,17 +1,25 @@
 using LOONACIA.Unity.Managers;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class EmptyScene : MonoBehaviour
+public class LogoScene : MonoBehaviour
 {
-	private void Start()
+    #region PublicVariables
+    #endregion
+
+    #region PrivateVariables
+    #endregion
+
+    #region PublicMethod
+    private void LoadNextScene()
     {
         StartCoroutine(LoadSceneAsync());
     }
 
     private IEnumerator LoadSceneAsync()
     {
-        var task = SceneManagerEx.LoadSceneAsync("LogoScene");
+        var task = SceneManagerEx.LoadSceneAsync("TitleScene");
         task.allowSceneActivation = false;
         while (!task.isDone)
         {
@@ -23,4 +31,8 @@ public class EmptyScene : MonoBehaviour
             yield return null;
         }
     }
+    #endregion
+
+    #region PrivateMethod
+    #endregion
 }
