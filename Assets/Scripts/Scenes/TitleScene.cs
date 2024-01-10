@@ -14,7 +14,7 @@ public class TitleScene : MonoBehaviour
 {
     [SerializeField]
     private SceneName m_gameSceneName;
-    
+
     [SerializeField]
     private Animator m_animator;
 
@@ -23,14 +23,16 @@ public class TitleScene : MonoBehaviour
 
     [SerializeField]
     private GameObject m_firstFocus;
-    
+
     private CanvasGroup m_canvasGroup;
 
     private IDisposable m_inputHandle;
 
     private bool m_isStarted;
-    
+
     private UISettings m_settings;
+
+    private bool m_isSettingsToggled;
 
     private void Awake()
     {
@@ -40,6 +42,15 @@ public class TitleScene : MonoBehaviour
 
         //사운드
         GameManager.Sound.Play(GameManager.Sound.ObjectDataSounds.TitleSceneBGM);
+    }
+
+    private void Update()
+    {
+        if (m_isSettingsToggled && (m_settings == null || !m_settings.isActiveAndEnabled))
+        {
+            GameManager.Sound.OnInGame();
+            m_isSettingsToggled = false;
+        }
     }
 
     private void OnEnable()
@@ -57,7 +68,8 @@ public class TitleScene : MonoBehaviour
     {
         if (m_settings == null || !m_settings.gameObject.activeSelf)
         {
-            m_settings = ManagerRoot.UI.ShowPopupUI<UISettings>();            
+            m_settings = ManagerRoot.UI.ShowPopupUI<UISettings>();
+            m_isSettingsToggled = true;
         }
     }
 
@@ -67,15 +79,15 @@ public class TitleScene : MonoBehaviour
         {
             return;
         }
-        
+
         m_inputHandle?.Dispose();
-        
+
         m_animator.Play("TitleMenu_Out");
         m_isStarted = true;
         GameManager.Notification.Initialize();
         CoroutineEx.Create(GameManager.Instance, WaitForLoadScene(m_gameSceneName));
     }
-    
+
     public void OnExitButtonClick()
     {
 #if UNITY_EDITOR
@@ -118,11 +130,11 @@ public class TitleScene : MonoBehaviour
                         .AppendCallback(() => task.allowSceneActivation = true);
                 }
             }
-                
+
             yield return null;
         }
     }
-    
+
     private void OnAnyButtonPress(InputControl inputControl)
     {
         if (!inputControl.device.name.ToLower().Contains("mouse") && EventSystem.current.currentSelectedGameObject == null)
