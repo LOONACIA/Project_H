@@ -126,4 +126,19 @@ public class NotificationManager
 
         QuestCompleted?.Invoke(this, quest);
     }
+    
+    public bool IsCompleted(int id)
+    {
+        if (!m_registeredNotifications.TryGetValue(id, out var notification))
+        {
+            return false;
+        }
+
+        if (notification is not Quest quest)
+        {
+            return false;
+        }
+
+        return quest.IsCompleted;
+    }
 }
