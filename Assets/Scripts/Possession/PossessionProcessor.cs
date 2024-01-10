@@ -22,6 +22,8 @@ public class PossessionProcessor : MonoBehaviour
 
     // 빙의가 가능한지 여부 체크, 표창을 던질 지, 빙의를 할지를 판단함.
     private bool m_isPossessable;
+
+    private bool m_isOnPossessing;
     
     private float m_currentCoolTime = ConstVariables.SHURIKEN_COOLTIME;
 
@@ -120,6 +122,7 @@ public class PossessionProcessor : MonoBehaviour
             throw new InvalidOperationException($"{ghostObj.name} does not have {nameof(Ghost)} component.");
         }
 
+        m_isOnPossessing = true;
         Possessing?.Invoke(this, EventArgs.Empty);
 
         // 사운드
@@ -147,6 +150,13 @@ public class PossessionProcessor : MonoBehaviour
     
     private void ThrowShuriken()
     {
+        // 이미 빙의 중인 상태라면
+        if (m_isOnPossessing)
+        {
+            // 리턴
+            return;
+        }
+        
         ClearTarget();
         m_currentCoolTime = 0f;
         var cameraPivot = GameManager.Camera.CurrentCamera;
@@ -222,6 +232,7 @@ public class PossessionProcessor : MonoBehaviour
     
     private void OnPossessed(Actor actor)
     {
+        m_isOnPossessing = false;
         Possessed?.Invoke(this, actor);
     }
     
