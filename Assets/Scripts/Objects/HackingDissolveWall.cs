@@ -1,3 +1,4 @@
+using LOONACIA.Unity;
 using System.Collections;
 using UnityEngine;
 
@@ -35,7 +36,7 @@ public class HackingDissolveWall : HackingObject
         if (isHacking == true)
             return;
 
-        ConvertMat();
+        //ConvertMat();
 
         //Sound
         if (TryGetComponent<AudioSource>(out var audioSource) && audios.Length >= 1)
@@ -45,6 +46,7 @@ public class HackingDissolveWall : HackingObject
         }
 
         ConvertMat();
+        HideShuriken();
     }
 
     private void Start()
@@ -103,6 +105,11 @@ public class HackingDissolveWall : HackingObject
             if (value < m_minAmount || value > m_maxAmount)
                 mul *= -1;
         }
+    }
+
+    private void HideShuriken()
+    {
+        Destroy(gameObject.FindChild<PossessionShuriken>().gameObject);
     }
 
     private IEnumerator IE_HackingEffect()
