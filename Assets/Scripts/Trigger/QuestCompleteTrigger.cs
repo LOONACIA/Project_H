@@ -37,8 +37,7 @@ public class QuestCompleteTrigger : MonoBehaviour
     private UnityEvent m_onComplete;
 
     private bool m_isTriggered;
-
-
+    
     private void Start()
     {
         if (m_type == CompleteType.Interaction && m_associatedObject != null)
@@ -49,6 +48,15 @@ public class QuestCompleteTrigger : MonoBehaviour
         if (m_type == CompleteType.Horde && m_waveTrigger != null)
         {
             m_waveTrigger.WaveEnd += OnWaveEnd;
+        }
+    }
+
+    private void OnEnable()
+    {
+        if (GameManager.Notification.IsCompleted(m_questId))
+        {
+            m_isTriggered = true;
+            m_onComplete?.Invoke();
         }
     }
 
