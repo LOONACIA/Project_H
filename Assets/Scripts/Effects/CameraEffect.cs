@@ -13,7 +13,9 @@ public class CameraEffect : MonoBehaviour
     
     private CinemachineBasicMultiChannelPerlin m_perlin;
 
-    private void Start()
+    private Vector3 m_IntialPos;
+
+    private void Awake()
     {
         var parent = transform.parent;
         m_vcam = parent.GetComponentInChildren<CinemachineVirtualCamera>();
@@ -30,6 +32,17 @@ public class CameraEffect : MonoBehaviour
     private void Update()
     {
         m_vcam.transform.localRotation = Quaternion.Euler(cameraRotation);
+    }
+
+    private void OnEnable()
+    {
+        m_IntialPos = m_vcam.transform.localPosition;
+    }
+
+    private void OnDisable()
+    {
+        m_vcam.transform.localPosition = m_IntialPos;
+        cameraRotation = Vector3.zero;
     }
     #endregion
 
