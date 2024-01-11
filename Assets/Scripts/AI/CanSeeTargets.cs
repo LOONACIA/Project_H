@@ -51,6 +51,9 @@ public class CanSeeTargets : Conditional
                 return TaskStatus.Success;
             }
         }
-        return base.OnUpdate();
+        
+        //24.01.11: 슈터 총알이 보이지 않아도 발사 가능한 문제 수정
+        //return base.OnUpdate();
+        return TaskStatus.Failure;
     }
 }
