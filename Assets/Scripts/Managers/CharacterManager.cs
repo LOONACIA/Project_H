@@ -13,6 +13,8 @@ public class CharacterManager
     private Vector3 m_respawnPosition;
     
     private Quaternion m_respawnRotation;
+
+    public BossPhaseType CurrentBossPhase { get; set; }
     
     public PlayerController Controller { get; private set; }
 
@@ -61,6 +63,7 @@ public class CharacterManager
         {
             // 다른 씬으로 이동했을 때 초기화
             m_savedSceneName = string.Empty;
+            CurrentBossPhase = BossPhaseType.None;
         }
     }
 }
