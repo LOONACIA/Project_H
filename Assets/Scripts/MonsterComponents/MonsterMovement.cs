@@ -793,7 +793,7 @@ public class MonsterMovement : MonoBehaviour
 
     private void CheckWalk()
     {
-        if (m_actor.Animator.GetFloat(ConstVariables.ANIMATOR_PARAMETER_MOVEMENT_RATIO) >= 0.1f ||
+        if (m_actor.Animator.GetFloat(ConstVariables.ANIMATOR_PARAMETER_MOVEMENT_RATIO) >= 0.01f ||
             !m_isWalkSoundPlaying)
         {
             return;
