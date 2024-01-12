@@ -4,7 +4,6 @@ using LOONACIA.Unity;
 using LOONACIA.Unity.Managers;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(PossessionProcessor))]
 public partial class PlayerController : MonoBehaviour

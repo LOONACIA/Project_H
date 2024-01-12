@@ -1,11 +1,4 @@
 using LOONACIA.Unity;
-using System;
-using System.Buffers;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Runtime.CompilerServices;
-using Unity.XR.Oculus.Input;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -793,7 +786,7 @@ public class MonsterMovement : MonoBehaviour
 
     private void CheckWalk()
     {
-        if (m_actor.Animator.GetFloat(ConstVariables.ANIMATOR_PARAMETER_MOVEMENT_RATIO) >= 0.1f ||
+        if (m_actor.Animator.GetFloat(ConstVariables.ANIMATOR_PARAMETER_MOVEMENT_RATIO) >= 0.01f ||
             !m_isWalkSoundPlaying)
         {
             return;

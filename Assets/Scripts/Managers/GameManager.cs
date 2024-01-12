@@ -1,8 +1,8 @@
 using System;
 using System.IO;
 using LOONACIA.Unity.Managers;
+using System.Linq;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 /*
  * * 주의사항
@@ -116,11 +116,14 @@ public class GameManager : MonoBehaviour
         }
         
         m_settings.Initialize();
+        m_settings.GameData.ChapterInfos.Single(info => info.SceneName == SceneName.Stage1).IsUnlocked = true;
+        m_settings.Save();
     }
 
     public void SetGameClear()
     {
-        Time.timeScale = 0;
+        //24.01.12: 클리어 시 FadeOut하며 EndingScene으로 넘어감에 따라 timeScale 변동 삭제
+        //Time.timeScale = 0;
         IsGameOver = true;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;

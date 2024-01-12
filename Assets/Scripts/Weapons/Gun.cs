@@ -1,5 +1,4 @@
 using Cinemachine;
-using LOONACIA.Unity;
 using UnityEngine;
 
 public abstract class Gun : Weapon

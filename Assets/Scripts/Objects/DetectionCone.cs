@@ -1,4 +1,3 @@
-using DG.Tweening;
 using LOONACIA.Unity;
 using LOONACIA.Unity.Coroutines;
 using System.Collections;

@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
-using UnityEngine.Serialization;
 
 public class ChangeWeaponAbility : Ability
 {

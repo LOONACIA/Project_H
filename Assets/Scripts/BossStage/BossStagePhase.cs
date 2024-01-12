@@ -1,12 +1,6 @@
-using BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject;
 using System;
 using System.Collections;
-using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UIElements;
-using static InteractableObject;
 
 public class BossStagePhase : MonoBehaviour
 {

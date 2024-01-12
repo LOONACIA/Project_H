@@ -411,6 +411,15 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Scroll Wheel"",
+                    ""type"": ""Value"",
+                    ""id"": ""1bec24ea-8b88-43ee-ba8a-f97ac414ac84"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -611,6 +620,28 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
                     ""action"": ""Cancel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c2f8bc6d-abbc-42ed-877f-3584dc32fdf8"",
+                    ""path"": ""<Mouse>/scroll"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Scroll Wheel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""74018075-87e6-4799-90bf-764fca2a8551"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Scroll Wheel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -664,6 +695,7 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
         m_UI_Submit = m_UI.FindAction("Submit", throwIfNotFound: true);
         m_UI_Click = m_UI.FindAction("Click", throwIfNotFound: true);
         m_UI_Cancel = m_UI.FindAction("Cancel", throwIfNotFound: true);
+        m_UI_ScrollWheel = m_UI.FindAction("Scroll Wheel", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -841,6 +873,7 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
     private readonly InputAction m_UI_Submit;
     private readonly InputAction m_UI_Click;
     private readonly InputAction m_UI_Cancel;
+    private readonly InputAction m_UI_ScrollWheel;
     public struct UIActions
     {
         private @CharacterInputActions m_Wrapper;
@@ -851,6 +884,7 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
         public InputAction @Submit => m_Wrapper.m_UI_Submit;
         public InputAction @Click => m_Wrapper.m_UI_Click;
         public InputAction @Cancel => m_Wrapper.m_UI_Cancel;
+        public InputAction @ScrollWheel => m_Wrapper.m_UI_ScrollWheel;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -878,6 +912,9 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
             @Cancel.started += instance.OnCancel;
             @Cancel.performed += instance.OnCancel;
             @Cancel.canceled += instance.OnCancel;
+            @ScrollWheel.started += instance.OnScrollWheel;
+            @ScrollWheel.performed += instance.OnScrollWheel;
+            @ScrollWheel.canceled += instance.OnScrollWheel;
         }
 
         private void UnregisterCallbacks(IUIActions instance)
@@ -900,6 +937,9 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
             @Cancel.started -= instance.OnCancel;
             @Cancel.performed -= instance.OnCancel;
             @Cancel.canceled -= instance.OnCancel;
+            @ScrollWheel.started -= instance.OnScrollWheel;
+            @ScrollWheel.performed -= instance.OnScrollWheel;
+            @ScrollWheel.canceled -= instance.OnScrollWheel;
         }
 
         public void RemoveCallbacks(IUIActions instance)
@@ -955,5 +995,6 @@ public partial class @CharacterInputActions: IInputActionCollection2, IDisposabl
         void OnSubmit(InputAction.CallbackContext context);
         void OnClick(InputAction.CallbackContext context);
         void OnCancel(InputAction.CallbackContext context);
+        void OnScrollWheel(InputAction.CallbackContext context);
     }
 }

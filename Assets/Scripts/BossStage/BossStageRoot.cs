@@ -1,8 +1,4 @@
-using LOONACIA.Unity.Coroutines;
-using LOONACIA.Unity.Managers;
 using System;
-using System.Collections;
-using System.Transactions;
 using UnityEngine;
 
 public class BossStageRoot : MonoBehaviour
