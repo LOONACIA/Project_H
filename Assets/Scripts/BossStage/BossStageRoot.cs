@@ -15,7 +15,9 @@ public class BossStageRoot : MonoBehaviour
 
     [Header("Phase Info")]
     [SerializeField]
-    private int m_currentPhase = -1;
+    private BossPhaseType m_currentPhase = BossPhaseType.None;
+
+    private SaveMachine[] m_saveMachineList;
 
     [Header("Start Event")]
     [SerializeField, Tooltip("플레이어를 날려버릴 위치")]
@@ -41,7 +43,7 @@ public class BossStageRoot : MonoBehaviour
 
     private int m_lastPhase;
 
-    public int CurrentPhase 
+    public BossPhaseType CurrentPhase 
     {
         get { return m_currentPhase; }
         set { m_currentPhase = value; }
@@ -49,6 +51,7 @@ public class BossStageRoot : MonoBehaviour
 
     private void Start()
     {
+        m_currentPhase = GameManager.Character.CurrentBossPhase;
         m_character = GameManager.Character.Controller.Character;
 
         foreach (var phase in m_bossStagePhaseList)
@@ -56,14 +59,22 @@ public class BossStageRoot : MonoBehaviour
             phase.PhaseEnd += OnPhaseEnd;
         }
 
-        if (m_currentPhase != ((int)BossStageType.None))
+        // 특정 페이즈부터 실행
+        if (m_currentPhase != BossPhaseType.None)
         {
-            // 특정 페이즈부터 실행
-            StageStart(m_currentPhase);
+            StageStart((int)m_currentPhase);
+        }
+
+        // 보스 페이즈 저장
+        m_saveMachineList = GetComponentsInChildren<SaveMachine>(true);
+        foreach (var saveMachine in m_saveMachineList)
+        { 
+            saveMachine.Interacted += SaveBossPhase;
         }
     }
 
-    public void StageStart(int phase = ((int)BossStageType.None))
+
+    public void StageStart(int phase = ((int)BossPhaseType.None))
     {
         m_lastPhase = m_bossStagePhaseList.Length - 1;
 
@@ -71,7 +82,7 @@ public class BossStageRoot : MonoBehaviour
         m_boss.gameObject.SetActive(true);
         Vector3 bossLookVec = (m_character.transform.position - m_boss.transform.position).GetFlatVector();
         m_boss.transform.forward = bossLookVec;
-        if (m_currentPhase == ((int)BossStageType.None) && m_boss.gameObject.TryGetComponent<Animator>(out var animator))
+        if (m_currentPhase == BossPhaseType.None && m_boss.gameObject.TryGetComponent<Animator>(out var animator))
         {
             animator.SetTrigger(ConstVariables.ANIMATOR_PARAMETER_WAKE_UP);
         }
@@ -82,13 +93,13 @@ public class BossStageRoot : MonoBehaviour
             activeObject.SetActive(true);
         }
 
-        if (phase == ((int)BossStageType.None))
+        if (phase == ((int)BossPhaseType.None))
         {
             // Stage 시작하면 플레이어를 지정한 방향으로 날림
             ThrowPlayer();
             m_dummyMachine?.Explode(20, transform.forward * 5f, 100, 10);
 
-            m_bossStagePhaseList[++m_currentPhase]?.ReadyPhase();
+            m_bossStagePhaseList[(int)(++m_currentPhase)]?.ReadyPhase();
         }
         else
         {
@@ -98,7 +109,7 @@ public class BossStageRoot : MonoBehaviour
                 deactiveObject.SetActive(false);
             }
 
-            for (int i = 0; i < m_currentPhase; i++) 
+            for (int i = 0; i < (int)m_currentPhase; i++) 
             {
                 m_bossStagePhaseList[i].gameObject.SetActive(false);
             }
@@ -116,13 +127,13 @@ public class BossStageRoot : MonoBehaviour
 
     private void NextPhase()
     {
-        if (m_currentPhase >= m_lastPhase)
+        if ((int)m_currentPhase >= m_lastPhase)
         {
             m_boss.Kill();
             return;
         }
 
-        m_bossStagePhaseList[++m_currentPhase].ReadyPhase();
+        m_bossStagePhaseList[(int)(++m_currentPhase)].ReadyPhase();
     }
 
     private void ThrowPlayer()    {
@@ -140,5 +151,10 @@ public class BossStageRoot : MonoBehaviour
 
             rigidbody.AddForce(direction * force, ForceMode.VelocityChange);
         }
+    }
+
+    private void SaveBossPhase(object sender, Transform e)
+    {
+        GameManager.Character.CurrentBossPhase = (BossPhaseType)CurrentPhase;
     }
 }

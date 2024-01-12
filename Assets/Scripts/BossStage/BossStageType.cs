@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum BossStageType
+public enum BossPhaseType
 {
     None = -1,
     Phase1,
