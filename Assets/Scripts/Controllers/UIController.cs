@@ -97,7 +97,7 @@ public partial class UIController : MonoBehaviour
         m_inputActions.Character.Disable();
         if (m_isMenuRequested)
         {
-            GameManager.UI.ShowMenuUI(MenuInfoBag.PausedText, MenuInfoBag.Continue, MenuInfoBag.Menu, MenuInfoBag.Settings, MenuInfoBag.Exit);
+            GameManager.UI.ShowMenuUI(MenuInfoBag.PausedText, MenuInfoBag.Continue, MenuInfoBag.Restart, MenuInfoBag.Menu, MenuInfoBag.Settings, MenuInfoBag.Exit);
             m_isMenuShown = true;
             m_isMenuRequested = false;
         }
