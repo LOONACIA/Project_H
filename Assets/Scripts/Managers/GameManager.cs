@@ -1,8 +1,8 @@
 using System;
 using System.IO;
 using LOONACIA.Unity.Managers;
+using System.Linq;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 /*
  * * 주의사항
@@ -116,6 +116,8 @@ public class GameManager : MonoBehaviour
         }
         
         m_settings.Initialize();
+        m_settings.GameData.ChapterInfos.Single(info => info.SceneName == SceneName.Stage1).IsUnlocked = true;
+        m_settings.Save();
     }
 
     public void SetGameClear()

@@ -2,10 +2,8 @@ using DG.Tweening;
 using LOONACIA.Unity.Managers;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Audio;
-using UnityEngine.Rendering;
 
 public class SoundManager
 {

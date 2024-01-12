@@ -1,9 +1,4 @@
-using LOONACIA.Unity.Coroutines;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem.Layouts;
-using UnityEngine.UIElements;
 
 [RequireComponent(typeof(Collider))]
 [RequireComponent(typeof(Rigidbody))]

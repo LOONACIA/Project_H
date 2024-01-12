@@ -1,4 +1,3 @@
-using LOONACIA.Unity;
 using System;
 using System.Collections;
 using UnityEngine;

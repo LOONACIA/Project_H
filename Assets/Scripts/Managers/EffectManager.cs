@@ -3,14 +3,10 @@ using LOONACIA.Unity;
 using LOONACIA.Unity.Coroutines;
 using LOONACIA.Unity.Managers;
 using System.Collections;
-using System.Runtime.InteropServices;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
-using UnityEngine.UIElements;
-using UnityEngine.VFX;
 using URPGlitch.Runtime.AnalogGlitch;
 using URPGlitch.Runtime.DigitalGlitch;
 
