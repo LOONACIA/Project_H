@@ -46,10 +46,22 @@ public class FixedSpawner : MonoBehaviour, ISpawn
         TryGetComponent<BoxCollider>(out m_collider);
     }
 
+    private void OnEnable()
+    {
+        EndSpawn();
+    }
+
+
+    private void OnDisable()
+    {
+        EndSpawn();
+    }
+
     private void Evaluate()
     {
         if (!m_isActive) return;
         if (!CanDetect()) return;
+        if (!gameObject.activeSelf) return;
         
         // 한 번도 소환한 적 없으면 바로 소환
         if (!m_isFirstSpawn) 
@@ -63,14 +75,12 @@ public class FixedSpawner : MonoBehaviour, ISpawn
         // 없으면 소환
         if (monster.Length == 0 && m_spawnCoroutine == null)
         { 
-            m_spawnCoroutine = CoroutineEx.Create(this, IE_WaitSpawnDelay());
+           m_spawnCoroutine = CoroutineEx.Create(this, IE_WaitSpawnDelay());
         }
     }
 
     public void StartSpawn()
     {
-        if (m_isActive) return;
-
         m_isActive = true;
     
         if (CanDetect())
@@ -80,8 +90,6 @@ public class FixedSpawner : MonoBehaviour, ISpawn
 
     public void EndSpawn()
     {
-        if (!m_isActive) return;
-
         m_isActive = false;
 
         if (m_spawnCoroutine != null)

@@ -88,9 +88,12 @@ public class BossStagePhase : MonoBehaviour
         m_processor = FindObjectOfType<PossessionProcessor>();
 
         // 객체 비활성화
-        foreach (var activeObject in m_onStartActiveObjects)
+        if (!m_active)
         {
-            activeObject?.SetActive(false);
+            foreach (var activeObject in m_onStartActiveObjects)
+            {
+                activeObject?.SetActive(false);
+            }
         }
     }
 
@@ -101,15 +104,18 @@ public class BossStagePhase : MonoBehaviour
         m_active = true;
 
         // 플레이어가 특정 위치에 존재할 때 Phase 진행
-        m_readyPhaseCoroutine = StartCoroutine(IE_WaitForStageReady());
+        if (gameObject.activeSelf) 
+            m_readyPhaseCoroutine = StartCoroutine(IE_WaitForStageReady());
 
         // 스테이지 시작하면 groundTrigger 활성화
         // 플레이어가 Trigger에 검출되면 바닥 생성
         m_phaseTrigger?.Activate();
     }
 
-    private void StartPhase()
+    public void StartPhase()
     {
+        m_active = true;
+
         // 몬스터 스폰
         m_spawnCoroutine = StartCoroutine(IE_WaitSpawnDelay());
 
