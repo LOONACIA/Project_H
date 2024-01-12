@@ -1,10 +1,5 @@
 using LOONACIA.Unity.Coroutines;
 using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider))]

@@ -1,5 +1,4 @@
 using DG.Tweening;
-using LOONACIA.Unity;
 using LOONACIA.Unity.Managers;
 using LOONACIA.Unity.UI;
 using Michsky.UI.Reach;

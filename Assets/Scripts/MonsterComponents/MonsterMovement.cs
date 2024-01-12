@@ -1,11 +1,4 @@
 using LOONACIA.Unity;
-using System;
-using System.Buffers;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Runtime.CompilerServices;
-using Unity.XR.Oculus.Input;
 using UnityEngine;
 using UnityEngine.AI;
 

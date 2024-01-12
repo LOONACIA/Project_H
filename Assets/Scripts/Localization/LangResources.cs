@@ -1,11 +1,6 @@
 using LOONACIA.Unity;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Globalization;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = nameof(LangResources), menuName = "Localization/" + nameof(LangResources))]
 public class LangResources : ScriptableObject, ISerializationCallbackReceiver

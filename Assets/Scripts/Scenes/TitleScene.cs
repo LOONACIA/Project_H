@@ -5,16 +5,12 @@ using Michsky.UI.Reach;
 using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Audio;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
 public class TitleScene : MonoBehaviour
 {
-    [SerializeField]
-    private SceneName m_gameSceneName;
-
     [SerializeField]
     private Animator m_animator;
 
@@ -81,11 +77,12 @@ public class TitleScene : MonoBehaviour
         }
 
         m_inputHandle?.Dispose();
-
-        m_animator.Play("TitleMenu_Out");
-        m_isStarted = true;
-        GameManager.Notification.Initialize();
-        CoroutineEx.Create(GameManager.Instance, WaitForLoadScene(m_gameSceneName));
+        var selector = ManagerRoot.UI.ShowPopupUI<UIChapterSelector>();
+        selector.Clear();
+        foreach (var chapterInfo in GameManager.Settings.GameData.ChapterInfos)
+        {
+            selector.AddChapter(chapterInfo, () => GameStart(chapterInfo));
+        }
     }
 
     public void OnExitButtonClick()
@@ -95,6 +92,15 @@ public class TitleScene : MonoBehaviour
 #else
         Application.Quit();
 #endif
+    }
+
+    private void GameStart(ChapterInfo chapterInfo)
+    {
+        ManagerRoot.UI.ClearAllPopup();
+        m_animator.Play("TitleMenu_Out");
+        m_isStarted = true;
+        GameManager.Notification.Initialize();
+        CoroutineEx.Create(GameManager.Instance, WaitForLoadScene(chapterInfo.SceneName));
     }
 
     private IEnumerator WaitForLoadScene(SceneName sceneName)

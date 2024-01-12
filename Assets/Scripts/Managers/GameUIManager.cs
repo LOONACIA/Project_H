@@ -3,9 +3,7 @@ using LOONACIA.Unity.Coroutines;
 using LOONACIA.Unity.Managers;
 using LOONACIA.Unity.UI;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class GameUIManager
 {

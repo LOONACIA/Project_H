@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BossStage : MonoBehaviour
@@ -11,6 +10,9 @@ public class BossStage : MonoBehaviour
 	{
 		Cursor.visible = false;
 		Cursor.lockState = CursorLockMode.Locked;
+        
+        GameManager.Settings.GameData.ChapterInfos.Single(info => info.SceneName == SceneName.Stage3).IsUnlocked = true;
+        GameManager.Settings.Save();
 	}
 
 	private void Start()

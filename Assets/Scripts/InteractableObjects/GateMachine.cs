@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.VFX;
 
 [RequireComponent(typeof(Alarm))]
 public class GateMachine : InteractableObject, IHealth

@@ -1,8 +1,6 @@
 using LOONACIA.Unity;
 using LOONACIA.Unity.Coroutines;
 using LOONACIA.Unity.Managers;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
