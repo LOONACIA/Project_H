@@ -1,6 +1,5 @@
 using BehaviorDesigner.Runtime;
 using Cinemachine;
-using DG.Tweening;
 using LOONACIA.Unity.Coroutines;
 using LOONACIA.Unity.Managers;
 using System;
@@ -8,7 +7,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.AI;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(ActorHealth))]

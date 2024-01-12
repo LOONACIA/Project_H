@@ -1,7 +1,6 @@
 using LOONACIA.Unity.Managers;
 using Michsky.UI.Reach;
 using System.Globalization;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UIPopup = LOONACIA.Unity.UI.UIPopup;

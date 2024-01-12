@@ -1,7 +1,4 @@
 using LOONACIA.Unity.Managers;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.InputSystem;
 
 public partial class UIController
@@ -53,6 +50,11 @@ public partial class UIController
         }
 
         public void OnCancel(InputAction.CallbackContext context)
+        {
+            // Handled by EventSystem in Scene
+        }
+
+        public void OnScrollWheel(InputAction.CallbackContext context)
         {
             // Handled by EventSystem in Scene
         }

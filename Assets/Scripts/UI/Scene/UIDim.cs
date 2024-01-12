@@ -1,8 +1,5 @@
 using DG.Tweening;
 using LOONACIA.Unity.UI;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class UIDim : UIScene
