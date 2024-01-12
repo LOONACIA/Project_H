@@ -78,7 +78,8 @@ public partial class UIController : MonoBehaviour
     
     private void OnGameClear(object sender, EventArgs e)
     {
-        GameManager.UI.ShowMenuUI(MenuInfoBag.GameClearText, MenuInfoBag.Menu, MenuInfoBag.Credits, MenuInfoBag.Exit);
+        //24.01.12: GameClear 시 UI 생성 대신 EndingScene으로 넘어가는 것으로 변경
+        //GameManager.UI.ShowMenuUI(MenuInfoBag.GameClearText, MenuInfoBag.Menu, MenuInfoBag.Credits, MenuInfoBag.Exit);
     }
 
     private void OnGameOver(object sender, EventArgs e)

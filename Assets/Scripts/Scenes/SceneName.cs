@@ -5,4 +5,5 @@ public enum SceneName
     Stage1,
     Stage2,
     Stage3,
+    EndingScene,
 }

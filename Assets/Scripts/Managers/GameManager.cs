@@ -122,7 +122,8 @@ public class GameManager : MonoBehaviour
 
     public void SetGameClear()
     {
-        Time.timeScale = 0;
+        //24.01.12: 클리어 시 FadeOut하며 EndingScene으로 넘어감에 따라 timeScale 변동 삭제
+        //Time.timeScale = 0;
         IsGameOver = true;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
