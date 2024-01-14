@@ -83,7 +83,7 @@ public static class ConstVariables
 
     [Header("CollisionLayers")]
     [Layer]
-    public static readonly string[] MOVEMENT_COLLISION_LAYERS = new[] { "Ground", "Wall", "Obstacle", "Gate", "BlockPlane", "Monster" };
+    public static readonly string[] MOVEMENT_COLLISION_LAYERS = new[] { "Ground", "Wall", "Obstacle", "Gate", "BlockPlane", "Monster", "InteractableObject" };
     public const string LAYER_MONSTER = "Monster";
     public const string LAYER_GROUND = "Ground";
     public const string LAYER_WALL = "Wall";
