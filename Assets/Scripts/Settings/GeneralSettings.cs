@@ -13,6 +13,12 @@ public class GeneralSettings : INotifyPropertyChanged
     private CultureInfo m_culture;
     
     [SerializeField]
+    private int m_currentWidth;
+    
+    [SerializeField]
+    private int m_currentHeight;
+    
+    [SerializeField]
     private float m_lookSensitivity = 5f;
     
     [SerializeField]
@@ -40,6 +46,18 @@ public class GeneralSettings : INotifyPropertyChanged
             m_culture = value;
             SetField(ref m_cultureId, value.LCID, EventArgCache.CurrentLanguage);
         }
+    }
+
+    public int CurrentWidth
+    {
+        get => m_currentWidth;
+        set => SetField(ref m_currentWidth, value, EventArgCache.CurrentLanguage);
+    }
+    
+    public int CurrentHeight
+    {
+        get => m_currentHeight;
+        set => SetField(ref m_currentHeight, value, EventArgCache.CurrentLanguage);
     }
 
     public float LookSensitivity

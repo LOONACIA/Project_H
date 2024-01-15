@@ -26,6 +26,10 @@ public class UISettings : UIPopup
     [SerializeField]
     private HorizontalSelector m_languageSelector;
     
+    [Header("Video")]
+    [SerializeField]
+    private Dropdown m_resolutionDropdown;
+    
     [Header("Input")]
     [SerializeField]
     private SliderManager m_inputSensitivitySlider;
@@ -170,6 +174,8 @@ public class UISettings : UIPopup
             }
         }
         
+        LoadResolution();
+        
         m_inputSensitivitySlider.mainSlider.value = GameManager.Settings.GeneralSettings.LookSensitivity;
         m_invertVerticalViewSwitch.isOn = GameManager.Settings.GeneralSettings.InvertVerticalView;
         m_masterVolumeSlider.mainSlider.value = ConvertVolumeToSlider(GameManager.Settings.GeneralSettings.MasterVolume);
@@ -182,11 +188,54 @@ public class UISettings : UIPopup
         m_bgmVolumeSlider.UpdateUI();
         m_sfxVolumeSlider.UpdateUI();
     }
+
+    private void LoadResolution()
+    {
+        foreach (var item in m_resolutionDropdown.items)
+        {
+            item.onItemSelection.RemoveAllListeners();
+        }
+        
+        m_resolutionDropdown.items.Clear();
+        
+        var settings = GameManager.Settings.GeneralSettings;
+        Resolution currentResolution = new() { width = settings.CurrentWidth, height = settings.CurrentHeight };
+        if (currentResolution.width == 0 || currentResolution.height == 0)
+        {
+            currentResolution = Screen.currentResolution;
+        }
+
+        int index = -1;
+        foreach (var resolution in Screen.resolutions)
+        {
+            Dropdown.Item item = new() { itemName = $"{resolution.width}x{resolution.height}" };
+            item.onItemSelection.AddListener(() => OnResolutionChanged(resolution));
+            m_resolutionDropdown.items.Add(item);
+            
+            if (resolution.width == currentResolution.width && resolution.height == currentResolution.height)
+            {
+                index = m_resolutionDropdown.items.Count - 1;
+            }
+        }
+        
+        m_resolutionDropdown.Initialize();
+        if (index != -1)
+        {
+            m_resolutionDropdown.SetDropdownIndex(index);
+        }
+    }
     
     private void OnLanguageChanged(CultureInfo cultureInfo)
     {
         GameManager.Settings.GeneralSettings.CurrentLanguage = cultureInfo;
         GameManager.Localization.SetLanguage(cultureInfo);
+    }
+    
+    private void OnResolutionChanged(Resolution resolution)
+    {
+        GameManager.Settings.GeneralSettings.CurrentWidth = resolution.width;
+        GameManager.Settings.GeneralSettings.CurrentHeight = resolution.height;
+        Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
     }
     
     private void OnMasterVolumeChanged(float value)
