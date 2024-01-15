@@ -55,6 +55,12 @@ public abstract class Actor : MonoBehaviour
                 return;
             }
 
+            if (!value)
+            {
+                Animator.Rebind();
+                Animator.Update(0f);
+            }
+
             Animator.gameObject.SetActive(false);
             m_isPossessed = value;
             Animator.gameObject.SetActive(true);

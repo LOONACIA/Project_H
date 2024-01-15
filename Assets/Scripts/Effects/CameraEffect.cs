@@ -41,6 +41,7 @@ public class CameraEffect : MonoBehaviour
 
     private void OnDisable()
     {
+        m_perlin.m_AmplitudeGain = 0f;
         m_vcam.transform.localPosition = m_IntialPos;
         cameraRotation = Vector3.zero;
     }
