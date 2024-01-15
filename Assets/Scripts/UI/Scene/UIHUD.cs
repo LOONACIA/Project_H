@@ -268,7 +268,6 @@ public class UIHUD : UIScene
         }
         UnregisterEvents(processor);
         
-        processor.ShurikenThrown += OnShurikenThrown;
         processor.HackStarted += OnHackStarted;
         processor.Possessable += OnPossessable;
         processor.Possessing += OnPossessing;
@@ -283,7 +282,6 @@ public class UIHUD : UIScene
             return;
         }
         
-        processor.ShurikenThrown -= OnShurikenThrown;
         processor.HackStarted -= OnHackStarted;
         processor.Possessable -= OnPossessable;
         processor.Possessing -= OnPossessing;
@@ -602,13 +600,6 @@ public class UIHUD : UIScene
             image.color = colorTo;
             root.localScale = scaleTo;
         }
-    }
-    
-    private void OnShurikenThrown(object sender, EventArgs e)
-    {
-        return;
-        m_hackingIndicatorManager.colorType = UIManagerImage.ColorType.Negative;
-        m_hackingIndicator.fillAmount = 0;
     }
 
     private void OnHackStarted(object sender, float e)
