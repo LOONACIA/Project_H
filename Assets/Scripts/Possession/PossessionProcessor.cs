@@ -95,8 +95,9 @@ public class PossessionProcessor : MonoBehaviour
         m_sender.Animator.SetTrigger(s_possess);
     }
 
-    public void TryPossess()
+    public void TryPossess(Actor sender)
     {
+        m_sender = sender;
         //표창이 박혀있는데 빙의가 아직 불가능하면 return
         if (!m_isPossessable)
         {
