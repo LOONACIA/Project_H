@@ -97,13 +97,13 @@ public class PossessionProcessor : MonoBehaviour
 
     public void TryPossess(Actor sender)
     {
-        m_sender = sender;
         //표창이 박혀있는데 빙의가 아직 불가능하면 return
         if (!m_isPossessable)
         {
             return;
         }
 
+        m_sender = sender;
         m_isPossessable = false;
 
         PossessTarget();
