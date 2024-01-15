@@ -606,12 +606,15 @@ public class UIHUD : UIScene
     
     private void OnShurikenThrown(object sender, EventArgs e)
     {
+        return;
         m_hackingIndicatorManager.colorType = UIManagerImage.ColorType.Negative;
         m_hackingIndicator.fillAmount = 0;
     }
 
     private void OnHackStarted(object sender, float e)
     {
+        m_hackingIndicatorManager.colorType = UIManagerImage.ColorType.Negative;
+        m_hackingIndicator.fillAmount = 0;
         m_hackingIndicatorCoroutine?.Abort();
         m_hackingIndicatorCoroutine = CoroutineEx.Create(this, CoHackingIndicator(e));
     }
