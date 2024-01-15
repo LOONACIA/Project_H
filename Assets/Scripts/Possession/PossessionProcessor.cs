@@ -267,8 +267,16 @@ public class PossessionProcessor : MonoBehaviour
 
     private void OnTargetDying(object sender, in AttackInfo info)
     {
-        ClearTarget();
-        var target = (Actor)sender;
+        if (sender is not Actor target)
+        {
+            return;
+        }
+        
         target.Dying -= OnTargetDying;
+
+        if (target == m_target)
+        {
+            ClearTarget();
+        }
     }
 }
