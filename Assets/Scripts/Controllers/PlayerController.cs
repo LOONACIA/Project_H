@@ -183,7 +183,7 @@ public partial class PlayerController : MonoBehaviour
             return;
         }
 
-        m_possession.TryPossess();
+        m_possession.TryPossess(Character);
     }
 
     private void Ability(bool isToggled)
