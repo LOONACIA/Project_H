@@ -20,6 +20,8 @@ public class PossessionProcessor : MonoBehaviour
 
     private Actor m_sender;
 
+    private Actor m_target;
+
     // 빙의가 가능한지 여부 체크, 표창을 던질 지, 빙의를 할지를 판단함.
     private bool m_isPossessable;
 
@@ -128,14 +130,15 @@ public class PossessionProcessor : MonoBehaviour
         // 사운드
         GameManager.Sound.Play(GameManager.Sound.ObjectDataSounds.TryHackingSound);
 
-        ghost.PossessToTarget(m_shuriken.targetActor, () => OnPossessed(m_shuriken.targetActor));
+        ghost.PossessToTarget(m_target, () => OnPossessed(m_target));
     }
 
     public void ClearTarget()
     {
         m_possessionCoroutine?.Abort();
         m_isPossessable = false;
-        m_shuriken = null;
+        m_target = null;
+        //m_shuriken = null;
         OnPossessed(null);
     }
 
@@ -157,7 +160,7 @@ public class PossessionProcessor : MonoBehaviour
             return;
         }
         
-        ClearTarget();
+        //ClearTarget();
         m_currentCoolTime = 0f;
         var cameraPivot = GameManager.Camera.CurrentCamera;
         var cameraTransform = cameraPivot.transform;
@@ -166,20 +169,20 @@ public class PossessionProcessor : MonoBehaviour
         //bool isHit = Physics.SphereCast(cameraTransform.position, m_shurikenSphereRadius, cameraTransform.forward,
         //    out var hit, 300f, m_targetLayers);
 
-        Vector2 view = new Vector2(cameraPivot.transform.forward.x, cameraPivot.transform.forward.y);
+        Vector2 view = new(cameraPivot.transform.forward.x, cameraPivot.transform.forward.y);
         float objectAngle = Vector2.SignedAngle(Vector2.right, view);  
 
-        m_shuriken =
+        var shuriken =
             Instantiate(m_sender.Data.ShurikenObj, cameraTransform.position + Vector3.down * 1 / 16f,
                 Quaternion.Euler(objectAngle, 0, 0)).GetComponent<PossessionShuriken>();
 
         if (isHit && hit.transform.TryGetComponent<Actor>(out var actor) && actor.Status.Shield != null && actor.IsPossessed == false)
         {
-            m_shuriken.InitSetting(actor, m_sender, OnTargetHit);
+            shuriken.InitSetting(actor, m_sender, OnTargetHit);
         }
         else
         {
-            m_shuriken.InitSetting(cameraPivot.transform.forward, m_sender, OnTargetHit);
+            shuriken.InitSetting(cameraPivot.transform.forward, m_sender, OnTargetHit);
         }
         
         ShurikenThrown?.Invoke(this, EventArgs.Empty);
@@ -218,6 +221,14 @@ public class PossessionProcessor : MonoBehaviour
         }
 
         target.PlayHackAnimation();
+        
+        if (target == m_target)
+        {
+            return;
+        }
+        
+        ClearTarget();
+        m_target = target;
         HackStarted?.Invoke(this, target.Data.PossessionRequiredTime);
         m_possessionCoroutine = CoroutineEx.Create(this, CoWaitForPossession(target.Data.PossessionRequiredTime));
     }
@@ -238,11 +249,17 @@ public class PossessionProcessor : MonoBehaviour
     
     private void OnTargetHit(PossessionShuriken shuriken, Actor target)
     {
-        if (shuriken != m_shuriken)
+        if (target == null)
         {
             return;
         }
         
+        // if (shuriken != m_shuriken)
+        // {
+        //     return;
+        // }
+        
+        target.Dying -= OnTargetDying;
         target.Dying += OnTargetDying;
         TargetHit?.Invoke(this, target.Data.PossessionRequiredTime);
         TryHacking(target);
