@@ -23,6 +23,7 @@ public class UIChapterSelector : UIPopup
     {
         var chapter = ManagerRoot.Resource.Instantiate(m_chapterPrefab);
         chapter.transform.SetParent(m_chapterParent, false);
+        chapter.transform.localScale = Vector3.one;
         chapter.GetComponent<UIChapterButton>().SetItem(chapterInfo, onClick);
     }
 }
