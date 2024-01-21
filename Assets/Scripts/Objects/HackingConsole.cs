@@ -77,7 +77,8 @@ public class HackingConsole : HackingObject
 
         foreach (var hackable in m_hackable)
         {
-            hackable.Activate();
+            if (hackable != null)
+                hackable.Activate();
         }
 
         if (hasRecoverTime) 
@@ -96,7 +97,8 @@ public class HackingConsole : HackingObject
 
         foreach (var hackable in m_hackable)
         {
-            hackable.Deactivate();
+            if (hackable != null && hackable.ToString() != "null")
+                hackable.Deactivate();
         }
     }
 

@@ -27,6 +27,6 @@ public class LaserSwitchTrigger : MonoBehaviour
     private IEnumerator Co_WaitDelayTime(HackingConsole console)
     { 
         yield return new WaitForSeconds(m_delayTime);
-        console.Recovery();
+        console?.Recovery();
     }
 }

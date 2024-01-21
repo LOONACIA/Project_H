@@ -44,7 +44,9 @@ public class Laser : MonoBehaviour, IActivate
         if (m_isHacking) return;
 
         m_isHacking = true;
-        m_collider.enabled = false;
+
+        if (m_collider != null)
+            m_collider.enabled = false;
 
         StartCoroutine(IE_ChangeWidth(m_originWidth, 0));
 
@@ -53,7 +55,9 @@ public class Laser : MonoBehaviour, IActivate
     public void Deactivate()
     {
         m_isHacking = false;
-        m_collider.enabled = true;
+    
+        if (m_collider != null)
+            m_collider.enabled = true;
 
         StartCoroutine(IE_ChangeWidth(0, m_originWidth));
     }
@@ -64,6 +68,9 @@ public class Laser : MonoBehaviour, IActivate
 
         while (time < m_progressTime)
         {
+            if (m_volumetricLineBehavior == null)
+                yield break;
+
             time += Time.deltaTime;
 
             m_volumetricLineBehavior.LineWidth = Mathf.Lerp(from, to, time / m_progressTime);
